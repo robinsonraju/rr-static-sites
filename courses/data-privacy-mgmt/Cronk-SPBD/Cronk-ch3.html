@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Privacy Harms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: The application uses a thematic, single-page dashboard structure. A top navigation bar allows users to filter between the four main categories of privacy harms (Processing, Dissemination, Collection, Invasion). This is more user-friendly than a linear document, allowing users to focus on specific areas of interest. Clicking on a harm reveals a modal with detailed descriptions and examples, providing layered information on demand. This interactive, non-linear approach reduces cognitive load and encourages exploration. A dedicated section for "Dark Patterns" and a summary chart provide further context and a high-level overview, making the complex taxonomy more digestible and engaging for the user. -->
+    <!-- Visualization & Content Choices: The primary structure uses a filterable grid of cards (HTML/Tailwind/JS) to organize the harms, which is ideal for categorization. Goal: Organize/Explore. Interaction: Click to filter, click to view details in a modal. Justification: This method breaks down dense information into manageable chunks. For a quantitative overview, a bar chart (Chart.js/Canvas) shows the number of sub-harms per category. Goal: Inform/Compare. Interaction: Hover for tooltips. Justification: Provides a quick visual summary of the taxonomy's structure. Dark Patterns are presented in a static card grid. Goal: Inform. Justification: This gives the topic dedicated space without needing complex interaction. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #F5F5F4;
+            color: #1F2937;
+            font-family: sans-serif;
+        }
+
+        .harm-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .harm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .nav-btn.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <div class="flex flex-col items-center gap-3 mb-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800">An Interactive Guide to Privacy Harms</h1>
+                <div class="flex gap-4">
+                    <a href="../index.html"
+                        class="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">Course Home</a>
+                    <a href="../Cronk-SPBD.html"
+                        class="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">&larr; Back to
+                        Book Index</a>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-2">Exploring the Moral Consequences of Privacy Violations Based on
+                Solove's Taxonomy</p>
+        </header>
+        <main>
+            <section id="taxonomy" class="mb-16">
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-4">Solove's Taxonomy of Privacy</h2>
+                    <p class="text-gray-700">This guide breaks down privacy harms into four main categories as defined
+                        by Professor Daniel Solove. This framework helps to systematically identify and understand
+                        different types of privacy violations, moving beyond abstract concepts to concrete examples. Use
+                        the filters below to explore each category and click on any harm to learn more about its
+                        definition and real-world implications.</p>
+                </div>
+                <div id="filters" class="flex flex-wrap justify-center gap-2 mb-8"><button
+                        class="nav-btn active px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm"
+                        data-filter="all">All Harms</button> <button
+                        class="nav-btn px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm"
+                        data-filter="processing">Information Processing</button> <button
+                        class="nav-btn px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm"
+                        data-filter="dissemination">Information Dissemination</button> <button
+                        class="nav-btn px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm"
+                        data-filter="collection">Collection</button> <button
+                        class="nav-btn px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm"
+                        data-filter="invasion">Invasion</button></div>
+                <div id="harms-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </section>
+            <section id="chart-section" class="mb-16">
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-4">Taxonomy at a Glance</h2>
+                    <p class="text-gray-700">This chart provides a visual breakdown of Solove's taxonomy, showing the
+                        number of specific harms identified within each of the four major categories. This helps to
+                        quickly understand the composition and focus areas of the framework. Information Dissemination
+                        and Processing cover the most sub-types, highlighting the complexity of managing and sharing
+                        data.</p>
+                </div>
+                <div class="chart-container bg-white p-4 rounded-lg shadow-md"><canvas id="harmsChart"></canvas></div>
+            </section>
+            <section id="dark-patterns" class="bg-white p-8 rounded-lg shadow-lg">
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-4">Decisional Interference Through Dark Patterns</h2>
+                    <p class="text-gray-700">A key aspect of "Invasion" harms is interfering with an individual's
+                        decisions. "Dark Patterns" are user interface designs that trick or manipulate users into making
+                        choices they might not otherwise make, especially regarding their privacy. These patterns
+                        exploit cognitive biases to benefit the service provider at the user's expense.</p>
+                </div>
+                <div id="dark-patterns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </section>
+        </main>
+        <footer class="text-center mt-16 text-gray-500 text-sm">
+            <p>Content adapted from Chapter 3 of "Strategic Privacy by Design."</p>
+            <p>This is an educational tool for exploring privacy concepts.</p>
+        </footer>
+    </div>
+    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0">
+        <div
+            class="modal-content bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95">
+            <div class="p-6">
+                <div class="flex justify-between items-start">
+                    <h3 id="modal-title" class="text-2xl font-bold"></h3>
+                    <button id="modal-close" class="text-gray-500 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <p id="modal-description" class="mt-4 text-gray-700"></p>
+                <div class="mt-6">
+                    <h4 class="font-semibold text-lg mb-2">Quick Reference Examples:</h4>
+                    <ul id="modal-examples" class="list-disc list-inside space-y-2 text-gray-600"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>
+        <script>
+            const harmsData = [
+                {
+                    name: 'Aggregation',
+                    category: 'processing',
+                    icon: '🔗',
+                    definition: 'Combining various pieces of personal information to reveal new insights.',
+                    description: 'Aggregation concerns combining data about an individual from multiple sources or interactions. This can reveal things about individuals that are not apparent from a single data point, such as habits, interests, or even sensitive characteristics they may not want to reveal.',
+                    examples: [
+                        "Aggregating an individual's searches to better interpret their interests.",
+                        "Aggregating a shopper's purchasing habits to provide targeted advertising based on an inferred characteristic, such as pregnancy.",
+                        "Aggregating patients' doctor visits to see if they are 'doctor shopping' to be over-prescribed medicines."
+                    ]
+                },
+                {
+                    name: 'Insecurity',
+                    category: 'processing',
+                    icon: '🔓',
+                    definition: 'Failing to protect information from unauthorized access.',
+                    description: 'Insecurity is the failure to implement adequate security measures to protect personal data. This negligence can lead to data breaches, identity theft, and other harms when malicious actors gain access to sensitive information.',
+                    examples: [
+                        "A web developer allowing web visitors to see other customer records by changing a customer ID number in the URL.",
+                        "A company's developers accidentally uploading company credentials into a public code repository.",
+                        "Using a weak password-reset mechanism that allows an attacker to take over an account."
+                    ]
+                },
+                {
+                    name: 'Identification',
+                    category: 'processing',
+                    icon: '🎯',
+                    definition: 'Linking information to a specific individual.',
+                    description: 'Identification involves piecing together data to single out an individual, even if their name isn\'t known. Seemingly anonymous data, when combined, can often be used to re-identify people and link them to sensitive information.',
+                    examples: [
+                        "Using facial recognition software to identify people in a crowd.",
+                        "Correlating time stamps in two databases, one that has been 'de-identified' and the other not, to re-identify individuals.",
+                        "Using just a few location data points from a mobile phone to uniquely identify its owner."
+                    ]
+                },
+                {
+                    name: 'Secondary Use',
+                    category: 'processing',
+                    icon: ' ♻️',
+                    definition: 'Using information for a purpose other than that for which it was collected.',
+                    description: 'Secondary use occurs when an organization uses personal information for a purpose that is different from, and not reasonably expected by, the individual at the time of collection. This violates the trust and understanding under which the data was shared.',
+                    examples: [
+                        "A company sending spam emails about all their products after you order one product.",
+                        "Facebook using phone numbers provided for two-factor authentication for advertising purposes.",
+                        "The U.S. government using census data to intern Japanese-Americans during World War II."
+                    ]
+                },
+                {
+                    name: 'Exclusion',
+                    category: 'processing',
+                    icon: '🚫',
+                    definition: 'Preventing individuals from knowing about or participating in the handling of their data.',
+                    description: 'Exclusion happens when an individual is not allowed to know about, access, or correct the data that an organization holds about them. This can lead to decisions being made based on inaccurate or incomplete information without any recourse for the individual.',
+                    examples: [
+                        "Closing an account based on secret information about a customer without giving them the ability to dispute it.",
+                        "Having a secret rating system for passengers of a ride-hailing service where the passengers are unaware of their rating.",
+                        "Using an 'e-score' based on online data to determine loan eligibility without the consumer's knowledge or access to the score."
+                    ]
+                },
+                {
+                    name: 'Breach of Confidentiality',
+                    category: 'dissemination',
+                    icon: '🗣️',
+                    definition: 'Breaking a promise to keep a person\'s information confidential.',
+                    description: 'This harm occurs when information shared in confidence is disclosed to others without permission. This applies not just to formal relationships (doctor-patient, lawyer-client) but also to social situations where confidentiality is implied.',
+                    examples: [
+                        "A medical billing company disclosing a patient's HIV condition in a lawsuit for an unpaid bill.",
+                        "A company selling their customer data despite a privacy notice saying they do not.",
+                        "A friend revealing a secret you told them in confidence."
+                    ]
+                },
+                {
+                    name: 'Disclosure',
+                    category: 'dissemination',
+                    icon: '📰',
+                    definition: 'Revealing truthful information that impacts a person\'s security or reputation.',
+                    description: 'Disclosure involves the intentional revelation of truthful but private information about an individual that can lead to negative consequences, such as reputational damage, financial loss, or even physical harm.',
+                    examples: [
+                        "Newspapers disclosing an individual's private sexual preference.",
+                        "Publishing the home address of a domestic abuse victim.",
+                        "A stalker obtaining a celebrity's home address from a public DMV record."
+                    ]
+                },
+                {
+                    name: 'Exposure',
+                    category: 'dissemination',
+                    icon: '😳',
+                    definition: 'Revealing a person\'s nudity, grief, or bodily functions.',
+                    description: 'Exposure involves revealing intimate and vulnerable aspects of a person\'s life that are typically kept private. This includes nudity, moments of grief, or bodily functions, which can cause significant distress and embarrassment.',
+                    examples: [
+                        "Posting 'revenge porn' of an ex-significant other.",
+                        "Newspaper posting pictures featuring a celebrity grieving at a private funeral.",
+                        "Nursing home workers sharing explicit photos of residents on social media."
+                    ]
+                },
+                {
+                    name: 'Increased Accessibility',
+                    category: 'dissemination',
+                    icon: '🌍',
+                    definition: 'Amplifying the accessibility of personal information.',
+                    description: 'This harm occurs when information that was previously difficult to find (obscure) is made widely and easily available, often through technology. Even public information can become a privacy risk when its accessibility is dramatically increased.',
+                    examples: [
+                        'Court records containing sensitive details being put online in a searchable format.',
+                        'A college newspaper article about a DUI from 20 years ago becoming easily findable through a simple Google search.',
+                        'Aggregating publicly available social media data into a single, easily downloadable file.'
+                    ]
+                },
+                {
+                    name: 'Appropriation',
+                    category: 'dissemination',
+                    icon: '👤',
+                    definition: 'Using an individual\'s identity to serve the interests of another.',
+                    description: 'Appropriation involves using someone\'s name, image, or likeness for commercial or other purposes without their consent. This is often associated with celebrity endorsements but can happen to anyone.',
+                    examples: [
+                        "A magazine using your photo on its cover without permission to increase sales.",
+                        "A dating website using your social media picture in its advertising to imply you are a customer.",
+                        "Facebook using your 'likes' to create 'social ads' shown to your friends."
+                    ]
+                },
+                {
+                    name: 'Distortion',
+                    category: 'dissemination',
+                    icon: '🎭',
+                    definition: 'Disseminating false or misleading information about a person.',
+                    description: 'Distortion is the spread of inaccurate or false information about an individual. This can harm their reputation and lead to tangible negative consequences, such as financial loss or loss of opportunity, just as if the information were true.',
+                    examples: [
+                        "An inaccurate notation of a late payment on a credit report.",
+                        "A political candidate releasing false information about their opponent to discredit their campaign.",
+                        "A fake application falsely implicating an individual as a member of a terrorist organization."
+                    ]
+                },
+                {
+                    name: 'Surveillance',
+                    category: 'collection',
+                    icon: '👀',
+                    definition: 'Watching, listening to, or monitoring of a person\'s activities.',
+                    description: 'Surveillance is the act of observing someone, which can alter their behavior. The harm is not just in the data collected, but in the feeling of being watched, which can chill free expression and create a sense of unease.',
+                    examples: [
+                        "Tracking mouse movements on a webpage.",
+                        "Security cameras in a public space or store.",
+                        "An employer monitoring employee emails and web browsing."
+                    ]
+                },
+                {
+                    name: 'Interrogation',
+                    category: 'collection',
+                    icon: '❓',
+                    definition: 'Questioning or probing for personal information in an inappropriate context.',
+                    description: 'Interrogation occurs when someone is asked invasive or out-of-context questions, especially when there is a power imbalance. The harm comes from the act of asking, which can be intrusive and coercive, regardless of how the answer is used.',
+                    examples: [
+                        "Asking a female job candidate if she is pregnant or plans to have children.",
+                        "Nudging social media users to 'complete their profiles' by answering more and more personal questions.",
+                        "A debt collector calling family and friends to ask about your whereabouts."
+                    ]
+                },
+                {
+                    name: 'Intrusion',
+                    category: 'invasion',
+                    icon: '🚪',
+                    definition: 'Disturbing a person\'s tranquility or solitude.',
+                    description: 'Intrusion involves an unwelcome disruption of someone\'s personal space, time, or attention. It can be physical, like trespassing, or electronic, like spam calls and unwanted pop-up ads.',
+                    examples: [
+                        "A game that invites players to go to individuals' private homes.",
+                        "A political pollster calling during dinner time.",
+                        "Being flooded with unsolicited marketing emails."
+                    ]
+                },
+                {
+                    name: 'Decisional Interference',
+                    category: 'invasion',
+                    icon: '⚖️',
+                    definition: 'Intruding into a person\'s decision-making regarding their private affairs.',
+                    description: 'This harm involves an external party manipulating or controlling an individual\'s choices about their own life. This can range from government coercion to commercial manipulation through deceptive design.',
+                    examples: [
+                        "A payment processor preventing a user from spending their money on legal products based on moral grounds.",
+                        "A school requiring parents to use a specific service to receive class updates, leaving them no alternative.",
+                        "Using a 'dark pattern' to trick a user into sharing more data than they intend to."
+                    ]
+                },
+            ];
+
+            const darkPatternsData = [
+                {
+                    name: 'Privacy Zuckering',
+                    description: 'Making the process of changing default privacy settings overly complex, tricking users into sharing more information than they intended.'
+                },
+                {
+                    name: 'Bad Defaults',
+                    description: 'Setting default options to be privacy-intrusive, relying on users not to change them.'
+                },
+                {
+                    name: 'Forced Registrations',
+                    description: 'Requiring users to create an account and share personal data for a service that doesn\'t technically need it.'
+                },
+                {
+                    name: 'Hidden Stipulations',
+                    description: 'Burying malicious or unexpected data use clauses in long and unreadable terms of service.'
+                },
+                {
+                    name: 'Immortal Accounts',
+                    description: 'Making it difficult or impossible for users to delete their accounts and associated data.'
+                },
+                {
+                    name: 'Address Book Leeching',
+                    description: 'Urging a user to upload their contacts and then using that data for unstated purposes, like creating shadow profiles of non-users.'
+                },
+                {
+                    name: 'Shadow Profiles',
+                    description: 'Creating hidden profiles of non-users or users with supplemental data of which the user is unaware.'
+                },
+                {
+                    name: 'Information Milking',
+                    description: 'Requesting more information than is necessary for providing a service.'
+                }
+            ];
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const grid = document.getElementById('harms-grid');
+                const filters = document.getElementById('filters');
+                const modal = document.getElementById('modal');
+                const modalTitle = document.getElementById('modal-title');
+                const modalDescription = document.getElementById('modal-description');
+                const modalExamples = document.getElementById('modal-examples');
+                const modalClose = document.getElementById('modal-close');
+                const darkPatternsGrid = document.getElementById('dark-patterns-grid');
+
+                const createHarmCard = (harm) => {
+                    const card = document.createElement('div');
+                    card.className = `harm-card bg-white p-6 rounded-lg shadow-md cursor-pointer flex flex-col items-center text-center`;
+                    card.dataset.category = harm.category;
+                    card.innerHTML = `
+                    <div class="text-4xl mb-4">${harm.icon}</div>
+                    <h3 class="text-xl font-bold mb-2">${harm.name}</h3>
+                    <p class="text-gray-600 flex-grow">${harm.definition}</p>
+                    <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full text-sm font-semibold hover:bg-blue-600">Learn More</button>
+                `;
+                    card.addEventListener('click', () => showModal(harm));
+                    return card;
+                };
+
+                const populateGrid = (filter = 'all') => {
+                    grid.innerHTML = '';
+                    const filteredHarms = filter === 'all' ? harmsData : harmsData.filter(h => h.category === filter);
+                    filteredHarms.forEach(harm => grid.appendChild(createHarmCard(harm)));
+                };
+
+                const showModal = (harm) => {
+                    modalTitle.textContent = harm.name;
+                    modalDescription.textContent = harm.description;
+                    modalExamples.innerHTML = harm.examples.map(ex => `<li>${ex}</li>`).join('');
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                    setTimeout(() => modal.querySelector('.modal-content').classList.remove('scale-95'), 10);
+                };
+
+                const hideModal = () => {
+                    modal.querySelector('.modal-content').classList.add('scale-95');
+                    modal.classList.add('opacity-0');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                };
+
+                modalClose.addEventListener('click', hideModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        hideModal();
+                    }
+                });
+
+                filters.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                        e.target.classList.add('active');
+                        populateGrid(e.target.dataset.filter);
+                    }
+                });
+
+                darkPatternsData.forEach(pattern => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-gray-100 p-4 rounded-lg';
+                    card.innerHTML = `
+                    <h4 class="font-bold text-lg">${pattern.name}</h4>
+                    <p class="text-gray-600">${pattern.description}</p>
+                `;
+                    darkPatternsGrid.appendChild(card);
+                });
+
+                const createChart = () => {
+                    const ctx = document.getElementById('harmsChart').getContext('2d');
+                    const categoryCounts = harmsData.reduce((acc, harm) => {
+                        acc[harm.category] = (acc[harm.category] || 0) + 1;
+                        return acc;
+                    }, {});
+
+                    const labels = {
+                        processing: 'Information Processing',
+                        dissemination: 'Information Dissemination',
+                        collection: 'Collection',
+                        invasion: 'Invasion'
+                    };
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(labels).map(key => labels[key]),
+                            datasets: [{
+                                label: '# of Harms',
+                                data: Object.keys(labels).map(key => categoryCounts[key] || 0),
+                                backgroundColor: [
+                                    'rgba(59, 130, 246, 0.6)',
+                                    'rgba(239, 68, 68, 0.6)',
+                                    'rgba(245, 158, 11, 0.6)',
+                                    'rgba(16, 185, 129, 0.6)'
+                                ],
+                                borderColor: [
+                                    'rgba(59, 130, 246, 1)',
+                                    'rgba(239, 68, 68, 1)',
+                                    'rgba(245, 158, 11, 1)',
+                                    'rgba(16, 185, 129, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function () {
+                                            return '';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 1
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Specific Harms'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+
+                populateGrid();
+                createChart();
+            });
+        </script>
+    </p>
+</body>
+
+</html>

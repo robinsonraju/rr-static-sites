@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Protecting Personal Information</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is structured into four thematic sections with a top navigation bar for easy access: 1) An introduction to set the stage, 2) A deep dive into the core principles of proactive privacy (PbD & GDPR), 3) An exploration of the relationship between security and privacy, and 4) A practical guide to implementation controls. This thematic structure was chosen over a linear one to allow users to explore interconnected concepts logically and non-linearly, enhancing understanding. Key interactions include clickable cards for principles, toggles to compare concepts, and dynamic charts to visualize relationships, making the dense information more digestible and engaging for a graduate-level audience. -->
+    <!-- Visualization & Content Choices: 
+        - PbD Principles: Report Info -> 7 Foundational Principles. Goal -> Inform/Organize. Viz -> Interactive HTML cards. Interaction -> Click to reveal details. Justification -> Breaks down a long list into focused, digestible parts. Method -> Vanilla JS.
+        - Privacy vs. Security: Report Info -> Venn Diagram of overlaps. Goal -> Show Relationships/Compare. Viz -> Donut Chart with dynamic central text. Interaction -> Buttons toggle view between 'Privacy Only', 'Security Only', and 'Overlap'. Justification -> Creates an interactive version of the report's key static visual, reinforcing the concepts. Library -> Chart.js.
+        - Security Controls: Report Info -> Control Categories & Natures. Goal -> Organize/Inform. Viz -> Dynamic Bar Chart. Interaction -> Buttons switch chart data between 'By Category' (Preventive, etc.) and 'By Nature' (Physical, etc.), updating a description panel. Justification -> Allows users to explore two different classification systems for the same topic in a single, interactive space. Library -> Chart.js.
+        - Technical Controls: Report Info -> 4 Areas of Technical Controls. Goal -> Organize. Viz -> Tabbed Interface. Interaction -> Click tabs to switch content. Justification -> Cleanly organizes distinct categories of information without vertical scrolling. Method -> Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #333D45;
+        }
+
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #C57B57;
+            border-bottom-color: #C57B57;
+        }
+
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab.active {
+            background-color: #C57B57;
+            color: #FDFBF8;
+        }
+
+        .control-btn.active {
+            background-color: #333D45;
+            color: #FDFBF8;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 flex items-center gap-4">
+                    <h1 class="text-xl font-bold text-gray-800">Protecting Personal Information</h1>
+                    <a href="../Densmore-PPM.html"
+                        class="text-xs font-medium text-gray-500 hover:text-[#C57B57] transition-colors">
+                        &larr; Back to Book Index
+                    </a>
+                </div>
+                <nav class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="../index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Course
+                            Home</a>
+                        <a href="#intro" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Introduction</a>
+                        <a href="#principles" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Core
+                            Principles</a>
+                        <a href="#security" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Security &
+                            Privacy</a>
+                        <a href="#implementation"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium">Implementation</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="intro" class="text-center mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">A Proactive Approach to Privacy</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                This guide explores the essential framework for protecting personal information. Effective data privacy
+                is not an afterthought; it begins with embedding protection into the very design of our systems,
+                products, and processes. We will delve into the core principles, the critical role of information
+                security, and the practical controls needed to build a robust and trustworthy privacy program.
+            </p>
+        </section>
+
+        <section id="principles" class="mb-16 md:mb-24 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Core Principles of Modern Privacy</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">The foundation of privacy protection rests on
+                    proactive, user-centric design principles. This section explores the globally recognized Privacy by
+                    Design (PbD) framework and its legal codification in regulations like the GDPR, which mandate a
+                    preventative, not remedial, approach to safeguarding data.</p>
+            </div>
+
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-center mb-8">The 7 Foundational Principles of Privacy by Design</h3>
+                <div id="pbd-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-bold text-center mb-6">PbD and GDPR: From Best Practice to Legal Requirement
+                </h3>
+                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">While PbD provides the conceptual framework,
+                    the EU's General Data Protection Regulation (GDPR) formalizes it into a legal obligation through
+                    Article 25, "Data protection by design and by default." Both aim for the same goal—embedding privacy
+                    from the start—but the GDPR tethers its requirements to specific legal principles.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-center text-gray-800">Privacy Engineering: The "How"
+                        </h4>
+                        <p class="text-gray-600 text-center">If Privacy by Design provides the <span
+                                class="font-bold text-C57B57">'what'</span> to do, then Privacy Engineering provides the
+                            <span class="font-bold text-C57B57">'how'</span>. It is the discipline of using technical
+                            tools and methodologies to translate privacy policies and principles into concrete system
+                            features and functionalities.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-3 text-center text-gray-800">GDPR Principles in Action</h4>
+                        <p class="text-gray-600 text-center">Data Protection by Design and Default is guided by core
+                            GDPR articles, including Data Minimization, Purpose Limitation, and ensuring Integrity &
+                            Confidentiality through appropriate security measures.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="security" class="mb-16 md:mb-24 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Security & Privacy: A Symbiotic Relationship</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">You cannot have privacy without security. This
+                    section examines the deep interdependencies and distinctions between the two domains. We'll explore
+                    their overlapping goals, such as data integrity and access, and the unique obligations of privacy
+                    that extend beyond traditional information security.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">The Overlap: Where Worlds Converge</h3>
+                    <p id="venn-text-display" class="text-center text-gray-600 mb-6 h-24">Select a segment to explore
+                        the relationship between Information Security and Data Privacy. The core overlap is where
+                        confidential information is also personal.</p>
+                    <div class="flex justify-center space-x-2 mb-6">
+                        <button class="control-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 text-gray-700"
+                            data-segment="security">Security Only</button>
+                        <button
+                            class="control-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 text-gray-700 active"
+                            data-segment="overlap">Overlap</button>
+                        <button class="control-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 text-gray-700"
+                            data-segment="privacy">Privacy Only</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="privacySecurityChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-4">Understanding Security Controls</h3>
+                    <p id="controls-text-display" class="text-center text-gray-600 mb-6 h-24">Security controls are
+                        safeguards to manage risk. They are classified by their function (Category) or their nature.
+                        Explore the different classifications.</p>
+                    <div class="flex justify-center space-x-2 mb-6">
+                        <button
+                            class="control-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 text-gray-700 active"
+                            data-type="category">By Category</button>
+                        <button class="control-btn px-4 py-2 text-sm font-medium rounded-md bg-gray-200 text-gray-700"
+                            data-type="nature">By Nature</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="securityControlsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="implementation" class="scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Implementation in Practice</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">Applying privacy principles requires a combination of
+                    robust policies and effective technical controls. This section covers the practical methods
+                    organizations use to protect data, from managing user access and classifying data to implementing
+                    privacy-enhancing technologies.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-6">Fundamental Access Control</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-lg">Least Privilege</h4>
+                            <p class="text-gray-600">Grant access at the lowest possible level required for an employee
+                                to perform their job function.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">Need-to-Know Access</h4>
+                            <p class="text-gray-600">Restrict data access to only that which is critical for an
+                                authorized, assigned mission.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">Segregation of Duties</h4>
+                            <p class="text-gray-600">Ensure no single person can exploit a process or gain access to
+                                information inappropriately.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-center mb-6">Data Classification Schemes</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-lg">Information Security Focus: Impact</h4>
+                            <p class="text-gray-600">Classifies data by the potential harm to the organization if
+                                compromised (e.g., Public, Confidential, Restricted).</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg">Data Privacy Focus: Identifiability</h4>
+                            <p class="text-gray-600">Classifies data based on its ability to identify an individual
+                                (e.g., Personal Info, Sensitive PI, Anonymous).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-bold text-center mb-8">Key Technical Controls for Privacy</h3>
+                <div class="w-full max-w-4xl mx-auto">
+                    <div class="mb-4 flex space-x-2 p-1 bg-gray-200 rounded-lg">
+                        <button data-tab="obfuscation"
+                            class="tab flex-1 py-2 px-4 rounded-md text-sm font-medium active">Obfuscation</button>
+                        <button data-tab="minimization" class="tab flex-1 py-2 px-4 rounded-md text-sm font-medium">Data
+                            Minimization</button>
+                        <button data-tab="security-tech"
+                            class="tab flex-1 py-2 px-4 rounded-md text-sm font-medium">Security</button>
+                        <button data-tab="pets"
+                            class="tab flex-1 py-2 px-4 rounded-md text-sm font-medium">PETs</button>
+                    </div>
+                    <div id="tab-content" class="bg-white p-6 rounded-lg shadow-inner min-h-[150px]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16 md:mt-24">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+            <p>Interactive guide based on "Privacy Program Management, Chapter 5."</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pbdData = [
+                { title: '1. Proactive not Reactive', description: 'Anticipates and prevents privacy-invasive events before they happen, rather than waiting for risks to materialize.' },
+                { title: '2. Privacy as the Default', description: 'No action is required by individuals to maintain their privacy; it is built into the system by default.' },
+                { title: '3. Privacy Embedded into Design', description: 'Privacy is an essential component of the core functionality being designed and delivered.' },
+                { title: '4. Full Functionality', description: 'Accommodates all legitimate interests and objectives, rather than making unnecessary trade-offs. It\'s a positive-sum, not zero-sum approach.' },
+                { title: '5. End-to-End Security', description: 'Strong security measures are essential to privacy, from the start to the finish of the data life cycle.' },
+                { title: '6. Visibility and Transparency', description: 'Component parts and operations remain visible and transparent to users and providers alike, establishing accountability and trust.' },
+                { title: '7. Respect for User Privacy', description: 'Keeps the interests of the individual uppermost by offering strong privacy defaults, appropriate notice, and empowering user-friendly options.' }
+            ];
+
+            const pbdGrid = document.getElementById('pbd-grid');
+            pbdData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card bg-white p-6 rounded-xl shadow-lg cursor-pointer';
+                card.innerHTML = `
+            <h4 class="font-bold text-lg mb-2 text-gray-800">${item.title}</h4>
+            <p class="text-gray-600 text-sm hidden">${item.description}</p>
+        `;
+                pbdGrid.appendChild(card);
+            });
+
+            pbdGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('.card');
+                if (card) {
+                    const description = card.querySelector('p');
+                    const allDescriptions = pbdGrid.querySelectorAll('p');
+                    const wasVisible = !description.classList.contains('hidden');
+
+                    allDescriptions.forEach(desc => desc.classList.add('hidden'));
+
+                    if (!wasVisible) {
+                        description.classList.remove('hidden');
+                    }
+                }
+            });
+
+            const vennData = {
+                security: {
+                    text: 'Focuses on protecting information assets from threats, ensuring Confidentiality, Integrity, and Availability (CIA) of all company data, not just personal data.',
+                    chartData: [100, 0],
+                    bgColors: ['#333D45', '#E5E7EB'],
+                },
+                overlap: {
+                    text: 'Both disciplines share goals of data Integrity (Accuracy), Availability (Access), and Accountability. This is most critical when nonpublic information is also personal information.',
+                    chartData: [50, 50],
+                    bgColors: ['#333D45', '#C57B57'],
+                },
+                privacy: {
+                    text: 'Focuses on the rights of individuals, governing how their personal information is collected, used, and disclosed. It includes principles like Purpose Limitation and Data Minimization.',
+                    chartData: [0, 100],
+                    bgColors: ['#E5E7EB', '#C57B57'],
+                }
+            };
+
+            const privacySecurityCtx = document.getElementById('privacySecurityChart').getContext('2d');
+            const privacySecurityChart = new Chart(privacySecurityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Information Security', 'Data Privacy'],
+                    datasets: [{
+                        data: vennData.overlap.chartData,
+                        backgroundColor: vennData.overlap.bgColors,
+                        borderColor: '#FDFBF8',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
+                }
+            });
+
+            document.querySelector('.lg\\:grid-cols-2').addEventListener('click', e => {
+                if (e.target.matches('[data-segment]')) {
+                    const segment = e.target.dataset.segment;
+                    const data = vennData[segment];
+                    privacySecurityChart.data.datasets[0].data = data.chartData;
+                    privacySecurityChart.data.datasets[0].backgroundColor = data.bgColors;
+                    privacySecurityChart.update();
+                    document.getElementById('venn-text-display').textContent = data.text;
+
+                    document.querySelectorAll('[data-segment]').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+
+            const controlsData = {
+                category: {
+                    text: 'Classified by function: what the control does. Preventive controls stop incidents, Detective controls identify them, and Corrective controls limit damage.',
+                    labels: ['Preventive', 'Detective', 'Corrective'],
+                    data: [8, 6, 5],
+                },
+                nature: {
+                    text: 'Classified by nature: how the control is implemented. Physical controls secure tangible assets, Administrative controls are policies, and Technical controls are software-based.',
+                    labels: ['Physical', 'Administrative', 'Technical'],
+                    data: [7, 9, 10],
+                }
+            };
+
+            const securityControlsCtx = document.getElementById('securityControlsChart').getContext('2d');
+            const securityControlsChart = new Chart(securityControlsCtx, {
+                type: 'bar',
+                data: {
+                    labels: controlsData.category.labels,
+                    datasets: [{
+                        label: 'Control Importance',
+                        data: controlsData.category.data,
+                        backgroundColor: '#C57B57',
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            document.getElementById('controls-text-display').textContent = controlsData.category.text;
+
+            document.querySelector('.lg\\:grid-cols-2').addEventListener('click', e => {
+                if (e.target.matches('[data-type]')) {
+                    const type = e.target.dataset.type;
+                    const data = controlsData[type];
+                    securityControlsChart.data.labels = data.labels;
+                    securityControlsChart.data.datasets[0].data = data.data;
+                    securityControlsChart.update();
+                    document.getElementById('controls-text-display').textContent = data.text;
+
+                    document.querySelectorAll('[data-type]').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+
+            const tabData = {
+                obfuscation: {
+                    title: 'Obfuscation',
+                    content: 'Making personal data obscure, unclear, or unintelligible to unauthorized parties. Techniques include masking, tokenization, randomization, and hashing to protect data while it is in use.'
+                },
+                minimization: {
+                    title: 'Data Minimization',
+                    content: 'Limiting the collection of personal information to that which is directly relevant and necessary to accomplish a specified purpose. This includes granulation, data segregation, deletion, and de-identification.'
+                },
+                'security-tech': {
+                    title: 'Security Measures',
+                    content: 'Protective privacy measures used to prevent unauthorized access. This is a broad category including encryption, system access controls, data loss prevention (DLP), secure destruction, and continuous auditing.'
+                },
+                pets: {
+                    title: 'Privacy Enhancing Technologies (PETs)',
+                    content: 'A class of technologies that are engineered specifically to protect privacy. Examples include homomorphic encryption (computing on encrypted data), differential privacy (adding noise to datasets), and anonymous digital credentials.'
+                }
+            };
+
+            const tabContent = document.getElementById('tab-content');
+            const tabs = document.querySelectorAll('.tab');
+
+            function updateTabContent(tabId) {
+                const data = tabData[tabId];
+                tabContent.innerHTML = `
+            <h4 class="font-bold text-lg mb-2 text-gray-800">${data.title}</h4>
+            <p class="text-gray-600">${data.content}</p>
+        `;
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabId);
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => updateTabContent(tab.dataset.tab));
+            });
+
+            updateTabContent('obfuscation');
+
+            const navLinks = document.querySelectorAll('nav a');
+            const sections = document.querySelectorAll('section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

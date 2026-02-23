@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Actors and Their Roles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application uses a tab-based navigation structure to separate the three core actor types: Individuals at Risk, Threat Actors, and Other Actors. This thematic approach allows users to explore the concepts in a non-linear, focused manner, which is more intuitive for a web app than a simple scrollable page. Interactions include clicking on cards to reveal detailed information and exploring a bubble chart to understand threat actor motives vs. capabilities. This structure was chosen to break down the dense, conceptual information into digestible, interactive chunks, enhancing usability and comprehension. -->
+    <!-- Visualization & Content Choices: 
+    - Individuals at Risk (Roles): Report Info -> 4 categories of at-risk individuals. Goal -> Organize/Inform. Viz -> Interactive Cards. Interaction -> Click to reveal definitions. Justification -> Focuses user attention on one concept at a time. Method -> HTML/CSS/JS.
+    - Individuals at Risk (Sub-populations): Report Info -> Table of high-risk groups. Goal -> Inform. Viz -> Accordion List. Interaction -> Click to expand. Justification -> Manages information density, keeping the UI clean. Method -> HTML/CSS/JS.
+    - Threat Actors (Motive/Capability): Report Info -> Table B examples. Goal -> Compare/Relationships. Viz -> Bubble Chart. Interaction -> Hover for tooltips showing scenarios. Justification -> More engaging and visually representative of varying capabilities than a static table. Library -> Chart.js.
+    - Other Concepts (Threat Actor Categories, Other Actors): Report Info -> Descriptive text and lists. Goal -> Organize/Inform. Viz -> Diagrams/Cards made with styled HTML. Interaction -> Static display. Justification -> Simple, clear presentation for straightforward concepts. Method -> Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #404040;
+        }
+
+        .active-tab {
+            border-color: #D5A021;
+            color: #D5A021;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 500px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-10">
+            <div class="flex flex-col items-center gap-2 mb-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Actors and Their Roles</h1>
+                <div class="flex gap-4">
+                    <a href="../index.html"
+                        class="text-sm font-bold text-[#D5A021] hover:text-gray-900 transition-colors">Course Home</a>
+                    <a href="../Cronk-SPBD.html"
+                        class="text-sm font-medium text-gray-500 hover:text-[#D5A021] transition-colors">&larr; Back to
+                        Book Index</a>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-2">An Interactive Summary of Chapter 2: Strategic Privacy by Design</p>
+        </header>
+        <nav class="flex justify-center border-b border-gray-200 mb-8"><button data-tab="individuals"
+                class="py-4 px-6 text-lg text-gray-500 hover:text-[#D5A021] border-b-2 border-transparent focus:outline-none active-tab">Individuals
+                at Risk</button> <button data-tab="threats"
+                class="py-4 px-6 text-lg text-gray-500 hover:text-[#D5A021] border-b-2 border-transparent focus:outline-none">Threat
+                Actors</button> <button data-tab="others"
+                class="py-4 px-6 text-lg text-gray-500 hover:text-[#D5A021] border-b-2 border-transparent focus:outline-none">Other
+                Actors</button></nav>
+        <main>
+            <div id="individuals" class="tab-content active">
+                <section class="mb-12">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Who is at Risk?</h2>
+                    <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">In any privacy scenario, we must first
+                        identify the individuals whose privacy could be compromised. These individuals can be grouped
+                        into distinct roles based on their relationship to a product, service, or process. Click on each
+                        role below to learn more about its definition and see an example based on an employee time clock
+                        service.</p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="card p-6 text-center cursor-pointer role-card" data-role="consumer">
+                            <div class="text-4xl mb-3">👤</div>
+                            <h3 class="text-xl font-semibold text-gray-800">First-Party Consumer</h3>
+                        </div>
+                        <div class="card p-6 text-center cursor-pointer role-card" data-role="provider">
+                            <div class="text-4xl mb-3">🛠️</div>
+                            <h3 class="text-xl font-semibold text-gray-800">First-Party Provider</h3>
+                        </div>
+                        <div class="card p-6 text-center cursor-pointer role-card" data-role="other">
+                            <div class="text-4xl mb-3">🔗</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Other Party</h3>
+                        </div>
+                        <div class="card p-6 text-center cursor-pointer role-card" data-role="bystander">
+                            <div class="text-4xl mb-3">🚶</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Bystander</h3>
+                        </div>
+                    </div>
+                    <div id="role-details"
+                        class="mt-8 p-6 bg-white border-2 border-dashed border-gray-300 rounded-lg min-h-[120px] flex items-center justify-center transition-all duration-300">
+                        <p class="text-gray-500">Click a role above to see its description here.</p>
+                    </div>
+                </section>
+                <section>
+                    <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">High-Risk Sub-Populations</h2>
+                    <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">Certain groups may be more susceptible
+                        to privacy harms due to historical, social, or personal circumstances. Understanding these
+                        sensitivities is crucial for effective privacy design. Click on each population to understand
+                        their specific vulnerabilities.</p>
+                    <div id="high-risk-container" class="space-y-4"></div>
+                </section>
+            </div>
+            <div id="threats" class="tab-content">
+                <section class="mb-12">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Who Poses a Threat?</h2>
+                    <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">A threat actor is any party that
+                        interacts with an individual or their information, representing a potential privacy threat. It's
+                        important to distinguish between their inherent abilities and their situational advantages.</p>
+                    <div class="grid md:grid-cols-2 gap-8 text-center">
+                        <div class="p-6 bg-white rounded-lg border">
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-2">Capability</h3>
+                            <p class="text-gray-600">The skills and resources at an actor's disposal. This is about what
+                                they *can* do. For example, a hacker trained in penetrating systems has high capability.
+                            </p>
+                        </div>
+                        <div class="p-6 bg-white rounded-lg border">
+                            <h3 class="text-2xl font-semibold text-gray-800 mb-2">Capacity</h3>
+                            <p class="text-gray-600">The affordances or opportunities an actor has due to their
+                                position. This is about what they are *positioned* to do. For example, an employee has
+                                greater capacity to harm their company's systems than an outsider.</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="mb-12">
+                    <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Threat Actor Motives vs. Capabilities
+                    </h2>
+                    <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">Threat actors have different motivations
+                        and varying levels of skill and resources. This table illustrates different scenarios based on
+                        the actor's motive and capability.</p>
+                    <div class="card p-4 overflow-x-auto">
+                        <table class="w-full text-left table-auto border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="p-4 font-semibold text-gray-700">Motive</th>
+                                    <th class="p-4 font-semibold text-gray-700">Capability</th>
+                                    <th class="p-4 font-semibold text-gray-700">Scenario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-4">Make Money</td>
+                                    <td class="p-4">Less Capable</td>
+                                    <td class="p-4">An amateur cyber-criminal accesses your email to blackmail you.</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-4">Make Money</td>
+                                    <td class="p-4">More Capable</td>
+                                    <td class="p-4">Organized criminals use their resources to blackmail people.</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-4">Enforce the Law</td>
+                                    <td class="p-4">Less Capable</td>
+                                    <td class="p-4">Local police use a fingerprint found at a crime scene to identify
+                                        you.</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-4">Enforce the Law</td>
+                                    <td class="p-4">More Capable</td>
+                                    <td class="p-4">The Federal Bureau of Investigation uses greater resources at its
+                                        disposal.</td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-4">Inflict Harm</td>
+                                    <td class="p-4">Less Capable</td>
+                                    <td class="p-4">A lover posts nude photos of you on the internet.</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-gray-50">
+                                    <td class="p-4">Inflict Harm</td>
+                                    <td class="p-4">More Capable</td>
+                                    <td class="p-4">A tech-savvy lover knows where to post photos for maximum exposure.
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <td class="p-4">Careless disregard</td>
+                                    <td class="p-4">Less Capable</td>
+                                    <td class="p-4">A friend not on social media inadvertently discloses your gambling
+                                        habit.</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="p-4">Careless disregard</td>
+                                    <td class="p-4">More Capable</td>
+                                    <td class="p-4">A social "super-node" friend with a large network increases the harm
+                                        of disclosure.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section>
+                    <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Categorizing Threat Actors</h2>
+                    <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">Threat actors can be broadly categorized
+                        into groups based on their nature and typical motivations. Their capabilities can range from
+                        amateur to superpower levels within each category.</p>
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="card p-6">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-3">People</h3>
+                            <p class="text-gray-600 mb-4"><strong>Motives:</strong> Revenge, money, spite, control,
+                                curiosity.</p>
+                            <p class="text-gray-500"><strong>Capability Levels:</strong> Amateur, Professional,
+                                Crowd/Mob</p>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-3">Organizations</h3>
+                            <p class="text-gray-600 mb-4"><strong>Motives:</strong> Money, competitive advantage, social
+                                agenda.</p>
+                            <p class="text-gray-500"><strong>Capability Levels:</strong> Small, Medium, Large,
+                                Multinational, FAAMG</p>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-3">Governments</h3>
+                            <p class="text-gray-600 mb-4"><strong>Motives:</strong> Law enforcement, espionage, control,
+                                public safety, repression.</p>
+                            <p class="text-gray-500"><strong>Capability Levels:</strong> Local, Regional, Nation State,
+                                Superpower</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div id="others" class="tab-content">
+                <section>
+                    <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Who Else is Involved?</h2>
+                    <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">Beyond those at risk and those posing a
+                        direct threat, a third group of actors can influence the privacy landscape. These actors may not
+                        be the source of a threat themselves but play a significant role in enabling, controlling, or
+                        being indirectly involved in privacy events.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Influencers &amp; Controllers</h3>
+                            <p class="text-gray-600">These actors have control over another actor. For example, <span
+                                    class="font-semibold">Employers</span> can institute controls over employees, and
+                                <span class="font-semibold">Regulators</span> (like the FTC) can restrict corporate
+                                behavior.</p>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Proxies</h3>
+                            <p class="text-gray-600">A proxy is anyone who may be a repository of information about or
+                                have influence over an individual. This includes <span class="font-semibold">friends and
+                                    family members</span> who might inadvertently reveal information.</p>
+                        </div>
+                        <div class="card p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Recipients of Information</h3>
+                            <p class="text-gray-600">These are passive recipients who may not be threat actors
+                                themselves. For example, if a disgruntled employee posts private personnel records, the
+                                <span class="font-semibold">public</span> may read it and be judgmental but are not the
+                                primary threat actor.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <p>
+        <script>
+            const roleData = {
+                consumer: {
+                    title: "First-Party Consumer",
+                    description: "Person interacting with a service, product, or business process for the purpose of receiving the results of that service, product or business process.",
+                    example: "<strong>Example:</strong> Human resource (HR) employees collecting results of the time clock to process payroll for the company."
+                },
+                provider: {
+                    title: "First-Party Provider",
+                    description: "Person interacting with a service, product, or business process for the purpose of providing the results of that service, product, or business process.",
+                    example: "<strong>Example:</strong> Service personnel from time clock company who repair, monitor, or administer the service."
+                },
+                other: {
+                    title: "Other Party",
+                    description: "Person or their proxy necessary for the provision of a service, product or business process but whom neither receives nor provides results of that service, product, or business process.",
+                    example: "<strong>Example:</strong> Employees clocking in and out. While they interact with the time clock, they are not the beneficiaries of the service; HR employees consume the results."
+                },
+                bystander: {
+                    title: "Bystander",
+                    description: "Person interacting with a service, product or business process who is immaterial to that service, product, or business process.",
+                    example: "<strong>Example:</strong> Salaried employees who may be captured via camera or audio by an advanced time clock but are not required to use it."
+                }
+            };
+
+            const highRiskData = [
+                {
+                    population: "Children",
+                    sensitivity: "More susceptible to manipulation and may lack emotional maturity to deal with privacy violations. The severity of privacy harm may be greater for children than adults.",
+                    justification: "Laws like COPPA (US) and GDPR (EU) provide additional protections for children."
+                },
+                {
+                    population: "Criminals",
+                    sensitivity: "Much more likely to suffer ostracism from society that may be disproportional to their crime. They may suffer embarrassment or employment discrimination if their criminal history is revealed.",
+                    justification: "Legal concepts like expungement of records and 'Ban the Box' laws acknowledge the need to reintegrate individuals into society."
+                },
+                {
+                    population: "Victim of intimate partner violence",
+                    sensitivity: "An active pursuer puts them at a higher risk that disclosure of personal information may adversely impact their personal security through physical injury.",
+                    justification: "History is replete with examples of victims being stalked and harmed after their information was exposed. They often must take extraordinary measures to protect themselves."
+                },
+                {
+                    population: "Women and minority groups",
+                    sensitivity: "More likely to be the targets of privacy violations. Ostracism and other social detriments may be more pronounced, and they may suffer lost opportunities due to discrimination.",
+                    justification: "Societal biases and disparate attitudes often result in more frequent and severe consequences for these groups."
+                },
+                {
+                    population: "Celebrities",
+                    sensitivity: "More likely to have their image appropriated to promote a product without consent, and may suffer more financial harm (brand damage) as a result.",
+                    justification: "The common law 'right of publicity' is aimed at protecting people from appropriation of their likeness."
+                }
+            ];
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const tabs = document.querySelectorAll('nav button');
+                const tabContents = document.querySelectorAll('.tab-content');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(item => item.classList.remove('active-tab'));
+                        tab.classList.add('active-tab');
+
+                        const target = document.getElementById(tab.dataset.tab);
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        target.classList.add('active');
+                    });
+                });
+
+                const roleCards = document.querySelectorAll('.role-card');
+                const roleDetailsContainer = document.getElementById('role-details');
+
+                roleCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const roleKey = card.dataset.role;
+                        const data = roleData[roleKey];
+
+                        roleDetailsContainer.innerHTML = `
+                    <div class="text-left">
+                        <h4 class="text-xl font-bold text-gray-800">${data.title}</h4>
+                        <p class="mt-2 text-gray-600">${data.description}</p>
+                        <p class="mt-3 text-sm text-gray-500 bg-gray-50 p-3 rounded-md">${data.example}</p>
+                    </div>
+                `;
+                        roleDetailsContainer.classList.remove('border-dashed', 'items-center', 'justify-center');
+                    });
+                });
+
+                const highRiskContainer = document.getElementById('high-risk-container');
+                highRiskData.forEach(item => {
+                    const element = document.createElement('div');
+                    element.className = 'card overflow-hidden';
+                    element.innerHTML = `
+                <div class="p-4 cursor-pointer bg-white hover:bg-gray-50 flex justify-between items-center high-risk-header">
+                    <h4 class="text-lg font-semibold text-gray-700">${item.population}</h4>
+                    <span class="transform transition-transform duration-300">▼</span>
+                </div>
+                <div class="p-4 border-t border-gray-200 hidden high-risk-body bg-gray-50">
+                    <p class="font-medium text-gray-700">Sensitivity:</p>
+                    <p class="mb-3 text-gray-600">${item.sensitivity}</p>
+                    <p class="font-medium text-gray-700">Justification:</p>
+                    <p class="text-gray-600">${item.justification}</p>
+                </div>
+            `;
+                    highRiskContainer.appendChild(element);
+                });
+
+                highRiskContainer.addEventListener('click', (e) => {
+                    const header = e.target.closest('.high-risk-header');
+                    if (header) {
+                        const body = header.nextElementSibling;
+                        const icon = header.querySelector('span');
+                        body.classList.toggle('hidden');
+                        icon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+        </script>
+    </p>
+</body>
+
+</html>

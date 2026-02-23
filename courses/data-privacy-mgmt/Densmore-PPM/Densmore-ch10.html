@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chosen Palette: Warm Neutral (BG: #f8f7f5, Text: #1f2937, Primary: #4f46e5, Accent: #10b981, Danger: #ef4444) -->
+    <!-- Application Structure Plan: A thematic, single-page application (SPA) structure. Instead of mirroring the report's linear chapters, the content is synthesized into five user-centric, interactive themes: 'Overview' (for key stats), 'The Lifecycle' (an interactive process flow from detection to recovery), 'The Team' (a role-explorer to compare planning vs. incident roles for each department), 'Planning & Prevention' (a dashboard of key prep tasks), and 'Risks & Costs' (the business case, featuring an interactive cost-saving/adding chart). This task-oriented, non-linear design allows users to explore content based on their needs (e.g., "What does my department do?" or "What's the process?"), which is more intuitive and usable than a static report. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: Breach Causes (Ponemon 2020: 52/25/23). Goal: Inform/Hook. Viz: Donut Chart. Interaction: Hover. Justification: Quick, visual summary of the problem. Library: Chart.js (Canvas).
+        2. Report Info: Response Process (Sections 10.7-10.11). Goal: Organize/Inform. Viz: Interactive Tabbed View (HTML/JS). Interaction: Click tabs ('Detect', 'Investigate', 'Report', 'Recover'). Justification: Breaks a complex, long process into digestible, user-controlled steps. Method: Vanilla JS DOM manipulation.
+        3. Report Info: Stakeholder Roles (Sections 10.5 & 10.8). Goal: Compare/Organize. Viz: Dynamic Content View. Interaction: Click department button (e.g., 'Legal') to load side-by-side 'Planning Role' vs. 'Incident Role'. Justification: Synthesizes data from two disparate chapters into a single, high-value comparative view. Method: Vanilla JS (data object).
+        4. Report Info: Cost Savers/Adders (Table 10-4). Goal: Compare/Persuade. Viz: Horizontal Bar Chart. Interaction: Hover. Justification: Visually demonstrates the financial impact of preparedness, far more effectively than a table. Positive (savers) and negative (adders) values are color-coded. Library: Chart.js (Canvas).
+        5. Report Info: Key Concepts (e.g., "Incident vs. Breach", "Legal Privilege"). Goal: Inform. Viz: Styled text blocks/alerts. Interaction: N/A (static display within context). Justification: Highlights critical legal/terminological concepts within the relevant process step. Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <title>Interactive Data Breach Response Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f7f5;
+            color: #1f2937;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link-active,
+        .nav-link:hover {
+            border-bottom-color: #4f46e5;
+            color: #4f46e5;
+        }
+
+        .page-content {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lifecycle-tab {
+            transition: all 0.3s ease;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        .lifecycle-tab-active {
+            border-color: #4f46e5;
+            background-color: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .role-button {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .role-button-active {
+            border-left-color: #4f46e5;
+            background-color: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .role-button:hover {
+            background-color: #f4f4f5;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="font-bold text-xl text-gray-800">Breach Response Interactive</span>
+                    <a href="../Densmore-PPM.html"
+                        class="text-xs font-medium text-indigo-500 hover:text-indigo-800 transition-colors ml-4">
+                        &larr; Back to Book Index
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="../index.html"
+                            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500">Course Home</a>
+                        <a href="#"
+                            class="nav-link nav-link-active px-3 py-2 rounded-md text-sm font-medium text-gray-700"
+                            data-target="page-overview">Overview</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500"
+                            data-target="page-lifecycle">The Lifecycle</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500"
+                            data-target="page-team">The Team</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500"
+                            data-target="page-planning">Planning & Prevention</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500"
+                            data-target="page-costs">Risks & Costs</a>
+                    </div>
+                </div>
+                <div classmd:hidden>
+                    <select id="mobile-nav"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="page-overview" selected>Overview</option>
+                        <option value="page-lifecycle">The Lifecycle</option>
+                        <option value="page-team">The Team</option>
+                        <option value="page-planning">Planning & Prevention</option>
+                        <option value="page-costs">Risks & Costs</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app-content" class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+
+        <!-- ===== PAGE 1: OVERVIEW ===== -->
+        <div id="page-overview" class="page-content">
+            <section>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Understanding Data Breach Response</h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    Responding to a data breach is a critical and complex challenge for any organization. With strict
+                    global laws like the GDPR and CCPA, a misstep can lead to significant financial penalties,
+                    class-action lawsuits, and severe reputational damage. This interactive guide synthesizes the key
+                    components of a robust incident response plan, based on Chapter 10 of "Privacy Program Management."
+                    Explore the lifecycle, team roles, and financial impact of preparedness.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">What's at Risk?</h2>
+                        <p class="text-gray-600 mb-4">A data breach isn't just a technical problem; it's a business
+                            crisis. The immediate risks are significant, but the long-term consequences can be even more
+                            severe.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Legal Exposure:</span> Fines in the EU can reach up to 10
+                                million euros or 2% of global turnover. In the US, class-action lawsuits can result in
+                                multi-million dollar settlements.</li>
+                            <li><span class="font-semibold">Financial Costs:</span> The 2020 Ponemon Report found the
+                                average cost of a data breach is <span class="text-indigo-600 font-bold">$3.86
+                                    million</span>, or <span class="text-indigo-600 font-bold">$146 per compromised
+                                    record</span>.</li>
+                            <li><span class="font-semibold">Reputational Harm:</span> Loss of customer trust, negative
+                                press, and diminished brand equity can impact revenue for years.</li>
+                            <li><span class="font-semibold">Operational Disruption:</span> Responding to a breach
+                                diverts resources from core business activities, impacting productivity and contracts.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3 text-center">Common Causes of Data Breaches
+                        </h2>
+                        <p class="text-gray-600 mb-4 text-center">Understanding the root causes is the first step in
+                            prevention. Malicious attacks are the most common, but internal factors are also
+                            significant.</p>
+                        <div class="chart-container">
+                            <canvas id="causes-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ===== PAGE 2: THE LIFECYCLE ===== -->
+        <div id="page-lifecycle" class="page-content hidden">
+            <section>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">The Breach Response Lifecycle</h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    A successful incident response is not a single event but a structured, four-stage process. Many
+                    steps happen in parallel, requiring close coordination. Click each tab to explore the key actions
+                    and considerations for that stage, from initial detection to long-term recovery.
+                </p>
+
+                <div class="flex flex-col md:flex-row border-b border-gray-300 mb-6">
+                    <button
+                        class="lifecycle-tab lifecycle-tab-active flex-1 py-3 px-4 font-semibold text-lg border-b-4 md:border-b-0 md:border-r"
+                        data-target="lifecycle-content-1">
+                        1. Detect & Handle
+                    </button>
+                    <button
+                        class="lifecycle-tab flex-1 py-3 px-4 font-semibold text-lg border-b-4 md:border-b-0 md:border-r"
+                        data-target="lifecycle-content-2">
+                        2. Investigate & Contain
+                    </button>
+                    <button
+                        class="lifecycle-tab flex-1 py-3 px-4 font-semibold text-lg border-b-4 md:border-b-0 md:border-r"
+                        data-target="lifecycle-content-3">
+                        3. Report & Notify
+                    </button>
+                    <button class="lifecycle-tab flex-1 py-3 px-4 font-semibold text-lg"
+                        data-target="lifecycle-content-4">
+                        4. Recover & Improve
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg min-h-[400px]">
+                    <div id="lifecycle-content-1" class="lifecycle-content">
+                        <h2 class="text-3xl font-semibold text-indigo-600 mb-4">Stage 1: Detect & Handle</h2>
+                        <p class="text-gray-600 mb-4">This initial stage begins when a potential compromise is
+                            identified. Speed and proper escalation are critical. Detection can come from internal
+                            systems, an employee report, a customer call, or even a news article.</p>
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-6"
+                            role="alert">
+                            <p class="font-bold">Critical Terminology: Incident vs. Breach</p>
+                            <p>Not all incidents are breaches. An <strong>Incident</strong> is a potential compromise. A
+                                <strong>Breach</strong> is a legal term, defined by law, that triggers specific
+                                notification obligations. Do not use the word "breach" until Legal has made a formal
+                                determination.
+                            </p>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Key Actions:</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Train Employees:</span> All employees must know how to
+                                recognize and report a potential incident immediately.</li>
+                            <li><span class="font-semibold">Standardize Reporting:</span> Use worksheets to capture
+                                initial facts: date, time, data type, and description of the event.</li>
+                            <li><span class="font-semibold">Escalate Immediately:</span> The report must go to the
+                                designated authority (e.g., Privacy Office or Legal) to begin the formal response.</li>
+                            <li><span class="font-semibold">Control Communications:</span> All internal communication
+                                must be locked down and on a strict "need-to-know" basis to prevent misinformation and
+                                protect privilege.</li>
+                        </ul>
+                    </div>
+
+                    <div id="lifecycle-content-2" class="lifecycle-content hidden">
+                        <h2 class="text-3xl font-semibold text-indigo-600 mb-4">Stage 2: Investigate & Contain</h2>
+                        <p class="text-gray-600 mb-4">Once an incident is declared, the investigation and containment
+                            efforts begin simultaneously. This stage is a delicate balance between stopping further
+                            damage (IT) and preserving evidence for legal analysis (Legal).</p>
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-6" role="alert">
+                            <p class="font-bold">The Importance of Legal Privilege</p>
+                            <p>All investigation activities must be directed by legal counsel (preferably outside
+                                counsel). This protects communications and work product under <strong>attorney-client
+                                    privilege</strong> or the <strong>attorney work product doctrine</strong>,
+                                preventing them from being used against the company in future litigation.</p>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Key Actions:</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Contain the Threat:</span> Secure physical areas, block bad
+                                actors' access, and take affected systems offline.</li>
+                            <li><span class="font-semibold">Engage Forensics:</span> Retain third-party forensic experts
+                                (engaged by Legal) to determine the cause, scope, and what data was compromised.</li>
+                            <li><span class="font-semibold">Preserve Evidence:</span> Ensure a sound chain of custody
+                                for all evidence.</li>
+                            <li><span class="font-semibold">Fix Vulnerabilities:</span> Analyze and patch the
+                                vulnerabilities that allowed the incident to occur.</li>
+                            <li><span class="font-semibold">Notify Insurers:</span> Immediately notify all insurance
+                                providers, as coverage may be available under multiple policies.</li>
+                        </ul>
+                    </div>
+
+                    <div id="lifecycle-content-3" class="lifecycle-content hidden">
+                        <h2 class="text-3xl font-semibold text-indigo-600 mb-4">Stage 3: Report & Notify</h2>
+                        <p class="text-gray-600 mb-4">After the investigation, Legal will determine if the incident
+                            constitutes a legal "breach" requiring notification. If so, this stage involves a massive,
+                            coordinated effort to communicate with regulators, affected individuals, and the public.</p>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Key Actions:</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Regulator Notifications:</span> Legal will guide
+                                notifications to all required agencies (e.g., State Attorneys General, FTC, HHS, or
+                                international DPAs).</li>
+                            <li><span class="font-semibold">Internal Announcements:</span> Provide properly worded
+                                communications to all employees with a strict directive to defer all external inquiries
+                                to the designated spokesperson.</li>
+                            <li><span class="font-semibold">External Announcements:</span> Coordinate press releases and
+                                public statements (led by PR/Legal) to ensure a consistent, accurate message.</li>
+                            <li><span class="font-semibold">Letter Drops:</span> Manage the complex production and
+                                delivery of notification letters to affected individuals, often in coordination with a
+                                print vendor.</li>
+                            <li><span class="font-semibold">Call Center Launch:</span> Activate a dedicated call center
+                                (internal or outsourced) with trained agents and approved scripts to handle inquiries.
+                            </li>
+                            <li><span class="font-semibold">Remediation Offers:</span> Provide services like credit
+                                monitoring or identity theft protection, including activation codes in the notification
+                                letter.</li>
+                        </ul>
+                    </div>
+
+                    <div id="lifecycle-content-4" class="lifecycle-content hidden">
+                        <h2 class="text-3xl font-semibold text-indigo-600 mb-4">Stage 4: Recover & Improve</h2>
+                        <p class="text-gray-600 mb-4">The crisis may be over, but the work is not. This final stage is
+                            about learning from the incident to build a more resilient organization. A failure is an
+                            opportunity for growth, funding, and renewed commitment.</p>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Key Actions:</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Conduct a Post-Incident Assessment:</span> Carefully
+                                evaluate the response. What worked? What failed? Were timelines realistic? Was the team
+                                sufficiently staffed?</li>
+                            <li><span class="font-semibold">Incorporate Lessons Learned:</span> Update the incident
+                                response plan and BCP with actionable insights from the assessment.</li>
+                            <li><span class="font-semibold">Calculate Total Costs:</span> Quantify all tangible (legal
+                                fees, call center) and intangible (lost business, brand damage) costs to understand the
+                                full impact.</li>
+                            <li><span class="font-semibold">Renew Commitment:</span> Use the incident as a business case
+                                to renew funding, focus, and C-suite commitment to the privacy program, staffing, and
+                                resources.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ===== PAGE 3: THE TEAM ===== -->
+        <div id="page-team" class="page-content hidden">
+            <section>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">The Response Team: Roles & Responsibilities</h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    An effective breach response requires a multidisciplinary team. The roles and responsibilities
+                    change dramatically from the "Planning" phase to the "Incident" phase. Select a function from the
+                    list to see a clear comparison of their duties.
+                </p>
+
+                <div class="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden min-h-[600px]">
+                    <div class="md:w-1/3 lg:w-1/4 border-r border-gray-200 bg-gray-50 overflow-y-auto">
+                        <nav class="flex flex-col p-2 space-y-1">
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="legal">Legal</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="information-security">Information Security / IT</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="compliance-privacy">Compliance / Privacy</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md" data-role="hr">Human
+                                Resources</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="finance">Finance</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="pr-communications">PR & Communications</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="marketing">Marketing</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="customer-care">Customer Care</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="business-development">Business Development</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="ceo-president">CEO / President</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md" data-role="board">Board of
+                                Directors</button>
+                            <button class="role-button w-full text-left px-4 py-3 rounded-md"
+                                data-role="outside-resources">Outside Resources</button>
+                        </nav>
+                    </div>
+                    <div class="md:w-2/3 lg:w-3/4 p-8 overflow-y-auto">
+                        <div id="role-details">
+                            <div class="flex flex-col items-center justify-center h-full text-center">
+                                <span class="text-6xl mb-4">👆</span>
+                                <h2 class="text-2xl font-semibold text-gray-700">Select a Role</h2>
+                                <p class="text-gray-500">Choose a department from the left to see their specific
+                                    responsibilities during planning and during an incident.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ===== PAGE 4: PLANNING & PREVENTION ===== -->
+        <div id="page-planning" class="page-content hidden">
+            <section>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Planning & Prevention: Getting Prepared</h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    The common phrase is "not if, but when." Prevention focuses on stopping a breach, while preparedness
+                    focuses on responding optimally when prevention fails. A robust preparedness program falls into
+                    several key categories.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">1. Incident Response Plan</h2>
+                        <p class="text-gray-600">The cornerstone of preparedness. This formal plan must be drafted and
+                            led by the <strong>Legal Department</strong> to protect privilege. It maps out roles,
+                            responsibilities, escalation procedures, severity rankings, and interactions with external
+                            parties.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">2. Training</h2>
+                        <p class="text-gray-600">Training exposes gaps and cultivates a security-first culture. The
+                            entire organization needs to know how to report an incident, while the response team needs
+                            in-depth, simulation-based training.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">3. Cyber-Liability Insurance</h2>
+                        <p class="text-gray-600">This coverage can offset the significant costs of a breach, including
+                            forensic investigations, outside counsel, notification, and credit monitoring. Policies must
+                            be reviewed closely for specific timing and vendor obligations.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">4. Vendor Management</h2>
+                        <p class="text-gray-600">Your company may be liable for a breach at your vendor. You must
+                            understand what information vendors have, their preparedness level, and their contractual
+                            obligations to notify you of an incident.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">5. BCP Integration</h2>
+                        <p class="text-gray-600">A data breach can be as disruptive as a natural disaster. The incident
+                            response plan should be integrated into the broader Business Continuity Plan (BCP) to ensure
+                            operational resilience.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-3">6. Tabletop Exercises</h2>
+                        <p class="text-gray-600">A structured readiness-testing activity that simulates a breach in a
+                            stress-free setting. These exercises (held at least semi-annually) are the best way to
+                            identify gaps in the plan and prepare stakeholders.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ===== PAGE 5: RISKS & COSTS ===== -->
+        <div id="page-costs" class="page-content hidden">
+            <section>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Risks & Costs: The Business Case for Preparedness</h1>
+                <p class="text-lg text-gray-600 mb-8">
+                    Investing in privacy and incident preparedness is not a cost center; it is a critical strategy for
+                    mitigating significant financial loss. The 2019 Ponemon Institute study quantified the average
+                    savings (and additional costs) per record based on an organization's preparedness level.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <span class="text-sm font-semibold text-gray-500 uppercase">Average Breach Cost</span>
+                        <p class="text-4xl font-bold text-red-600">$3.86 Million</p>
+                        <span class="text-xs text-gray-400">(Ponemon 2020)</span>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <span class="text-sm font-semibold text-gray-500 uppercase">Average Cost Per Record</span>
+                        <p class="text-4xl font-bold text-red-600">$146</p>
+                        <span class="text-xs text-gray-400">(Ponemon 2020)</span>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                        <span class="text-sm font-semibold text-gray-500 uppercase">Breach Probability (in 24mo)</span>
+                        <p class="text-4xl font-bold text-red-600">29.6%</p>
+                        <span class="text-xs text-gray-400">(Ponemon 2019)</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">How Preparedness Impacts Breach
+                        Costs (per Record)</h2>
+                    <p class="text-gray-600 mb-6 text-center">Actions in <span
+                            class="font-semibold text-green-600">green</span> save money, while factors in <span
+                            class="font-semibold text-red-600">red</span> increase costs.</p>
+                    <div class="chart-container" style="max-width: 900px; height: 700px; max-height: 800px;">
+                        <canvas id="costs-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-6 mt-8 border-t border-gray-200">
+        <p class="text-sm text-gray-500">Interactive Summary based on "Privacy Program Management," Chapter 10 by Liisa
+            Thomas.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const chartData = {
+                causes: {
+                    labels: ['Malicious or Criminal Attack', 'Systems Glitch', 'Human Error'],
+                    datasets: [{
+                        data: [52, 25, 23],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.7)',  // red-600
+                            'rgba(245, 158, 11, 0.7)', // amber-500
+                            'rgba(59, 130, 246, 0.7)'  // blue-500
+                        ],
+                        borderColor: [
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                costs: {
+                    labels: [
+                        'Incident response team', 'Extensive use of encryption', 'Employee training', 'BCM involvement',
+                        'Participation in threat-sharing', 'Artificial intelligence platform', 'Use of security analytics',
+                        'Board-level involvement', 'Extensive use of DLP', 'CISO appointed', 'Insurance protection',
+                        'Data classification schema', 'CPO appointed', 'Provision of ID protection', 'Consultants engaged',
+                        'Rush to notify', 'Extensive use of IoT devices', 'Lost or stolen devices',
+                        'Extensive use of mobile platforms', 'Extensive cloud migration', 'Compliance failures',
+                        'Third-party involvement'
+                    ],
+                    datasets: [{
+                        label: 'Avg. Cost Saved/Added per Record (in $)',
+                        data: [
+                            13.66, 13.59, 10.31, 10.56, 9.27, 8.97, 7.68, 7.68, 6.91, 6.85, 6.05, 5.11, 2.08, 0.56,
+                            -4.17, -5.61, -5.95, -6.75, -9.33, -11.39, -13.47, -14.04
+                        ],
+                        backgroundColor: (context) => {
+                            const value = context.raw;
+                            return value > 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)'; // green-500 / red-500
+                        },
+                        borderColor: (context) => {
+                            const value = context.raw;
+                            return value > 0 ? 'rgba(16, 185, 129, 1)' : 'rgba(239, 68, 68, 1)';
+                        },
+                        borderWidth: 1
+                    }]
+                }
+            };
+
+            const roleData = {
+                'legal': {
+                    planning: "Leads the drafting of the incident response plan to ensure it protects <strong>privilege</strong>. Advises on legal requirements, limits liability, and negotiates with business partners.",
+                    incident: "Leads the response to protect <strong>attorney-client privilege</strong>. Directs the investigation, determines the legal duty to notify, engages outside counsel and forensics, manages regulatory statements, and prepares for litigation."
+                },
+                'information-security': {
+                    planning: "Provides guidance on the technical aspects of the plan, including detection, isolation, removal, and preservation of affected systems. Helps identify vulnerabilities.",
+                    incident: "Focuses on investigation and containment. Supports forensic investigations, preserves evidence, deletes malware, corrects vulnerabilities, and may establish a <strong>Computer Emergency Response Team (CERT)</strong>."
+                },
+                'compliance-privacy': {
+                    planning: "Provides advice on fulfilling privacy obligations. Often manages <strong>data maps</strong> and repositories that are critical for identifying impacted individuals and data types.",
+                    incident: "As CPO/CCO, works with Legal and IT to ensure the breach is handled correctly from a compliance standpoint. Uses data maps to quickly assess what data was impacted."
+                },
+                'hr': {
+                    planning: "Provides the employee perspective, especially regarding employee data handling, security awareness training, and incident recognition for all staff.",
+                    incident: "Serves as the information conduit to employees. Manages staff concerns, facilitates investigator interviews, and administers <strong>corrective action or termination</strong> if an employee is involved."
+                },
+                'finance': {
+                    planning: "Calculates the potential bottom-line impact of a breach and helps allocate a budget for preparedness, training, and potential response costs.",
+                    incident: "Secures and allocates the funds necessary for the response (forensics, legal, notification). Manages reserves, pays vendors, and tracks all incident-related expenses."
+                },
+                'pr-communications': {
+                    planning: "Develops the strategic and tactical communication plan for informing and influencing external audiences (media, public) in the event of a crisis.",
+                    incident: "Manages the message. Works with Legal to draft press releases, website updates, and media talking points. Monitors media coverage and ensures message consistency."
+                },
+                'marketing': {
+                    planning: "Advises on the vast amounts of customer data held in CRM and campaign databases, which are often a primary target for attackers.",
+                    incident: "Helps mitigate brand and reputational damage. Collaborates with PR on content, analyzes media coverage, and develops customer retention campaigns to minimize churn."
+                },
+                'customer-care': {
+                    planning: "Offers insight on customer behavior and call center operations. This function is often susceptible to <strong>social engineering attacks</strong> ('phishing') and needs specific training.",
+                    incident: "Manages the breach-related call traffic. Works with leadership to provide scripts, train agents, or coordinate with an outsourced call center vendor."
+                },
+                'business-development': {
+                    planning: "Represents knowledge of key accounts, high-value relationships, and the corporate culture of major partners.",
+                    incident: "Often tasked with notifying <strong>key accounts</strong> and high-value customers personally. This helps mitigate backlash, maintain trust, and prevent loss of strategic partners."
+                },
+                'ceo-president': {
+                    planning: "Sets the 'tone at the top.' Demonstrates the value of preparedness through action, funding, and holding leaders accountable for data security.",
+                    incident: "Promptly allocates all necessary funds and personnel. May be called upon to make public comments (with coaching from PR/Legal) and contact <strong>regulators</strong> to show top-down accountability."
+                },
+                'board': {
+                    planning: "Increasingly concerned with preparedness, boards ensure the company is ready for an incident and that management is fulfilling its <strong>fiduciary obligations</strong>.",
+                    incident: "Receives frequent communication from management. Asks questions to ensure the company is properly handling risk exposure and mitigating its financial and legal risks."
+                },
+                'outside-resources': {
+                    planning: "Pre-negotiating agreements with breach response providers (forensics, legal, print, call center) is a best practice to ensure readiness.",
+                    incident: "Engaged to manage specific tasks: <strong>Forensic Firms</strong> (investigate), <strong>Outside Counsel</strong> (protect privilege, advise), <strong>Print Vendors</strong> (mail letters), <strong>Call Centers</strong> (handle calls), <strong>Remediation Providers</strong> (offer credit monitoring)."
+                }
+            };
+
+            let causesChartInstance = null;
+            let costsChartInstance = null;
+
+            function renderCausesChart() {
+                const ctx = document.getElementById('causes-chart');
+                if (!ctx) return;
+                if (causesChartInstance) {
+                    causesChartInstance.destroy();
+                }
+                causesChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: chartData.causes,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return `${context.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderCostsChart() {
+                const ctx = document.getElementById('costs-chart');
+                if (!ctx) return;
+                if (costsChartInstance) {
+                    costsChartInstance.destroy();
+                }
+                costsChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData.costs,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Average Cost Impact per Record (USD)'
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                ticks: {
+                                    autoSkip: false,
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.raw;
+                                        const prefix = value > 0 ? 'Saves $' : 'Adds $';
+                                        return `${context.label}: ${prefix}${Math.abs(value).toFixed(2)}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const pages = document.querySelectorAll('.page-content');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileNav = document.getElementById('mobile-nav');
+            const lifecycleTabs = document.querySelectorAll('.lifecycle-tab');
+            const roleButtons = document.querySelectorAll('.role-button');
+            const roleDetailsContainer = document.getElementById('role-details');
+
+            function switchPage(targetId) {
+                pages.forEach(page => {
+                    page.classList.toggle('hidden', page.id !== targetId);
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.toggle('nav-link-active', link.dataset.target === targetId);
+                    link.classList.toggle('text-gray-500', link.dataset.target !== targetId);
+                });
+
+                if (mobileNav.value !== targetId) {
+                    mobileNav.value = targetId;
+                }
+
+                if (targetId === 'page-overview') {
+                    renderCausesChart();
+                }
+                if (targetId === 'page-costs') {
+                    renderCostsChart();
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchPage(e.target.dataset.target);
+                });
+            });
+
+            mobileNav.addEventListener('change', (e) => {
+                switchPage(e.target.value);
+            });
+
+            lifecycleTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = e.target.dataset.target;
+
+                    document.querySelectorAll('.lifecycle-content').forEach(content => {
+                        content.classList.toggle('hidden', content.id !== targetId);
+                    });
+
+                    lifecycleTabs.forEach(t => {
+                        t.classList.toggle('lifecycle-tab-active', t.dataset.target === targetId);
+                    });
+                });
+            });
+
+            roleButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const roleKey = e.currentTarget.dataset.role;
+                    const data = roleData[roleKey];
+
+                    if (data) {
+                        roleDetailsContainer.innerHTML = `
+                            <h2 class="text-3xl font-bold text-indigo-600 mb-6">${e.currentTarget.textContent}</h2>
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-2 border-b border-gray-300 pb-1">Role During Planning</h3>
+                                    <p class="text-gray-600">${data.planning}</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-2 border-b border-gray-300 pb-1">Role During an Incident</h3>
+                                    <p class="text-gray-600">${data.incident}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    roleButtons.forEach(btn => {
+                        btn.classList.toggle('role-button-active', btn.dataset.role === roleKey);
+                    });
+                });
+            });
+
+            switchPage('page-overview');
+        });
+    </script>
+</body>
+
+</html>

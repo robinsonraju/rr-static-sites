@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Explorer: Tangible Privacy Harms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A thematic, single-page application guides users through the core concepts. The structure begins with an an interactive exploration of Calo's Subjective vs. Objective harms. The main section now uses an interactive table to explore the six categories of tangible consequences. A final interactive diagram visualizes the critical distinction between a privacy violation and a tangible consequence. This structure uses the robust table element to present the consequence data reliably, while interaction reinforces learning. -->
+    <!-- Visualization & Content Choices: Calo's Taxonomy uses interactive div cards (HTML/CSS) for conceptual comparison. The six harm categories are organized in an interactive table (HTML/CSS/JS) where clicking a row reveals detailed information, replacing the problematic card grid. A simple list diagram (HTML/CSS/JS) provides a high-level visual summary of the harm categories. Finally, a custom 2x2 interactive matrix (HTML/CSS/JS) is used to explain the relationship between violations and consequences. This approach prioritizes table structure for reliability over complex card layouts. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #383838;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+
+        /* Active states managed by JS. Used for Calo cards (V1 restoration) and Consequence table rows. */
+        .harm-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .harm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .active-harm-card {
+            border-color: #A5947A;
+            transform: translateY(-2px);
+        }
+
+        .active-table-row {
+            background-color: #F8F4EF !important;
+            border-left: 4px solid #A5947A;
+            font-weight: 600;
+        }
+
+        .matrix-quadrant {
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+
+        .active-matrix-quadrant {
+            background-color: #EFEAE4;
+            border-color: #A5947A;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200/50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <h1 class="text-xl font-bold text-[#A5947A]">Privacy Harms Explorer</h1>
+                <a href="../index.html"
+                    class="text-xs font-bold text-[#A5947A] hover:text-gray-900 transition-colors">Course Home</a>
+                <a href="../Cronk-SPBD.html"
+                    class="text-xs font-medium text-gray-500 hover:text-[#A5947A] transition-colors">&larr; Book
+                    Index</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#introduction" class="text-gray-600 hover:text-[#A5947A] transition">Introduction</a>
+                <a href="#calo-taxonomy" class="text-gray-600 hover:text-[#A5947A] transition">Calo's Taxonomy</a>
+                <a href="#consequences" class="text-gray-600 hover:text-[#A5947A] transition">Consequences</a>
+                <a href="#violation-vs-consequence" class="text-gray-600 hover:text-[#A5947A] transition">Violation vs.
+                    Consequence</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="introduction" class="text-center mb-20">
+            <h2 class="text-4xl font-bold mb-4">Tangible Privacy Harms</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">This explorer summarizes Chapter 4 of *Strategic Privacy
+                by Design*, moving beyond moral indignities to examine the physical, mental, and other tangible
+                consequences of privacy violations. We will explore a framework for categorizing these harms and
+                understand their complex relationship with the privacy violations that cause them.</p>
+        </section>
+
+        <section id="calo-taxonomy" class="mb-20">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-bold">The Calo Taxonomy: A Foundational Framework</h3>
+                <p class="text-md text-gray-500 mt-2">Ryan Calo categorizes privacy harms into two broad types. Click
+                    each to learn more.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- REVERTED: Restoring V1 structure (div with harm-card class) for Calo cards as requested -->
+                <div id="subjective-card"
+                    class="harm-card cursor-pointer bg-white p-8 rounded-lg border-2 border-transparent transition-all duration-300 shadow-sm hover:shadow-lg">
+                    <h4 class="text-2xl font-semibold mb-3 text-center">Subjective Harms</h4>
+                    <p class="text-gray-600 text-center text-sm mb-4">Internal to the individual.</p>
+                    <div id="subjective-details" class="hidden">
+                        <p class="text-gray-700 font-medium">Definition: "The perception of unwanted observation."</p>
+                        <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600 text-left">
+                            <li>Can occur even without an actual privacy invasion.</li>
+                            <li>Includes fear, anxiety, embarrassment, and behavioral changes (e.g., chilling effects).
+                            </li>
+                            <li>Aversion to observation can exist in degrees, not just a binary "yes" or "no".</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- REVERTED: Restoring V1 structure (div with harm-card class) for Calo cards as requested -->
+                <div id="objective-card"
+                    class="harm-card cursor-pointer bg-white p-8 rounded-lg border-2 border-transparent transition-all duration-300 shadow-sm hover:shadow-lg">
+                    <h4 class="text-2xl font-semibold mb-3 text-center">Objective Harms</h4>
+                    <p class="text-gray-600 text-center text-sm mb-4">External to the individual.</p>
+                    <div id="objective-details" class="hidden">
+                        <p class="text-gray-700 font-medium">Definition: "Forced or unanticipated use of personal
+                            information."</p>
+                        <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600 text-left">
+                            <li>Objectively visible detriments.</li>
+                            <li>Applies when information is used nonconsensually or in an unexpected way.</li>
+                            <li>If information is volunteered, the resulting detriment is not considered a privacy harm
+                                under this definition.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="consequences" class="mb-20">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-bold">Exploring Tangible Consequences</h3>
+                <p class="text-md text-gray-500 mt-2">The six primary tangible consequences are detailed below. Click on
+                    any row to view its full definition and examples.</p>
+            </div>
+
+            <!-- NEW: Table structure to replace the 6 clickable buttons -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <table id="consequence-table" class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                                Consequence Category</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                                Nature (Calo Taxonomy)</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                                Impact Example</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 text-sm">
+                        <!-- Table Rows are now the clickable elements -->
+                        <tr data-harm="psychological" class="cursor-pointer hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">🧠 Psychological</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">Subjective</td>
+                            <td class="px-6 py-4 text-gray-500">Anxiety, loss of trust, embarrassment.</td>
+                        </tr>
+                        <tr data-harm="behavioral" class="cursor-pointer hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">🚶‍♂️ Behavioral</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">Subjective</td>
+                            <td class="px-6 py-4 text-gray-500">Changed behavior, reclusion, chilling effects.</td>
+                        </tr>
+                        <tr data-harm="opportunity" class="cursor-pointer hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">🚫 Lost Opportunity</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">Objective</td>
+                            <td class="px-6 py-4 text-gray-500">Denial of jobs, insurance, or housing.</td>
+                        </tr>
+                        <tr data-harm="economic" class="cursor-pointer hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">💸 Economic Loss</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">Objective</td>
+                            <td class="px-6 py-4 text-gray-500">Financial costs, inability to get loans.</td>
+                        </tr>
+                        <tr data-harm="liberty" class="cursor-pointer hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">⛓️ Lost Liberty/Life</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">Objective</td>
+                            <td class="px-6 py-4 text-gray-500">Bodily injury, incarceration, death.</td>
+                        </tr>
+                        <tr data-harm="social" class="cursor-pointer hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">👥 Social Detriment</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">Objective</td>
+                            <td class="px-6 py-4 text-gray-500">Shunning, ostracism, loss of trust from others.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- END: Table structure -->
+
+            <div id="harm-details-container"
+                class="bg-white p-8 rounded-lg shadow-sm min-h-[20rem] transition-opacity duration-500 opacity-0 mt-8">
+                <h4 id="harm-title" class="text-2xl font-bold"></h4>
+                <p id="harm-type" class="text-sm font-medium uppercase tracking-wider text-[#A5947A] mb-4"></p>
+                <p id="harm-description" class="text-gray-700 mb-4"></p>
+                <div id="harm-examples-container">
+                    <h5 class="font-semibold mb-2">Examples from Chapter 4:</h5>
+                    <ul id="harm-examples" class="list-disc list-inside space-y-2 text-gray-600"></ul>
+                </div>
+            </div>
+
+            <div class="mt-16">
+                <div class="text-center mb-10">
+                    <h3 class="text-2xl font-bold">Mapping Tangible Consequences</h3>
+                    <p class="text-md text-gray-500 mt-2">The six categories of harm can be organized by their
+                        subjective or objective nature.</p>
+                </div>
+                <div class="flex flex-col md:flex-row justify-center gap-8 max-w-4xl mx-auto">
+                    <div class="bg-[#EFEAE4] p-6 rounded-lg shadow-inner w-full md:w-1/2">
+                        <h4 class="text-xl font-bold text-center mb-4 text-[#A5947A]">Subjective Harms</h4>
+                        <ul class="space-y-4">
+                            <li class="p-4 bg-white rounded-lg shadow-sm">
+                                <h5 class="font-semibold">Psychological</h5>
+                                <p class="text-sm text-gray-600">Loss of trust, anxiety, embarrassment.</p>
+                            </li>
+                            <li class="p-4 bg-white rounded-lg shadow-sm">
+                                <h5 class="font-semibold">Behavioral</h5>
+                                <p class="text-sm text-gray-600">Changed behavior, digital detox, reclusion.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-[#EFEAE4] p-6 rounded-lg shadow-inner w-full md:w-1/2">
+                        <h4 class="text-xl font-bold text-center mb-4 text-[#A5947A]">Objective Harms</h4>
+                        <ul class="space-y-4">
+                            <li class="p-4 bg-white rounded-lg shadow-sm">
+                                <h5 class="font-semibold">Lost Opportunity</h5>
+                                <p class="text-sm text-gray-600">Denial of employment, housing, or insurance.</p>
+                            </li>
+                            <li class="p-4 bg-white rounded-lg shadow-sm">
+                                <h5 class="font-semibold">Economic Loss</h5>
+                                <p class="text-sm text-gray-600">Financial costs and inconvenience.</p>
+                            </li>
+                            <li class="p-4 bg-white rounded-lg shadow-sm">
+                                <h5 class="font-semibold">Lost Liberty/Life</h5>
+                                <p class="text-sm text-gray-600">Bodily injury, incarceration, death.</p>
+                            </li>
+                            <li class="p-4 bg-white rounded-lg shadow-sm">
+                                <h5 class="font-semibold">Social Detriment</h5>
+                                <p class="text-sm text-gray-600">Shunning, ostracism, loss of trust from others.</p>
+                                </p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="violation-vs-consequence" class="mb-12">
+            <div class="text-center mb-10">
+                <h3 class="text-3xl font-bold">Violation vs. Consequence</h3>
+                <p class="text-md text-gray-500 mt-2">A privacy violation and a tangible consequence are not the same.
+                    Explore the four possible scenarios by clicking on the quadrants below.</p>
+            </div>
+
+            <div class="grid grid-cols-5 grid-rows-3 gap-2 max-w-3xl mx-auto">
+                <div class="col-start-3 col-span-3 text-center font-semibold">Privacy Violation?</div>
+                <div class="row-start-2 row-span-2 flex items-center justify-center -rotate-90 font-semibold">Tangible
+                    Consequence?</div>
+                <div class="row-start-2 text-center flex items-center justify-end font-semibold pr-2">Yes</div>
+                <div class="row-start-3 text-center flex items-center justify-end font-semibold pr-2">No</div>
+
+                <div class="col-start-3 text-center font-semibold">Yes</div>
+                <div class="col-start-4 text-center font-semibold">No</div>
+
+                <button data-quadrant="1"
+                    class="matrix-quadrant col-start-3 row-start-2 p-6 bg-white rounded-lg border-2 border-gray-200 text-center flex items-center justify-center">Violation
+                    + Consequence</button>
+                <button data-quadrant="2"
+                    class="matrix-quadrant col-start-4 row-start-2 p-6 bg-white rounded-lg border-2 border-gray-200 text-center flex items-center justify-center">No
+                    Violation + Consequence</button>
+                <button data-quadrant="3"
+                    class="matrix-quadrant col-start-3 row-start-3 p-6 bg-white rounded-lg border-2 border-gray-200 text-center flex items-center justify-center">Violation
+                    + No Consequence</button>
+                <button data-quadrant="4"
+                    class="matrix-quadrant col-start-4 row-start-3 p-6 bg-white rounded-lg border-2 border-gray-200 text-center flex items-center justify-center">No
+                    Violation + No Consequence</button>
+            </div>
+
+            <div id="matrix-details-container"
+                class="bg-white p-8 rounded-lg shadow-sm mt-8 max-w-3xl mx-auto min-h-[10rem] transition-opacity duration-500 opacity-0">
+                <h4 id="matrix-title" class="text-xl font-bold mb-2"></h4>
+                <p id="matrix-description" class="text-gray-700"></p>
+                <p id="matrix-example" class="text-gray-600 italic mt-3"></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200/50 mt-12">
+        <div class="container mx-auto px-6 py-6 text-center text-gray-500">
+            <p>An interactive summary of concepts from Chapter 4 of *Strategic Privacy by Design*.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const harmData = {
+                psychological: {
+                    title: 'Psychological',
+                    type: 'Subjective Harm',
+                    description: 'Internal, mental harms such as loss of trust, embarrassment, anxiety, or in extreme cases, suicide. These harms are felt by the individual, often as a direct result of a privacy invasion.',
+                    examples: [
+                        'Widespread use of CCTV cameras leading to anxiety among citizens.',
+                        'A delivery driver sending unsolicited texts to a customer, leading to fear.',
+                        'A family suffering distress after a relative\'s death is broadcast on a medical show.'
+                    ]
+                },
+                behavioral: {
+                    title: 'Behavioral',
+                    type: 'Subjective Harm',
+                    description: 'Changes in an individual\'s behavior to avoid perceived or actual privacy invasions. This includes self-censorship and reclusion.',
+                    examples: [
+                        'Domestic violence victims avoiding social media due to electronic stalking.',
+                        'Users creating "finsta" (fake Instagram) accounts to separate public personas from private life.',
+                        'Victims of online harassment changing their lifestyle out of fear.'
+                    ]
+                },
+                opportunity: {
+                    title: 'Lost Opportunity',
+                    type: 'Objective Harm',
+                    description: 'The denial of opportunities in areas like employment, insurance, housing, or education based on the use of personal information.',
+                    examples: [
+                        'Job ads being targeted in a way that discriminates against individuals based on age.',
+                        'An actress losing job opportunities after her age was published on IMDb.',
+                        'China\'s former one-child policy reducing family opportunities.'
+                    ]
+                },
+                economic: {
+                    title: 'Economic Loss',
+                    type: 'Objective Harm',
+                    description: 'Direct financial costs or other inconveniences that result in economic harm.',
+                    examples: [
+                        'Faulty information in a database preventing a woman from getting loans.',
+                        'Information from a fitness app being used to invalidate a health insurance payout.',
+                        'Banks limiting customers\' ability to use credit cards for cryptocurrency purchases.'
+                    ]
+                },
+                liberty: {
+                    title: 'Lost Liberty/Life',
+                    type: 'Objective Harm',
+                    description: 'The most severe objective harms, including bodily injury, wrongful incarceration, or death.',
+                    examples: [
+                        'Users of a mobile app in Turkey being rounded up and detained based on app data.',
+                        'A patient losing their driving privileges after a doctor discloses drug use to the DOT.',
+                        'A suspect spending years in jail due to a manipulated confession.'
+                    ]
+                },
+                social: {
+                    title: 'Social Detriment',
+                    type: 'Objective Harm',
+                    description: 'Harms to an individual\'s reputation and social standing, including loss of trust from others, shunning, ostracism, or banishment.',
+                    examples: [
+                        'A person being rejected by their family after being identified in a controversial protest.',
+                        'A student being body-shamed after a private photo is posted online.',
+                        'A church forcing a mother to end a relationship with her son or be shunned.'
+                    ]
+                }
+            };
+
+            const matrixData = {
+                '1': {
+                    title: 'Violation + Consequence',
+                    description: 'This is the most straightforward scenario where a privacy violation directly leads to a tangible negative outcome.',
+                    example: 'Example: A private investigator taps an adulterer\'s phone (violation), and the information leads to a divorce (consequence).'
+                },
+                '2': {
+                    title: 'No Violation + Consequence',
+                    description: 'A negative outcome occurs, but it is not caused by a privacy violation because the information was shared consensually.',
+                    example: 'Example: An adulterer voluntarily confesses their infidelity (no violation), which results in a divorce (consequence).'
+                },
+                '3': {
+                    title: 'Violation + No Consequence',
+                    description: 'A privacy violation occurs, but it results in no tangible harm to the victim, often because they are unaware of it. The act itself is still a moral violation of social norms.',
+                    example: 'Example: A "peeping Tom" places a camera in a shower, but the victim never finds out and the footage is never shared. The violation occurred, but no tangible consequence was suffered by the victim.'
+                },
+                '4': {
+                    title: 'No Violation + No Consequence',
+                    description: 'In this scenario, there is neither a privacy violation nor a resulting negative outcome.',
+                    example: 'Example: An adulterer voluntarily confesses, but their spouse stays with them. There is no violation and no adverse consequence.'
+                }
+            };
+
+            const subjectiveCard = document.getElementById('subjective-card');
+            const objectiveCard = document.getElementById('objective-card');
+            const subjectiveDetails = document.getElementById('subjective-details');
+            const objectiveDetails = document.getElementById('objective-details');
+
+            // Logic for Calo Taxonomy Cards (Subjective/Objective) - V1 Restoration Logic
+            function toggleDetails(card, details) {
+                const isActive = card.classList.contains('active-harm-card');
+
+                // Remove active state from both cards and hide details
+                subjectiveCard.classList.remove('active-harm-card');
+                objectiveCard.classList.remove('active-harm-card');
+                subjectiveDetails.classList.add('hidden');
+                objectiveDetails.classList.add('hidden');
+
+                if (!isActive) {
+                    card.classList.add('active-harm-card');
+                    details.classList.remove('hidden');
+                }
+            }
+
+            subjectiveCard.addEventListener('click', () => toggleDetails(subjectiveCard, subjectiveDetails));
+            objectiveCard.addEventListener('click', () => toggleDetails(objectiveCard, objectiveDetails));
+
+            // Logic for the Six Specific Harm Table Rows
+            const consequenceTableRows = document.querySelectorAll('#consequence-table tr[data-harm]');
+            const harmDetailsContainer = document.getElementById('harm-details-container');
+            const harmTitle = document.getElementById('harm-title');
+            const harmType = document.getElementById('harm-type');
+            const harmDescription = document.getElementById('harm-description');
+            const harmExamples = document.getElementById('harm-examples');
+            let activeTableRow = null;
+
+            consequenceTableRows.forEach(row => {
+                row.addEventListener('click', () => {
+                    const harmKey = row.dataset.harm;
+                    const data = harmData[harmKey];
+
+                    if (activeTableRow) {
+                        activeTableRow.classList.remove('active-table-row');
+                    }
+                    row.classList.add('active-table-row');
+                    activeTableRow = row;
+
+                    harmDetailsContainer.style.opacity = 0;
+
+                    setTimeout(() => {
+                        harmTitle.textContent = data.title;
+                        harmType.textContent = data.type;
+                        harmDescription.textContent = data.description;
+                        harmExamples.innerHTML = data.examples.map(ex => `<li>${ex}</li>`).join('');
+                        harmDetailsContainer.style.opacity = 1;
+                    }, 300);
+                });
+            });
+
+            // Logic for the 2x2 Violation Matrix
+            const matrixQuadrants = document.querySelectorAll('.matrix-quadrant');
+            const matrixDetailsContainer = document.getElementById('matrix-details-container');
+            const matrixTitle = document.getElementById('matrix-title');
+            const matrixDescription = document.getElementById('matrix-description');
+            const matrixExample = document.getElementById('matrix-example');
+            let activeQuadrant = null;
+
+            matrixQuadrants.forEach(quadrant => {
+                quadrant.addEventListener('click', () => {
+                    const quadrantKey = quadrant.dataset.quadrant;
+                    const data = matrixData[quadrantKey];
+
+                    if (activeQuadrant) {
+                        activeQuadrant.classList.remove('active-matrix-quadrant');
+                    }
+                    quadrant.classList.add('active-matrix-quadrant');
+                    activeQuadrant = quadrant;
+
+                    matrixDetailsContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        matrixTitle.textContent = data.title;
+                        matrixDescription.textContent = data.description;
+                        matrixExample.textContent = data.example;
+                        matrixDetailsContainer.style.opacity = 1;
+                    }, 300);
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>

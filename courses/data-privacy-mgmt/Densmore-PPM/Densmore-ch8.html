@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Summary: Chapter 8 Training and Awareness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: "Calm Harmony" - Warm neutrals (bg-stone-100), complimentary blue (slate-700, slate-800 for text/headers), and a subtle accent (emerald-500). -->
+    <!-- Application Structure Plan: A single-page application (SPA) with a sticky top navigation. This structure was chosen for its clarity and ease of use, allowing a user (student/professional) to logically navigate the key themes of the chapter summary (Why, What, How, How Well) as distinct, scroll-to sections. This non-linear, thematic access is more user-friendly than a linear report and encourages exploration. -->
+    <!-- Visualization & Content Choices: 
+        1. Business Case: Info: $3.86M avg cost, 67% human error. Goal: Inform/show stakes. Viz: Key stat cards (HTML) + Bar chart (Industry Costs) + Donut chart (Attack Vectors). Interaction: Chart tooltips. Justification: Bar for comparison, Donut for proportion. Library: Chart.js (Canvas).
+        2. Core Concepts: Info: Training vs. Awareness definitions. Goal: Compare/Define. Viz: Interactive toggle buttons (HTML/JS). Interaction: Click to show/hide definition blocks. Justification: More engaging than a static table, reinforces the "vs." concept. Library: Vanilla JS.
+        3. Program Framework: Info: NIST 4-steps, Operational Actions. Goal: Organize/Inform. Viz: 1. Horizontal process flow diagram (HTML/CSS) for NIST. 2. Icon-based list (HTML) for Actions. Interaction: None. Justification: Visually represents the life cycle and key actions clearly. Library: HTML/Tailwind.
+        4. Strategy & Methods: Info: Comms, Incidents, Audiences, Delivery Methods. Goal: Organize/Inform. Viz: Tabbed interface (HTML/JS). Tab 1 (Strategy), Tab 2 (Audiences), Tab 3 (Delivery Methods - as grid of cards). Interaction: Click tabs. Justification: Best UI pattern for organizing dense, related sub-topics. Library: Vanilla JS.
+        5. Measuring Success: Info: Metrics beyond enrollment (quiz scores, incident reduction). Goal: Demonstrate value. Viz: Interactive Bar Chart ("Program Effectiveness"). Interaction: Toggle button ("Show Effective Metrics") updates chart data from 'Ineffective Program' (high enrollment, low outcomes) to 'Effective Program' (high outcomes). Justification: Interactively proves the *point* of the section, rather than just listing metrics. Library: Chart.js (Canvas) + Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            /* Tailwind 'slate-50' */
+            color: #334155;
+            /* Tailwind 'slate-700' */
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #1e293b;
+            /* Tailwind 'slate-800' */
+            font-weight: 700;
+        }
+
+        nav a {
+            transition: color 0.2s ease-in-out;
+        }
+
+        nav a:hover {
+            color: #10b981;
+            /* Tailwind 'emerald-500' */
+        }
+
+        .nav-active {
+            color: #10b981;
+            /* Tailwind 'emerald-500' */
+            font-weight: 600;
+        }
+
+        .btn {
+            @apply px-4 py-2 rounded-lg transition-all duration-200;
+        }
+
+        .btn-primary {
+            @apply bg-emerald-500 text-white hover:bg-emerald-600;
+        }
+
+        .btn-secondary {
+            @apply bg-slate-200 text-slate-700 hover:bg-slate-300;
+        }
+
+        .tab {
+            @apply px-4 py-2 rounded-t-lg cursor-pointer text-slate-600 hover:text-emerald-500;
+        }
+
+        .tab-active {
+            @apply border-b-2 border-emerald-500 text-emerald-500 font-semibold;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50 w-full">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-4">
+                    <h1 class="text-xl font-bold text-slate-800">Chapter 8: Training & Awareness</h1>
+                    <a href="../Densmore-PPM.html"
+                        class="text-xs font-medium text-slate-500 hover:text-emerald-500 transition-colors">
+                        &larr; Back to Book Index
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="../index.html" class="text-emerald-600 px-3 py-2 rounded-md text-sm font-bold">Course
+                            Home</a>
+                        <a href="#business-case" class="text-slate-600 px-3 py-2 rounded-md text-sm font-medium">The
+                            Business Case</a>
+                        <a href="#core-concepts" class="text-slate-600 px-3 py-2 rounded-md text-sm font-medium">Core
+                            Concepts</a>
+                        <a href="#framework" class="text-slate-600 px-3 py-2 rounded-md text-sm font-medium">Program
+                            Framework</a>
+                        <a href="#strategy" class="text-slate-600 px-3 py-2 rounded-md text-sm font-medium">Strategy &
+                            Methods</a>
+                        <a href="#metrics" class="text-slate-600 px-3 py-2 rounded-md text-sm font-medium">Measuring
+                            Success</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Section 1: The Business Case -->
+        <section id="business-case" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">The Business Case for Training</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        This section explores the "why" behind privacy training, highlighting the significant financial
+                        and security risks of inaction. The data shows a clear disconnect between policy and practice
+                        that effective training can solve.
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-slate-100 p-6 rounded-lg shadow-sm">
+                        <div class="text-4xl font-bold text-emerald-500">$3.86M</div>
+                        <p class="mt-2 text-slate-700 font-semibold">Average Global Cost</p>
+                        <p class="text-sm text-slate-500">Of a single data breach (Ponemon 2020).</p>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg shadow-sm">
+                        <div class="text-4xl font-bold text-emerald-500">$150</div>
+                        <p class="mt-2 text-slate-700 font-semibold">Cost Per Record</p>
+                        <p class="text-sm text-slate-500">For compromised customer PII.</p>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg shadow-sm">
+                        <div class="text-4xl font-bold text-emerald-500">$2M</div>
+                        <p class="mt-2 text-slate-700 font-semibold">Potential Savings</p>
+                        <p class="text-sm text-slate-500">From having a trained Incident Response Team.</p>
+                    </div>
+                    <div class="bg-slate-100 p-6 rounded-lg shadow-sm">
+                        <div class="text-4xl font-bold text-emerald-500">67%</div>
+                        <p class="mt-2 text-slate-700 font-semibold">Human-Centric Breaches</p>
+                        <p class="text-sm text-slate-500">Caused by errors, phishing, or credential theft.</p>
+                    </div>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-center">Breach Costs by Industry</h3>
+                        <div class="chart-container h-[350px]">
+                            <canvas id="industryCostChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-center">Primary Attack Vectors</h3>
+                        <div class="chart-container h-[350px]">
+                            <canvas id="attackVectorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Core Concepts -->
+        <section id="core-concepts" class="py-16 md:py-24 bg-slate-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Defining Core Concepts</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        "Training" and "Awareness" are not interchangeable. This section clarifies the distinct goals of
+                        each, based on NIST standards. Click the buttons to explore each concept.
+                    </p>
+                </div>
+
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <div class="flex justify-center space-x-4">
+                        <button id="show-training" class="btn btn-primary" data-concept="training">Training</button>
+                        <button id="show-awareness" class="btn btn-secondary"
+                            data-concept="awareness">Awareness</button>
+                    </div>
+
+                    <div id="concept-display" class="mt-8">
+                        <div id="concept-training" class="concept-content bg-white p-8 rounded-lg shadow-lg">
+                            <h3 class="text-2xl font-semibold text-emerald-500">Training</h3>
+                            <p class="mt-4 text-slate-600">Training is about building specific competencies. It provides
+                                the "how-to" for an employee's specific role.</p>
+                            <ul class="mt-4 space-y-2 list-disc list-inside">
+                                <li><strong>Focus:</strong> Skills and competencies</li>
+                                <li><strong>Goal:</strong> To <span class="font-bold">teach skills</span> that allow a
+                                    person to perform a specific function.</li>
+                                <li><strong>Source:</strong> NIST SP 800-50</li>
+                            </ul>
+                            <p class="mt-4 text-slate-600">It must go beyond checking a box and be refreshed regularly,
+                                addressing specific laws, policies, and potential violations.</p>
+                        </div>
+                        <div id="concept-awareness" class="concept-content bg-white p-8 rounded-lg shadow-lg hidden">
+                            <h3 class="text-2xl font-semibold text-emerald-500">Awareness</h3>
+                            <p class="mt-4 text-slate-600">Awareness is about creating a baseline level of knowledge and
+                                sensitivity to privacy issues for *everyone*.</p>
+                            <ul class="mt-4 space-y-2 list-disc list-inside">
+                                <li><strong>Focus:</strong> A specific topic (e.g., security)</li>
+                                <li><strong>Goal:</strong> To allow individuals to <span
+                                        class="font-bold">recognize</span> specific concerns and respond accordingly.
+                                </li>
+                                <li><strong>Source:</strong> NIST SP 800-16</li>
+                            </ul>
+                            <p class="mt-4 text-slate-600">This is the "big picture" communication that builds a culture
+                                of privacy throughout the organization.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Program Framework -->
+        <section id="framework" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Program Framework & Operations</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        An effective program is built on a solid framework. This includes both the high-level life cycle
+                        defined by NIST and the key operational actions needed to sustain it.
+                    </p>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold text-center">NIST SP 800-50 Program Life Cycle</h3>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="flex items-center p-4">
+                            <div
+                                class="flex-shrink-0 bg-emerald-500 text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">
+                                1</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Design</h4>
+                                <p class="text-slate-600">Design the program.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4">
+                            <div
+                                class="flex-shrink-0 bg-emerald-500 text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">
+                                2</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Develop</h4>
+                                <p class="text-slate-600">Develop materials.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4">
+                            <div
+                                class="flex-shrink-0 bg-emerald-500 text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">
+                                3</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Implement</h4>
+                                <p class="text-slate-600">Implement the program.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4">
+                            <div
+                                class="flex-shrink-0 bg-emerald-500 text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">
+                                4</div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold">Post-Implement</h4>
+                                <p class="text-slate-600">Review and update.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold text-center">Key Operational Actions</h3>
+                    <div class="mt-8 max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold text-emerald-500">Integration & Accountability</h4>
+                            <p class="mt-2 text-slate-600">Integrate with other functions (like Cybersecurity) and
+                                ingrain operational accountability.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold text-emerald-500">Policy Flexibility</h4>
+                            <p class="mt-2 text-slate-600">Ensure policies are flexible and can incorporate changes from
+                                new laws and standards.</p>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold text-emerald-500">Document & Catalog</h4>
+                            <p class="mt-2 text-slate-600">Identify, catalog, and maintain all document requirement
+                                updates to demonstrate compliance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Strategy & Methods -->
+        <section id="strategy" class="py-16 md:py-24 bg-slate-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Strategy & Delivery Methods</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        A great framework needs a smart strategy. This section covers *how* to communicate, *who* to
+                        target, and the *methods* you can use to deliver your message effectively.
+                    </p>
+                </div>
+
+                <div class="mt-12 max-w-5xl mx-auto">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                            <button class="tab tab-active" data-tab="strategy">Strategy</button>
+                            <button class="tab" data-tab="audiences">Audiences</button>
+                            <button class="tab" data-tab="methods">Delivery Methods</button>
+                        </nav>
+                    </div>
+                    <div class="mt-8">
+                        <div id="tab-strategy" class="tab-content">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-xl font-semibold text-emerald-500">Communication Strategy</h4>
+                                    <p class="mt-2 text-slate-600">Communication is your most effective tool for
+                                        sustaining the program.</p>
+                                    <ul class="mt-4 space-y-2 list-disc list-inside">
+                                        <li><strong>Goal:</strong> Develop privacy program advocates in each business
+                                            unit.</li>
+                                        <li><strong>Focus:</strong> Teach guiding principles and expected behaviors, not
+                                            just regulation details.</li>
+                                        <li><strong>Internal:</strong> Build interdepartmental cooperation (HR, IT,
+                                            Marketing).</li>
+                                        <li><strong>External:</strong> Build consumer confidence and brand trust.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-xl font-semibold text-emerald-500">Leverage Incidents</h4>
+                                    <p class="mt-2 text-slate-600">Turn mistakes (yours or others') into powerful
+                                        teaching tools.</p>
+                                    <ul class="mt-4 space-y-2 list-disc list-inside">
+                                        <li><strong>Use Headlines:</strong> Discuss (sanitized) internal or major
+                                            external incidents (e.g., SolarWinds).</li>
+                                        <li><strong>Build Trust:</strong> Treat employee mistakes as learning
+                                            opportunities, not reasons for termination.</li>
+                                        <li><strong>Make it Fun:</strong> Use "lunch and learns," gamification, and
+                                            memorable slogans (like "U-R-IT").</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-audiences" class="tab-content hidden">
+                            <div class="bg-white p-8 rounded-lg shadow-sm max-w-3xl mx-auto">
+                                <h4 class="text-xl font-semibold text-emerald-500">Targeted Training is Key</h4>
+                                <p class="mt-2 text-slate-600">Training should not be one-size-fits-all. The key is to
+                                    identify *who* has access to personal information and provide training tailored to
+                                    their role.</p>
+                                <p class="mt-4 text-slate-600">A <strong>Training Needs Analysis</strong> helps identify
+                                    risks and modify content for specific audiences, including:</p>
+                                <ul class="mt-4 space-y-2 list-disc list-inside">
+                                    <li>Staff</li>
+                                    <li>Managers</li>
+                                    <li>Contractors</li>
+                                    <li>Other Third Parties</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="tab-methods" class="tab-content hidden">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-lg font-semibold text-emerald-500">Formal</h4>
+                                    <p class="text-slate-600">Instructor/classroom, online modules, hybrid, and
+                                        "just-in-time" training for new tasks.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-lg font-semibold text-emerald-500">Repetition</h4>
+                                    <p class="text-slate-600">Shorter, repeated training (e.g., quarterly) is more
+                                        effective than "one-and-done."</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-lg font-semibold text-emerald-500">Microlearning</h4>
+                                    <p class="text-slate-600">Short (3-5 minute) videos or blended learning modules to
+                                        reinforce key concepts.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-lg font-semibold text-emerald-500">Gamification</h4>
+                                    <p class="text-slate-600">Online games, knowledge challenges, privacy escape rooms,
+                                        and contests with prizes.</p>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h4 class="text-lg font-semibold text-emerald-500">Passive/Reinforcement</h4>
+                                    <p class="text-slate-600">Posters, newsletters, internal social media, webpages, and
+                                        hallway/lobby monitors.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Measuring Success -->
+        <section id="metrics" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Measuring Success: Effective Metrics</h2>
+                    <p class="mt-4 text-lg text-slate-600">
+                        How do you prove your program works? Regulators and leadership expect to see proof of
+                        effectiveness, not just completion. This section shows the shift from simple enrollment to
+                        outcome-based metrics.
+                    </p>
+                </div>
+
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <div class="text-center mb-8">
+                        <button id="toggle-metrics" class="btn btn-primary">Toggle: Show "Effective" Metrics</button>
+                    </div>
+                    <div class="chart-container h-[400px]">
+                        <canvas id="metricsChart"></canvas>
+                    </div>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold text-emerald-500">Key Metric Examples</h4>
+                            <ul class="mt-4 space-y-2 list-disc list-inside text-slate-600">
+                                <li>Number of training opportunities by topic</li>
+                                <li>Percent of training completed</li>
+                                <li><strong>Results of quizzes or knowledge tests</strong></li>
+                                <li><strong>Changes in privacy incident reports</strong></li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold text-emerald-500">The Goal</h4>
+                            <p class="mt-4 text-slate-600">Metrics should move beyond enrollment numbers to tell a story
+                                of <span class="font-bold">process improvement</span> and <span class="font-bold">risk
+                                    reduction</span>. Regulators increasingly expect to see proof that the learner has
+                                gained knowledge.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-400">Interactive Summary based on Chapter 8: Training and Awareness</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Section 1: Business Case Charts ---
+            function initBusinessCaseCharts() {
+                const industryCostCtx = document.getElementById('industryCostChart')?.getContext('2d');
+                if (industryCostCtx) {
+                    new Chart(industryCostCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Healthcare', 'Energy', 'Financial'],
+                            datasets: [{
+                                label: 'Cost in Millions ($)',
+                                data: [7.1, 6.39, 5.9],
+                                backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                title: { display: false }
+                            },
+                            scales: {
+                                y: { beginAtZero: true, title: { display: true, text: 'Cost (in $ Millions)' } }
+                            }
+                        }
+                    });
+                }
+
+                const attackVectorCtx = document.getElementById('attackVectorChart')?.getContext('2d');
+                if (attackVectorCtx) {
+                    new Chart(attackVectorCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Human-Centric (Phishing, Error, etc.)', 'Other Causes'],
+                            datasets: [{
+                                data: [67, 33],
+                                backgroundColor: ['#ef4444', '#6b7280'],
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                            }
+                        }
+                    });
+                }
+            }
+
+            // --- Section 2: Core Concepts Toggle ---
+            function initCoreConceptsToggle() {
+                const trainingBtn = document.getElementById('show-training');
+                const awarenessBtn = document.getElementById('show-awareness');
+                const trainingContent = document.getElementById('concept-training');
+                const awarenessContent = document.getElementById('concept-awareness');
+
+                if (!trainingBtn) return;
+
+                const allBtns = [trainingBtn, awarenessBtn];
+                const allContent = [trainingContent, awarenessContent];
+
+                allBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const concept = btn.dataset.concept;
+
+                        allBtns.forEach(b => {
+                            b.classList.remove('btn-primary');
+                            b.classList.add('btn-secondary');
+                        });
+                        btn.classList.add('btn-primary');
+                        btn.classList.remove('btn-secondary');
+
+                        allContent.forEach(content => {
+                            if (content.id === `concept-${concept}`) {
+                                content.classList.remove('hidden');
+                            } else {
+                                content.classList.add('hidden');
+                            }
+                        });
+                    });
+                });
+            }
+
+            // --- Section 4: Strategy Tabs ---
+            function initStrategyTabs() {
+                const tabs = document.querySelectorAll('.tab');
+                const tabContents = document.querySelectorAll('.tab-content');
+
+                if (!tabs.length) return;
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const target = tab.dataset.tab;
+
+                        tabs.forEach(t => t.classList.remove('tab-active'));
+                        tab.classList.add('tab-active');
+
+                        tabContents.forEach(content => {
+                            if (content.id === `tab-${target}`) {
+                                content.classList.remove('hidden');
+                            } else {
+                                content.classList.add('hidden');
+                            }
+                        });
+                    });
+                });
+            }
+
+            // --- Section 5: Metrics Chart ---
+            let metricsChart;
+            let metricsState = 'ineffective';
+            const metricsCtx = document.getElementById('metricsChart')?.getContext('2d');
+            const metricsToggleButton = document.getElementById('toggle-metrics');
+
+            const ineffectiveData = {
+                labels: ['Enrollment', 'Quiz Scores', 'Incident Reports'],
+                datasets: [{
+                    label: 'Ineffective Program',
+                    data: [95, 40, 85],
+                    backgroundColor: ['#6b7280', '#ef4444', '#ef4444'],
+                }]
+            };
+
+            const effectiveData = {
+                labels: ['Enrollment', 'Quiz Scores', 'Incident Reports'],
+                datasets: [{
+                    label: 'Effective Program',
+                    data: [98, 92, 25],
+                    backgroundColor: ['#10b981', '#10b981', '#10b981'],
+                }]
+            };
+
+            function initMetricsChart() {
+                if (!metricsCtx) return;
+
+                metricsChart = new Chart(metricsCtx, {
+                    type: 'bar',
+                    data: ineffectiveData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Program Effectiveness Metrics (Example)', fontSize: 16 }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 100, title: { display: true, text: 'Metric Value (%)' } }
+                        }
+                    }
+                });
+
+                metricsToggleButton.addEventListener('click', () => {
+                    if (metricsState === 'ineffective') {
+                        metricsChart.data = effectiveData;
+                        metricsState = 'effective';
+                        metricsToggleButton.textContent = 'Toggle: Show "Ineffective" Metrics';
+                        metricsToggleButton.classList.remove('btn-primary');
+                        metricsToggleButton.classList.add('btn-secondary');
+                    } else {
+                        metricsChart.data = ineffectiveData;
+                        metricsState = 'ineffective';
+                        metricsToggleButton.textContent = 'Toggle: Show "Effective" Metrics';
+                        metricsToggleButton.classList.add('btn-primary');
+                        metricsToggleButton.classList.remove('btn-secondary');
+                    }
+                    metricsChart.update();
+                });
+            }
+
+            // Initialize all functions
+            initBusinessCaseCharts();
+            initCoreConceptsToggle();
+            initStrategyTabs();
+            initMetricsChart();
+        });
+    </script>
+</body>
+
+</html>

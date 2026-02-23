@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Mitigating Privacy Risks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Stone & Sage -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive educational tool with four distinct sections to guide the user through the concepts of privacy risk mitigation. The structure is thematic, not linear, to promote exploration. 1) 'Introduction' sets the stage. 2) 'The Core Mapping' is the centerpiece, an interactive dashboard where users click a FAIR risk factor to dynamically update a radar chart and view detailed cards on corresponding Hoepman strategies. This was chosen to transform static tables into an active learning experience, helping users visualize relationships. 3) 'Systematic Application' uses simple CSS diagrams to explain how controls are applied in real-world systems with intermediaries and regulators. 4) 'Risk Tolerance Assessment' turns the report's concluding questions into an interactive, reflective quiz. This user flow encourages understanding through exploration and application, making dense academic content more digestible and engaging. -->
+    <!-- Visualization & Content Choices: 1. Core Mapping (Report Info: FAIR/Hoepman Tables -> Goal: Explain Relationships -> Viz: Interactive Radar Chart (Chart.js/Canvas) + Dynamic Text Cards (HTML/JS) -> Interaction: Click on FAIR factor buttons updates chart and cards -> Justification: Visually represents the strength of connection between factors and strategies, focusing user attention on one concept at a time. Replaces static tables with an engaging tool.). 2. Systematic Application (Report Info: Intermediary/Regulator concepts -> Goal: Organize system roles -> Viz: HTML/CSS diagrams with flexbox -> Interaction: N/A, static visual aid -> Justification: Clearly illustrates system structures without complex graphics, adhering to NO SVG rule.). 3. Risk Assessment (Report Info: List of questions -> Goal: Inform/Apply -> Viz: Interactive multi-step question cards -> Interaction: Click through questions -> Justification: Converts a passive checklist into a guided, reflective exercise.). All choices support the interactive, educational structure and avoid proscribed libraries/formats. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4;
+            /* stone-100 */
+            color: #3f3f46;
+            /* zinc-700 */
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .nav-link.active {
+            color: #166534;
+            /* green-800 */
+            border-bottom-color: #166534;
+            /* green-800 */
+        }
+
+        .factor-button.active {
+            background-color: #166534;
+            /* green-800 */
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-2xl font-bold text-stone-800">Strategic Privacy by Design</h1>
+                    <a href="../index.html"
+                        class="text-xs font-bold text-green-700 hover:text-green-900 transition-colors">Course Home</a>
+                    <a href="../Cronk-SPBD.html"
+                        class="text-xs font-medium text-stone-500 hover:text-green-800 transition-colors">&larr; Book
+                        Index</a>
+                </div>
+                <nav class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#introduction"
+                        class="nav-link text-stone-600 hover:text-green-800 border-b-2 border-transparent pb-1">Introduction</a>
+                    <a href="#mapping"
+                        class="nav-link text-stone-600 hover:text-green-800 border-b-2 border-transparent pb-1">Core
+                        Mapping</a>
+                    <a href="#application"
+                        class="nav-link text-stone-600 hover:text-green-800 border-b-2 border-transparent pb-1">Systematic
+                        Application</a>
+                    <a href="#assessment"
+                        class="nav-link text-stone-600 hover:text-green-800 border-b-2 border-transparent pb-1">Risk
+                        Assessment</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="introduction" class="mb-16 scroll-mt-24">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-green-900 mb-4">Mitigating Privacy Risks</h2>
+            <p class="max-w-3xl mx-auto text-center text-stone-600 leading-relaxed">
+                This guide explores the integration of the <strong>Factor Analysis of Information Risk (FAIR)</strong>
+                model with the <strong>Hoepman Privacy Design strategies</strong> to effectively mitigate privacy risks.
+                The core principle is that risk factors identified by FAIR can be systematically targeted and reduced by
+                applying specific design strategies. This interactive tool will help you understand these relationships
+                and how to apply them.
+            </p>
+        </section>
+
+        <section id="mapping" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-800">The Core Mapping: FAIR to Hoepman</h2>
+                <p class="max-w-3xl mx-auto text-stone-600 mt-2">
+                    Click on a FAIR risk factor below to see which Hoepman strategies are most effective at mitigating
+                    it. The chart and cards will update to visualize and explain the relationship.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8">
+                <button
+                    class="factor-button px-4 py-2 bg-white rounded-full shadow-sm font-semibold text-stone-700 hover:bg-green-50 transition-all duration-200"
+                    data-factor="opportunity">Opportunity</button>
+                <button
+                    class="factor-button px-4 py-2 bg-white rounded-full shadow-sm font-semibold text-stone-700 hover:bg-green-50 transition-all duration-200"
+                    data-factor="motivation">Motivation</button>
+                <button
+                    class="factor-button px-4 py-2 bg-white rounded-full shadow-sm font-semibold text-stone-700 hover:bg-green-50 transition-all duration-200"
+                    data-factor="difficulty">Difficulty</button>
+                <button
+                    class="factor-button px-4 py-2 bg-white rounded-full shadow-sm font-semibold text-stone-700 hover:bg-green-50 transition-all duration-200"
+                    data-factor="severity">Severity</button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-4 md:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 id="mapping-title" class="text-2xl font-bold text-green-900 mb-2 text-center lg:text-left">
+                            Select a Factor</h3>
+                        <p id="mapping-description" class="text-stone-600 mb-6 text-center lg:text-left">The chart
+                            visualizes how strongly the selected FAIR factor is influenced by each Hoepman strategy.</p>
+                        <div class="chart-container">
+                            <canvas id="hoepmanChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="strategy-cards" class="flex flex-col gap-4">
+                        <div class="text-center text-stone-500 p-8">
+                            <p>Strategies will appear here when you select a factor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="application" class="mb-16 scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-800">Systematic Application</h2>
+                <p class="max-w-3xl mx-auto text-stone-600 mt-2">
+                    Understanding the roles different actors play in a system is key to placing controls effectively.
+                    Privacy strategies can be applied by intermediaries to protect individuals or enforced by regulators
+                    to ensure compliance.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-xl text-green-900 mb-3">The Intermediary Advantage</h3>
+                    <p class="text-stone-600 mb-4">An intermediary (Actor 2) sits between a threat actor (Actor 1) and
+                        an individual. This unique position allows the intermediary to implement controls that the
+                        threat actor cannot bypass.</p>
+                    <div
+                        class="bg-stone-50 rounded-lg p-4 flex items-center justify-center space-x-4 text-sm font-semibold">
+                        <div class="text-center">
+                            <div class="bg-red-200 text-red-800 w-20 h-10 flex items-center justify-center rounded">
+                                Threat<br>Actor 1</div>
+                        </div>
+                        <div class="text-stone-400">&rarr;</div>
+                        <div class="text-center">
+                            <div
+                                class="bg-blue-200 text-blue-800 w-20 h-10 flex items-center justify-center rounded relative">
+                                Intermediary<br>Actor 2
+                                <div class="absolute -bottom-6 text-xs font-normal text-blue-800">(Applies Controls)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-stone-400">&rarr;</div>
+                        <div class="text-center">
+                            <div class="bg-green-200 text-green-800 w-20 h-10 flex items-center justify-center rounded">
+                                Individual</div>
+                        </div>
+                    </div>
+                    <p class="text-stone-600 mt-6">Effective controls for intermediaries include:
+                        <strong>Minimize</strong>, <strong>Separate</strong>, <strong>Hide</strong>,
+                        <strong>Abstract</strong>, <strong>Inform</strong>, and <strong>Control</strong>.
+                    </p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-xl text-green-900 mb-3">Leveraging Relationships for Enforcement</h3>
+                    <p class="text-stone-600 mb-4">When one actor, like a government regulator, has control over another
+                        (e.g., a company), they can supervise conduct through legal and contractual means.</p>
+                    <div
+                        class="bg-stone-50 rounded-lg p-4 flex flex-col items-center justify-center space-y-4 text-sm font-semibold">
+                        <div class="text-center">
+                            <div
+                                class="bg-yellow-200 text-yellow-800 w-20 h-10 flex items-center justify-center rounded">
+                                Regulator</div>
+                        </div>
+                        <div class="text-stone-400 text-xl">&darr;</div>
+                        <div class="text-center">
+                            <div
+                                class="bg-purple-200 text-purple-800 w-20 h-10 flex items-center justify-center rounded relative">
+                                Company
+                                <div class="absolute -bottom-6 text-xs font-normal text-purple-800">(Must Comply)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-stone-600 mt-6">The primary strategies used by controlling actors are:
+                        <strong>Enforce</strong> (policies, laws) and <strong>Demonstrate</strong> (audits, compliance
+                        reports).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="assessment" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-800">Risk Tolerance Assessment Tool</h2>
+                <p class="max-w-3xl mx-auto text-stone-600 mt-2">
+                    Mitigation rarely reduces risk to zero. Use this tool to reflect on the questions professionals must
+                    ask to determine if the remaining (residual) risk is acceptable within their organization's risk
+                    tolerance.
+                </p>
+            </div>
+            <div id="assessment-container" class="bg-white rounded-xl shadow-lg p-6 md:p-8 max-w-3xl mx-auto">
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const contentData = {
+            opportunity: {
+                title: 'Opportunity',
+                description: 'Opportunity is defined by the affordances available to a threat actor. The most effective strategies for reducing opportunity are MINIMIZE and SEPARATE.',
+                chartData: [10, 10, 2, 2, 1, 1, 3, 5],
+                strategies: [
+                    { name: 'MINIMIZE', details: 'Eliminates or reduces interactions, thereby reducing opportunities for privacy violations. Tactics include Excluding, Selecting, Stripping, and Destroying data.' },
+                    { name: 'SEPARATE', details: 'Reduces the number of actors who have access to an individual or their information. Tactics include Isolating interactions or physically distributing data processing.' },
+                ]
+            },
+            motivation: {
+                title: 'Motivation',
+                description: 'Motivation is the probability that a threat actor will act upon an opportunity. Strategies introduce a cost or deterrent to the actor.',
+                chartData: [1, 1, 10, 10, 5, 5, 2, 2],
+                strategies: [
+                    { name: 'ENFORCE', details: 'Introduces a cost to the actor (e.g., job loss, fines) that must be weighed against benefits, through laws, regulations, or strong organizational policies.' },
+                    { name: 'DEMONSTRATE', details: 'Increases the visibility of non-compliance, which deters covert actions. Achieved through public notices, periodic audits, and access logging.' },
+                    { name: 'HIDE / ABSTRACT (Indirect)', details: 'Technical controls like encryption make success less likely, which can demotivate actors from even attempting the violation.' },
+                ]
+            },
+            difficulty: {
+                title: 'Difficulty',
+                description: 'Difficulty is independent of the threat actor and is based on system controls that increase the effort required to compromise data.',
+                chartData: [1, 1, 2, 2, 10, 10, 3, 3],
+                strategies: [
+                    { name: 'HIDE', details: 'Increases the effort required for a threat actor to discern information. Tactics include obfuscation, encryption, and restricting access.' },
+                    { name: 'ABSTRACT', details: 'Reduces the ability of a threat actor to discern individual identities or sensitive details by sharing summarized, less granular, or grouped data.' },
+                ]
+            },
+            severity: {
+                title: 'Severity',
+                description: 'Severity is based on the violation of social norms, often assessed using Awareness, Benefit, and Consent (ABC). Controls focus on giving the individual knowledge and power.',
+                chartData: [2, 2, 1, 1, 3, 3, 10, 10],
+                strategies: [
+                    { name: 'INFORM', details: 'Ensures the individual is aware of risks, data collection, or access to their information. This addresses the "Awareness" aspect of ABC.' },
+                    { name: 'CONTROL', details: 'Ensures the individual has given consent, transforming a potentially unacceptable situation into an acceptable one. This addresses the "Consent" aspect of ABC.' },
+                ]
+            }
+        };
+
+        const assessmentQuestions = [
+            { category: 'Opportunity', question: 'Have we eliminated all unnecessary opportunities for data access and interaction?' },
+            { category: 'Opportunity', question: 'Are we comfortable with the remaining opportunities, assuming they might be acted upon?' },
+            { category: 'Motivation/Difficulty', question: 'Have we sufficiently deterred actors through enforcement and made violations difficult enough with technical controls?' },
+            { category: 'Motivation/Difficulty', question: 'Is the remaining motivation/capability acceptable because the likelihood of harm is low or the benefits are high?' },
+            { category: 'Severity (ABC)', question: 'Have we given individuals sufficient information and power (control) over their data?' },
+            { category: 'Severity (ABC)', question: 'Is it ethically sound for individuals not to know or be in control, because the benefits to them or society clearly outweigh the harm?' },
+            { category: 'Tangible Consequences', question: 'After our controls are in place, could individuals still be negatively and tangibly impacted?' },
+            { category: 'Tangible Consequences', question: 'Is it acceptable for some individuals to be tangibly harmed because the chance and amount of harm are countered by overwhelming benefits?' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const factorButtons = document.querySelectorAll('.factor-button');
+            const mappingTitle = document.getElementById('mapping-title');
+            const mappingDescription = document.getElementById('mapping-description');
+            const strategyCardsContainer = document.getElementById('strategy-cards');
+
+            const ctx = document.getElementById('hoepmanChart').getContext('2d');
+            const chartLabels = ['MINIMIZE', 'SEPARATE', 'ENFORCE', 'DEMONSTRATE', 'HIDE', 'ABSTRACT', 'INFORM', 'CONTROL'];
+            const hoepmanChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Strategy Effectiveness',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0],
+                        fill: true,
+                        backgroundColor: 'rgba(22, 101, 52, 0.2)',
+                        borderColor: 'rgb(22, 101, 52)',
+                        pointBackgroundColor: 'rgb(22, 101, 52)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(22, 101, 52)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 2
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: '#d6d3d1' // stone-300
+                            },
+                            grid: {
+                                color: '#e7e5e4' // stone-200
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 11,
+                                    weight: '500'
+                                },
+                                color: '#57534e' // stone-600
+                            },
+                            ticks: {
+                                display: false,
+                                stepSize: 2
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            function updateMappingView(factorKey) {
+                const data = contentData[factorKey];
+
+                mappingTitle.textContent = data.title;
+                mappingDescription.textContent = data.description;
+
+                hoepmanChart.data.datasets[0].data = data.chartData;
+                hoepmanChart.update();
+
+                strategyCardsContainer.innerHTML = '';
+                data.strategies.forEach(strategy => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-stone-50 rounded-lg p-4 transition-all duration-300 transform';
+                    card.innerHTML = `
+                <h4 class="font-bold text-lg text-green-800">${strategy.name}</h4>
+                <p class="text-stone-600 text-sm">${strategy.details}</p>
+            `;
+                    strategyCardsContainer.appendChild(card);
+                });
+
+                factorButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.factor === factorKey);
+                });
+            }
+
+            factorButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    updateMappingView(button.dataset.factor);
+                });
+            });
+
+            updateMappingView('opportunity');
+
+            const assessmentContainer = document.getElementById('assessment-container');
+            let currentQuestionIndex = 0;
+
+            function renderAssessmentQuestion() {
+                if (currentQuestionIndex >= assessmentQuestions.length) {
+                    assessmentContainer.innerHTML = `
+                <div class="text-center">
+                    <h3 class="text-xl font-bold text-green-900 mb-2">Assessment Complete</h3>
+                    <p class="text-stone-600 mb-4">You have reviewed the key questions for determining risk tolerance. The final decision requires balancing security, privacy, ethics, and operational needs. Ethical outrage often occurs when the sole beneficiary of risk is the entity inflicting harm, not the individual or society.</p>
+                    <button id="restart-assessment" class="px-4 py-2 bg-green-700 text-white font-semibold rounded-lg hover:bg-green-800 transition-colors">Restart Assessment</button>
+                </div>
+            `;
+                    document.getElementById('restart-assessment').addEventListener('click', () => {
+                        currentQuestionIndex = 0;
+                        renderAssessmentQuestion();
+                    });
+                    return;
+                }
+
+                const item = assessmentQuestions[currentQuestionIndex];
+                assessmentContainer.innerHTML = `
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm font-semibold bg-green-100 text-green-800 px-3 py-1 rounded-full">${item.category}</span>
+                    <span class="text-sm text-stone-500">${currentQuestionIndex + 1} / ${assessmentQuestions.length}</span>
+                </div>
+                <p class="text-lg text-stone-800 mb-6">${item.question}</p>
+                <div class="flex justify-end">
+                    <button id="next-question" class="px-5 py-2 bg-green-700 text-white font-semibold rounded-lg hover:bg-green-800 transition-colors">Next &rarr;</button>
+                </div>
+            </div>
+        `;
+
+                document.getElementById('next-question').addEventListener('click', () => {
+                    currentQuestionIndex++;
+                    renderAssessmentQuestion();
+                });
+            }
+
+            renderAssessmentQuestion();
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

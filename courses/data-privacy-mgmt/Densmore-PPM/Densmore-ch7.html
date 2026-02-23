@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Program Sustain Phase: Metrics, Monitoring, Auditing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutral & Teal -->
+    <!-- Application Structure Plan: The SPA is structured into three thematic, scrollable sections (Metrics, Monitoring, Audits) mirroring the report's logical flow. This is intuitive for users familiar with the subject. The 'Metrics' section is a dashboard, starting with a donut chart for key data (IAPP-FTI findings) and a clear linear visual for the PMM, enhanced by interactive tabs for 'Board Reporting' to manage information density. 'Monitoring' uses clear card grids to make lists digestible. 'Audits' now features two clear, responsive tables for the 5-phase Audit Life Cycle and the 3 Types of Audits, greatly enhancing data consumption and comparison. Navigation is handled by a sticky JS-powered nav bar for easy, smooth-scrolling access to each section, prioritizing user exploration and clarity. -->
+    <!-- Visualization & Content Choices: 1) IAPP-FTI Metrics: (Info: % of metric popularity) -> (Goal: Inform/Compare) -> (Viz: Donut Chart) -> (Interaction: Hover tooltip) -> (Justification: Clear part-to-whole data display) -> (Library: Chart.js). 2) PMM: (Info: 5-level process) -> (Goal: Organize) -> (Viz: HTML/Tailwind 5-step responsive grid) -> (Interaction: Static visual) -> (Justification: Clearly shows a linear progression without complex arrows) -> (Library: HTML/Tailwind). 3) Audit Life Cycle: (Info: 5-phase cycle) -> (Goal: Organize) -> (Viz: Responsive Table) -> (Interaction: Sort/Read) -> (Justification: Clearly lists all 5 distinct phases and activities for easy reference, solving the previous diagram issue) -> (Library: HTML/Tailwind). 4) Types of Audits: (Info: 3 categories) -> (Goal: Compare) -> (Viz: Responsive Table) -> (Interaction: Read/Compare) -> (Justification: Optimal for comparing defining characteristics) -> (Library: HTML/Tailwind). 5) Board Reporting: (Info: 3 categories of text lists) -> (Goal: Organize) -> (Viz: JS Tabs) -> (Interaction: Click to reveal content) -> (Justification: Manages information density, allows user drill-down) -> (Library: Vanilla JS + HTML). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 450px;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        .tab-btn.active {
+            border-color: #0d9488;
+            background-color: #f0fdfa;
+            color: #134e4a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="bg-amber-50 text-slate-800 antialiased">
+
+    <header class="sticky top-0 z-50 w-full bg-white/70 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <ul class="flex items-center justify-center h-16 space-x-4 sm:space-x-8">
+                <li><a href="../index.html"
+                        class="text-sm sm:text-base font-bold text-teal-700 hover:text-teal-900 transition-colors">Course
+                        Home</a></li>
+                <li><a href="../Densmore-PPM.html"
+                        class="text-sm sm:text-base font-medium text-slate-500 hover:text-teal-600 transition-colors">&larr;
+                        Book Index</a></li>
+                <li><a href="#metrics" data-target="metrics"
+                        class="text-sm sm:text-base font-medium text-slate-600 hover:text-teal-600 transition-colors">Metrics</a>
+                </li>
+                <li><a href="#monitoring" data-target="monitoring"
+                        class="text-sm sm:text-base font-medium text-slate-600 hover:text-teal-600 transition-colors">Monitoring</a>
+                </li>
+                <li><a href="#audits" data-target="audits"
+                        class="text-sm sm:text-base font-medium text-slate-600 hover:text-teal-600 transition-colors">Audits</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <section class="text-center py-16 sm:py-20">
+            <h1 class="text-4xl sm:text-5xl font-bold text-teal-800">The Sustain Phase</h1>
+            <p class="mt-4 text-xl sm:text-2xl text-slate-600">Monitoring & Auditing Privacy Program Performance</p>
+            <p class="mt-6 max-w-3xl mx-auto text-lg text-slate-700">
+                This interactive guide explores Chapter 7 of "Privacy Program Management," focusing on the
+                <strong>"Sustain"</strong> phase of the privacy life cycle. Learn how organizations use <strong>metrics,
+                    monitoring, and audits</strong> to ensure their privacy programs remain effective, compliant, and
+                valuable.
+            </p>
+        </section>
+
+        <div class="border-t border-teal-200/60"></div>
+
+        <section id="metrics" class="py-16 sm:py-20">
+            <h2 class="text-3xl sm:text-4xl font-bold text-teal-700 text-center">Section 7.1: Metrics</h2>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto text-center mb-12 sm:mb-16">
+                Metrics are the foundation of a sustainable privacy program. They provide objective data to measure
+                performance, demonstrate value, and justify investments. This section breaks down the most popular
+                metrics, how to analyze them (like the PMM), and who they're for.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200/60">
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-4 text-center">Most Popular Privacy Metrics</h3>
+                    <p class="text-center text-slate-600 mb-6">Based on IAPP-FTI Consulting findings, these are the most
+                        commonly tracked metrics. A significant portion of organizations <strong>(21%) reported using no
+                            formal metrics at all</strong>.</p>
+                    <div class="chart-container">
+                        <canvas id="popularMetricsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200/60">
+                        <h3 class="text-2xl font-semibold text-slate-800 mb-6 text-center">Core Principles of Metrics
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-amber-100/40 p-4 rounded-lg border border-amber-200/60">
+                                <h4 class="font-semibold text-teal-800">Currency & Value</h4>
+                                <p class="text-sm text-slate-700">Must be simple, quantifiable, and correlated to
+                                    business goals.</p>
+                            </div>
+                            <div class="bg-amber-100/40 p-4 rounded-lg border border-amber-200/60">
+                                <h4 class="font-semibold text-teal-800">Purpose</h4>
+                                <p class="text-sm text-slate-700">Inform of success, failure, and progress toward
+                                    objectives.</p>
+                            </div>
+                            <div class="bg-amber-100/40 p-4 rounded-lg border border-amber-200/60">
+                                <h4 class="font-semibold text-teal-800">Benefits</h4>
+                                <p class="text-sm text-slate-700">Normalize concepts, eliminate jargon, and advance
+                                    program maturity.</p>
+                            </div>
+                            <div class="bg-amber-100/40 p-4 rounded-lg border border-amber-200/60">
+                                <h4 class="font-semibold text-teal-800">ROI Justification</h4>
+                                <p class="text-sm text-slate-700">Quantify mitigated risks in financial terms to prove
+                                    value.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200/60">
+                        <h3 class="text-2xl font-semibold text-slate-800 mb-4 text-center">Metric Audiences</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <h4 class="font-semibold text-teal-700">Primary</h4>
+                                <ul class="list-disc list-inside text-sm text-slate-600">
+                                    <li>Privacy Officers/DPOs</li>
+                                    <li>Senior Leadership (CIO/CSO)</li>
+                                    <li>Program Managers</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-teal-700">Secondary</h4>
+                                <ul class="list-disc list-inside text-sm text-slate-600">
+                                    <li>CFO</li>
+                                    <li>Training / HR</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-teal-700">Tertiary</h4>
+                                <ul class="list-disc list-inside text-sm text-slate-600">
+                                    <li>Watchdog Groups</li>
+                                    <li>Sponsors</li>
+                                    <li>Shareholders</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 sm:mt-20">
+                <h3 class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-8 text-center">Analysis Methods: Privacy
+                    Maturity Model (PMM)</h3>
+                <p class="text-center text-slate-600 max-w-2xl mx-auto mb-10">The PMM provides a scale to measure
+                    program maturity, allowing organizations to set a baseline and target. Each level builds on the
+                    previous one.</p>
+                <div class="relative overflow-x-auto pb-4">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+
+                        <div class="flex flex-col items-center p-4 bg-teal-50/70 rounded-lg border border-teal-200">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-teal-600 text-white font-bold rounded-full">1</span>
+                            <h4 class="font-semibold text-slate-700 mt-2">Ad hoc</h4>
+                            <p class="text-sm text-slate-600 text-center">Informal, incomplete, inconsistent processes.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col items-center p-4 bg-teal-50/70 rounded-lg border border-teal-200">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-teal-600 text-white font-bold rounded-full">2</span>
+                            <h4 class="font-semibold text-slate-700 mt-2">Repeatable</h4>
+                            <p class="text-sm text-slate-600 text-center">Procedures exist, but not fully documented or
+                                covering all aspects.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center p-4 bg-teal-50/70 rounded-lg border border-teal-200">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-teal-600 text-white font-bold rounded-full">3</span>
+                            <h4 class="font-semibold text-slate-700 mt-2">Defined</h4>
+                            <p class="text-sm text-slate-600 text-center">Fully documented, implemented, and covering
+                                all relevant aspects.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center p-4 bg-teal-50/70 rounded-lg border border-teal-200">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-teal-600 text-white font-bold rounded-full">4</span>
+                            <h4 class="font-semibold text-slate-700 mt-2">Managed</h4>
+                            <p class="text-sm text-slate-600 text-center">Reviews are conducted to assess the
+                                effectiveness of controls in place.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center p-4 bg-teal-50/70 rounded-lg border border-teal-200">
+                            <span
+                                class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-teal-600 text-white font-bold rounded-full">5</span>
+                            <h4 class="font-semibold text-slate-700 mt-2">Optimized</h4>
+                            <p class="text-sm text-slate-600 text-center">Regular review and feedback used for continual
+                                improvement toward optimization.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 sm:mt-20">
+                <h3 class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-8 text-center">Reporting to the Board
+                </h3>
+                <p class="text-center text-slate-600 max-w-2xl mx-auto mb-10">Metrics are vital for DPOs and privacy
+                    leaders to demonstrate compliance and program status to the highest management levels. Click the
+                    tabs below to see common metric categories reported to the board, often driven by GDPR mandates.</p>
+
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex flex-col sm:flex-row sm:space-x-2 rounded-lg" role="tablist">
+                        <button role="tab" data-tab-target="defending"
+                            class="tab-btn active w-full sm:w-1/3 text-left sm:text-center p-4 font-semibold text-slate-700 border-b-4 border-transparent hover:bg-teal-50/70 transition">
+                            Defending Systems & Data
+                        </button>
+                        <button role="tab" data-tab-target="legal"
+                            class="tab-btn w-full sm:w-1/3 text-left sm:text-center p-4 font-semibold text-slate-700 border-b-4 border-transparent hover:bg-teal-50/70 transition">
+                            Legal Responsibilities
+                        </button>
+                        <button role="tab" data-tab-target="advising"
+                            class="tab-btn w-full sm:w-1/3 text-left sm:text-center p-4 font-semibold text-slate-700 border-b-4 border-transparent hover:bg-teal-50/70 transition">
+                            Advising the Business
+                        </button>
+                    </div>
+
+                    <div class="mt-6 bg-white rounded-xl shadow p-6 sm:p-8 border border-slate-200/60">
+                        <div id="defending" data-tab-content class="tab-content active">
+                            <ul class="list-disc list-outside space-y-2 pl-6 text-slate-700">
+                                <li>Number of reported incidents</li>
+                                <li>Number of actual (confirmed) incidents</li>
+                                <li>Number of incidents reportable to authorities</li>
+                                <li>Number of attempted system intrusions</li>
+                                <li>Average investigation and response time for incidents</li>
+                            </ul>
+                        </div>
+                        <div id="legal" data-tab-content class="tab-content">
+                            <ul class="list-disc list-outside space-y-2 pl-6 text-slate-700">
+                                <li>Complaints received from data subjects</li>
+                                <li>Data Subject Access Requests (DSARs) received</li>
+                                <li>Rectification (correction) requests received</li>
+                                <li>Erasure ("right to be forgotten") requests</li>
+                                <li>Unsubscribe / opt-out requests</li>
+                            </ul>
+                        </div>
+                        <div id="advising" data-tab-content class="tab-content">
+                            <ul class="list-disc list-outside space-y-2 pl-6 text-slate-700">
+                                <li>Number of Privacy Impact Assessments (PIAs) completed</li>
+                                <li>Number of Data Protection Impact Assessments (DPIAs) completed</li>
+                                <li>Average completion time for PIAs/DPIAs</li>
+                                <li>Number of staff receiving privacy training</li>
+                                <li>Percentage of all staff who have completed training</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="border-t border-teal-200/60"></div>
+
+        <section id="monitoring" class="py-16 sm:py-20">
+            <h2 class="text-3xl sm:text-4xl font-bold text-teal-700 text-center">Section 7.2: Monitoring</h2>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto text-center mb-12 sm:mb-16">
+                Monitoring involves ongoing activities to control, manage, and report privacy risk. It's the continuous
+                process of ensuring your organization is adhering to its policies and meeting regulatory goals, helping
+                to detect failures early and drive program improvement.
+            </p>
+
+            <h3 class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-8 text-center">Types of Monitoring</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200/60 h-full">
+                    <h4 class="font-semibold text-xl text-teal-700 mb-2">Compliance</h4>
+                    <p class="text-slate-600">Focuses on collection, use, and retention of personal information to
+                        ensure policies and controls are in place and effective.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200/60 h-full">
+                    <h4 class="font-semibold text-xl text-teal-700 mb-2">Regulation</h4>
+                    <p class="text-slate-600">Tracks constant changes to laws and requirements to ensure policies are
+                        updated in a timely manner.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200/60 h-full">
+                    <h4 class="font-semibold text-xl text-teal-700 mb-2">Environment</h4>
+                    <p class="text-slate-600">Monitors internal and external vulnerabilities, from physical building
+                        access to insider and cybersecurity threats.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-200/60 h-full">
+                    <h4 class="font-semibold text-xl text-teal-700 mb-2">Training Data</h4>
+                    <p class="text-slate-600">Tracks and assesses training completion rates by employee and topic to
+                        ensure organization-wide awareness.</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-8 text-center">Forms of Monitoring</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Tools</h4>
+                    <p class="text-sm text-slate-600">Active scanning tools for networks and storage to identify risks,
+                        like PII on public-facing servers.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Audits</h4>
+                    <p class="text-sm text-slate-600">Internal and external reviews of people, processes, and technology
+                        to evaluate controls.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Breaches</h4>
+                    <p class="text-sm text-slate-600">Tracking breach type, severity, and time-to-remediation to assess
+                        program sufficiency.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Complaints</h4>
+                    <p class="text-sm text-slate-600">Tracking type and origin of complaints as an early indicator of
+                        potential regulatory activity.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Data Retention</h4>
+                    <p class="text-sm text-slate-600">Monitoring schedules for risks like excessive collection or
+                        inadequate access controls.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Controls</h4>
+                    <p class="text-sm text-slate-600">Assessing the design and efficacy of established operational and
+                        program-level privacy controls.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Human Resources</h4>
+                    <p class="text-sm text-slate-600">Ensuring protections for employee data and monitoring
+                        compliance-related investigations.</p>
+                </div>
+                <div
+                    class="bg-white rounded-xl shadow p-5 border border-slate-200/60 transition-all hover:shadow-xl hover:border-teal-300">
+                    <h4 class="font-semibold text-lg text-teal-700">Suppliers</h4>
+                    <p class="text-sm text-slate-600">Monitoring third-party performance and compliance with contractual
+                        privacy requirements.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="border-t border-teal-200/60"></div>
+
+        <section id="audits" class="py-16 sm:py-20">
+            <h2 class="text-3xl sm:text-4xl font-bold text-teal-700 text-center">Section 7.3: Audits</h2>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto text-center mb-12 sm:mb-16">
+                Audits are a formal, <strong>evidence-based</strong> process to evaluate the effectiveness of your
+                privacy controls. They are critical for demonstrating compliance and are triggered by regular schedules,
+                system changes, security incidents, or regulatory requests.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200/60">
+                    <h3 class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-8 text-center">The Five-Phase Audit
+                        Life Cycle</h3>
+                    <p class="text-center text-slate-600 max-w-xl mx-auto mb-8">The Audit Life Cycle is a continuous
+                        process that ensures controls are reviewed and improvements are scheduled.</p>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-slate-700 table-auto border-collapse">
+                            <thead class="text-xs text-teal-700 uppercase bg-teal-50/70 border-b border-teal-200">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 w-1/12 text-center rounded-tl-lg">Phase</th>
+                                    <th scope="col" class="px-4 py-3 w-3/12">Name</th>
+                                    <th scope="col" class="px-4 py-3 w-8/12 rounded-tr-lg">Key Activities</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-lg text-teal-600 text-center">1</td>
+                                    <td class="px-4 py-3 font-semibold">Plan</td>
+                                    <td class="px-4 py-3">Conduct risk assessment, set schedule, select auditor, compile
+                                        checklist.</td>
+                                </tr>
+                                <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-lg text-teal-600 text-center">2</td>
+                                    <td class="px-4 py-3 font-semibold">Prepare</td>
+                                    <td class="px-4 py-3">Confirm schedule, prepare sampling criteria, finalize audit
+                                        plan.</td>
+                                </tr>
+                                <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-lg text-teal-600 text-center">3</td>
+                                    <td class="px-4 py-3 font-semibold">Audit</td>
+                                    <td class="px-4 py-3">Execute functional goals, meet with stakeholders and process
+                                        owners.</td>
+                                </tr>
+                                <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-lg text-teal-600 text-center">4</td>
+                                    <td class="px-4 py-3 font-semibold">Report</td>
+                                    <td class="px-4 py-3">Draft formal report, record noncompliance, suggest corrective
+                                        actions.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-medium text-lg text-teal-600 text-center">5</td>
+                                    <td class="px-4 py-3 font-semibold">Follow-up</td>
+                                    <td class="px-4 py-3">Confirm scope of remediation, schedule activities, and close
+                                        out the audit.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200/60">
+                    <h3 class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-8 text-center">Types of Audits</h3>
+                    <p class="text-center text-slate-600 max-w-xl mx-auto mb-8">The type of audit determines who
+                        conducts the review and its primary objective.</p>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-slate-700 table-auto border-collapse">
+                            <thead class="text-xs text-teal-700 uppercase bg-teal-50/70 border-b border-teal-200">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 w-1/4 rounded-tl-lg">Type</th>
+                                    <th scope="col" class="px-4 py-3 w-1/4">Conducted By</th>
+                                    <th scope="col" class="px-4 py-3 w-2/4 rounded-tr-lg">Primary Purpose /
+                                        Characteristic</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-semibold text-teal-800">First-Party</td>
+                                    <td class="px-4 py-3">The organization itself (Internal)</td>
+                                    <td class="px-4 py-3">Supports self-certifications; evaluates internal risk culture
+                                        and control implementation.</td>
+                                </tr>
+                                <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-semibold text-teal-800">Second-Party</td>
+                                    <td class="px-4 py-3">The organization (on another entity) (Supplier)</td>
+                                    <td class="px-4 py-3">Ensures suppliers/subcontractors comply with contractual
+                                        privacy requirements. Accountability is retained by the data collector.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-slate-50">
+                                    <td class="px-4 py-3 font-semibold text-teal-800">Third-Party</td>
+                                    <td class="px-4 py-3">Independent outside source</td>
+                                    <td class="px-4 py-3">Provides increased credibility; often triggered by regulatory
+                                        request; aligns to external frameworks (NIST, ISO).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-teal-200/60 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p class="text-sm text-slate-500">
+                Interactive Summary based on Chapter 7 of "Privacy Program Management."
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const popularMetricsCtx = document.getElementById('popularMetricsChart').getContext('2d');
+            new Chart(popularMetricsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Incident Response (58%)',
+                        'PIAs/DPIAs (57%)',
+                        'Training & Awareness (56%)',
+                        'DSARs (53%)',
+                        'No Formal Metrics (21%)'
+                    ],
+                    datasets: [{
+                        label: 'Popularity',
+                        data: [58, 57, 56, 53, 21],
+                        backgroundColor: [
+                            '#0d9488',
+                            '#0f766e',
+                            '#115e59',
+                            '#f59e0b',
+                            '#a1a1aa'
+                        ],
+                        borderColor: '#fdfbf6',
+                        borderWidth: 3,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                boxWidth: 12,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label = label.split('(')[0].trim();
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += ': ' + context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const tabs = document.querySelectorAll('.tab-btn[data-tab-target]');
+            const tabContents = document.querySelectorAll('.tab-content[data-tab-content]');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = document.getElementById(tab.dataset.tabTarget);
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+
+                    if (target) {
+                        target.classList.add('active');
+                    }
+                });
+            });
+
+            const navLinks = document.querySelectorAll('nav a[data-target]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

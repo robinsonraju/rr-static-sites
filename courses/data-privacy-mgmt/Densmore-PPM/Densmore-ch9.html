@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Compliance Dashboard: Data Subject Rights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Warm Professional (Cream/Beige + Teal/Dark Green) -->
+    <!-- Application Structure Plan: The application uses a new **Tabbed Navigation** structure at the top, facilitating rapid context switching. The structure is: (1) Top Tabbed Navigation (using custom CSS .main-nav-tab), (2) Main Content Area with Header, (3) Three thematic content sections (Foundations, Global Rights, Operations). The Global Rights section remains the core interactive element, using dynamic sub-tabs to compare legal regions, supporting the goal of content synthesis and comparison. -->
+    <!-- Visualization & Content Choices:
+    - Main Navigation (HTML/CSS/JS): Goal: Organize. Method: Top Tabbed Bar (using .main-nav-tab class). Interaction: onClick to change the main dashboard view. Justification: Provides clear, persistent, and visually distinct navigation.
+    - Conceptual Chart (Chart.js): Goal: Inform. Method: Donut Chart ('Pillars of the Respond Life Cycle'). Interaction: Hover for tooltips. Justification: Visualizes the four core, equally important themes of the chapter.
+    - Design Strategies (HTML/Tailwind): Goal: Inform. Method: Highlighted, styled cards inside a grid. Interaction: None. Justification: Uses color contrast (amber background) to highlight these best practices.
+    - Global Rights Explorer (HTML/JS): Goal: Compare/Organize. Method: Sub-navigation with dynamic content blocks. Interaction: onClick to swap content for USA, EU, Global. Justification: Essential interactive component for comparing dense legal texts.
+    - GDPR Rights (HTML Table): Goal: Organize. Method: Table. Justification: Provides structure for the article-by-article rights. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        /* New Standard CSS for Bolder Tabbed Navigation */
+        .main-nav-tab {
+            /* Base Tab Style */
+            padding: 0.75rem 1.5rem;
+            /* py-3 px-6 */
+            font-weight: 600;
+            /* semi-bold */
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid #D1D5DB;
+            /* Light gray border */
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem 0.5rem 0 0;
+            /* Rounded top corners */
+            margin-right: 0.5rem;
+            background-color: #F9FAF8;
+            /* Off-white base */
+            color: #10B981;
+            /* Medium Teal text */
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-nav-tab:hover {
+            background-color: #F0FAF8;
+            /* Light hover background */
+            color: #065F46;
+            /* Darker text */
+        }
+
+        .main-nav-tab.active {
+            background-color: #FFFFFF;
+            /* White background for active tab */
+            border-color: #10B981;
+            /* Teal border */
+            border-bottom-color: #FFFFFF;
+            /* Hide bottom border on active tab to overlap content area */
+            color: #065F46;
+            /* Darker text */
+            z-index: 10;
+        }
+
+        /* Chart Container Styling (Tailwind utility classes are used here for responsiveness) */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        /* Sub-Navigation (Inside Global Explorer) */
+        .sub-nav-btn {
+            @apply py-2 px-4 text-sm font-medium rounded-full transition-all;
+        }
+
+        .sub-nav-btn.active {
+            @apply bg-emerald-700 text-white shadow-md;
+        }
+
+        .sub-nav-btn:not(.active) {
+            @apply text-gray-700 border border-gray-300 hover:bg-gray-100;
+        }
+
+        .content-section,
+        .region-section {
+            display: none;
+        }
+
+        .content-section.active,
+        .region-section.active {
+            display: block;
+        }
+
+        /* Typography */
+        h2 {
+            @apply text-3xl font-bold text-gray-900 mb-4 border-b-2 border-emerald-200 pb-2;
+        }
+
+        h3 {
+            @apply text-2xl font-semibold text-gray-800 mt-8 mb-4;
+        }
+
+        h4 {
+            @apply text-xl font-semibold text-emerald-700 mt-6 mb-3;
+        }
+
+        p {
+            @apply text-base text-gray-700 leading-relaxed mb-4;
+        }
+
+        /* Table and Card Overrides */
+        .card {
+            @apply bg-white rounded-xl shadow-lg p-6 border border-gray-100;
+        }
+
+        th {
+            @apply px-6 py-3 bg-emerald-50 text-left text-xs font-medium text-emerald-700 uppercase tracking-wider;
+        }
+
+        tbody tr:nth-child(even) {
+            @apply bg-gray-50;
+        }
+
+        /* Ensures the content container sits below the tabs */
+        #content-container {
+            border-top: 1px solid #D1D5DB;
+            padding-top: 2rem;
+            position: relative;
+            margin-top: -1px;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* Soft shadow for lift */
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 min-h-screen font-sans">
+
+    <!-- Main Content Area Wrapper -->
+    <div class="max-w-7xl mx-auto p-6 md:p-10">
+        <header class="mb-8 pb-4 text-center">
+            <div class="flex flex-col items-center gap-2">
+                <h1 class="text-4xl font-extrabold text-gray-900">Data Subject Rights Dashboard</h1>
+                <div class="flex gap-4">
+                    <a href="../index.html"
+                        class="text-sm font-bold text-emerald-600 hover:text-emerald-800 transition-colors">Course
+                        Home</a>
+                    <a href="../Densmore-PPM.html"
+                        class="text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors">&larr; Back
+                        to Book Index</a>
+                </div>
+            </div>
+            <p class="text-xl text-emerald-600 mt-2">Operationalizing Chapter 9 Requirements</p>
+        </header>
+
+        <!-- Tabbed Navigation -->
+        <nav class="flex flex-wrap justify-center mb-0" role="tablist">
+            <button onclick="showSection('foundations')" id="nav-foundations" class="main-nav-tab active">
+                &#x1F4DA; Foundations: Transparency &amp; Consent
+            </button>
+            <button onclick="showSection('global-rights')" id="nav-global-rights" class="main-nav-tab">
+                &#x1F30D; Global Rights Explorer
+            </button>
+            <button onclick="showSection('operations')" id="nav-operations" class="main-nav-tab">
+                &#x2699; Operational Response
+            </button>
+        </nav>
+
+        <!-- Main Content Container -->
+        <main id="content-container" class="grid grid-cols-1 gap-10 p-6 md:p-8">
+
+            <!-- Section 1: Foundations -->
+            <section id="foundations" class="content-section active">
+                <p class="text-lg text-gray-600 mb-6">Transparency and choice are the foundational promises an
+                    organization makes to its users. This dashboard section covers the primary communication tools,
+                    design best practices, and consent mechanisms, including special protections for children's data.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                    <div class="card md:col-span-2">
+                        <h2>1. Transparency and Consent</h2>
+                        <h3>Pillars of the "Respond" Life Cycle</h3>
+                        <p class="text-sm text-gray-600 mb-4">The core areas necessary for a robust response capability
+                            are equally important for program success.</p>
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="pillarsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card md:col-span-1 bg-amber-50">
+                        <h3>Notice vs. Policy</h3>
+                        <p class="text-sm text-gray-700">A core requirement across global privacy laws is transparency.
+                            Organizations manage this through two key documents:</p>
+                        <ul>
+                            <li class="mb-3"><strong>Privacy Notice (External):</strong> A public-facing
+                                <strong>promise</strong> to data subjects. Breaking this promise can lead to regulatory
+                                action (e.g., FTC actions).
+                            </li>
+                            <li><strong>Privacy Policy (Internal):</strong> An internal document for employees detailing
+                                the organization's processing rules.</li>
+                        </ul>
+
+                        <h4 class="text-emerald-700">Consent Mandates</h4>
+                        <p class="text-sm text-gray-700">Consent must be a <strong>freely given, specific, informed, and
+                                unambiguous indication</strong> (GDPR Standard). It must be as easy to revoke as it was
+                            to grant. Avoid <strong>Dark Patterns</strong> designed to subvert user autonomy.</p>
+                    </div>
+                </div>
+
+                <div class="card mt-8">
+                    <h3>Effective Notice Design &amp; Children's Consent</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h4>Key Design Strategies</h4>
+                            <p class="text-sm text-gray-600">Regulators endorse these approaches to ensure notices are
+                                digestible and accessible:</p>
+                            <ul class="space-y-2 mt-4">
+                                <li class="bg-emerald-50 p-2 rounded-lg">&#9733; <strong>Layered Approach:</strong>
+                                    High-level summary with links to detail (FTC, EDPB).</li>
+                                <li class="bg-emerald-50 p-2 rounded-lg">&#9733; <strong>Just-in-Time:</strong> Notice
+                                    given immediately before unexpected data collection (CCPA).</li>
+                                <li class="bg-emerald-50 p-2 rounded-lg">&#9733; <strong>Privacy Dashboard:</strong>
+                                    Centralized, personalized user control center.</li>
+                                <li class="bg-emerald-50 p-2 rounded-lg">&#9733; <strong>Icons/Symbols:</strong> Visual
+                                    shorthand for practices (e.g., AdChoices).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Children's Consent Thresholds</h4>
+                            <p class="text-sm text-gray-600">Special rules apply to children (sensitive data), requiring
+                                age-appropriate language and verifiable processes.</p>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Law</th>
+                                        <th>Age Threshold</th>
+                                        <th>Requirement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>COPPA (US)</strong></td>
+                                        <td>Under 13</td>
+                                        <td>Verifiable <strong>parental consent</strong> for online collection.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CCPA (CA)</strong></td>
+                                        <td>Under 13; 13-16</td>
+                                        <td><strong>Parental consent</strong> (under 13); <strong>Affirmative
+                                                consent</strong> (13-16) to sell data.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>GDPR (EU)</strong></td>
+                                        <td>16 (flexible: 13-16)</td>
+                                        <td>Requires parental consent or authorization.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Global Rights Explorer -->
+            <section id="global-rights" class="content-section">
+                <h2>2. Global Rights Explorer</h2>
+                <p class="text-lg text-gray-600 mb-6">Data subject rights vary significantly across jurisdictions. Use
+                    this explorer to dynamically load and compare the key rights granted to individuals across the three
+                    primary regulatory spheres (USA, EU, Global). The global trend is toward empowering individuals with
+                    more control.</p>
+
+                <div class="mb-6 bg-stone-50 rounded-xl shadow-inner p-4">
+                    <nav class="flex flex-wrap justify-center space-x-2" aria-label="Regions" role="tablist">
+                        <button onclick="showRegion('region-usa')" id="nav-region-usa" class="sub-nav-btn active"
+                            role="tab">USA</button>
+                        <button onclick="showRegion('region-gdpr')" id="nav-region-gdpr" class="sub-nav-btn"
+                            role="tab">Europe (GDPR)</button>
+                        <button onclick="showRegion('region-global')" id="nav-region-global" class="sub-nav-btn"
+                            role="tab">Other Global Regions</button>
+                    </nav>
+                </div>
+
+                <!-- Region Content Containers -->
+                <div class="card p-0 border-none shadow-none">
+                    <div id="region-usa" class="region-section active p-6">
+                        <h3>USA Rights: Federal &amp; State Laws</h3>
+                        <p>In the U.S., rights are a patchwork of sector-specific federal laws (e.g., FCRA, HIPAA) and
+                            new comprehensive state laws (e.g., CCPA/CPRA, CDPA).</p>
+
+                        <h4>Key State Law Rights Comparison</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Law</th>
+                                    <th>Key Rights</th>
+                                    <th>Operational Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>CCPA/CPRA (CA)</strong></td>
+                                    <td>Know, Erasure, Opt-Out of Sale/Sharing, Correction, Limit Sensitive Use.</td>
+                                    <td>Requires "Do Not Sell/Share" link. Created the CPPA regulator.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Virginia (CDPA)</strong></td>
+                                    <td>Confirm, Correct, Delete, Access (Portable), Opt-Out (Profiling/Ads).</td>
+                                    <td>Requires <strong>consent</strong> for Sensitive Data processing.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Illinois (BIPA)</strong></td>
+                                    <td>Written Notification and Release/Consent before collecting Biometrics.</td>
+                                    <td>Provides a <strong>private right of action</strong> with statutory damages.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="region-gdpr" class="region-section p-6">
+                        <h3>Europe &amp; UK: GDPR Rights (Articles 12-22)</h3>
+                        <p>The GDPR provides a comprehensive and far-reaching set of rights. Compliance requires
+                            meticulous processes and adherence to strict timelines.</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Article</th>
+                                    <th>Right</th>
+                                    <th>Operational Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15</td>
+                                    <td><strong>Right of Access (DSAR)</strong></td>
+                                    <td><strong>Response Time: 1 month.</strong> Must provide data copy and mandatory
+                                        context (purpose, recipients, etc.).</td>
+                                </tr>
+                                <tr>
+                                    <td>17</td>
+                                    <td><strong>Right to Erasure (RTBF)</strong></td>
+                                    <td>Must delete data and <strong>inform third parties</strong> if the data was made
+                                        public. Requires processes for backup deletion.</td>
+                                </tr>
+                                <tr>
+                                    <td>20</td>
+                                    <td><strong>Right to Data Portability</strong></td>
+                                    <td>Must provide data in a <strong>structured, machine-readable format</strong> to
+                                        the user or another controller.</td>
+                                </tr>
+                                <tr>
+                                    <td>21</td>
+                                    <td><strong>Right to Object</strong></td>
+                                    <td>Absolute right against <strong>direct marketing</strong>. Must cease processing
+                                        based on legitimate interests unless compelling grounds exist.</td>
+                                </tr>
+                                <tr>
+                                    <td>22</td>
+                                    <td><strong>Automated Decision-Making</strong></td>
+                                    <td>General <strong>prohibition</strong> on <em>solely</em> automated decisions with
+                                        significant legal effects without safeguards.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="region-global" class="region-section p-6">
+                        <h3>Global Data Subject Rights (LatAm &amp; Asia-Pacific)</h3>
+                        <p>Many countries are adopting GDPR-like laws, making global compliance complex. Note the local
+                            terminology and rapid response times required.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <div class="bg-amber-50 p-4 rounded-lg">
+                                <h4>Latin America</h4>
+                                <p class="text-sm"><strong>Brazil (LGPD):</strong> Access, Rectification, Cancellation,
+                                    Opposition, and <strong>Data Portability</strong>.</p>
+                                <p class="text-sm"><strong>Mexico:</strong> "ARCO" rights (Access, Rectification,
+                                    Cancellation, Opposition).</p>
+                            </div>
+                            <div class="bg-amber-50 p-4 rounded-lg">
+                                <h4>Asia-Pacific</h4>
+                                <p class="text-sm"><strong>South Korea (PIPA):</strong> Strictest regime. Requires
+                                    <strong>explicit consent</strong>, Access, Correction, Deletion, and
+                                    <strong>Destruction</strong>.
+                                </p>
+                                <p class="text-sm"><strong>Australia/NZ:</strong> Access and Correction. Requires
+                                    <strong>30-day (AU) / 20-day (NZ)</strong> response time.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Operational Response -->
+            <section id="operations" class="content-section">
+                <h2>3. Operational Response &amp; Procedures</h2>
+                <p class="text-lg text-gray-600 mb-6">Policies are useless without execution. This section details the
+                    critical, mandatory steps in the DSR workflow. A poor response leads to regulatory complaints and
+                    damages brand trust. Good operational design is paramount.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="md:col-span-2">
+                        <h3>Procedural Checklist for Handling DSRs</h3>
+                        <ol
+                            class="list-decimal list-outside text-gray-700 leading-relaxed space-y-4 text-base bg-white p-6 rounded-xl shadow-inner">
+                            <li class="pl-2">
+                                <strong class="text-gray-900">Centralized Intake &amp; Escalation:</strong> All
+                                employees must be trained to <strong>recognize</strong> DSRs (via email, phone, social
+                                media) and <strong>escalate</strong> them immediately to a centralized team.
+                            </li>
+                            <li class="pl-2">
+                                <strong class="text-gray-900">Authentication:</strong> Develop <strong>proportional
+                                    procedures</strong> to verify the identity of the data subject or their agent to
+                                prevent fraud and unauthorized disclosure.
+                            </li>
+                            <li class="pl-2">
+                                <strong class="text-gray-900">Data Location &amp; Retrieval:</strong> A strong
+                                <strong>records retention program</strong> is essential to reduce the burden of DSARs.
+                                Use data mapping to quickly locate in-scope data.
+                            </li>
+                            <li class="pl-2">
+                                <strong class="text-gray-900">Process and Documentation:</strong> Use a ticketing system
+                                for tracking metrics (time-to-resolve, volume). <strong>Meticulously document the
+                                    justification</strong> for every action, especially refusals, limitations, or
+                                deadline extensions.
+                            </li>
+                            <li class="pl-2">
+                                <strong class="text-gray-900">Redaction &amp; Delivery:</strong> Before providing access
+                                data, critically <strong>redact or remove the personal data of third parties</strong>
+                                who have not consented. Delivery must be timely (e.g., 30 or 45 days).
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="md:col-span-1">
+                        <h3>Core Takeaways</h3>
+                        <div class="space-y-4">
+                            <div class="card bg-emerald-50">
+                                <h4 class="text-emerald-800">1. Trust, Not Just Compliance</h4>
+                                <p class="text-sm">A responsive process builds customer confidence. A poor one leads
+                                    directly to regulator complaints and social media backlash.</p>
+                            </div>
+                            <div class="card bg-emerald-50">
+                                <h4 class="text-emerald-800">2. Meticulous Documentation</h4>
+                                <p class="text-sm">You must be able to prove your compliance. Every refusal or
+                                    limitation must be justified and recorded.</p>
+                            </div>
+                            <div class="card bg-emerald-50">
+                                <h4 class="text-emerald-800">3. Governance is Foundational</h4>
+                                <p class="text-sm">Efficient DSR response depends entirely on robust data mapping
+                                    (knowing where data is) and retention policies (ensuring old data is deleted).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let activeSection = 'foundations';
+        let activeRegion = 'region-usa';
+
+        function showSection(sectionId) {
+            activeSection = sectionId;
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update main navigation tabs using the new class
+            document.querySelectorAll('.main-nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('nav-' + sectionId).classList.add('active');
+        }
+
+        function showRegion(regionId) {
+            activeRegion = regionId;
+            document.querySelectorAll('.region-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(regionId).classList.add('active');
+
+            // Update sub-navigation buttons
+            document.querySelectorAll('.sub-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('nav-' + regionId).classList.add('active');
+        }
+
+        window.onload = function () {
+            showSection(activeSection);
+            showRegion(activeRegion);
+
+            const ctx = document.getElementById('pillarsChart').getContext('2d');
+            const pillarsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Transparency (Notices)', 'Choice & Consent', 'Data Subject Rights', 'Operational Response'],
+                    datasets: [{
+                        label: 'Key Pillars',
+                        data: [25, 25, 25, 25],
+                        backgroundColor: [
+                            'rgba(6, 95, 76, 0.9)', /* Dark Teal */
+                            'rgba(110, 231, 183, 0.8)', /* Light Mint */
+                            'rgba(251, 191, 36, 0.8)', /* Amber */
+                            'rgba(20, 184, 166, 0.8)' /* Medium Teal */
+                        ],
+                        borderColor: [
+                            'rgba(6, 95, 76, 1)',
+                            'rgba(110, 231, 183, 1)',
+                            'rgba(251, 191, 36, 1)',
+                            'rgba(20, 184, 166, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+
+</body>
+
+</html>

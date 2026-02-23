@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Privacy Threat Modeling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Academic Neutral -->
+    <!-- Application Structure Plan: The SPA is organized into five thematic, interactive sections accessible via a sidebar, rather than a linear chapter format. This structure (1. Core Concepts, 2. Scoping Test, 3. Key Actors, 4. Diagramming Toolkit, 5. Information Risk) was chosen to deconstruct complex theoretical topics into manageable, engaging modules. The user flow allows for both targeted exploration of specific concepts and a sequential learning path, culminating in the interactive diagramming and risk visualization tools. This design prioritizes active learning and user engagement, making the material more accessible and memorable for a graduate-level audience. -->
+    <!-- Visualization & Content Choices: 
+        - Risk Formula: (Goal: Inform) -> Interactive cards with click-to-reveal definitions. (Justification: More engaging than static text). (Method: HTML/JS).
+        - Scoping Test: (Goal: Apply) -> Interactive "But For" test scenarios. (Justification: Reinforces learning through application). (Method: HTML/JS).
+        - Actors/Proxies: (Goal: Organize) -> Clickable cards that expand to show sub-types. (Justification: Clarifies conceptual hierarchies). (Method: HTML/JS).
+        - Diagramming: (Goal: Synthesize) -> Now replaced with explanatory text to guide the understanding of Interaction vs. Relationship views. (Justification: Focuses on methodology clarity over visual simulation). (Method: HTML/JS text toggle).
+        - Information Risk: (Goal: Organize) -> Now replaced with a comprehensive, static table of information categories and descriptions. (Justification: Provides an authoritative reference list). (Method: HTML table).
+        - All choices support the non-linear, modular application structure. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .nav-link.active {
+            background-color: #e9ecef;
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .interactive-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .info-category-table th,
+        .info-category-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .info-category-table th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .category-group-header {
+            background-color: #dee2e6;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <div class="min-h-screen flex flex-col md:flex-row">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-white border-r border-gray-200 p-4 md:p-6 sticky top-0 h-screen">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Threat Modeling</h1>
+            <div class="flex flex-col gap-1 mb-6">
+                <a href="../index.html"
+                    class="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">Course Home</a>
+                <a href="../Cronk-SPBD.html"
+                    class="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">&larr; Back to Book
+                    Index</a>
+            </div>
+            <p class="text-sm text-gray-500 mb-8">An Interactive Guide</p>
+            <nav id="navigation" class="space-y-2">
+                <a href="#concepts" class="nav-link active flex items-center p-3 rounded-lg">
+                    <span class="mr-3 text-lg">💡</span> Core Concepts
+                </a>
+                <a href="#scoping" class="nav-link flex items-center p-3 rounded-lg">
+                    <span class="mr-3 text-lg">🎯</span> Scoping the Analysis
+                </a>
+                <a href="#actors" class="nav-link flex items-center p-3 rounded-lg">
+                    <span class="mr-3 text-lg">👥</span> Actors & Proxies
+                </a>
+                <a href="#diagramming" class="nav-link flex items-center p-3 rounded-lg">
+                    <span class="mr-3 text-lg">🗺️</span> Diagramming Tool
+                </a>
+                <a href="#information" class="nav-link flex items-center p-3 rounded-lg">
+                    <span class="mr-3 text-lg">📊</span> Information Risk
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+
+            <!-- Section 1: Core Concepts -->
+            <section id="concepts" class="content-section active">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Core Concepts of Threat Modeling</h2>
+                <p class="text-lg text-gray-600 mb-8">Threat modeling is a systematic process to identify and mitigate
+                    potential security and privacy concerns. This section introduces the foundational questions and the
+                    core definition of risk. Click on each element of the risk formula to learn more.</p>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Shostack's Four Key Questions</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                        <li>What are we working on?</li>
+                        <li>What can go wrong?</li>
+                        <li>What are we going to do about it?</li>
+                        <li>Did we do a good enough job?</li>
+                    </ol>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 text-center">
+                    <div id="risk-threat" class="interactive-card bg-blue-100 p-6 rounded-lg cursor-pointer">
+                        <h4 class="font-bold text-xl text-blue-800">Threat</h4>
+                    </div>
+                    <div class="text-2xl font-bold text-gray-500">+</div>
+                    <div id="risk-vulnerability" class="interactive-card bg-yellow-100 p-6 rounded-lg cursor-pointer">
+                        <h4 class="font-bold text-xl text-yellow-800">Vulnerability</h4>
+                    </div>
+                    <div class="text-2xl font-bold text-gray-500">=</div>
+                    <div id="risk-consequence" class="interactive-card bg-red-100 p-6 rounded-lg cursor-pointer">
+                        <h4 class="font-bold text-xl text-red-800">Consequence</h4>
+                    </div>
+                </div>
+                <div id="risk-explanation" class="mt-8 bg-white p-6 rounded-xl shadow-sm min-h-[150px]">
+                    <p class="text-gray-500 italic">Click an element above to see its definition and examples.</p>
+                </div>
+            </section>
+
+            <!-- Section 2: Scoping the Analysis -->
+            <section id="scoping" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Scoping the Analysis: The "But For" Test</h2>
+                <p class="text-lg text-gray-600 mb-8">Properly scoping your analysis is crucial. You don't want to miss
+                    critical threats, nor do you want to be overwhelmed by irrelevant ones. The "But For" test is a
+                    simple heuristic to determine if a potential harm is within the scope of your product's
+                    responsibility. Test your knowledge below.</p>
+                <div id="scoping-scenarios"></div>
+            </section>
+
+            <!-- Section 3: Actors & Proxies -->
+            <section id="actors" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Actors, Proxies, and Agents</h2>
+                <p class="text-lg text-gray-600 mb-8">A threat involves an interaction between a threat actor and an
+                    at-risk individual. However, this interaction is often indirect. Understanding proxies (surrogates
+                    for the individual) and agents (instruments of the threat actor) is key to identifying non-obvious
+                    threats. Click each card to expand.</p>
+                <div id="actors-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </section>
+
+            <!-- Section 4: Diagramming Tool -->
+            <section id="diagramming" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">The Dual Maps: Interactions and Relationships</h2>
+                <p class="text-lg text-gray-600 mb-8">To systematically identify threats and controls, we create two
+                    distinct maps. Use the buttons below to switch between the analysis of <strong>threat
+                        vectors</strong> (Interactions) and the analysis of <strong>power dynamics</strong>
+                    (Relationships).</p>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex justify-center mb-6 space-x-4">
+                        <button id="view-interactions"
+                            class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors">View
+                            Interactions (Threats)</button>
+                        <button id="view-relationships"
+                            class="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">View
+                            Relationships (Controls)</button>
+                    </div>
+
+                    <div id="diagram-text-output" class="p-4 bg-gray-50 rounded-lg min-h-[250px]">
+                        <!-- Initial text loaded by JS -->
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Section 5: Information Risk -->
+            <section id="information" class="content-section">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Information Categories and Risk Factors</h2>
+                <p class="text-lg text-gray-600 mb-8">Categorizing personal information helps determine risk based on
+                    whether the data creates <strong>Opportunity</strong> for harm, increases
+                    <strong>Motivation</strong>, or magnifies <strong>Magnitude</strong> of consequences. Below is a
+                    breakdown of key categories used in threat analysis.
+                </p>
+
+                <div class="bg-white p-0 rounded-xl shadow-md overflow-x-auto">
+                    <table class="w-full info-category-table">
+                        <thead>
+                            <tr>
+                                <th class="w-1/4">Category</th>
+                                <th class="w-3/4">Description & Examples</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- EXTERNAL Group -->
+                            <tr>
+                                <td colspan="2" class="category-group-header">1. EXTERNAL</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Identifying</td>
+                                <td>Information that uniquely identifies a specific individual (name, username, unique
+                                    identifier, government issued identification, picture, biometric data, etc.).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Ethnicity</td>
+                                <td>Information that describes an individual's origins and lineage (race, national or
+                                    ethnic origin, languages spoken, dialects, accents).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Sexual</td>
+                                <td>Information that describes an individual's sexual life (gender identity,
+                                    preferences, proclivities, fetishes, history).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Behavioral</td>
+                                <td>Information that describes an individual's behavior or activity, on- or offline
+                                    (browsing behavior, call logs, links clicked, demeanor, attitude).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Demographic</td>
+                                <td>Information that describes an individual's characteristics shared with others (age
+                                    ranges, physical traits, income brackets, geographic).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Medical and Health</td>
+                                <td>Information that describes an individual's health, medical conditions, or health
+                                    care (physical and mental health, drug test results, disabilities, family or
+                                    individual health history, health records, blood type, DNA code, prescriptions).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Physical characteristics</td>
+                                <td>Information that describes an individual's physical characteristics (height, weight,
+                                    age, hair color, skin tone, tattoos, gender, piercings).</td>
+                            </tr>
+
+                            <!-- INTERNAL Group -->
+                            <tr>
+                                <td colspan="2" class="category-group-header">2. INTERNAL</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Knowledge and belief</td>
+                                <td>Information about what a person knows or believes (religious beliefs, philosophical
+                                    beliefs, thoughts, what they know and don't know, what someone thinks).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Preference</td>
+                                <td>Information about an individual's preferences or interests (opinions, intentions,
+                                    preferences or interests).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Authenticating</td>
+                                <td>Information used to authenticate an individual with something they know (passwords,
+                                    PIN, mother's maiden name).</td>
+                            </tr>
+
+                            <!-- TRACKING Group -->
+                            <tr>
+                                <td colspan="2" class="category-group-header">3. TRACKING</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Contact</td>
+                                <td>Information that provides a mechanism for contacting an individual (email address,
+                                    physical address, telephone number).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Computer device</td>
+                                <td>Information about a device that an individual uses for personal use, even part-time
+                                    or with others (IP address, Mac address, browser fingerprint).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Location</td>
+                                <td>Information about an individual's location (country, GPS coordinates, room number).
+                                </td>
+                            </tr>
+
+                            <!-- SOCIAL Group -->
+                            <tr>
+                                <td colspan="2" class="category-group-header">4. SOCIAL</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Professional</td>
+                                <td>Information about an individual's educational or professional career (job titles,
+                                    salary, work history, school attendance, employee files, employment history,
+                                    evaluations, references, interviews, certifications, disciplinary actions).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Criminal</td>
+                                <td>Information about an individual's criminal activity (convictions, charges, pardons).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Public life</td>
+                                <td>Information about an individual's public life (character, general reputation, social
+                                    status, marital status, religion, political affiliations, interactions,
+                                    communications metadata).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Family</td>
+                                <td>Information about an individual's family and relationships (family structure,
+                                    siblings, offspring, marriages, divorces, relationships).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Social network</td>
+                                <td>Information about an individual's friends or social connections (friends,
+                                    connections, acquaintances, associates, group membership).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Communication</td>
+                                <td>Information communicated from or to an individual (telephone recordings, voicemail,
+                                    email).</td>
+                            </tr>
+
+                            <!-- FINANCIAL Group -->
+                            <tr>
+                                <td colspan="2" class="category-group-header">5. FINANCIAL</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Account</td>
+                                <td>Information that identifies an individual's financial account (credit card number,
+                                    bank account).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Ownership</td>
+                                <td>Information about things an individual has owned, rented, borrowed, possessed (cars,
+                                    houses, apartments, personal possessions).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Transactional</td>
+                                <td>Information about an individual's purchasing, spending, or income (purchases, sales,
+                                    credit, income, loan records, transactions, taxes, purchases, and spending habits).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Credit</td>
+                                <td>Information about an individual's reputation with regards to money (credit records,
+                                    creditworthiness, credit standing, credit capacity).</td>
+                            </tr>
+
+                            <!-- HISTORICAL Group -->
+                            <tr>
+                                <td colspan="2" class="category-group-header">6. HISTORICAL</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">History</td>
+                                <td>Information about an individual's personal history (events that happened in a
+                                    person's life, either to them or just around them that might have influenced them,
+                                    such as WWII or 9/11).</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const navigationLinks = document.querySelectorAll('#navigation a');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            function switchTab(hash) {
+                navigationLinks.forEach(link => {
+                    link.classList.toggle('active', link.hash === hash);
+                });
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', `#${section.id}` === hash);
+                });
+            }
+
+            navigationLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const hash = e.currentTarget.hash;
+                    window.location.hash = hash;
+                    switchTab(hash);
+                });
+            });
+
+            const initialHash = window.location.hash || '#concepts';
+            switchTab(initialHash);
+
+            // --- Section 1: Core Concepts Data & Logic ---
+            const riskData = {
+                threat: {
+                    title: "Threat",
+                    definition: "The source and means of an attack.",
+                    example_bald_tire: "<strong>Bald Tire Example:</strong> The tire losing traction with the road.",
+                    example_witch: "<strong>Wicked Witch Example:</strong> The witch monitoring Dorothy via her crystal ball."
+                },
+                vulnerability: {
+                    title: "Vulnerability",
+                    definition: "A weakness that allows for a threat to occur.",
+                    example_bald_tire: "<strong>Bald Tire Example:</strong> The tire's tread is completely worn down (it's bald).",
+                    example_witch: "<strong>Wicked Witch Example:</strong> Dorothy is visible and can be watched through the crystal ball."
+                },
+                consequence: {
+                    title: "Consequence",
+                    definition: "The adverse results of a realized threat.",
+                    example_bald_tire: "<strong>Bald Tire Example:</strong> Loss of control of the vehicle, leading to an accident and potential injury.",
+                    example_witch: "<strong>Wicked Witch Example:</strong> The privacy harm of surveillance, and tangible harm from flying monkeys being dispatched."
+                }
+            };
+
+            const riskExplanationEl = document.getElementById('risk-explanation');
+            document.getElementById('risk-threat').addEventListener('click', () => updateRiskExplanation('threat'));
+            document.getElementById('risk-vulnerability').addEventListener('click', () => updateRiskExplanation('vulnerability'));
+            document.getElementById('risk-consequence').addEventListener('click', () => updateRiskExplanation('consequence'));
+
+            function updateRiskExplanation(key) {
+                const data = riskData[key];
+                riskExplanationEl.innerHTML = `
+            <h3 class="font-bold text-xl mb-3">${data.title}</h3>
+            <p class="text-lg text-gray-700 mb-4"><em>${data.definition}</em></p>
+            <div class="space-y-2 text-gray-600">
+                <p>${data.example_bald_tire}</p>
+                <p>${data.example_witch}</p>
+            </div>
+        `;
+            }
+
+            // --- Section 2: Scoping Scenarios Data & Logic ---
+            const scopingScenarios = [
+                {
+                    scenario: "A company provides a simple scheduling widget that a private coach embeds on her website for students to book lessons.",
+                    question: "Is a privacy harm that occurs during the lesson (e.g., the coach asking inappropriate questions) in scope for the widget provider?",
+                    options: ["In Scope", "Out of Scope"],
+                    correct: 1,
+                    explanation: "<strong>Correct: Out of Scope.</strong> The harm did not happen 'but for' the widget; it happened 'but for' the lesson itself, which the widget provider does not control or participate in. The interaction is between the coach and student."
+                },
+                {
+                    scenario: "A company runs a marketplace that actively matches students with vetted coaches, taking a commission on each lesson booked through the platform.",
+                    question: "Is a privacy harm that occurs during a lesson arranged via the marketplace in scope for the marketplace provider?",
+                    options: ["In Scope", "Out of Scope"],
+                    correct: 0,
+                    explanation: "<strong>Correct: In Scope.</strong> 'But for' the marketplace setting up the interaction, it would not have happened. The marketplace has a direct role and responsibility in the interaction it creates."
+                },
+                {
+                    scenario: "A user's connection to your website is not secured with HTTPS. A network provider injects ads into the page.",
+                    question: "Is the harm of Intrusion (the injected ads) in scope for you, the website provider?",
+                    options: ["In Scope", "Out of Scope"],
+                    correct: 0,
+                    explanation: "<strong>Correct: In Scope.</strong> 'But for' your bad security (the harm of Insecurity), this never would have happened. While a network provider is the agent, your vulnerability enabled the threat."
+                }
+            ];
+
+            const scenariosContainer = document.getElementById('scoping-scenarios');
+            scopingScenarios.forEach((item, index) => {
+                const scenarioEl = document.createElement('div');
+                scenarioEl.className = 'bg-white p-6 rounded-xl shadow-sm mb-6';
+                scenarioEl.innerHTML = `
+            <p class="font-semibold text-gray-800 mb-2">${item.scenario}</p>
+            <p class="text-gray-700 mb-4">${item.question}</p>
+            <div class="flex space-x-4 mb-4" id="options-${index}">
+                ${item.options.map((opt, i) => `<button data-index="${i}" class="flex-1 bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">${opt}</button>`).join('')}
+            </div>
+            <div id="explanation-${index}" class="hidden p-4 rounded-lg"></div>
+        `;
+                scenariosContainer.appendChild(scenarioEl);
+
+                const optionButtons = scenarioEl.querySelectorAll(`#options-${index} button`);
+                optionButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const selectedIndex = parseInt(e.target.getAttribute('data-index'));
+                        const explanationEl = scenarioEl.querySelector(`#explanation-${index}`);
+
+                        optionButtons.forEach(btn => btn.disabled = true);
+
+                        if (selectedIndex === item.correct) {
+                            e.target.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                            e.target.classList.add('bg-green-500', 'text-white');
+                            explanationEl.classList.add('bg-green-100', 'text-green-800');
+                        } else {
+                            e.target.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+                            e.target.classList.add('bg-red-500', 'text-white');
+                            optionButtons[item.correct].classList.add('bg-green-500', 'text-white');
+                            explanationEl.classList.add('bg-red-100', 'text-red-800');
+                        }
+
+                        explanationEl.innerHTML = item.explanation;
+                        explanationEl.classList.remove('hidden');
+                    });
+                });
+            });
+
+            // --- Section 3: Actors Data & Logic ---
+            const actorsData = [
+                {
+                    title: "Threat Actor",
+                    icon: "💀",
+                    description: "The source of a threat. The person or entity performing a threatening action.",
+                    details: null
+                },
+                {
+                    title: "At-Risk Individual",
+                    icon: "👤",
+                    description: "The target of the threat.",
+                    details: null
+                },
+                {
+                    title: "Proxy",
+                    icon: "🎭",
+                    description: "A representative or surrogate for the at-risk individual. Attacks on proxies are attacks on the individual.",
+                    details: `
+                <ul class="list-disc list-inside mt-2 space-y-1">
+                    <li><strong>Property:</strong> Physical items like a phone or a house.</li>
+                    <li><strong>Friends & Family:</strong> People who can be leveraged to harm the individual.</li>
+                    <li><strong>Information:</strong> Data that acts as a digital representation of the individual.</li>
+                </ul>
+            `
+                },
+                {
+                    title: "Agent",
+                    icon: "🤖",
+                    description: "An instrument or means used by the Threat Actor to accomplish their goal.",
+                    details: `
+                <p class="mt-2">An agent acts on behalf of the threat actor. This can be a knowing participant (a thug) or an unwitting one (software, or people tricked into participating).</p>
+            `
+                }
+            ];
+
+            const actorsContainer = document.getElementById('actors-grid');
+            actorsData.forEach(actor => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-sm cursor-pointer';
+                card.innerHTML = `
+            <div class="p-6">
+                <div class="flex items-center mb-2">
+                    <span class="text-3xl mr-4">${actor.icon}</span>
+                    <h3 class="text-xl font-bold text-gray-900">${actor.title}</h3>
+                </div>
+                <p class="text-gray-600">${actor.description}</p>
+                <div class="actor-details hidden text-sm text-gray-600 mt-4 border-t pt-4">${actor.details || ''}</div>
+            </div>
+        `;
+
+                if (actor.details) {
+                    card.addEventListener('click', () => {
+                        card.querySelector('.actor-details').classList.toggle('hidden');
+                    });
+                }
+                actorsContainer.appendChild(card);
+            });
+
+            // --- Section 4: Diagramming Logic (Text-Only) ---
+            const diagramTextOutput = document.getElementById('diagram-text-output');
+            const viewInteractionsBtn = document.getElementById('view-interactions');
+            const viewRelationshipsBtn = document.getElementById('view-relationships');
+
+            const diagramText = {
+                interactions: {
+                    title: "Interactions View: Identifying Threats and Vectors",
+                    content: "The <strong>Interactions View</strong> maps the <strong>threats</strong> (sources) to the <strong>means</strong> (interactions) of an attack. This map is crucial for identifying every possible path a threat actor can take to cause harm to an At-Risk Individual or their Proxies.<br><br>The lines represent risk vectors:<br>— <strong>Straight Solid Line (→):</strong> Direct interaction with the individual (giving rise to Collection/Invasion harms).<br>— <strong>Dotted Line (…→):</strong> Interaction solely with a <strong>Proxy</strong> (e.g., collecting data from a mobile phone).<br>— <strong>Dashed Line (--→):</strong> Interaction with both the individual and their proxy.<br><br>By mapping these vectors, you determine <em>where</em> in the system privacy harms—especially Collection, Invasion, and the start of Information Processing/Dissemination—can originate."
+                },
+                relationships: {
+                    title: "Relationships View: Identifying Control Points",
+                    content: "The <strong>Relationships View</strong> maps the <strong>power dynamics</strong> between actors, which is key to finding mitigation and control points.<br><br>The lines represent the nature of the relationship:<br>— <strong>Controlling Relationship:</strong> One actor has power asymmetry over another (e.g., employer over employee). This allows for easy imposition of internal controls.<br>— <strong>Negotiated Relationship:</strong> Actors have relatively equal power (e.g., company and a major vendor). Controls must be injected and agreed upon via contracts.<br>— <strong>Regulatory Relationship:</strong> An external body (like the FTC) has <strong>jurisdiction</strong> over actors, providing a legal/governance chokepoint.<br><br>This map helps determine <em>who</em> has the power to impose the necessary privacy controls."
+                }
+            };
+
+            function updateDiagramText(view) {
+                const data = diagramText[view];
+                diagramTextOutput.innerHTML = `
+            <h4 class="font-bold text-lg mb-3 text-gray-800">${data.title}</h4>
+            <p class="text-sm text-gray-700">${data.content}</p>
+        `;
+            }
+
+            viewInteractionsBtn.addEventListener('click', () => {
+                updateDiagramText('interactions');
+                viewInteractionsBtn.classList.add('bg-blue-500', 'text-white');
+                viewInteractionsBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                viewRelationshipsBtn.classList.add('bg-gray-200', 'text-gray-800');
+                viewRelationshipsBtn.classList.remove('bg-blue-500', 'text-white');
+            });
+
+            viewRelationshipsBtn.addEventListener('click', () => {
+                updateDiagramText('relationships');
+                viewRelationshipsBtn.classList.add('bg-blue-500', 'text-white');
+                viewRelationshipsBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                viewInteractionsBtn.classList.add('bg-gray-200', 'text-gray-800');
+                viewInteractionsBtn.classList.remove('bg-blue-500', 'text-white');
+            });
+
+            // Initialize with the Interaction View
+            updateDiagramText('interactions');
+
+            // --- Section 5: Information Risk Logic (Removed Chart Logic) ---
+
+        });
+    </script>
+</body>
+
+</html>

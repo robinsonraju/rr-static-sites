@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Privacy Controls Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Calm Neutrals (Slate & Blue) -->
+    <!-- 
+    Application Structure Plan (REDESIGNED): 
+    A single-page application with a spacious, card-based layout.
+    
+    Navigation:
+    - Top-right prominent pill buttons switch between "Strategies" and "Architecture".
+    
+    View 1: Strategies & Tactics (Interactive Split-Pane)
+    - Left Column: A responsive grid of "Strategy Cards". Each card displays the Strategy name, definition, and a cluster of clickable "Tactic Buttons".
+    - Right Column (Sticky): A "Detail Panel" that stays fixed as you scroll. When a user clicks a Tactic button on the left, this panel updates to show the specific Definition, Timing, and Example for that tactic.
+    - Spacing: Generous padding (p-6 to p-8) and gaps (gap-8) are used to separate elements clearly.
+    
+    View 2: Privacy Architecture (Visualizations)
+    - A vertical stack of spacious "Content Cards" containing the Chart.js visualization and HTML diagrams.
+    -->
+    <!-- 
+    Visualization & Content Choices:
+    1. Strategies Cards:
+       Viz/Method: HTML Grid of interactive Cards.
+       Interaction: Clicking nested buttons updates a separate DOM element (Detail Panel).
+       Justification: Cards are easier to scan than a table. The split-pane approach prevents the layout from jumping around when opening/closing details.
+    2. Architecture Visualizations:
+       - Chart.js Bubble Chart for the Spiekermann/Cranor model.
+       - Custom Flexbox Diagram for Centralization models.
+       - Styled Table for Identifiability levels.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        /* Custom Scrollbar for the Detail Panel if it gets too long */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            /* Allow full width of container */
+            height: 400px;
+            max-height: 500px;
+        }
+
+        /* Card Hover Effects */
+        .strategy-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            @apply px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-200 ease-in-out shadow-sm border border-transparent;
+        }
+
+        .nav-btn-active {
+            @apply bg-blue-600 text-white shadow-md transform scale-105;
+        }
+
+        .nav-btn-inactive {
+            @apply bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300;
+        }
+
+        /* Tactic Buttons inside Cards */
+        .tactic-btn {
+            @apply px-4 py-1.5 rounded-md text-sm font-medium transition-colors border;
+        }
+
+        .tactic-btn-active {
+            @apply bg-blue-600 text-white border-blue-600 shadow-sm;
+        }
+
+        .tactic-btn-inactive {
+            @apply bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600;
+        }
+
+        /* Filter Pills */
+        .filter-pill {
+            @apply px-5 py-2 rounded-full text-sm font-medium transition-all cursor-pointer border;
+        }
+
+        .filter-pill-active {
+            @apply bg-slate-800 text-white border-slate-800;
+        }
+
+        .filter-pill-inactive {
+            @apply bg-white text-slate-500 border-slate-200 hover:border-slate-400;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 text-slate-800 font-sans leading-relaxed selection:bg-blue-100">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- HEADER & NAV -->
+        <header
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 space-y-4 md:space-y-0">
+            <div>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Strategic Privacy by Design</h1>
+                <div class="flex gap-4 mt-2">
+                    <a href="../index.html"
+                        class="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">Course Home</a>
+                    <a href="../Cronk-SPBD.html"
+                        class="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">&larr; Back to
+                        Book Index</a>
+                </div>
+                <p class="text-lg text-slate-500 mt-1">Chapter 5: Interactive Controls Explorer</p>
+            </div>
+            <nav class="flex space-x-3 bg-slate-200/50 p-1.5 rounded-full">
+                <button id="nav-strategies" class="nav-btn">Strategies & Tactics</button>
+                <button id="nav-architecture" class="nav-btn">Privacy Architecture</button>
+            </nav>
+        </header>
+
+        <main id="app-content" class="min-h-[60vh]">
+
+            <!-- VIEW 1: STRATEGIES & TACTICS -->
+            <section id="strategies-view" class="space-y-8">
+
+                <!-- Filters Area -->
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-slate-600 text-sm mb-4 sm:mb-0 max-w-xl">
+                        Explore the 8 privacy strategies. <strong>Technical</strong> strategies focus on data
+                        architecture, while <strong>Process</strong> strategies focus on organizational policy.
+                    </p>
+                    <div class="flex space-x-3">
+                        <button id="filter-all" class="filter-pill">All Strategies</button>
+                        <button id="filter-tech" class="filter-pill">Technical</button>
+                        <button id="filter-process" class="filter-pill">Process</button>
+                    </div>
+                </div>
+
+                <!-- Main Grid Layout -->
+                <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-start">
+
+                    <!-- Left Column: Strategy Cards (7 Columns) -->
+                    <div class="lg:col-span-7 space-y-6" id="strategies-grid">
+                        <!-- Cards injected via JS -->
+                    </div>
+
+                    <!-- Right Column: Sticky Detail Panel (5 Columns) -->
+                    <div class="hidden lg:block lg:col-span-5 sticky top-8">
+                        <div id="detail-panel"
+                            class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+                            <div
+                                class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Tactic Details
+                                </h2>
+                                <span id="detail-type-badge"
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 uppercase tracking-wide">Technical</span>
+                            </div>
+                            <div class="p-8 space-y-6">
+                                <div>
+                                    <h3 id="detail-title" class="text-3xl font-bold text-slate-900 mb-2">Exclude</h3>
+                                    <p id="detail-definition" class="text-lg text-slate-600 leading-relaxed">Limit
+                                        interactions only to those necessary to complete the task.</p>
+                                </div>
+
+                                <div class="space-y-4 pt-4 border-t border-slate-100">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-slate-900 mb-1">Timing</h4>
+                                        <p id="detail-timing" class="text-slate-500 text-sm">Before interaction</p>
+                                    </div>
+                                    <div class="bg-blue-50 rounded-lg p-5 border border-blue-100">
+                                        <h4 class="text-sm font-bold text-blue-900 mb-2 flex items-center">
+                                            <span class="mr-2">💡</span> Example
+                                        </h4>
+                                        <p id="detail-example" class="text-blue-800 text-sm italic">A restaurant handing
+                                            out numbers instead of taking names to announce when a table is ready.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-slate-50 px-6 py-3 text-center text-xs text-slate-400 border-t border-slate-100">
+                                Select a tactic from the left to view details
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Detail Modal (Hidden on Desktop, shown via JS logic if needed, but for simplicity reusing sticky for desktop and placing below on mobile via flex order or simple stacking) -->
+                    <!-- Note: In this layout, on mobile, users just see the grid. We will add a "Mobile Detail" container at the top of the grid or keep it below. For better UX, let's inject a detail container immediately after the active card on mobile? 
+                         DECISION: For Simplicity in a single file, the "Detail Panel" above is hidden on mobile. I will create a separate container for mobile that appears at the top of the list.
+                    -->
+                    <div id="mobile-detail-anchor" class="lg:hidden mb-8">
+                        <!-- Mobile Details appear here -->
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- VIEW 2: ARCHITECTURE -->
+            <section id="architecture-view" class="hidden space-y-10 max-w-5xl mx-auto">
+
+                <!-- Intro Card -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">Privacy Architecture</h2>
+                    <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                        System design influences privacy along two key axes: <strong>Identifiability</strong> (how
+                        easily data links to a person) and <strong>Centricity</strong> (where data is stored/processed).
+                    </p>
+                </div>
+
+                <!-- Chart Card -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-slate-900">The Spiekermann & Cranor Model</h3>
+                        <div class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0">Hover
+                            bubbles for details</div>
+                    </div>
+                    <div class="chart-container mx-auto">
+                        <canvas id="architecture-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Centralization Diagram Card -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-900 mb-8 text-center">Data Centralization Models</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Centralized -->
+                        <div
+                            class="bg-slate-50 rounded-xl p-6 border border-slate-200 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                            <div
+                                class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mb-4 shadow-sm">
+                                1</div>
+                            <h4 class="font-bold text-lg mb-2 text-slate-900">Centralized</h4>
+                            <p class="text-sm text-slate-500 mb-4">High Risk</p>
+                            <div class="w-full bg-white p-4 rounded-lg border border-slate-200">
+                                <span class="text-3xl block mb-1">🗄️</span>
+                                <span class="text-xs font-bold text-slate-700">Service</span>
+                                <span class="text-[10px] block text-slate-400">Holds All Data</span>
+                            </div>
+                        </div>
+
+                        <!-- Partially Decentralized -->
+                        <div
+                            class="bg-slate-50 rounded-xl p-6 border border-slate-200 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                            <div
+                                class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mb-4 shadow-sm">
+                                2</div>
+                            <h4 class="font-bold text-lg mb-2 text-slate-900">Partially Decentralized</h4>
+                            <p class="text-sm text-slate-500 mb-4">Medium Risk</p>
+                            <div class="flex items-center w-full justify-between px-2">
+                                <div class="bg-white p-2 rounded shadow-sm">
+                                    <span class="text-xl block">👤</span>
+                                    <span class="text-[10px]">Proc.</span>
+                                </div>
+                                <span class="text-slate-400">→</span>
+                                <div class="bg-white p-2 rounded shadow-sm border border-slate-200">
+                                    <span class="text-xl block">🖥️</span>
+                                    <span class="text-[10px]">Results</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fully Decentralized -->
+                        <div
+                            class="bg-blue-50 rounded-xl p-6 border border-blue-100 flex flex-col items-center text-center hover:shadow-md transition-shadow relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                                GOAL</div>
+                            <div
+                                class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl mb-4 shadow-sm text-blue-600">
+                                3</div>
+                            <h4 class="font-bold text-lg mb-2 text-blue-900">Fully Decentralized</h4>
+                            <p class="text-sm text-blue-600 mb-4">Lowest Risk</p>
+                            <div class="w-full bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                                <span class="text-3xl block mb-1">📱</span>
+                                <span class="text-xs font-bold text-slate-700">User Device</span>
+                                <span class="text-[10px] block text-slate-400">Data & Proc.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Identifiability Table Card -->
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6">Levels of Identifiability</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-200">
+                                    <th class="py-3 px-4 text-xs font-bold uppercase text-slate-500">Level</th>
+                                    <th class="py-3 px-4 text-xs font-bold uppercase text-slate-500">Description</th>
+                                    <th class="py-3 px-4 text-xs font-bold uppercase text-slate-500">Strategy</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="py-4 px-4 text-sm font-bold text-slate-900">Identified</td>
+                                    <td class="py-4 px-4 text-sm text-slate-600">Direct links (User ID, Email)</td>
+                                    <td class="py-4 px-4 text-sm text-slate-400">-</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="py-4 px-4 text-sm font-bold text-slate-900">Pseudonymized (Linkable)</td>
+                                    <td class="py-4 px-4 text-sm text-slate-600">IDs removed, but attributes linkable
+                                    </td>
+                                    <td class="py-4 px-4 text-sm font-medium text-blue-600">SEPARATE</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="py-4 px-4 text-sm font-bold text-slate-900">Pseudonymized (Unlinkable)
+                                    </td>
+                                    <td class="py-4 px-4 text-sm text-slate-600">Random IDs, Hashing, Encryption</td>
+                                    <td class="py-4 px-4 text-sm font-medium text-blue-600">HIDE</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="py-4 px-4 text-sm font-bold text-slate-900">Anonymized</td>
+                                    <td class="py-4 px-4 text-sm text-slate-600">k-anonymity (Indistinguishable)</td>
+                                    <td class="py-4 px-4 text-sm font-medium text-blue-600">ABSTRACT</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATA STORE ---
+            const appData = {
+                strategies: [
+                    {
+                        name: "MINIMIZE",
+                        type: "technical",
+                        definition: "Reduce interactions as much as possible.",
+                        tactics: ["exclude", "select", "strip", "destroy"]
+                    },
+                    {
+                        name: "SEPARATE",
+                        type: "technical",
+                        definition: "Separate interactions with people or their proxies.",
+                        tactics: ["distribute", "isolate"]
+                    },
+                    {
+                        name: "HIDE",
+                        type: "technical",
+                        definition: "Hide people or proxies from others to make interaction difficult.",
+                        tactics: ["restrict", "mix", "obfuscate", "dissociate", "perturb"]
+                    },
+                    {
+                        name: "ABSTRACT",
+                        type: "technical",
+                        definition: "Limit the particularity and individuality of interactions.",
+                        tactics: ["summarize", "group"]
+                    },
+                    {
+                        name: "ENFORCE",
+                        type: "process",
+                        definition: "Commit to acting in a privacy-friendly way.",
+                        tactics: ["create", "uphold", "maintain"]
+                    },
+                    {
+                        name: "DEMONSTRATE",
+                        type: "process",
+                        definition: "Demonstrate compliance with privacy values, policies, and processes.",
+                        tactics: ["record", "audit", "report"]
+                    },
+                    {
+                        name: "INFORM",
+                        type: "process",
+                        definition: "Inform individuals about interactions and risks (overcoming information asymmetry).",
+                        tactics: ["supply", "notify", "explain"]
+                    },
+                    {
+                        name: "CONTROL",
+                        type: "process",
+                        definition: "Provide individuals control over interactions (overcoming power asymmetry).",
+                        tactics: ["consent", "choose", "update", "retract"]
+                    }
+                ],
+                tactics: {
+                    "exclude": { name: "Exclude", definition: "Limit interactions only to those necessary to complete the task.", timing: "Before interaction", example: "A restaurant handing out numbers instead of taking names to announce when a table is ready." },
+                    "select": { name: "Select", definition: "Limit interactions on a case-by-case basis.", timing: "Before interaction", example: "A liquor store checking IDs only for customers who appear under 30, rather than scanning everyone’s ID." },
+                    "strip": { name: "Strip", definition: "Remove unnecessary information prior to interaction.", timing: "Before interaction", example: "An Address Verification System (AVS) using only the numeric street number and zip code, stripping the street name." },
+                    "destroy": { name: "Destroy", definition: "Remove information after interaction.", timing: "After interaction", example: "Deleting a customer’s address immediately after a physical book has been delivered." },
+                    "distribute": { name: "Distribute", definition: "Physically separate actors from individuals or their proxies.", timing: "Before interaction", example: "Storing data on a user's mobile device (local) vs. a central server." },
+                    "isolate": { name: "Isolate", definition: "Logically separate actors from individuals or their proxies.", timing: "Before interaction", example: "A hiring manager checking qualifications while a payroll department processes salary; neither has access to the other’s data pool." },
+                    "restrict": { name: "Restrict", definition: "Limit access to people or their proxies.", timing: "N/A (Concept)", example: "Authentication and authorization (e.g., role-based access control)." },
+                    "mix": { name: "Mix", definition: "Randomize people or proxies to prevent correlations.", timing: "N/A (Concept)", example: "Randomizing order numbers so an attacker cannot infer sales volume or time-distance between purchases." },
+                    "obfuscate": { name: "Obfuscate", definition: "Reduce the understandability of information.", timing: "N/A (Concept)", example: "Hashing passwords or using 'Leet speak.'" },
+                    "dissociate": { name: "Dissociate", definition: "Remove correlations between people or their proxies.", timing: "After initial interaction, but before subsequent interactions.", example: "A restaurant keeping a record of what was ordered for inventory, but removing the link to the specific customer who ordered it." },
+                    "perturb": { name: "Perturb", definition: "Add noise to interactions.", timing: "N/A (Concept)", example: "A pothole reporting app adding random time delays to submissions to prevent calculating the user's driving speed." },
+                    "summarize": { name: "Summarize", definition: "Generalize detail about people to reduce particularity.", timing: "N/A (Concept)", example: "Converting a Date of Birth (July 31, 1980) to an age range (40-60)." },
+                    "group": { name: "Group", definition: "Limit interactions to groups of people rather than individuals.", timing: "N/A (Concept)", example: "Recommendation engines that suggest products based on 'people who bought X also bought Y' without tracking the specific individual identity." },
+                    "create": { name: "Create", definition: "Decide on a policy that dictates interactions.", timing: "N/A (Concept)", example: "Context Policies ('Drivers forbidden from contacting customers') and Control Policies ('All PAN data must be hashed')." },
+                    "uphold": { name: "Uphold", definition: "Identify core privacy values that drive organizational behavior.", timing: "N/A (Concept)", example: "Deriving values from privacy norms (referencing Hartzog, Westin, etc.) to create a value like 'By Invitation Only' to prevent Intrusion harms." },
+                    "maintain": { name: "Maintain", definition: "Continuously improve privacy values, policies, and controls.", timing: "N/A (Concept)", example: "Using maturity models (Initial -> Optimized) to ensure the program evolves based on feedback." },
+                    "record": { name: "Record", definition: "Track interactions; document activities.", timing: "N/A (Concept)", example: "Logging system events and documenting design decisions. (e.g., DPPA lawsuit)." },
+                    "audit": { name: "Audit", definition: "Review activity regularly.", timing: "N/A (Concept)", example: "Analyzing logs and reviewing design decisions to ensure processes are followed." },
+                    "report": { name: "Report", definition: "Analyze records/audits and report to responsible parties.", timing: "N/A (Concept)", example: "Creating a feedback loop for leadership to improve the privacy posture." },
+                    "supply": { name: "Supply", definition: "Inform individuals about <em>future</em> interactions.", timing: "N/A (Concept)", example: "Privacy Notices, considering Timing (At-setup, Just-in-time), Channel, and Modality." },
+                    "notify": { name: "Notify", definition: "Alert individuals to <em>past</em> interactions or risks.", timing: "N/A (Concept)", example: "Alerts for data breaches or indicators of active collection (e.g., a camera LED light or a shutter click sound)." },
+                    "explain": { name: "Explain", definition: "Provide information in a concise, understandable way.", timing: "N/A (Concept)", example: "Clarity and readability, addressing 'Cognitive bias hyperbolic discounting' by warning of risks, not just usage." },
+                    "consent": { name: "Consent", definition: "Interact only with permission.", timing: "N/A (Concept)", example: "Key Requirement: Consent must be <strong>unconditional</strong>. (Example: 'A landlord asking for consent to video monitor in exchange for lower rent' is <em>not</em> free choice)." },
+                    "choose": { name: "Choose", definition: "Interact within the scope/specifications determined by the individual.", timing: "N/A (Concept)", example: "iOS Location Services (Never, Ask Next Time, While Using App, Always)." },
+                    "update": { name: "Update", definition: "Allow timely changes to information.", timing: "N/A (Concept)", example: "Purpose: To prevent 'Distortion' harms (false/misleading info)." },
+                    "retract": { name: "Retract", definition: "Cease interactions after permission is withdrawn.", timing: "N/A (Concept)", example: "Right to Erasure / Right to be Forgotten." }
+                }
+            };
+
+            // --- SELECTORS ---
+            const strategiesView = document.getElementById('strategies-view');
+            const architectureView = document.getElementById('architecture-view');
+            const navStrategiesBtn = document.getElementById('nav-strategies');
+            const navArchitectureBtn = document.getElementById('nav-architecture');
+            const filterButtons = [document.getElementById('filter-all'), document.getElementById('filter-tech'), document.getElementById('filter-process')];
+            const strategiesGrid = document.getElementById('strategies-grid');
+
+            // Detail Panel Elements
+            const detailTitle = document.getElementById('detail-title');
+            const detailDef = document.getElementById('detail-definition');
+            const detailTiming = document.getElementById('detail-timing');
+            const detailEx = document.getElementById('detail-example');
+            const detailBadge = document.getElementById('detail-type-badge');
+            const mobileDetailAnchor = document.getElementById('mobile-detail-anchor');
+
+            // State
+            let currentFilter = 'all';
+            let currentTactic = 'exclude';
+            let isChartRendered = false;
+            let architectureChart = null;
+
+            // --- VIEW NAVIGATION ---
+            function showView(viewId) {
+                if (viewId === 'strategies') {
+                    strategiesView.classList.remove('hidden');
+                    architectureView.classList.add('hidden');
+                    navStrategiesBtn.classList.replace('nav-btn-inactive', 'nav-btn-active');
+                    navArchitectureBtn.classList.replace('nav-btn-active', 'nav-btn-inactive');
+                } else {
+                    strategiesView.classList.add('hidden');
+                    architectureView.classList.remove('hidden');
+                    navStrategiesBtn.classList.replace('nav-btn-active', 'nav-btn-inactive');
+                    navArchitectureBtn.classList.replace('nav-btn-inactive', 'nav-btn-active');
+                    if (!isChartRendered) { renderArchitectureChart(); isChartRendered = true; }
+                }
+            }
+
+            // --- STRATEGIES RENDERER ---
+            function renderStrategies(filter) {
+                strategiesGrid.innerHTML = '';
+                currentFilter = filter;
+
+                // Update Filters
+                filterButtons.forEach(btn => {
+                    const btnFilter = btn.id.split('-')[1];
+                    if (btnFilter === currentFilter) {
+                        btn.classList.replace('filter-pill-inactive', 'filter-pill-active');
+                    } else {
+                        btn.classList.replace('filter-pill-active', 'filter-pill-inactive');
+                    }
+                });
+
+                const filtered = appData.strategies.filter(s => filter === 'all' || s.type === filter);
+
+                filtered.forEach(strategy => {
+                    const isTech = strategy.type === 'technical';
+                    const borderColor = isTech ? 'border-blue-100' : 'border-emerald-100';
+                    const titleColor = isTech ? 'text-blue-700' : 'text-emerald-700';
+                    const bgHover = isTech ? 'hover:border-blue-300' : 'hover:border-emerald-300';
+
+                    const tacticsHTML = strategy.tactics.map(tacticKey => {
+                        const isActive = tacticKey === currentTactic;
+                        return `<button 
+                            class="tactic-btn ${isActive ? 'tactic-btn-active' : 'tactic-btn-inactive'}" 
+                            data-tactic="${tacticKey}" 
+                            data-type="${strategy.type}">
+                            ${appData.tactics[tacticKey].name}
+                        </button>`;
+                    }).join('');
+
+                    const cardHTML = `
+                        <div class="strategy-card bg-white rounded-xl border ${borderColor} ${bgHover} p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-xl font-bold ${titleColor}">${strategy.name}</h3>
+                                <span class="text-[10px] font-bold uppercase tracking-wide text-slate-400 border border-slate-100 px-2 py-0.5 rounded">${isTech ? 'Tech' : 'Proc'}</span>
+                            </div>
+                            <p class="text-slate-600 text-sm mb-6 h-10 overflow-hidden text-ellipsis">${strategy.definition}</p>
+                            <div class="flex flex-wrap gap-2">
+                                ${tacticsHTML}
+                            </div>
+                        </div>
+                    `;
+                    strategiesGrid.innerHTML += cardHTML;
+                });
+            }
+
+            // --- DETAIL UPDATER ---
+            function updateDetails(tacticKey, type) {
+                const tactic = appData.tactics[tacticKey];
+                if (!tactic) return;
+
+                currentTactic = tacticKey;
+
+                // Update UI State
+                document.querySelectorAll('.tactic-btn').forEach(btn => {
+                    if (btn.dataset.tactic === tacticKey) {
+                        btn.classList.replace('tactic-btn-inactive', 'tactic-btn-active');
+                    } else {
+                        btn.classList.replace('tactic-btn-active', 'tactic-btn-inactive');
+                    }
+                });
+
+                // Populate Data
+                // Desktop Sticky Panel
+                detailTitle.innerHTML = tactic.name;
+                detailDef.innerHTML = tactic.definition;
+                detailTiming.innerHTML = tactic.timing;
+                detailEx.innerHTML = tactic.example;
+
+                // Badge Logic
+                if (type === 'technical') {
+                    detailBadge.textContent = 'Technical';
+                    detailBadge.classList.replace('bg-emerald-100', 'bg-blue-100');
+                    detailBadge.classList.replace('text-emerald-800', 'text-blue-800');
+                } else if (type === 'process') {
+                    detailBadge.textContent = 'Process';
+                    detailBadge.classList.replace('bg-blue-100', 'bg-emerald-100');
+                    detailBadge.classList.replace('text-blue-800', 'text-emerald-800');
+                }
+
+                // Mobile View Injection
+                const mobileHTML = `
+                    <div class="bg-white rounded-xl shadow-lg border border-blue-200 p-6 animate-fade-in-down">
+                         <div class="flex justify-between mb-2">
+                            <h3 class="text-2xl font-bold text-slate-900">${tactic.name}</h3>
+                            <span class="text-xs font-bold bg-slate-100 px-2 py-1 rounded text-slate-500 h-fit uppercase">${type}</span>
+                        </div>
+                        <p class="text-lg text-slate-700 mb-4">${tactic.definition}</p>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <p class="text-sm text-blue-800 italic">Example: ${tactic.example}</p>
+                        </div>
+                    </div>
+                `;
+                mobileDetailAnchor.innerHTML = mobileHTML;
+            }
+
+            // --- CHART RENDERER ---
+            function renderArchitectureChart() {
+                const ctx = document.getElementById('architecture-chart').getContext('2d');
+                if (architectureChart) architectureChart.destroy();
+
+                architectureChart = new Chart(ctx, {
+                    type: 'bubble',
+                    data: {
+                        datasets: [
+                            { label: 'Policy-Based', data: [{ x: 2, y: 8, r: 20 }], backgroundColor: 'rgba(239, 68, 68, 0.8)' },
+                            { label: 'Architecture-Based', data: [{ x: 8, y: 2, r: 20 }], backgroundColor: 'rgba(34, 197, 94, 0.8)' },
+                            { label: 'Point Controls (HIDE)', data: [{ x: 5, y: 2, r: 15 }], backgroundColor: 'rgba(59, 130, 246, 0.8)' },
+                            { label: 'Point Controls (CONTROL)', data: [{ x: 2, y: 5, r: 15 }], backgroundColor: 'rgba(245, 158, 11, 0.8)' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' } },
+                        scales: {
+                            x: { min: 0, max: 10, title: { display: true, text: 'Centricity (Low -> High)', font: { weight: 'bold' } }, ticks: { display: false } },
+                            y: { min: 0, max: 10, title: { display: true, text: 'Identifiability (Low -> High)', font: { weight: 'bold' } }, ticks: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // --- EVENTS ---
+            navStrategiesBtn.addEventListener('click', () => showView('strategies'));
+            navArchitectureBtn.addEventListener('click', () => showView('architecture'));
+
+            filterButtons.forEach(btn => btn.addEventListener('click', (e) => renderStrategies(e.target.id.split('-')[1])));
+
+            strategiesGrid.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tactic-btn')) {
+                    updateDetails(e.target.dataset.tactic, e.target.dataset.type);
+                }
+            });
+
+            // --- INIT ---
+            showView('strategies');
+            renderStrategies('all');
+            updateDetails('exclude', 'technical'); // Default selection
+        });
+    </script>
+</body>
+
+</html>

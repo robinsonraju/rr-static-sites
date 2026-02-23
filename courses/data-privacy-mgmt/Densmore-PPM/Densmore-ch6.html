@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Privacy Program Policies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is structured into four thematic sections accessible via a sticky navigation bar: 'Policy Core', 'Implementation & Communication', 'Supporting Policies', and 'Lifecycle & Training'. This structure was chosen to guide the user logically from foundational concepts (what a policy is) to practical application (how it's implemented and supported). It breaks down a dense text into manageable, interactive modules. The user flow is designed to be both linear for a comprehensive overview and non-linear, allowing users to jump directly to topics of interest. Key interactions include a clickable bar chart for policy components, a toggle for policy vs. notice, and a tabbed interface for supporting policies, all designed to make complex information more digestible and engaging than a static document. -->
+    <!-- Visualization & Content Choices: 
+        - Policy Components: Report Info -> 5 key components. Goal -> Inform/Compare. Viz -> Interactive Horizontal Bar Chart. Interaction -> Click a bar to show details. Justification -> More engaging than a static table, encourages exploration. Library -> Chart.js.
+        - Policy vs. Notice: Report Info -> Distinction. Goal -> Clarify. Viz -> Toggle/Clickable cards. Interaction -> Click to reveal definitions. Justification -> Simple interaction for a binary concept. Library -> JS.
+        - Communication Plan: Report Info -> Key planning questions. Goal -> Organize/Inform. Viz -> HTML Table. Interaction -> None (static display). Justification -> Replaced non-functional hover logic with a clear, static, responsive table for content clarity and reliability. Library -> HTML/CSS/Tailwind.
+        - Vendor Management: Report Info -> 3-step process. Goal -> Show flow. Viz -> HTML/CSS process diagram. Interaction -> Click step for details. Justification -> Clearly visualizes a linear process. Library -> JS/CSS.
+        - Supporting Policies: Report Info -> AUP, ISP, HR, etc. Goal -> Organize. Viz -> Tabbed Interface. Interaction -> Click tab to switch content. Justification -> Best UI for managing related but distinct content sections. Library -> JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+
+        .active-nav {
+            color: #D35400;
+            font-weight: 700;
+        }
+
+        .inactive-nav {
+            color: #7f8c8d;
+        }
+
+        .tab-active {
+            border-bottom-color: #D35400;
+            color: #D35400;
+            font-weight: 600;
+        }
+
+        .tab-inactive {
+            border-bottom-color: transparent;
+            color: #7f8c8d;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-bold text-[#D35400]">Privacy Policy Guide</h1>
+                    <a href="../Densmore-PPM.html"
+                        class="text-xs font-medium text-gray-500 hover:text-[#D35400] transition-colors">
+                        &larr; Back to Book Index
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="../index.html"
+                        class="px-4 py-2 text-gray-700 hover:text-[#D35400] transition-colors font-medium">Course
+                        Home</a>
+                    <a href="#policy-core"
+                        class="inactive-nav hover:text-[#D35400] transition-colors duration-300 nav-link">Policy
+                        Core</a>
+                    <a href="#implementation"
+                        class="inactive-nav hover:text-[#D35400] transition-colors duration-300 nav-link">Implementation</a>
+                    <a href="#supporting-policies"
+                        class="inactive-nav hover:text-[#D35400] transition-colors duration-300 nav-link">Supporting
+                        Policies</a>
+                    <a href="#lifecycle"
+                        class="inactive-nav hover:text-[#D35400] transition-colors duration-300 nav-link">Lifecycle &
+                        Training</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-[#2C3E50] mb-4">An Interactive Guide to Privacy Program Policies</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">This guide translates Chapter 6 of "Privacy Program
+                Management" into an interactive experience. Explore the essential components, implementation strategies,
+                and the ecosystem of policies that form a robust privacy program.</p>
+        </div>
+
+        <section id="policy-core" class="mb-20 pt-16">
+            <h3 class="text-3xl font-bold text-center text-[#2C3E50] mb-2">The Core of a Privacy Policy</h3>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A privacy policy is the foundational governance
+                document for an organization's privacy program. This section breaks down its essential definition, its
+                key components, and how it differs from a public-facing privacy notice.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center mb-12">
+                <div id="policy-distinction"
+                    class="bg-white p-6 rounded-lg shadow-md cursor-pointer transition-transform duration-300 hover:scale-105">
+                    <h4 class="text-xl font-bold text-center text-[#D35400] mb-4">Internal Policy vs. External Notice
+                    </h4>
+                    <div id="policy-vs-notice-container" class="relative h-48">
+                        <div id="policy-card"
+                            class="absolute inset-0 p-4 bg-orange-50 rounded-lg transition-opacity duration-500">
+                            <h5 class="font-bold text-lg mb-2">🔒 Privacy Policy (Internal)</h5>
+                            <p class="text-sm text-gray-700">An internal document for employees, stating how personal
+                                information will be handled, stored, and transmitted to meet organizational needs and
+                                legal requirements.</p>
+                        </div>
+                        <div id="notice-card"
+                            class="absolute inset-0 p-4 bg-blue-50 rounded-lg transition-opacity duration-500 opacity-0">
+                            <h5 class="font-bold text-lg mb-2">📢 Privacy Notice (External)</h5>
+                            <p class="text-sm text-gray-700">An external communication to customers, creating
+                                transparency in how the organization collects, uses, shares, and retains their personal
+                                information.</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-center text-gray-500 mt-2">Click me to toggle</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-xl font-bold text-[#2C3E50] mb-2">What is a Privacy Policy?</h4>
+                    <p class="text-gray-700">It governs the privacy goals and strategic direction of the privacy office,
+                        aligning with the overall business strategy. It's a high-level document that supports more
+                        detailed standards, guidelines, and procedures. These supporting documents provide specific
+                        instructions on everything from antivirus software use to new user account creation.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg shadow-xl">
+                <h4 class="text-2xl font-bold text-center text-[#2C3E50] mb-2">Interactive: Key Policy Components</h4>
+                <p class="text-center text-gray-500 mb-8">Click on a bar in the chart below to explore each essential
+                    component of a comprehensive privacy policy.</p>
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="componentsChart"></canvas>
+                    </div>
+                    <div id="component-details" class="p-6 bg-gray-50 rounded-lg min-h-[300px]">
+                        <h5 id="details-title" class="text-xl font-bold text-[#D35400] mb-4">Select a Component</h5>
+                        <p id="details-text" class="text-gray-700">Details about the selected component will appear
+                            here.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="implementation" class="mb-20 pt-16">
+            <h3 class="text-3xl font-bold text-center text-[#2C3E50] mb-2">Implementation & Communication</h3>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A policy is ineffective without a strong plan
+                for communication and implementation. This section explores how to educate the organization and
+                considers the associated costs of a privacy program.</p>
+
+            <div class="bg-white p-8 rounded-lg shadow-xl">
+                <h4 class="text-2xl font-bold text-center text-[#2C3E50] mb-2">Crafting an Internal Communications Plan
+                </h4>
+                <p class="text-center text-gray-500 mb-8">An effective plan answers key questions to ensure the privacy
+                    message is clear, consistent, and reaches the right audience.</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 shadow-md rounded-lg">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+                                    Key Question</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Rationale and Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-orange-50">
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#D35400] flex items-center">
+                                    <span class="text-xl mr-3">🎯</span>Purpose
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">Does it simply announce a policy, or is it
+                                    meant to train employees and cause behavior modification concerning privacy?</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50">
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#2C3E50] flex items-center">
+                                    <span class="text-xl mr-3">👥</span>Audience
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">Who is the audience? Are there different
+                                    potential user groups, such as production or administrative staff, managers, and
+                                    vendors, that require tailored messaging?</td>
+                            </tr>
+                            <tr class="hover:bg-green-50">
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#D35400] flex items-center">
+                                    <span class="text-xl mr-3">📢</span>Methods
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">What existing communication methods, such as
+                                    a company intranet, posters, digital screens, or videos, can be employed to boost
+                                    engagement?</td>
+                            </tr>
+                            <tr class="hover:bg-purple-50">
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#2C3E50] flex items-center">
+                                    <span class="text-xl mr-3">🗓️</span>Timing
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-700">Should there be a recurring time slot
+                                    assigned on the communications calendar dedicated to particular messaging (e.g.,
+                                    Data Privacy Day or security threat awareness)?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="supporting-policies" class="mb-20 pt-16">
+            <h3 class="text-3xl font-bold text-center text-[#2C3E50] mb-2">The Supporting Policy Ecosystem</h3>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A privacy policy doesn't exist in a vacuum.
+                It's reinforced by a network of other organizational policies. Explore the key supporting policies using
+                the tabs below.</p>
+
+            <div class="bg-white p-8 rounded-lg shadow-xl">
+                <div class="border-b border-gray-200 mb-6">
+                    <nav class="flex -mb-px" id="tabs">
+                        <button class="tab-active py-4 px-6 border-b-2 font-medium text-sm focus:outline-none"
+                            data-target="aup-isp">AUP & InfoSec</button>
+                        <button class="tab-inactive py-4 px-6 border-b-2 font-medium text-sm focus:outline-none"
+                            data-target="vendor">Vendor Management</button>
+                        <button class="tab-inactive py-4 px-6 border-b-2 font-medium text-sm focus:outline-none"
+                            data-target="hr">HR Policies</button>
+                        <button class="tab-inactive py-4 px-6 border-b-2 font-medium text-sm focus:outline-none"
+                            data-target="retention">Data Retention</button>
+                    </nav>
+                </div>
+
+                <div id="tab-content">
+                    <div id="aup-isp" class="tab-pane active">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-[#D35400]">Acceptable Use Policy (AUP)</h5>
+                                <p class="text-sm text-gray-700 mb-4">Stipulates rules for individuals accessing company
+                                    resources (networks, computers). It acts as a "terms of service" to protect the
+                                    organization from legal harm and ensures users accept monitoring and logging.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-lg mb-2 text-[#2C3E50]">Information Security Policy (ISP)</h5>
+                                <p class="text-sm text-gray-700 mb-4">Focuses on protecting data from threats through IT
+                                    methods to maintain Confidentiality, Integrity, and Availability (CIA). Security
+                                    controls data access, while privacy controls consent for its use.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="vendor" class="tab-pane hidden">
+                        <h5 class="font-bold text-lg mb-4 text-[#D35400]">Engaging Vendors: Third-Party Risk Management
+                        </h5>
+                        <p class="text-sm text-center text-gray-600 mb-6">Vendors must be held to the same privacy
+                            standards as employees. This process ensures data is protected when handled by third
+                            parties. Click a step to learn more.</p>
+                        <div
+                            class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+                            <div class="vendor-step text-center cursor-pointer p-4 rounded-lg hover:bg-orange-50"
+                                data-info="Guides the organization in working with third parties, requiring inventories, risk assessments, and evaluation of vendor's internal policies.">
+                                <div
+                                    class="bg-orange-100 text-orange-600 rounded-full h-16 w-16 flex items-center justify-center mx-auto font-bold text-2xl">
+                                    1</div>
+                                <p class="font-semibold mt-2">Vendor Policy</p>
+                            </div>
+                            <div class="text-2xl text-gray-300 hidden md:block">→</div>
+                            <div class="vendor-step text-center cursor-pointer p-4 rounded-lg hover:bg-orange-50"
+                                data-info="Includes legal, privacy, and security teams to define requirements for data backup, right to audit, vendor liability, and incident response procedures.">
+                                <div
+                                    class="bg-orange-100 text-orange-600 rounded-full h-16 w-16 flex items-center justify-center mx-auto font-bold text-2xl">
+                                    2</div>
+                                <p class="font-semibold mt-2">Vendor Contract</p>
+                            </div>
+                            <div class="2xl text-gray-300 hidden md:block">→</div>
+                            <div class="vendor-step text-center cursor-pointer p-4 rounded-lg hover:bg-orange-50"
+                                data-info="A Vendor Management Program (VMP) ensures consistent service and data protection through on-site visits, attestations, and periodic reassessments.">
+                                <div
+                                    class="bg-orange-100 text-orange-600 rounded-full h-16 w-16 flex items-center justify-center mx-auto font-bold text-2xl">
+                                    3</div>
+                                <p class="font-semibold mt-2">Monitoring (VMP)</p>
+                            </div>
+                        </div>
+                        <p id="vendor-info"
+                            class="mt-6 p-4 bg-gray-100 rounded-md text-center text-gray-700 min-h-[50px]">
+                            Click a step to see its description.
+                        </p>
+                    </div>
+                    <div id="hr" class="tab-pane hidden">
+                        <h5 class="font-bold text-lg mb-4 text-[#D35400]">Human Resources (HR) Policies</h5>
+                        <p class="text-sm text-gray-700 mb-6">HR handles diverse and sensitive employee information,
+                            requiring policies that tightly control data access. These policies must be adaptable to new
+                            challenges like remote work and health data collection.</p>
+                        <ul class="list-disc list-inside space-y-2 text-sm text-gray-700">
+                            <li>Handling of applicant information and background checks.</li>
+                            <li>Access to and termination of employee data.</li>
+                            <li>Bring Your Own Device (BYOD) and social media use.</li>
+                            <li>Employee/workplace monitoring.</li>
+                            <li>Employee health programs (e.g., COVID-19 records).</li>
+                        </ul>
+                    </div>
+                    <div id="retention" class="tab-pane hidden">
+                        <h5 class="font-bold text-lg mb-4 text-[#D35400]">Data Retention & Destruction Policies</h5>
+                        <p class="text-sm text-gray-700 mb-6">Personal information should only be retained for as long
+                            as necessary. This policy aligns with legal requirements and defines when and how data
+                            should be securely destroyed.</p>
+                        <ol class="list-decimal list-inside space-y-2 text-sm font-medium">
+                            <li>Determine what data is currently retained and where.</li>
+                            <li>Work with legal to identify retention requirements.</li>
+                            <li>Estimate business impacts of retaining vs. destroying data.</li>
+                            <li>Work with IT to implement technical controls for destruction.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="lifecycle" class="pt-16">
+            <h3 class="text-3xl font-bold text-center text-[#2C3E50] mb-2">Closing the Loop: Lifecycle & Training</h3>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Effective policies are living documents,
+                integrated into daily tasks through alignment, awareness, and formal training. This ensures the
+                organization's privacy values are understood and followed by everyone.</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-xl">
+                    <h4 class="text-xl font-bold mb-4 text-center">Awareness vs. Training</h4>
+                    <div class="flex justify-around">
+                        <div class="text-center">
+                            <h5 class="font-semibold text-lg text-blue-600">Awareness</h5>
+                            <p class="text-sm text-gray-600 mb-3">Being vigilant & watchful.</p>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>🎨 Infographics</li>
+                                <li>📰 Tip Sheets</li>
+                                <li>📧 Email Campaigns</li>
+                                <li>🎉 Data Privacy Day</li>
+                            </ul>
+                        </div>
+                        <div class="border-l border-gray-200"></div>
+                        <div class="text-center">
+                            <h5 class="font-semibold text-lg text-green-600">Formal Training</h5>
+                            <p class="text-sm text-gray-600 mb-3">Structured education.</p>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>💻 Online Platforms</li>
+                                <li>🏫 Classroom Courses</li>
+                                <li>✅ Regular & Mandatory</li>
+                                <li>🎓 Knowledge Transfer</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-xl">
+                    <h4 class="text-xl font-bold mb-4 text-center">Conclusion: A Living Document</h4>
+                    <p class="text-gray-700">Policies apply to everyone and must be integrated into daily tasks. They
+                        should be corrected if disconnected from reality. Constant awareness and training ensure that
+                        the organization's privacy vision is implemented in an orderly, trusted, and well-understood
+                        manner, protecting both the user and the organization.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const policyComponentsData = {
+                "Purpose": "Explains why the policy exists, its goals, and its alignment with national, regional, or local laws and other nonbinding frameworks.",
+                "Scope": "Defines which resources the policy protects, including facilities, hardware, software, information, and personnel.",
+                "Applicability": "Specifies who the policy applies to, such as customers, employees, contractors, and other third parties.",
+                "Roles & Responsibilities": "Delineates privacy duties for all data users (leaders, managers, employees) and serves as the basis for accountability.",
+                "Compliance": "Outlines monitoring, enforcement, penalties for violations, and addresses understanding of legal and regulatory penalties."
+            };
+
+            const ctx = document.getElementById('componentsChart').getContext('2d');
+            const componentsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(policyComponentsData),
+                    datasets: [{
+                        label: 'Policy Components',
+                        data: [10, 10, 10, 10, 10],
+                        backgroundColor: [
+                            'rgba(230, 126, 34, 0.7)',
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(230, 126, 34, 1)',
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        },
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const label = componentsChart.data.labels[index];
+                            const text = policyComponentsData[label];
+                            document.getElementById('details-title').textContent = label;
+                            document.getElementById('details-text').textContent = text;
+                        }
+                    },
+                    onHover: (event, chartElement) => {
+                        event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                    }
+                }
+            });
+
+            const policyDistinction = document.getElementById('policy-distinction');
+            const policyCard = document.getElementById('policy-card');
+            const noticeCard = document.getElementById('notice-card');
+            let isPolicyVisible = true;
+            policyDistinction.addEventListener('click', () => {
+                if (isPolicyVisible) {
+                    policyCard.classList.add('opacity-0');
+                    noticeCard.classList.remove('opacity-0');
+                } else {
+                    policyCard.classList.remove('opacity-0');
+                    noticeCard.classList.add('opacity-0');
+                }
+                isPolicyVisible = !isPolicyVisible;
+            });
+
+            // Removed: commPlanItems and commPlanInfoBox logic, as the section is now a static table.
+
+            const tabs = document.querySelectorAll('#tabs button');
+            const tabPanes = document.querySelectorAll('#tab-content .tab-pane');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.replace('tab-active', 'tab-inactive'));
+                    tab.classList.replace('tab-inactive', 'tab-active');
+
+                    tabPanes.forEach(pane => {
+                        if (pane.id === tab.dataset.target) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const vendorSteps = document.querySelectorAll('.vendor-step');
+            const vendorInfo = document.getElementById('vendor-info');
+            vendorSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    vendorInfo.textContent = step.dataset.info;
+                    vendorSteps.forEach(s => s.classList.remove('bg-orange-50'));
+                    step.classList.add('bg-orange-50');
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav');
+                    link.classList.add('inactive-nav');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active-nav');
+                        link.classList.remove('inactive-nav');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
