@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy-First Password Generator | Dev Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <header>
+            <div class="header-left">
+                <a href="../../index.html" class="back-link">← Back to Tools</a>
+                <h1>Burner Password Generator</h1>
+            </div>
+            <div class="header-right">
+                <p>100% Local. Secure. Evaluated for Entropy.</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Generator UI -->
+            <section class="generator-section card">
+                
+                <div class="password-display-wrapper">
+                    <input type="text" id="password-display" class="code-font" readonly value="" placeholder="Click Generate">
+                    <button id="copy-btn" class="primary-btn square-btn" title="Copy to clipboard">
+                        <!-- Simple copy SVG -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                    <button id="generate-btn" class="primary-btn square-btn" title="Generate new">
+                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 3.1-8.98L2 11"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="strength-meter mt-4">
+                    <div class="strength-labels">
+                        <span>Strength: <strong id="strength-text">Weak</strong></span>
+                        <span id="entropy-text" class="code-font">0 bits</span>
+                    </div>
+                    <div class="strength-bars">
+                        <div class="bar" id="bar-1"></div>
+                        <div class="bar" id="bar-2"></div>
+                        <div class="bar" id="bar-3"></div>
+                        <div class="bar" id="bar-4"></div>
+                    </div>
+                </div>
+
+                <div class="crack-time mt-2 text-center">
+                    <p>Estimated offline crack time: <strong id="crack-time-text" class="code-font">-</strong></p>
+                </div>
+
+                <div class="controls-grid mt-4">
+                    <div class="control-group full-width">
+                        <label>Password Length: <span id="len-val" class="code-font highlight">16</span></label>
+                        <input type="range" id="len-slider" min="8" max="128" value="16">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="chk-upper" checked>
+                            <span class="checkmark"></span>
+                            Uppercase (A-Z)
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="chk-lower" checked>
+                            <span class="checkmark"></span>
+                            Lowercase (a-z)
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="chk-num" checked>
+                            <span class="checkmark"></span>
+                            Numbers (0-9)
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="chk-sym" checked>
+                            <span class="checkmark"></span>
+                            Symbols (!@#$%)
+                        </label>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Education area -->
+            <section class="education-section card">
+                <h2>Why trust this generator?</h2>
+                <div class="info-grid">
+                    <div class="info-block">
+                        <h3>100% Local Execution</h3>
+                        <p>This page is completely static. The password generation happens directly within your browser's memory and is never transmitted over the internet to any server.</p>
+                    </div>
+                    <div class="info-block">
+                        <h3>Cryptographically Secure</h3>
+                        <p>Instead of using the predictable <code>Math.random()</code>, this tool utilizes the browser's native <code>window.crypto.getRandomValues()</code> API, ensuring true cryptographically secure pseudo-random number generation (CSPRNG).</p>
+                    </div>
+                    <div class="info-block">
+                        <h3>What is Entropy?</h3>
+                        <p>Entropy measures the unpredictability of a password in bits. A 16-character password using all character types has about 104 bits of entropy. Modern cracking rigs can calculate billions of hashes per second, making high-entropy passwords essential for offline protection.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

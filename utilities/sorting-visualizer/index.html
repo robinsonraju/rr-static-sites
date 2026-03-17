@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer | Dev Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <header>
+            <div class="header-left">
+                <a href="../../index.html" class="back-link">← Back to Tools</a>
+                <h1>Sorting Visualizer</h1>
+            </div>
+            <div class="header-right">
+                <p>Animate array sorting algorithms in real-time.</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            
+            <section class="controls card">
+                
+                <div class="control-group array-controls">
+                    <button id="gen-array-btn" class="secondary-btn">New Array</button>
+                    
+                    <div class="slider-wrapper">
+                        <label for="size-slider">Size: <span id="size-val" class="code-font highlight">30</span></label>
+                        <input type="range" id="size-slider" min="10" max="100" value="30" step="5">
+                    </div>
+
+                    <div class="slider-wrapper">
+                        <label for="speed-slider">Speed: <span id="speed-val" class="code-font highlight">Normal</span></label>
+                        <input type="range" id="speed-slider" min="1" max="100" value="50">
+                    </div>
+                </div>
+
+                <div class="control-group sort-controls">
+                    <div class="alg-buttons">
+                        <button class="alg-btn active" data-alg="bubble">Bubble Sort</button>
+                        <button class="alg-btn" data-alg="quick">Quick Sort</button>
+                        <button class="alg-btn" data-alg="merge">Merge Sort</button>
+                    </div>
+
+                    <button id="sort-btn" class="primary-btn">Sort!</button>
+                </div>
+            </section>
+
+            <section class="visualizer-container card">
+                
+                <div class="status-bar">
+                    <span id="sort-status">Ready to sort</span>
+                    <div class="legend">
+                        <span class="legend-item"><span class="dot unsorted"></span> Unsorted</span>
+                        <span class="legend-item"><span class="dot comparing"></span> Comparing</span>
+                        <span class="legend-item"><span class="dot swapping"></span> Swapping</span>
+                        <span class="legend-item"><span class="dot sorted"></span> Sorted</span>
+                    </div>
+                </div>
+
+                <div id="array-container" class="array-canvas">
+                    <!-- Bars injected by JS -->
+                </div>
+
+            </section>
+            
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

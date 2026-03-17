@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronos | Epoch Time & Cron Converter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Using cronstrue to cleanly parse cron expressions to human readable text -->
+    <script src="https://unpkg.com/cronstrue@2.48.0/dist/cronstrue.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <div class="header-left">
+                    <a href="../../index.html" class="back-link">← Back to Tools</a>
+                    <h1>Chronos</h1>
+                </div>
+                <div class="header-right">
+                    <p>Epoch timestamp & Cron expression playground.</p>
+                </div>
+            </header>
+
+            <!-- Epoch Realtime -->
+            <section class="card current-time-card">
+                <h2>Current Epoch Time</h2>
+                <div class="realtime-display">
+                    <span id="current-epoch-secs" class="epoch-value large-code">Loading...</span>
+                    <span class="epoch-label">seconds since Jan 01 1970 (UTC)</span>
+                </div>
+                <div class="realtime-display small mt-1">
+                    <span id="current-epoch-ms" class="epoch-value mono">Loading...</span>
+                    <span class="epoch-label">milliseconds</span>
+                </div>
+                <div class="realtime-display small mt-1">
+                    <span id="current-iso" class="epoch-value mono">Loading...</span>
+                    <span class="epoch-label">ISO 8601</span>
+                </div>
+            </section>
+
+            <div class="split-pane">
+                <!-- Epoch to Human -->
+                <section class="card tool-section">
+                    <h2>Epoch to Human Readable</h2>
+                    <div class="input-group">
+                        <label>Enter Timestamp (ms or s)</label>
+                        <div class="field-wrapper inline">
+                            <input type="number" id="epoch-input" class="code-font" placeholder="E.g. 1672531199">
+                            <button id="epoch-to-human-btn" class="primary-btn">Convert</button>
+                        </div>
+                    </div>
+                    <div class="results">
+                        <div class="result-row">
+                            <span class="label">GMT:</span>
+                            <span id="result-gmt" class="value code-font">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="label">Local:</span>
+                            <span id="result-local" class="value code-font">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="label">Relative:</span>
+                            <span id="result-relative" class="value code-font">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Human to Epoch -->
+                <section class="card tool-section">
+                    <h2>Human Readable to Epoch</h2>
+                    <div class="input-group">
+                        <label>Enter Date/Time (Any common format)</label>
+                        <div class="field-wrapper inline">
+                            <input type="text" id="human-input" class="code-font" placeholder="E.g. 2024-01-01T00:00:00Z">
+                            <button id="human-to-epoch-btn" class="primary-btn">Convert</button>
+                        </div>
+                    </div>
+                    <div class="results">
+                        <div class="result-row">
+                            <span class="label">Epoch (s):</span>
+                            <span id="result-epoch-s" class="value code-font">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="label">Epoch (ms):</span>
+                            <span id="result-epoch-ms" class="value code-font">-</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Cron Converter -->
+            <section class="card tool-section mt-4">
+                <h2>Cron Expression Explorer</h2>
+                <div class="input-group">
+                    <label>Enter Cron Expression</label>
+                    <div class="field-wrapper cron-wrapper">
+                        <input type="text" id="cron-input" class="code-font large-input" placeholder="* * * * *" value="0 12 * * 1-5">
+                    </div>
+                    <div class="cron-labels">
+                        <span>minute</span>
+                        <span>hour</span>
+                        <span>day(month)</span>
+                        <span>month</span>
+                        <span>day(week)</span>
+                    </div>
+                </div>
+                
+                <div class="cron-result">
+                    <div id="cron-human" class="cron-human-text">Every day at 12:00 PM, Monday through Friday</div>
+                    <div id="cron-error" class="error-text"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

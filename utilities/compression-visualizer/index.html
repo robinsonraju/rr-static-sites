@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compression Visualizer | Algorithmic Playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <header>
+            <div class="header-left">
+                <a href="../../index.html" class="back-link">← Back to Tools</a>
+                <h1>Compression Visualizer</h1>
+            </div>
+            <div class="header-right">
+                <p>Interactive playground for RLE, LZW, Huffman, and TTTD algorithms.</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            
+            <!-- Controls Area -->
+            <section class="controls-section card">
+                <div class="algorithm-selector">
+                    <button class="alg-btn active" data-alg="rle">Run-Length Encoding (RLE)</button>
+                    <button class="alg-btn" data-alg="lzw">Lempel-Ziv-Welch (LZW)</button>
+                    <button class="alg-btn" data-alg="huffman">Huffman Coding</button>
+                    <button class="alg-btn" data-alg="tttd">Two Thresholds Two Divisors (TTTD)</button>
+                </div>
+
+                <div class="input-area mt-4">
+                    <div class="header-row">
+                        <label>Input Text</label>
+                        <div class="action-buttons">
+                            <button id="load-sample-btn" class="text-btn">Load Sample Data</button>
+                            <button id="clear-btn" class="text-btn danger">Clear</button>
+                        </div>
+                    </div>
+                    <textarea id="input-text" class="code-font" placeholder="Enter text to compress..."></textarea>
+                    
+                    <div id="tttd-controls" class="tttd-controls" style="display: none;">
+                        <div class="control-row">
+                            <div class="control-item">
+                                <label title="Min chunk size">Min size <span class="val" id="val-min">16</span></label>
+                                <input type="range" id="tttd-min" min="8" max="64" value="16">
+                            </div>
+                            <div class="control-item">
+                                <label title="Max chunk size">Max size <span class="val" id="val-max">128</span></label>
+                                <input type="range" id="tttd-max" min="32" max="256" value="128">
+                            </div>
+                        </div>
+                        <div class="control-row mt-2">
+                             <div class="control-item">
+                                <label title="Main divisor for primary chunk boundary">Main Divisor <span class="val" id="val-mdiv">54</span></label>
+                                <input type="range" id="tttd-mdiv" min="10" max="100" value="54">
+                            </div>
+                            <div class="control-item">
+                                <label title="Backup divisor for secondary boundary">Backup Divisor <span class="val" id="val-bdiv">27</span></label>
+                                <input type="range" id="tttd-bdiv" min="5" max="50" value="27">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Metrics -->
+            <section class="metrics-section card">
+                <h2>Compression Statistics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <span class="metric-label">Original Size</span>
+                        <span class="metric-value code-font" id="stat-original">0 B</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-label">Processed Size</span>
+                        <span class="metric-value code-font highlight" id="stat-compressed">0 B</span>
+                    </div>
+                    <div class="metric-box">
+                        <span class="metric-label">Ratio / Savings</span>
+                        <span class="metric-value code-font" id="stat-ratio">-</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualization Output -->
+            <section class="output-section card flex-grow">
+                <h2>Visualization & Output</h2>
+                
+                <div class="output-container">
+                    <!-- Text/Table Output -->
+                    <div id="text-output" class="output-block code-font"></div>
+                    
+                    <!-- Structural Visualization (Tree, Dictionary, Chunks) -->
+                    <div id="visual-output" class="visual-block mt-4">
+                        <p class="empty-state">Enter text to see the algorithm visualization.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

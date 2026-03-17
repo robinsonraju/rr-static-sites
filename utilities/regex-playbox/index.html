@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Playbox | Interactive Regular Expression Tester</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <div class="header-left">
+                    <a href="../../index.html" class="back-link">← Back to Tools</a>
+                    <h1>Regex Playbox</h1>
+                </div>
+                <div class="header-right">
+                    <p>An interactive, local regular expression playground.</p>
+                </div>
+            </header>
+
+            <section class="regex-input-section">
+                <div class="input-group">
+                    <label for="regex-input">Regular Expression</label>
+                    <div class="regex-field-wrapper">
+                        <span class="regex-slash">/</span>
+                        <input type="text" id="regex-input" class="code-font" placeholder="Enter regex here (e.g. \d+)" autocomplete="off" spellcheck="false" value="([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)">
+                        <span class="regex-slash">/</span>
+                        <input type="text" id="regex-flags" class="code-font" placeholder="gmi" autocomplete="off" spellcheck="false" value="g">
+                    </div>
+                    <div id="regex-error" class="error-message"></div>
+                </div>
+            </section>
+
+            <section class="test-string-section">
+                <div class="section-header">
+                    <h2>Test String</h2>
+                    <span id="match-count" class="badge">0 Matches</span>
+                </div>
+                
+                <div class="editor-container">
+                    <!-- The hidden textarea catches input -->
+                    <textarea id="test-string-input" class="code-font" spellcheck="false">Contact support at info@example.com or reach out directly to the sales team at sales-inquiries123@company.co.uk. 
+Please DO NOT reply to noreply@automated-system.net.
+
+Also regex is great!</textarea>
+                    
+                    <!-- The div below displays the highlighted text perfectly layered under the textarea text -->
+                    <div id="test-string-highlight" class="code-font highlight-layer" aria-hidden="true"></div>
+                </div>
+            </section>
+
+            <section class="results-section">
+                <h2>Match Results</h2>
+                <div id="results-container" class="results-container">
+                    <!-- Dynamic match result chips go here -->
+                    <p class="empty-state">Enter a regex and test string to see match groups.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar / Cheatsheet -->
+        <aside class="sidebar">
+            <div class="cheatsheet">
+                <h2>Regex Cheatsheet</h2>
+                
+                <div class="cheat-group">
+                    <h3>Character Classes</h3>
+                    <ul>
+                        <li><code>.</code> Any character except newline</li>
+                        <li><code>\w</code> Word character <code>[a-zA-Z0-9_]</code></li>
+                        <li><code>\d</code> Digit <code>[0-9]</code></li>
+                        <li><code>\s</code> Whitespace</li>
+                        <li><code>\W</code> Not a word</li>
+                        <li><code>\D</code> Not a digit</li>
+                        <li><code>\S</code> Not whitespace</li>
+                    </ul>
+                </div>
+
+                <div class="cheat-group">
+                    <h3>Anchors</h3>
+                    <ul>
+                        <li><code>^</code> Start of string</li>
+                        <li><code>$</code> End of string</li>
+                        <li><code>\b</code> Word boundary</li>
+                    </ul>
+                </div>
+
+                <div class="cheat-group">
+                    <h3>Quantifiers</h3>
+                    <ul>
+                        <li><code>*</code> 0 or more</li>
+                        <li><code>+</code> 1 or more</li>
+                        <li><code>?</code> 0 or 1</li>
+                        <li><code>{3}</code> Exactly 3</li>
+                        <li><code>{3,}</code> 3 or more</li>
+                        <li><code>{3,5}</code> 3, 4, or 5</li>
+                    </ul>
+                </div>
+
+                <div class="cheat-group">
+                    <h3>Groups & Sets</h3>
+                    <ul>
+                        <li><code>[abc]</code> a, b, or c</li>
+                        <li><code>[^abc]</code> Not a, b, or c</li>
+                        <li><code>[a-z]</code> Characters a to z</li>
+                        <li><code>(xyz)</code> Capture group</li>
+                        <li><code>(?:xyz)</code> Non-capturing group</li>
+                        <li><code>x|y</code> x or y</li>
+                    </ul>
+                </div>
+                
+                <div class="cheat-group">
+                    <h3>Common Flags</h3>
+                    <ul>
+                        <li><code>g</code> Global (don't stop at first match)</li>
+                        <li><code>i</code> Case insensitive</li>
+                        <li><code>m</code> Multiline (impacts ^ and $)</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

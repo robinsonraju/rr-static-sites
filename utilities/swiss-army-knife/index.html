@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Swiss Army Knife | Local Text Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../../index.html" class="back-link">← Back to Tools</a>
+                <h2>Swiss Army Knife</h2>
+            </div>
+            
+            <nav class="tool-nav">
+                <button class="nav-btn active" data-tool="json">JSON Formatter</button>
+                <button class="nav-btn" data-tool="jwt">JWT Decoder</button>
+                <button class="nav-btn" data-tool="base64">Base64 Encoder</button>
+                <button class="nav-btn" data-tool="url">URL Encoder</button>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- TOOL: JSON -->
+            <section id="tool-json" class="tool-section active">
+                <div class="tool-header">
+                    <h1>JSON Formatter & Validator</h1>
+                    <div class="tool-actions">
+                        <button id="json-format-btn" class="primary-btn">Format</button>
+                        <button id="json-minify-btn" class="secondary-btn">Minify</button>
+                        <button id="json-clear-btn" class="secondary-btn danger">Clear</button>
+                    </div>
+                </div>
+                <div class="split-pane">
+                    <div class="pane">
+                        <label>Input JSON</label>
+                        <textarea id="json-input" class="code-font" placeholder="Paste JSON here..."></textarea>
+                    </div>
+                    <div class="pane">
+                        <label>Result <span id="json-status" class="status-badge"></span></label>
+                        <textarea id="json-output" class="code-font" readonly placeholder="Result will appear here..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TOOL: JWT -->
+            <section id="tool-jwt" class="tool-section">
+                <div class="tool-header">
+                    <h1>JWT Decoder</h1>
+                    <div class="tool-actions">
+                        <button id="jwt-clear-btn" class="secondary-btn danger">Clear</button>
+                    </div>
+                </div>
+                <div class="single-pane">
+                    <label>Encoded Token</label>
+                    <textarea id="jwt-input" class="code-font encoded-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+                </div>
+                <div class="split-pane mt-2">
+                    <div class="pane">
+                        <label>Header (Algorithm & Type)</label>
+                        <textarea id="jwt-header-output" class="code-font" readonly></textarea>
+                    </div>
+                    <div class="pane">
+                        <label>Payload (Data)</label>
+                        <textarea id="jwt-payload-output" class="code-font" readonly></textarea>
+                    </div>
+                </div>
+                <div id="jwt-error" class="error-text"></div>
+            </section>
+
+            <!-- TOOL: Base64 -->
+            <section id="tool-base64" class="tool-section">
+                <div class="tool-header">
+                    <h1>Base64 Encoder / Decoder</h1>
+                    <div class="tool-actions">
+                        <button id="base64-encode-btn" class="primary-btn">Encode</button>
+                        <button id="base64-decode-btn" class="primary-btn">Decode</button>
+                        <button id="base64-clear-btn" class="secondary-btn danger">Clear</button>
+                    </div>
+                </div>
+                <div class="split-pane">
+                    <div class="pane">
+                        <label>Input</label>
+                        <textarea id="base64-input" class="code-font" placeholder="Enter text to encode or decode..."></textarea>
+                    </div>
+                    <div class="pane">
+                        <label>Result</label>
+                        <textarea id="base64-output" class="code-font" readonly></textarea>
+                    </div>
+                </div>
+                <div id="base64-error" class="error-text"></div>
+            </section>
+
+            <!-- TOOL: URL -->
+            <section id="tool-url" class="tool-section">
+                <div class="tool-header">
+                    <h1>URL Encoder / Decoder</h1>
+                    <div class="tool-actions">
+                        <button id="url-encode-btn" class="primary-btn">Encode</button>
+                        <button id="url-decode-btn" class="primary-btn">Decode</button>
+                        <button id="url-clear-btn" class="secondary-btn danger">Clear</button>
+                    </div>
+                </div>
+                <div class="split-pane">
+                    <div class="pane">
+                        <label>Input</label>
+                        <textarea id="url-input" class="code-font" placeholder="Enter URL or text to encode/decode..."></textarea>
+                    </div>
+                    <div class="pane">
+                        <label>Result</label>
+                        <textarea id="url-output" class="code-font" readonly></textarea>
+                    </div>
+                </div>
+                <div id="url-error" class="error-text"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

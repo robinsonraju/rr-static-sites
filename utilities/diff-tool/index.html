@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text & Code Diff Tool | Dev Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <header>
+            <div class="header-left">
+                <a href="../../index.html" class="back-link">← Back to Tools</a>
+                <h1>Diff Tool Comparator</h1>
+            </div>
+            <div class="header-right">
+                <p>Compare JSON, code, or dense text locally.</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            
+            <div class="controls-bar card">
+                <div class="view-toggles">
+                    <button class="toggle-btn active" id="view-split">Split View</button>
+                    <button class="toggle-btn" id="view-unified">Unified View</button>
+                </div>
+                
+                <div class="actions">
+                    <button id="compare-btn" class="primary-btn">Compare</button>
+                    <button id="clear-btn" class="secondary-btn danger">Clear</button>
+                </div>
+            </div>
+
+            <!-- Input Mode (Side by Side) -->
+            <section class="input-section" id="input-section">
+                <div class="pane left-pane card">
+                    <div class="pane-header">
+                        <h2>Original text</h2>
+                    </div>
+                    <textarea id="text-original" class="code-font diff-input" placeholder="Paste original text here..."></textarea>
+                </div>
+                <div class="pane right-pane card">
+                    <div class="pane-header">
+                        <h2>Modified text</h2>
+                    </div>
+                    <textarea id="text-modified" class="code-font diff-input" placeholder="Paste modified text here..."></textarea>
+                </div>
+            </section>
+
+            <!-- Output Mode -->
+            <section class="output-section card" id="output-section" style="display: none;">
+                <div class="output-header">
+                    <h2>Comparison Results</h2>
+                    <div class="legend">
+                        <span class="legend-item bg-added">+ Added</span>
+                        <span class="legend-item bg-removed">- Removed</span>
+                    </div>
+                    <button id="edit-btn" class="secondary-btn">← Back to Edit</button>
+                </div>
+                
+                <!-- Container for the Diff rendering -->
+                <div id="diff-output" class="diff-container code-font"></div>
+            </section>
+            
+        </main>
+    </div>
+
+    <!-- We load a small lightweight library for the actual Myers Diff algorithm algorithm 
+         Diff package (BSD License) minified from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/diff@5.1.0/dist/diff.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
