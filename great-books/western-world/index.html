@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Books of the Western World</title>
+    <meta name="description" content="A comprehensive listing in a premium display layout of the 54 volumes of the Great Books of the Western World (1952 original list).">
+    
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+        <div class="blob-3"></div>
+    </div>
+
+    <header class="glass-header">
+        <div class="container">
+            <a href="../../index.html" class="back-home-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Back to Home
+            </a>
+            <h1>Great Books of the Western World</h1>
+            <p>The Original 1952 Series Collection</p>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search volumes, authors, or works...">
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="volumesGrid" class="volumes-grid">
+            <!-- Dynamically populated via script.js -->
+        </div>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="container">
+            <p>Curated and presented with a modern aesthetic.</p>
+        </div>
+    </footer>
+
+    <!-- Scripting -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
