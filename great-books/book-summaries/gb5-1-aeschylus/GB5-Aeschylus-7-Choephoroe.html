@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choephoroe | Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1c1917;
+            color: #d6d3d1;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 350px;
+        }
+        .tab-active {
+            border-left: 4px solid #16a34a;
+            background-color: #292524;
+            font-weight: 600;
+            color: #4ade80;
+        }
+        .timeline-node {
+            transition: all 0.3s ease;
+        }
+        .timeline-node:hover, .timeline-node.active {
+            background-color: #16a34a;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(22, 163, 74, 0.5);
+        }
+        .theme-card {
+            background-color: #292524;
+            transition: all 0.3s ease;
+            border: 1px solid #44403c;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            border-color: #16a34a;
+            background-color: #1c1917;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .moss-border {
+            border-bottom: 4px solid #16a34a;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-[#1c1917]/95 backdrop-blur border-b border-stone-800 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-serif font-bold text-xl text-green-600 tracking-wider">
+                    AESCHYLUS: CHOEPHOROE
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-stone-400 hover:text-green-500 transition uppercase text-xs">The Tomb</a>
+                    <a href="#narrative" class="text-stone-400 hover:text-green-500 transition uppercase text-xs">The Offering</a>
+                    <a href="#characters" class="text-stone-400 hover:text-green-500 transition uppercase text-xs">The Avenged</a>
+                    <a href="#themes" class="text-stone-400 hover:text-green-500 transition uppercase text-xs">The Blood</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="overview" class="relative py-24 bg-stone-900 overflow-hidden moss-border">
+        <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-stone-200">The Libation Bearers</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed text-stone-400">
+                A ritual of homecoming and horror. Orestes returns to the grave of his father to ignite a revolution of vengeance, where maternal blood is the only currency for justice.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#narrative" class="bg-stone-700 hover:bg-green-800 text-stone-100 px-10 py-4 rounded shadow-2xl transition font-bold tracking-widest uppercase border border-stone-600">Pour the Libation</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 space-y-32">
+
+        <section id="narrative" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-green-600 border-b border-stone-700 pb-2 inline-block">The Path of the Viper</h2>
+                <p class="text-stone-400 mt-4">
+                    The calculated steps toward the liberation of Argos, from the recognition at the tomb to the inevitable, terrifying act of matricide.
+                </p>
+            </div>
+
+            <div class="bg-stone-800/40 rounded-xl border border-stone-700 p-8 flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/3 relative">
+                    <div class="absolute left-6 top-0 bottom-0 w-1 bg-stone-700"></div>
+                    <div class="space-y-8 relative z-10" id="timeline-container"></div>
+                </div>
+
+                <div class="w-full md:w-2/3 bg-stone-900 rounded-lg p-8 min-h-[350px] flex flex-col justify-center border-l-4 border-green-700 shadow-2xl" id="plot-detail-container">
+                    <h3 id="plot-title" class="text-3xl font-serif font-bold text-green-500 mb-4 uppercase">Select a ritual stage</h3>
+                    <p id="plot-desc" class="text-stone-300 text-lg leading-relaxed"></p>
+                    <div id="plot-quote" class="mt-6 italic text-stone-500 border-l-4 border-stone-600 pl-4 bg-black/20 py-4 font-serif"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-green-600 border-b border-stone-700 pb-2 inline-block">The House of Revenge</h2>
+                <p class="text-stone-400 mt-4">
+                    The radar chart compares the piety and agency of the siblings against the defensive power of the usurpers. Analysis of Piety, Power, Agency, and Aggression.
+                </p>
+            </div>
+
+            <div class="bg-stone-800/40 rounded-xl border border-stone-700 p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="w-full">
+                    <div class="chart-container">
+                        <canvas id="characterRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-wrap border-b border-stone-700 mb-6" id="character-tabs"></div>
+                    <div id="character-content" class="flex-grow bg-black/30 p-8 rounded-lg border-t border-green-900">
+                        <h3 id="char-name" class="text-3xl font-serif font-bold text-stone-200 mb-2"></h3>
+                        <div id="char-role" class="text-sm font-bold text-green-700 mb-6 tracking-widest uppercase"></div>
+                        <p id="char-desc" class="text-stone-400 leading-relaxed text-lg"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-green-600 border-b border-stone-700 pb-2 inline-block">The Deep-Rooted Curse</h2>
+                <p class="text-stone-400 mt-4">
+                    Themes of ancestral pollution and the religious obligation that drives a son to do the unthinkable.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="themes-container"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black text-stone-600 py-16 mt-20 border-t-2 border-stone-800">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif text-3xl tracking-widest text-stone-500 mb-4 uppercase">CHOEPHOROE</p>
+            <p class="text-lg uppercase text-green-900 tracking-tighter">The Earth Drinks the Potion of Revenge</p>
+        </div>
+    </footer>
+
+    <script>
+        const plotData = [
+            {
+                title: "1. The Homecoming",
+                desc: "Orestes returns from exile to the tomb of his father, Agamemnon. He leaves a lock of hair as a sign of mourning and piety, marking the beginning of his divinely mandated mission.",
+                quote: "This lock to Inachus for nurture; this For mourning... on this mounded sepulchre I call On my dead sire to listen."
+            },
+            {
+                title: "2. The Recognition",
+                desc: "Electra arrives with the Chorus to offer libations. She discovers Orestes' hair and footprints, leading to a profound and intense reunion with her brother as they unite against their father's killers.",
+                quote: "Look! They are like! They tally with mine own!... The hope within me struggles to be born."
+            },
+            {
+                title: "3. The Dream of the Viper",
+                desc: "The Chorus reveals Clytaemnestra's dream: she birthed a viper that sucked blood from her breast. Orestes interprets himself as that viper, destined to kill his mother in retribution.",
+                quote: "I am dragon-fanged To kill her as the dream would have me do."
+            },
+            {
+                title: "4. The Deception",
+                desc: "Disguised as a traveler, Orestes gains entry to the palace by claiming Orestes is dead. He uses the enemies' own tools—deceit and strategy—to penetrate the heart of the house.",
+                quote: "So, as their treason slew a royal man, They may be tricked and the same noose they rove Strangle themselves."
+            },
+            {
+                title: "5. The Double Slaughter",
+                desc: "Orestes kills Aegisthus and then faces his mother. Despite her pleas for mercy, he carries out the matricide. The play ends with Orestes haunted by the Furies, driven into madness by his guilt.",
+                quote: "The dead have come to life and slain the quick... I slew her with just cause; But whether justly done or no, do Thou Give sentence."
+            }
+        ];
+
+        const charData = [
+            {
+                name: 'Orestes',
+                role: 'The Avenging Son',
+                desc: 'A youth driven by the command of Apollo and the memory of his father. He represents the terrible burden of religious duty when it conflicts with the most basic human taboos.',
+                stats: [9, 6, 9, 8], // Piety, Power, Agency, Aggression
+                color: '#16a34a',
+                bgColor: 'rgba(22, 163, 74, 0.2)'
+            },
+            {
+                name: 'Electra',
+                role: 'The Catalyst of Grief',
+                desc: 'The enduring voice of mourning in Argos. Her hatred for her mother and devotion to her father provide the emotional fuel for Orestes\' mission, though she cannot act alone.',
+                stats: [9, 2, 6, 5],
+                color: '#78716c',
+                bgColor: 'rgba(120, 113, 108, 0.2)'
+            },
+            {
+                name: 'Clytaemnestra',
+                role: 'The Defensive Queen',
+                desc: 'Now established in power but haunted by nightmares. She attempts to use her role as a mother to ward off the consequences of her own previous crimes, but find the cycle inescapable.',
+                stats: [4, 8, 6, 7],
+                color: '#b91c1c',
+                bgColor: 'rgba(185, 28, 28, 0.2)'
+            },
+            {
+                name: 'Pylades',
+                role: 'The Voice of Apollo',
+                desc: 'Orestes\' silent companion who speaks only once—to remind him of the divine command at his moment of hesitation. He represents the uncompromising nature of the gods.',
+                stats: [10, 4, 8, 4],
+                color: '#d97706',
+                bgColor: 'rgba(217, 119, 6, 0.2)'
+            }
+        ];
+
+        const themeData = [
+            {
+                title: "The Revenge Cycle",
+                icon: "&#128257;",
+                brief: "Blood demands blood in an endless loop.",
+                detail: "The play explores how every act of 'justice' through violence necessitates a new crime. Orestes' act of revenge for his father creates a new, even more terrible blood-debt to his mother."
+            },
+            {
+                title: "Divine Mandate",
+                icon: "&#9889;",
+                brief: "The inescapable command of Apollo.",
+                detail: "Orestes does not act out of personal desire but under the threat of divine punishment. This theme highlights the conflict between human morality and the pitiless demands of the gods."
+            },
+            {
+                title: "Blood Guilt (Pollution)",
+                icon: "&#128128;",
+                brief: "The stain that cannot be washed away.",
+                detail: "The 'pollution' of the house is physical. The blood of the dead is seen as a tangible force that poisons the living, requiring ritual purification that only creates more blood."
+            },
+            {
+                title: "Ritual and Mourning",
+                icon: "&#127994;",
+                brief: "Communicating with the dead.",
+                detail: "The extensive scene at the tomb demonstrates the belief that the spirits of the dead are active participants in human affairs, needing libations and prayers to empower their living kin."
+            }
+        ];
+
+        function initTimeline() {
+            const container = document.getElementById('timeline-container');
+            plotData.forEach((item, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center gap-6 cursor-pointer group mb-6';
+                wrapper.onclick = () => selectPlot(index);
+                
+                const btn = document.createElement('div');
+                btn.className = `timeline-node w-12 h-12 rounded-full border border-stone-600 bg-stone-900 flex items-center justify-center font-bold text-stone-400 z-10 ${index === 0 ? 'active border-green-600 bg-green-600 text-white' : ''}`;
+                btn.innerText = index + 1;
+                btn.id = `node-${index}`;
+
+                const label = document.createElement('span');
+                label.className = 'font-serif font-semibold text-sm tracking-widest text-stone-500 group-hover:text-green-500 transition uppercase';
+                label.innerText = item.title.split('. ')[1];
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(label);
+                container.appendChild(wrapper);
+            });
+            updatePlot(0);
+        }
+
+        function selectPlot(index) {
+            document.querySelectorAll('.timeline-node').forEach(n => {
+                n.classList.remove('active', 'bg-green-600', 'text-white');
+                n.classList.add('bg-stone-900', 'text-stone-400');
+            });
+            const active = document.getElementById(`node-${index}`);
+            active.classList.add('active', 'bg-green-600', 'text-white');
+            updatePlot(index);
+        }
+
+        function updatePlot(index) {
+            const data = plotData[index];
+            const container = document.getElementById('plot-detail-container');
+            container.classList.remove('fade-in');
+            void container.offsetWidth;
+            container.classList.add('fade-in');
+            
+            document.getElementById('plot-title').innerText = data.title;
+            document.getElementById('plot-desc').innerText = data.desc;
+            document.getElementById('plot-quote').innerText = data.quote;
+        }
+
+        let radarChart = null;
+        function initCharts() {
+            const tabs = document.getElementById('character-tabs');
+            charData.forEach((char, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-4 text-xs font-serif tracking-widest transition flex-grow text-center uppercase ${index === 0 ? 'tab-active' : 'border-l-4 border-transparent text-stone-600'}`;
+                btn.innerText = char.name;
+                btn.onclick = (e) => selectChar(index, e.target);
+                tabs.appendChild(btn);
+            });
+
+            const ctx = document.getElementById('characterRadarChart').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['PIETY', 'POWER', 'AGENCY', 'AGGRESSION'],
+                    datasets: charData.map((char, i) => ({
+                        label: char.name,
+                        data: char.stats,
+                        backgroundColor: i === 0 ? char.bgColor : 'rgba(0,0,0,0)',
+                        borderColor: i === 0 ? char.color : 'rgba(100, 100, 100, 0.1)',
+                        borderWidth: i === 0 ? 3 : 1,
+                        pointRadius: i === 0 ? 5 : 0
+                    }))
+                },
+                options: {
+                    scales: { r: { min: 0, max: 10, ticks: { display: false }, grid: { color: 'rgba(22, 163, 74, 0.1)' }, pointLabels: { color: '#a8a29e', font: { family: 'Cinzel', size: 14, weight: 'bold' } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+            updateCharInfo(0);
+        }
+
+        function selectChar(index, btn) {
+            document.querySelectorAll('#character-tabs button').forEach(b => b.className = 'px-4 py-4 text-xs font-serif tracking-widest transition flex-grow text-center uppercase border-l-4 border-transparent text-stone-600');
+            btn.className = 'px-4 py-4 text-xs font-serif tracking-widest transition flex-grow text-center uppercase tab-active';
+            
+            radarChart.data.datasets.forEach((ds, i) => {
+                ds.backgroundColor = i === index ? charData[i].bgColor : 'rgba(0,0,0,0)';
+                ds.borderColor = i === index ? charData[i].color : 'rgba(100, 100, 100, 0.1)';
+                ds.borderWidth = i === index ? 3 : 1;
+                ds.pointRadius = i === index ? 5 : 0;
+            });
+            radarChart.update();
+            updateCharInfo(index);
+        }
+
+        function updateCharInfo(index) {
+            const char = charData[index];
+            const content = document.getElementById('character-content');
+            content.classList.remove('fade-in');
+            void content.offsetWidth;
+            content.classList.add('fade-in');
+            
+            document.getElementById('char-name').innerText = char.name;
+            document.getElementById('char-role').innerText = char.role;
+            document.getElementById('char-desc').innerText = char.desc;
+        }
+
+        function initThemes() {
+            const container = document.getElementById('themes-container');
+            themeData.forEach(theme => {
+                const card = document.createElement('div');
+                card.className = 'theme-card p-8 rounded-none cursor-pointer shadow-lg';
+                card.innerHTML = `
+                    <div class="text-5xl text-green-800 mb-6">${theme.icon}</div>
+                    <h3 class="text-2xl font-serif font-bold text-stone-200 mb-4 uppercase tracking-tighter">${theme.title}</h3>
+                    <p class="text-green-600 font-bold mb-4 italic text-xs uppercase tracking-widest border-b border-stone-800 pb-2">${theme.brief}</p>
+                    <p class="text-stone-400 leading-relaxed text-sm">${theme.detail}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initCharts();
+            initThemes();
+        });
+    </script>
+</body>
+</html>

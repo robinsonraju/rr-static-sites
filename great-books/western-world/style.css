@@ -1,14 +1,14 @@
 :root {
-    --bg-color: #0b0f19;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --accent: #3b82f6;
-    --accent-hover: #60a5fa;
-    --accent-glow: rgba(59, 130, 246, 0.4);
+    --bg-color: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --accent: #0284c7;
+    --accent-hover: #0369a1;
+    --accent-glow: rgba(2, 132, 199, 0.4);
     
-    --glass-bg: rgba(17, 25, 40, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
     
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -95,7 +95,7 @@ body {
     font-family: var(--font-heading);
     font-size: 2.8rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff, #94a3b8);
+    background: linear-gradient(135deg, #0f172a, var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -115,20 +115,20 @@ body {
     max-width: 600px;
     padding: 0.9rem 1.4rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.04);
     border: 1px solid var(--glass-border);
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: 1rem;
     outline: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 .search-container input::placeholder {
-    color: rgba(148, 163, 184, 0.6);
+    color: var(--text-secondary);
 }
 .search-container input:focus {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.8);
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
@@ -180,8 +180,8 @@ main {
 }
 .volume-card:hover {
     transform: translateY(-8px) !important;
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
-    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: var(--glass-shadow);
+    border-color: rgba(2, 132, 199, 0.2);
 }
 .volume-card:hover::before {
     transform: scaleX(1);
@@ -202,7 +202,7 @@ main {
     font-weight: 600;
     margin-bottom: 1.5rem;
     line-height: 1.35;
-    color: #f1f5f9;
+    color: #1e293b;
 }
 
 /* Works List inside Card */
@@ -242,11 +242,11 @@ main {
 
 .work-item.author-item {
     font-weight: 600;
-    color: #cbd5e1;
+    color: #0f172a;
     margin-top: 1.2rem;
     padding-left: 0;
     font-size: 1.05rem;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
     padding-bottom: 0.4rem;
 }
 .work-item.author-item::before {
@@ -254,7 +254,7 @@ main {
 }
 .work-item.author-item:hover {
     transform: none;
-    color: #fff;
+    color: var(--accent);
 }
 
 /* Footer */

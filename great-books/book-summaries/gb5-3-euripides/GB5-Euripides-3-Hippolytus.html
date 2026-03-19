@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hippolytus: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #0ea5e9;
+            color: #0ea5e9;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Hippolytus <span class="text-amber-500 font-light">The War of the Goddesses</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                A devastating tragedy where human beings are mere collateral in a grudge match between Aphrodite and Artemis. Explore the themes of chastity, suppressed desire, and the fatal power of a father's curse.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> The Decline of the Chaste & the Passionate
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Tracking the parallel destruction of Phaedra (Love's victim) and Hippolytus (Chastity's devotee).
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Phaedra's Path:</strong> Starts in silent, wasting agony, peaks with a desperate attempt to save her honor, and ends in suicide and false accusation.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Hippolytus's Path:</strong> Starts in arrogant purity, peaks during his defense against his father, and ends in a violent, supernatural death.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="devotee" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium transition-colors mx-1">The Chaste</button><button data-filter="victim" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium transition-colors mx-1">The Tormented</button><button data-filter="divine" class="px-5 py-2 rounded-full bg-purple-100 text-purple-800 font-medium transition-colors mx-1">Divine Architects</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="devotee">
+            <div class="text-4xl mb-3">🏹</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Hippolytus</h3>
+            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">Devotee of Artemis</span>
+            <p class="text-stone-600 text-sm mb-4">A youth who prides himself on his purity, perhaps to the point of hubris.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I greet her from afar, preserving still my chastity."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="victim">
+            <div class="text-4xl mb-3">🥀</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Phaedra</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Wronged Queen</span>
+            <p class="text-stone-600 text-sm mb-4">A woman possessed by a love she never wanted, choosing death to protect her children's name.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Ah, hapless mother, what a love was thine!"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="victim">
+            <div class="text-4xl mb-3">🗡️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Theseus</h3>
+            <span class="inline-block px-2 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded mb-3">The Rash King</span>
+            <p class="text-stone-600 text-sm mb-4">A father who acts on anger before evidence, using a god's gift to kill his own son.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"O Poseidon, who didst promise me three curses..."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="divine">
+            <div class="text-4xl mb-3">🐚</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Aphrodite</h3>
+            <span class="inline-block px-2 py-1 bg-pink-100 text-pink-800 text-xs font-bold rounded mb-3">Goddess of Desire</span>
+            <p class="text-stone-600 text-sm mb-4">The catalyst who destroys an innocent family to punish one youth's neglect.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I will this very day take vengeance on Hippolytus."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="divine">
+            <div class="text-4xl mb-3">🌙</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Artemis</h3>
+            <span class="inline-block px-2 py-1 bg-cyan-100 text-cyan-800 text-xs font-bold rounded mb-3">Goddess of the Hunt</span>
+            <p class="text-stone-600 text-sm mb-4">The remote patron who can only comfort her devotee once he is already broken.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Farewell, for I may not look upon the dead."</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: The Vengeance of the Gods
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    In Euripides' world, the gods are not moral guides but powerful forces that demand recognition.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">The Sea Bull</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Nurse's Role</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Sea Bull</h3>
+                <p class="text-stone-600">Poseidon's monster represents the chaotic, uncontrollable power of nature and the divine, summoned by human rage.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Symbol</h4>
+                    <p class="text-sm text-stone-600">The bull rising from the sea is the literalization of the 'storm' that has been brewing in the household.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🐂</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Nurse's Role</h3>
+                <p class="text-stone-600">The Nurse represents 'pragmatic' morality, which often leads to more disaster than the 'idealistic' codes of the heroes.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Catalyst</h4>
+                    <p class="text-sm text-stone-600">By speaking what should have remained unsaid, she transforms a private agony into a public catastrophe.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">👵</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">A reconciliation that comes too late to save the living.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">The Death of Hippolytus</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> Forced to forgive his father</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Dies in the arms of his retainers</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Vindicated by Artemis</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">The Living Grief</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Theseus realizes he killed his innocent son</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Phaedra is dead by her own lie</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Aphrodite's honor is satisfied</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "Hippolytus".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Vow", "The Sickness", "The Revelation", "The Curse", "The Revelation"],
+                    datasets: [
+                        {
+                            label: 'Phaedra',
+                            data: [4, 2, 5, 3, 0],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Hippolytus',
+                            data: [9, 8, 4, 2, 1],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Phaedra": ["Vows to die in silence for her honor", "Confesses her secret to the Nurse", "Overhears Hippolytus\\' misogynistic rant", "Writes the false suicide note", "Dies by her own hand"], "Hippolytus": ["Snubs Aphrodite\\'s image at the gate", "Enjoys the hunt with Artemis", "Reacts with horror to Phaedra\\'s desire", "Banished by Theseus\\' curse", "Dragged to death by the sea-bull"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

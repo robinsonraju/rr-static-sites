@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philoctetes: The Deserted Shore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cardo', serif; background-color: #f2f2f2; color: #444; }
+        h1, h2, .nav-font { font-family: 'Space Grotesk', sans-serif; text-transform: lowercase; letter-spacing: -0.02em; }
+        .island-block { background-color: white; border: 1px solid #ddd; padding: 3rem; margin-bottom: 2rem; }
+        .philo-btn { transition: all 0.3s; border-bottom: 2px solid transparent; color: #999; }
+        .philo-btn:hover, .philo-btn.active { color: #2d3748; border-bottom-color: #2d3748; }
+    </style>
+</head>
+<body class="p-8 md:p-24">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-24">
+            <h1 class="text-7xl font-light mb-4">Philoctetes.</h1>
+            <p class="text-xl italic text-slate-400 max-w-lg">Ten years of silence, broken by the arrival of a lie.</p>
+        </header>
+
+        <section class="island-block">
+            <h2 class="text-3xl font-bold mb-12">I. The Moral Compass</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="h-64"><canvas id="philoRadar"></canvas></div>
+                <div class="space-y-8" id="theme-list"></div>
+            </div>
+        </section>
+
+        <section class="island-block">
+            <h2 class="text-3xl font-bold mb-8">II. The Lemnos Mission</h2>
+            <nav class="flex flex-wrap gap-x-8 gap-y-4 mb-12" id="plot-nav"></nav>
+            <div id="content-focus" class="min-h-[300px] border-t border-slate-100 pt-12 transition-opacity duration-500">
+                <h3 id="focus-title" class="text-4xl font-light mb-6">The Desolate Island</h3>
+                <p id="focus-text" class="text-2xl leading-relaxed text-slate-500">A journey through the ethics of abandonment and the return of integrity.</p>
+            </div>
+        </section>
+
+        <footer class="mt-24 text-slate-300 text-sm italic">
+            "We are made to be honest, not to be clever."
+        </footer>
+    </div>
+
+    <script>
+        const data = {
+            themes: [
+                { title: 'Ethics', val: 95, desc: 'The conflict between personal truth and political need.' },
+                { title: 'Isolation', val: 90, desc: 'The psychological impact of a decade of abandonment.' },
+                { title: 'Integrity', val: 88, desc: 'Neoptolemus finding his own nature despite Odysseus.' },
+                { title: 'Fate', val: 75, desc: 'The requirement of the gods for the bow to fall at Troy.' }
+            ],
+            plot: [
+                { title: 'Landing', text: 'Odysseus and Neoptolemus land on Lemnos to trick Philoctetes out of his bow.' },
+                { title: 'The Lie', text: 'Neoptolemus wins Philoctetes\' trust by pretending to be an enemy of the Greeks.' },
+                { title: 'The Wound', text: 'Philoctetes suffers a seizure; his trust is so absolute he gives Neoptolemus the bow.' },
+                { title: 'The Crisis', text: 'Watching Philoctetes\' agony, Neoptolemus is unable to maintain the deception.' },
+                { title: 'The Return', text: 'Neoptolemus defies Odysseus and gives the bow back to its rightful owner.' },
+                { title: 'The Stand', text: 'Philoctetes refuses to go to Troy, even if it means his wound never heals.' },
+                { title: 'The Decree', text: 'The deified Heracles appears and commands Philoctetes to fulfill his destiny at Troy.' }
+            ]
+        };
+
+        new Chart(document.getElementById('philoRadar'), {
+            type: 'radar',
+            data: {
+                labels: data.themes.map(t => t.title),
+                datasets: [{ data: data.themes.map(t => t.val), backgroundColor: 'rgba(203, 213, 224, 0.4)', borderColor: '#2d3748', pointBackgroundColor: '#2d3748' }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { r: { ticks: { display: false }, grid: { color: '#eee' } } } }
+        });
+
+        const themeList = document.getElementById('theme-list');
+        data.themes.forEach(t => {
+            themeList.innerHTML += `<div><h4 class="nav-font font-bold text-slate-800 lowercase mb-1">${t.title}</h4><p class="text-sm italic text-slate-400">${t.desc}</p></div>`;
+        });
+
+        const nav = document.getElementById('plot-nav');
+        data.plot.forEach((p, i) => {
+            const btn = document.createElement('button');
+            btn.className = `philo-btn nav-font text-lg font-bold lowercase`;
+            btn.innerText = p.title;
+            btn.onclick = () => {
+                document.querySelectorAll('.philo-btn').forEach(el => el.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('focus-title').innerText = p.title;
+                document.getElementById('focus-text').innerText = p.text;
+            };
+            nav.appendChild(btn);
+        });
+    </script>
+</body>
+</html>

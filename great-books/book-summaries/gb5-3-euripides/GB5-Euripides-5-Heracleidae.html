@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Heracleidae: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #84cc16;
+            color: #84cc16;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">The Heracleidae <span class="text-amber-500 font-light">The Children of Heracles</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                A patriotic tragedy focused on the children of the deceased Heracles seeking sanctuary in Athens. A play about the duty to the weak, the pride of a city, and the cycle of vengeance.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> Suppliants vs. Oppressors
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Tracking the survival of the children of Heracles against the relentless pursuit of King Eurystheus.
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Iolaus's Path:</strong> Starts as a feeble old man protecting the children, miraculously rejuvenated for battle, and ends in victory.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Eurystheus's Path:</strong> Starts as a powerful, arrogant hunter of children, but is defeated and captured by the very people he persecuted.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="suppliant" class="px-5 py-2 rounded-full bg-lime-100 text-lime-800 font-medium transition-colors mx-1">The Heracleidae</button><button data-filter="athenian" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium transition-colors mx-1">The Protectors</button><button data-filter="argive" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium transition-colors mx-1">The Oppressors</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="suppliant">
+            <div class="text-4xl mb-3">👴✨</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Iolaus</h3>
+            <span class="inline-block px-2 py-1 bg-lime-100 text-lime-800 text-xs font-bold rounded mb-3">Old Comrade</span>
+            <p class="text-stone-600 text-sm mb-4">The faithful friend of Heracles who protects his children with a heart that outlasts his strength.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I am but a shadow, yet I will not fail them."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="suppliant">
+            <div class="text-4xl mb-3">🕊️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Macaria</h3>
+            <span class="inline-block px-2 py-1 bg-lime-100 text-lime-800 text-xs font-bold rounded mb-3">The Sacrifice</span>
+            <p class="text-stone-600 text-sm mb-4">The daughter of Heracles who willingly dies to ensure her siblings' victory.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"No need to force me; I give my life freely."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="athenian">
+            <div class="text-4xl mb-3">🛡️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Demophon</h3>
+            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">King of Athens</span>
+            <p class="text-stone-600 text-sm mb-4">The ruler who upholds the law of sanctuary even at the risk of total war.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Athens will never betray those who seek her aid."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="argive">
+            <div class="text-4xl mb-3">⛓️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Eurystheus</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Tyrant</span>
+            <p class="text-stone-600 text-sm mb-4">The king who hounded Heracles and now seeks to exterminate his line.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Thinkest thou Athens can withstand my power?"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="suppliant">
+            <div class="text-4xl mb-3">👵</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Alcmene</h3>
+            <span class="inline-block px-2 py-1 bg-lime-100 text-lime-800 text-xs font-bold rounded mb-3">Mother of Heracles</span>
+            <p class="text-stone-600 text-sm mb-4">A grandmother whose years of suffering have turned into a fierce desire for blood-vengeance.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Slay him! Let him pay the penalty at last."</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: The Law of Sanctuary
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Athenian identity is built on the moral courage to protect the vulnerable.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">Macaria's Choice</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Rejuvenation</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">Macaria's Choice</h3>
+                <p class="text-stone-600">Unlike many tragic figures, Macaria chooses her death without hesitation, seeing it as the only way to honor her father's legacy.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Martyr</h4>
+                    <p class="text-sm text-stone-600">Her sacrifice is the spiritual engine of the Athenian victory.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🩸</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Rejuvenation</h3>
+                <p class="text-stone-600">Iolaus' sudden return to youth is a rare 'miracle' in Euripidean tragedy, symbolizing the renewed vigor of a just cause.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Miracle</h4>
+                    <p class="text-sm text-stone-600">It marks the moment where the 'powerless' suppliants become the 'powerful' victors.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">⚡</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">The hunter becomes the prey, but the cycle of blood continues.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">The Athenian Victory</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> The children are safe and free</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Athens' honor is upheld</li><li class="flex gap-3"><span class="text-amber-500">✔</span> The tyrant is captured</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">The Vengeful End</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Alcmene demands Eurystheus' death</li><li class="flex gap-3"><span class="text-slate-500">✖</span> The law of war clashes with the law of mercy</li><li class="flex gap-3"><span class="text-slate-500">✖</span> A grim prophecy of future Athenian wars</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "The Heracleidae".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Sanctuary", "The Sacrifice", "The Battle", "The Rejuvenation", "The Judgment"],
+                    datasets: [
+                        {
+                            label: 'Iolaus',
+                            data: [2, 4, 7, 10, 9],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Eurystheus',
+                            data: [9, 8, 5, 2, 1],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Iolaus": ["Seeks refuge at the altar in Marathon", "Witnesses Macaria\\'s heroic sacrifice", "Arms himself for the fight despite his age", "Regains his youth mid-battle", "Witnesses the capture of his enemy"], "Eurystheus": ["Demands the surrender of the suppliants", "Threatens Athens with war", "His army is routed by the Athenians", "Taken prisoner and brought to Alcmene", "Condemned to death while prophesying"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

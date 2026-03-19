@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigone: The Clash of Laws</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lora', serif; background-color: #1e293b; color: #f8fafc; overflow-x: hidden; }
+        h1, h2 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; }
+        .marble-panel { background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%); color: #0f172a; border-right: 8px solid #991b1b; }
+        .antigone-btn { border: 2px solid #94a3b8; transition: all 0.3s; }
+        .antigone-btn:hover, .antigone-btn.active { background-color: #991b1b; border-color: #991b1b; color: white; transform: translateX(10px); }
+        .divider { width: 4px; background: #991b1b; height: 100%; position: absolute; left: 50%; transform: translateX(-50%); display: none; }
+        @media (min-width: 1024px) { .divider { display: block; } }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="flex flex-col lg:flex-row min-h-screen relative">
+        <div class="divider"></div>
+        
+        <!-- Left Column: The Thematic Conflict -->
+        <div class="w-full lg:w-1/2 p-8 lg:p-16 marble-panel">
+            <header class="mb-12">
+                <h1 class="text-6xl font-black mb-4">Antigone</h1>
+                <p class="text-xl font-semibold italic text-slate-700">Man's Decree vs. God's Law.</p>
+            </header>
+            
+            <section class="space-y-12">
+                <div>
+                    <h2 class="text-2xl font-bold mb-6 border-b-4 border-slate-900 pb-2">I. Thematic Weight</h2>
+                    <div class="h-64"><canvas id="antigoneChart"></canvas></div>
+                </div>
+                <div class="grid grid-cols-1 gap-4" id="themes-grid"></div>
+            </section>
+        </div>
+
+        <!-- Right Column: The Narrative Arc -->
+        <div class="w-full lg:w-1/2 p-8 lg:p-16 bg-slate-900">
+            <h2 class="text-2xl font-bold mb-10 border-b-4 border-red-800 pb-2 text-red-100">II. Chronology of Defiance</h2>
+            <div class="space-y-4 mb-12" id="plot-steps"></div>
+            
+            <div id="content-focus" class="bg-slate-800 p-8 rounded-lg border-l-8 border-red-700 shadow-2xl min-h-[250px] transition-all">
+                <h3 id="focus-title" class="text-3xl font-black text-red-500 mb-4 uppercase">Select a Stage</h3>
+                <p id="focus-text" class="text-lg leading-relaxed text-slate-300">Explore the escalating tragedy of Thebes.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            themes: [
+                { title: 'Divine Law', val: 95, desc: 'The unwritten, eternal laws of the gods.' },
+                { title: 'Civil Order', val: 85, desc: 'Creon\'s rigid adherence to the rule of the state.' },
+                { title: 'Family', val: 90, desc: 'The bond of blood that transcends political loyalty.' },
+                { title: 'Gender Roles', val: 75, desc: 'Antigone\'s defiance of societal expectations for women.' }
+            ],
+            plot: [
+                { title: 'The Edict', text: 'Creon forbids the burial of Polyneices, labeling him a traitor.' },
+                { title: 'The Ritual', text: 'Antigone defies the law, performing burial rites for her brother.' },
+                { title: 'The Arrest', text: 'Guards capture Antigone re-performing the rites in broad daylight.' },
+                { title: 'The Duel', text: 'Creon and Antigone clash in a battle of ideologies and stubbornness.' },
+                { title: 'The Sentence', text: 'Creon orders Antigone to be entombed alive, ignoring his son\'s pleas.' },
+                { title: 'The Prophecy', text: 'Teiresias warns that the gods will take a life for a life.' },
+                { title: 'The Ruin', text: 'Antigone, Haemon, and Eurydice die; Creon is left a shell of a man.' }
+            ]
+        };
+
+        new Chart(document.getElementById('antigoneChart'), {
+            type: 'bar',
+            data: {
+                labels: data.themes.map(t => t.title),
+                datasets: [{ data: data.themes.map(t => t.val), backgroundColor: '#0f172a', borderRadius: 5 }]
+            },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { font: { weight: 'bold' } } } } }
+        });
+
+        const themeGrid = document.getElementById('themes-grid');
+        data.themes.forEach(t => {
+            themeGrid.innerHTML += `<div class="p-4 bg-white/50 border-l-4 border-slate-900"><h4 class="font-bold uppercase text-sm">${t.title}</h4><p class="text-xs italic">${t.desc}</p></div>`;
+        });
+
+        const plotSteps = document.getElementById('plot-steps');
+        data.plot.forEach((p, i) => {
+            const btn = document.createElement('button');
+            btn.className = `antigone-btn w-full text-left p-4 rounded uppercase font-bold text-sm tracking-widest`;
+            btn.innerHTML = `${i+1}. ${p.title}`;
+            btn.onclick = () => {
+                document.querySelectorAll('.antigone-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('focus-title').innerText = p.title;
+                document.getElementById('focus-text').innerText = p.text;
+            };
+            plotSteps.appendChild(btn);
+        });
+    </script>
+</body>
+</html>

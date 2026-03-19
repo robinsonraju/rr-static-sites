@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Acharnians: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Warm Neutrals (Stone/Parchment) with Olive Green (Peace) and Rust Red (War/Conflict) accents. -->
+    <!-- Application Structure Plan: The SPA is structured as a 'Thematic Dashboard' that breaks down the play's narrative and themes into analytical sections. It flows from a macro view of the plot's emotional trajectory (Chart), to character analysis (Interactive Cards), down to the specific micro-economics of the play's central conceit (The Private Market), and concludes with the thematic resolution. This structure allows users to digest a complex classical text through modern data-exploration paradigms, making the satire instantly apparent without reading the full script. -->
+    <!-- Visualization & Content Choices: 1. Emotional Trajectory -> Line Chart (Chart.js) to compare the opposing fates of Dicaeopolis and Lamachus. 2. Character Factions -> Interactive Grid with JS filtering to show the alignment of key players. 3. The Market -> Clickable detail cards to explore the absurd 'goods' traded, highlighting the comic relief. NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-active {
+            border-bottom: 2px solid #4d7c0f;
+            color: #4d7c0f;
+            font-weight: 600;
+        }
+
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-lime-200 selection:text-lime-900">
+
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-lime-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">The Acharnians <span
+                    class="text-lime-500 font-light">Private Peace Treaty</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                An interactive analysis of Aristophanes' 425 BC comedic masterpiece. Explore the absurdity of the
+                Peloponnesian War, the plight of the common citizen, and the radical pursuit of a private peace treaty.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> The Trajectory of War & Peace
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    This section visualizes the emotional and situational fortunes of the play's two central opposing
+                    figures: Dicaeopolis (the advocate for peace) and Lamachus (the general of war). By tracking their
+                    "Happiness Index" across the five major plot points, we can clearly see Aristophanes' central
+                    thesis: peace leads to abundance and joy, while war leads to suffering and ruin.
+                </p>
+            </div>
+
+            <div
+                class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-lime-50 p-4 rounded-lg border border-lime-200">
+                    <strong class="text-lime-800">Dicaeopolis's Path:</strong> Starts in frustration at the Assembly,
+                    dips during the Acharnian attack, but steadily rises to pure triumph after securing his private
+                    market and feast.
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Lamachus's Path:</strong> Starts proud and heavily armed, but suffers a
+                    steady decline in dignity and physical well-being, culminating in his humiliating injury in the
+                    snow.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Factions & Alignments
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Aristophanes populates his play with exaggerated caricatures representing the political realities of
+                    Athens. This section allows you to filter the main cast based on their alignment towards the war.
+                    Select a faction below to understand the motivations and roles of the characters driving the
+                    narrative.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all"
+                    class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All
+                    Characters</button>
+                <button data-filter="peace"
+                    class="px-5 py-2 rounded-full bg-lime-100 text-lime-800 font-medium hover:bg-lime-200 transition-colors">Pro-Peace</button>
+                <button data-filter="war"
+                    class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium hover:bg-red-200 transition-colors">Pro-War
+                    / Establishment</button>
+                <button data-filter="neutral"
+                    class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Opportunists
+                    & Neutrals</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card"
+                    data-faction="peace">
+                    <div class="text-4xl mb-3">🌾</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Dicaeopolis</h3>
+                    <span
+                        class="inline-block px-2 py-1 bg-lime-100 text-lime-800 text-xs font-bold rounded mb-3">Pro-Peace</span>
+                    <p class="text-stone-600 text-sm mb-4">An honest Athenian farmer who takes the radical step of
+                        making a private 30-year peace treaty for his own family.</p>
+                    <blockquote class="italic text-stone-500 text-sm border-l-2 border-lime-400 pl-3">"I am always first
+                        of all to come... longing for Peace, loathing the town, sick for my village-home."</blockquote>
+                </div>
+
+                <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card"
+                    data-faction="war">
+                    <div class="text-4xl mb-3">⚔️</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Lamachus</h3>
+                    <span
+                        class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">Pro-War</span>
+                    <p class="text-stone-600 text-sm mb-4">A real-life general depicted as a boastful, heavily armed
+                        warmonger who profits from the conflict.</p>
+                    <blockquote class="italic text-stone-500 text-sm border-l-2 border-red-400 pl-3">"Whence came the
+                        cry of battle to my ears? Where shall I charge ? where cast the battle-din ?"</blockquote>
+                </div>
+
+                <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card"
+                    data-faction="neutral">
+                    <div class="text-4xl mb-3">🔥</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">The Chorus</h3>
+                    <span
+                        class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">Shifting
+                        Alignment</span>
+                    <p class="text-stone-600 text-sm mb-4">Elderly charcoal-burners from Acharnae. Initially furious at
+                        Dicaeopolis for his treason, but eventually convinced by his logic.</p>
+                    <blockquote class="italic text-stone-500 text-sm border-l-2 border-blue-400 pl-3">"The man has the
+                        best of the wordy debate, and the hearts of the people is winning."</blockquote>
+                </div>
+
+                <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card"
+                    data-faction="peace">
+                    <div class="text-4xl mb-3">🕊️</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Amphitheus</h3>
+                    <span
+                        class="inline-block px-2 py-1 bg-lime-100 text-lime-800 text-xs font-bold rounded mb-3">Pro-Peace</span>
+                    <p class="text-stone-600 text-sm mb-4">A supposed immortal who acts as the envoy to Sparta, securing
+                        the private treaties (represented as wines) for Dicaeopolis.</p>
+                    <blockquote class="italic text-stone-500 text-sm border-l-2 border-lime-400 pl-3">"These are the
+                        five-year treaties; take and taste them."</blockquote>
+                </div>
+
+                <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card"
+                    data-faction="neutral">
+                    <div class="text-4xl mb-3">🎭</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Euripides</h3>
+                    <span
+                        class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">Neutral</span>
+                    <p class="text-stone-600 text-sm mb-4">The famous tragic playwright, satirized here as an eccentric
+                        intellectual who lends Dicaeopolis "beggar's rags" for his defense speech.</p>
+                    <blockquote class="italic text-stone-500 text-sm border-l-2 border-blue-400 pl-3">"Fellow, you’re
+                        taking the whole tragedy. Here, take it and begone."</blockquote>
+                </div>
+
+                <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card"
+                    data-faction="war">
+                    <div class="text-4xl mb-3">🗣️</div>
+                    <h3 class="text-xl font-bold text-stone-800 mb-1">Pseudo-Artabas & Envoys</h3>
+                    <span
+                        class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">Establishment</span>
+                    <p class="text-stone-600 text-sm mb-4">Corrupt ambassadors who drain the city's funds while
+                        pretending to secure foreign alliances with Persia and Thrace.</p>
+                    <blockquote class="italic text-stone-500 text-sm border-l-2 border-red-400 pl-3">"He says the King
+                        is going to send you gold."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="the-market" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">⚖️</span> The Economics of the Private Market
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Once Dicaeopolis secures his peace, he opens a private market where enemies of Athens can trade
+                    freely with him. This section explores the bizarre and comedic goods exchanged, demonstrating
+                    Aristophanes' point that war deprives citizens of simple, joyous necessities. Click the trade goods
+                    below to see the exchange details.
+                </p>
+            </div>
+
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="market-tabs">
+                <button class="px-6 py-3 text-lg market-tab tab-active" data-target="megarian-trade">The Megarian
+                    Trade</button>
+                <button class="px-6 py-3 text-lg market-tab text-stone-500 hover:text-stone-800"
+                    data-target="boeotian-trade">The Boeotian Trade</button>
+            </div>
+
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+
+                <div id="megarian-trade" class="market-content flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 space-y-4">
+                        <div class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-bold">
+                            Desperation & Comedy</div>
+                        <h3 class="text-2xl font-bold text-stone-800">Starving Megarian & His "Piggies"</h3>
+                        <p class="text-stone-600">The Athenian embargo (Megarian Decree) has starved Megara. A desperate
+                            father arrives to sell his own daughters, disguised in sacks and instructed to squeal like
+                            pigs, just to get some food.</p>
+                        <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                            <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Exchange</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex justify-between items-center"><span
+                                        class="text-stone-500">Provided:</span> <span class="font-bold">Two young girls
+                                        (disguised as pigs) 👧🐷</span></li>
+                                <li class="flex justify-between items-center"><span
+                                        class="text-stone-500">Received:</span> <span class="font-bold">A tie of garlic
+                                        & half a peck of salt 🧄🧂</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div
+                        class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full shadow-inner aspect-square flex flex-col items-center justify-center">
+                        <span class="text-6xl mb-2">🐷</span>
+                        <span class="text-xl font-bold text-stone-700">"Wee! wee!"</span>
+                    </div>
+                </div>
+
+                <div id="boeotian-trade"
+                    class="market-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 space-y-4">
+                        <div class="inline-block px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-sm font-bold">
+                            Luxury & Satire</div>
+                        <h3 class="text-2xl font-bold text-stone-800">The Copaic Eels & The Informer</h3>
+                        <p class="text-stone-600">A wealthy Boeotian arrives with luxury foods that Athens has been
+                            denied during the war, including the highly prized Copaic eels. In exchange, he doesn't want
+                            money; he wants something abundant in Athens but rare in Boeotia.</p>
+                        <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                            <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Exchange</h4>
+                            <ul class="space-y-2 text-sm">
+                                <li class="flex justify-between items-center"><span
+                                        class="text-stone-500">Provided:</span> <span class="font-bold">Fowl, game, and
+                                        Copaic Eels 🦆🐟</span></li>
+                                <li class="flex justify-between items-center"><span
+                                        class="text-stone-500">Received:</span> <span class="font-bold">Nicarchus (An
+                                        Athenian Informer, packed like pottery) 🏺🕵️‍♂️</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div
+                        class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full shadow-inner aspect-square flex flex-col items-center justify-center">
+                        <span class="text-6xl mb-2">🐟</span>
+                        <span class="text-xl font-bold text-stone-700">"Darling dressed in beet"</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    The Final Juxtaposition
+                </h2>
+                <p class="text-stone-400 text-lg">
+                    The play's climax masterfully alternates between the preparations of the two men. This split-screen
+                    reality emphasizes the ultimate message of the text: the physical realities of choosing conflict
+                    versus harmony.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+
+                <div class="absolute hidden lg:flex inset-0 justify-center items-center pointer-events-none">
+                    <div
+                        class="bg-stone-700 text-stone-200 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl border-4 border-stone-900 z-10">
+                        VS</div>
+                </div>
+
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <div class="text-center mb-6">
+                        <div class="text-5xl mb-4">🛡️</div>
+                        <h3 class="text-2xl font-bold text-red-400">The Reality of War</h3>
+                        <p class="text-stone-400 font-medium">Lamachus</p>
+                    </div>
+                    <ul class="space-y-4 text-stone-300">
+                        <li class="flex gap-3"><span class="text-red-500">✖</span> Ordered out on a freezing, snowy
+                            night to guard the mountain passes.</li>
+                        <li class="flex gap-3"><span class="text-red-500">✖</span> Packs rotten fish and onions in a
+                            soldier's knapsack.</li>
+                        <li class="flex gap-3"><span class="text-red-500">✖</span> Returns groaning, having fallen into
+                            a ditch, wrenched his ankle, and cracked his skull.</li>
+                        <li class="flex gap-3"><span class="text-red-500">✖</span> Supported by an attendant, calling
+                            for a doctor.</li>
+                    </ul>
+                    <div
+                        class="mt-8 p-4 bg-stone-900 rounded-lg text-center text-red-300 italic text-sm border-l-4 border-red-500">
+                        "O me, my woful dolorous lot! O me, the gruesome wounds I’ve got!"
+                    </div>
+                </div>
+
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <div class="text-center mb-6">
+                        <div class="text-5xl mb-4">🍷</div>
+                        <h3 class="text-2xl font-bold text-lime-400">The Reality of Peace</h3>
+                        <p class="text-stone-400 font-medium">Dicaeopolis</p>
+                    </div>
+                    <ul class="space-y-4 text-stone-300">
+                        <li class="flex gap-3"><span class="text-lime-500">✔</span> Invited to a lavish supper by the
+                            Priest of Bacchus.</li>
+                        <li class="flex gap-3"><span class="text-lime-500">✔</span> Packs roasted thrushes, ringdoves,
+                            and sweet meats in a supper-basket.</li>
+                        <li class="flex gap-3"><span class="text-lime-500">✔</span> Returns singing, victorious in a
+                            drinking contest, accompanied by two courtesans.</li>
+                        <li class="flex gap-3"><span class="text-lime-500">✔</span> Carried off to the judges to claim
+                            his prize wineskin.</li>
+                    </ul>
+                    <div
+                        class="mt-8 p-4 bg-stone-900 rounded-lg text-center text-lime-300 italic text-sm border-l-4 border-lime-500">
+                        "I’ve drained the pitcher all alone; Sing ho! Sing ho! for Victory."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Acharnians" (425 BC).</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            const fortuneChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1. The Assembly', '2. The Acharnian Attack', '3. The Trial & Defense', '4. The Private Market', '5. The Finale'],
+                    datasets: [
+                        {
+                            label: 'Dicaeopolis (Peace)',
+                            data: [2, 3, 7, 9, 10],
+                            borderColor: '#84cc16',
+                            backgroundColor: 'rgba(132, 204, 22, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#4d7c0f',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Lamachus (War)',
+                            data: [8, 7, 5, 3, 1],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#b91c1c',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#333'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Happiness/Success Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function (context) {
+                                    const events = {
+                                        'Dicaeopolis (Peace)': [
+                                            "Frustrated by corrupt envoys",
+                                            "Threatened with stoning by veterans",
+                                            "Wins the crowd wearing beggar's rags",
+                                            "Trades for luxury goods",
+                                            "Feasts and wins a drinking prize"
+                                        ],
+                                        'Lamachus (War)': [
+                                            "Absent, presumably rich and powerful",
+                                            "Called to suppress Dicaeopolis",
+                                            "Mocked and rejected by Dicaeopolis",
+                                            "Excluded from the market, sent to snow",
+                                            "Wounded in a ditch, lamenting"
+                                        ]
+                                    };
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 11,
+                            title: {
+                                display: true,
+                                text: 'Fortune / Happiness Index',
+                                color: '#666',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: false }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-stone-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-stone-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-faction') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            const marketTabs = document.querySelectorAll('.market-tab');
+            const marketContents = document.querySelectorAll('.market-content');
+
+            marketTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    marketTabs.forEach(t => {
+                        t.classList.remove('tab-active', 'text-stone-800');
+                        t.classList.add('text-stone-500');
+                    });
+                    tab.classList.add('tab-active', 'text-stone-800');
+                    tab.classList.remove('text-stone-500');
+
+                    const targetId = tab.getAttribute('data-target');
+
+                    marketContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden-content');
+                            content.classList.add('flex');
+                        } else {
+                            content.classList.add('hidden-content');
+                            content.classList.remove('flex');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

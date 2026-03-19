@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Frogs: A Quest for Poetic Wisdom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Deep blues and greens (#1a202c, #2c5282) for the Underworld and its mysterious waters. Regal purples (#6b4f8c, #805ad5) and golds (#d69e2e, #f6ad55) for Dionysus and the importance of drama. Contrasting earth tones (#a0aec0) for Xanthias and the comic elements. A light neutral background (#f8f9fa) for readability. -->
+    <!-- Application Structure Plan: This SPA is designed as a "Literary & Political Quest" dashboard. It begins with "Dionysus's Motivation" for his journey, detailing the crisis in Athens. It then traces his "Perilous Journey" through Hades, highlighting comic and symbolic encounters. The core focuses on the "Central Conflict" – the poetic agon between Aeschylus and Euripides – and its "Resolution," where Dionysus makes a crucial decision. The dashboard concludes with the "Impact" of this choice on Athens. This structure emphasizes the play's dual nature as literary criticism and political commentary. -->
+    <!-- Visualization & Content Choices:
+    1. Dionysus's Wisdom/Resolve Arc: A line chart (Chart.js) illustrating Dionysus's intellectual and moral growth throughout the play, from his initial foolishness to his final wise decision regarding Athens' poetic savior.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Dionysus, Xanthias, Aeschylus, Euripides, Chorus of Frogs/Mystics), detailing their roles, characteristics, and key quotes.
+    3. The Poetic Debate: A tabbed section summarizing the key arguments of Aeschylus and Euripides, comparing their dramatic principles, language, and moral influence.
+    4. Journey Through Hades: A simplified, step-by-step visual or textual overview of Dionysus's encounters in the Underworld, highlighting the comic elements and challenges.
+    5. Weighing of Verses: A visual representation of the dramatic "weighing of lines" on a scale, explaining the symbolic weight of words in the contest.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #6b4f8c; /* Purple for Dionysus/Drama */
+            color: #6b4f8c;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-100 selection:text-purple-800">
+
+    <header class="bg-gray-900 text-white py-12 px-6 shadow-md border-b-4 border-purple-600">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">The Frogs <span class="text-purple-400 font-light">A Quest for Poetic Wisdom</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive journey into Aristophanes' literary and political satire, as Dionysus descends to Hades to rescue a poet and save Athens.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="dionysus-wisdom-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">💡</span> Dionysus's Wisdom & Resolve
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart tracks Dionysus's personal growth, from his initial effeminate and cowardly persona to his emergence as a discerning judge capable of making a crucial decision for the future of Athens.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="wisdomResolveChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Initial Folly:</strong> Dionysus is depicted as a rather foolish and cowardly god, driven by superficial longing.
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <strong class="text-green-800">Growing Wisdom:</strong> Through his journey and the poetic agon, he demonstrates increasing judgment and resolves to act for the city's good.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Cast of the Underworld Journey
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the diverse inhabitants of the land of the dead, from gods and heroes to spectral creatures and literary titans, all contributing to Dionysus's quest.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="protagonist" class="px-5 py-2 rounded-full bg-purple-100 text-purple-800 font-medium hover:bg-purple-200 transition-colors">Dionysus</button>
+                <button data-filter="companion" class="px-5 py-2 rounded-full bg-yellow-100 text-yellow-800 font-medium hover:bg-yellow-200 transition-colors">Xanthias</button>
+                <button data-filter="poet" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Tragic Poets</button>
+                <button data-filter="underworld" class="px-5 py-2 rounded-full bg-gray-100 text-gray-800 font-medium hover:bg-gray-200 transition-colors">Underworld Denizens</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="protagonist">
+                    <div class="text-4xl mb-3">🍷</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Dionysus</h3>
+                    <span class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded mb-3">God of Drama</span>
+                    <p class="text-gray-600 text-sm mb-4">The effeminate and cowardly god of wine and drama, who journeys to Hades to bring back a great tragedian to save Athens.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-purple-400 pl-3">"I want a genuine poet, 'For some are not, and those that are, are bad.'"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="companion">
+                    <div class="text-4xl mb-3">🎒</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Xanthias</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">Dionysus's Slave</span>
+                    <p class="text-gray-600 text-sm mb-4">Dionysus's clever, long-suffering slave, who often displays more courage and wit than his master, leading to comic role-reversals.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"O thrice unlucky neck of mine, which now Is getting crushed, yet must not crack its joke!"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="poet">
+                    <div class="text-4xl mb-3">🏛️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Aeschylus</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Traditional Poet</span>
+                    <p class="text-gray-600 text-sm mb-4">Represents the grandeur, moral seriousness, and patriotic themes of traditional tragedy. He champions the poet's role as a moral educator.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"For boys a teacher at school is found, but we, the poets, are teachers of men."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="poet">
+                    <div class="text-4xl mb-3">📝</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Euripides</h3>
+                    <span class="inline-block px-2 py-1 bg-cyan-100 text-cyan-800 text-xs font-bold rounded mb-3">The Modern Poet</span>
+                    <p class="text-gray-600 text-sm mb-4">Represents the "modern" style of tragedy, characterized by realism, clever rhetoric, domestic themes, and a questioning of traditional values. Criticized for corrupting the audience.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-cyan-400 pl-3">"I never used haphazard words, or plunged abruptly in; Who entered first explained at large the drama’s origin and source."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="underworld">
+                    <div class="text-4xl mb-3">🐸</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Frogs</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Primal Chant</span>
+                    <p class="text-gray-600 text-sm mb-4">The titular chorus, engaging Dionysus in a comical, repetitive rowing song ("Brekekekex, ko-ax, ko-ax"), symbolizing the chaotic and primal sounds of the Underworld.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Brekekekex, ko-ax, ko-ax!"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="underworld">
+                    <div class="text-4xl mb-3">✨</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Blessed Mystics</h3>
+                    <span class="inline-block px-2 py-1 bg-pink-100 text-pink-800 text-xs font-bold rounded mb-3">The Initiated</span>
+                    <p class="text-gray-600 text-sm mb-4">A more refined chorus in Hades, representing those initiated into the Eleusinian Mysteries, who enjoy a blissful afterlife and offer wise counsel to Dionysus.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-pink-400 pl-3">"O Iacchus! power excelling, here in stately temples dwelling."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="poetic-debate" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">⚔️</span> The Agon: Aeschylus vs. Euripides
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    The heart of the play is the fierce literary contest between the two greatest tragic poets. Dionysus acts as judge as they critique each other's style, themes, and moral influence on society.
+                </p>
+            </div>
+
+            <div class="flex border-b border-gray-200 px-8 pt-4" id="poet-tabs">
+                <button class="px-6 py-3 text-lg poet-tab tab-active" data-target="aeschylus-arguments">Aeschylus's Stance</button>
+                <button class="px-6 py-3 text-lg poet-tab text-gray-500 hover:text-gray-800" data-target="euripides-arguments">Euripides's Stance</button>
+                <button class="px-6 py-3 text-lg poet-tab text-gray-500 hover:text-gray-800" data-target="weighing-verses">The Weighing of Verses</button>
+            </div>
+
+            <div class="p-8 bg-gray-50 min-h-[300px]">
+
+                <div id="aeschylus-arguments" class="poet-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Championing Grandeur & Morality</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                            <h4 class="font-bold text-blue-700 mb-2">Poet as Moral Educator</h4>
+                            <p class="text-gray-700 mb-2">Believes poets are teachers who should inspire citizens to virtue, courage, and patriotism. His plays depict noble heroes and grand themes, encouraging civic duty.</p>
+                            <p class="italic text-sm text-gray-500">"For boys a teacher at school is found, but we, the poets, are teachers of men."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                            <h4 class="font-bold text-blue-700 mb-2">Sublime Language & Character</h4>
+                            <p class="text-gray-700 mb-2">Favors elevated, majestic language and heroic characters, believing this is appropriate for tragic subjects. Criticizes Euripides for "degrading" tragedy with common speech and realistic (often problematic) characters.</p>
+                            <p class="italic text-sm text-gray-500">"For mighty thoughts and heroic aims, the words themselves must appropriate be."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                            <h4 class="font-bold text-blue-700 mb-2">Patriotic & Martial Themes</h4>
+                            <p class="text-gray-700 mb-2">His plays like "The Seven Against Thebes" and "The Persians" inspire military prowess and national pride, which he argues is crucial for Athens' survival.</p>
+                            <p class="italic text-sm text-gray-500">"Which whoso beheld, with eagerness swelled to rush to the battlefield there and then."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="euripides-arguments" class="poet-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Advocating Realism & Intellect</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg border border-cyan-200 shadow-sm">
+                            <h4 class="font-bold text-cyan-700 mb-2">Realism & Accessibility</h4>
+                            <p class="text-gray-700 mb-2">Praises his use of everyday language and relatable characters, bringing tragedy closer to the audience's experience. He "reduced and toned down" tragedy from Aeschylus's bombast.</p>
+                            <p class="italic text-sm text-gray-500">"I showed them scenes of common life, the things we know and see."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-cyan-200 shadow-sm">
+                            <h4 class="font-bold text-cyan-700 mb-2">Intellectual & Rhetorical Skill</h4>
+                            <p class="text-gray-700 mb-2">Emphasizes his plays' intellectual content, logical debates, and clever rhetorical techniques, which he claims make citizens more discerning and capable in public life.</p>
+                            <p class="italic text-sm text-gray-500">"I taught them all these knowing ways By chopping logic in my plays, And making all my speakers try To reason out the How and Why."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-cyan-200 shadow-sm">
+                            <h4 class="font-bold text-cyan-700 mb-2">Critique of Aeschylean Obscurity</h4>
+                            <p class="text-gray-700 mb-2">Attacks Aeschylus's long silences, obscure language, and grand, unapproachable style as a form of artistic fraud, designed to impress rather than enlighten.</p>
+                            <p class="italic text-sm text-gray-500">"He’d bring some single mourner on, seated and veiled... an empty show of tragic woe, who uttered not one thing."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="weighing-verses" class="poet-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">The Scales of Poetic Weight</h3>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <p class="text-gray-700 mb-2">In a literal contest of poetic "weight," key lines from each poet are placed on a giant scale. Aeschylus consistently wins, his lines proving heavier due to their substance and the gravity of their themes.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li><strong>Aeschylus's Lines:</strong> "River Spercheius, cattle-grazing haunts—", "Death loves not gifts, alone amongst the gods.", "Chariot on chariot, corpse on corpse was hurled." (Themes of nature, death, war, substance).</li>
+                            <li><strong>Euripides's Lines:</strong> "O that the Argo had not winged her way—", "Persuasion’s only shrine is eloquent speech.", "In his right hand he grasped an iron-clamped mace." (Themes of lightness, rhetoric, objects).</li>
+                        </ul>
+                        <p class="italic text-sm text-gray-500 mt-2">Dionysus's commentary often explains why Aeschylus's lines possess more "weight," humorously noting Euripides's "light and winged word."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hades-journey" class="bg-gray-800 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    Dionysus's Perilous Journey to Hades
+                </h2>
+                <p class="text-gray-300 text-lg">
+                    Before reaching the palace of Pluto, Dionysus and Xanthias face a series of comical and sometimes frightening encounters that satirize various aspects of Greek mythology and society.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-gray-700 rounded-xl p-6 border border-gray-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-blue-400 mb-2">Heracles's Directions</h3>
+                    <p class="text-gray-200">Dionysus consults Heracles (whom he imitates) for the quickest way to Hades, receiving comically grim options like hanging or hemlock before settling on the boat journey.</p>
+                </div>
+                <div class="bg-gray-700 rounded-xl p-6 border border-gray-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-green-400 mb-2">Charon's Ferry & The Frogs</h3>
+                    <p class="text-gray-200">Dionysus, forced to row (as Xanthias is a slave and didn't fight at sea), endures a rowing contest with the boisterous Chorus of Frogs chanting "Brekekekex, ko-ax, ko-ax."</p>
+                </div>
+                <div class="bg-gray-700 rounded-xl p-6 border border-gray-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-red-400 mb-2">Empusa & Other Monsters</h3>
+                    <p class="text-gray-200">Upon disembarking, Dionysus is terrified by Empusa, a shape-shifting demon, and other mythical creatures, showcasing his extreme cowardice.</p>
+                </div>
+                <div class="bg-gray-700 rounded-xl p-6 border border-gray-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-yellow-400 mb-2">Chorus of Mystics</h3>
+                    <p class="text-gray-200">Dionysus encounters the blissful Chorus of Eleusinian Initiates, whose songs and dances create a stark contrast to the earlier chaotic Frogs. They offer hospitality and guidance.</p>
+                </div>
+                <div class="bg-gray-700 rounded-xl p-6 border border-gray-600 shadow-sm">
+                    <h3 class="text-xl font-bold text-purple-400 mb-2">Aeacus & the Hostelers</h3>
+                    <p class="text-gray-200">Dionysus and Xanthias repeatedly swap roles as master/slave to avoid threats from Aeacus (who seeks revenge on "Heracles") and irate hostelers demanding payment for past gluttony.</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-gray-400 italic text-md">
+                <p>"O, dear! O, dear! now I declare I’ve got a bump upon my rump, Brekekekex, ko-ax, ko-ax!" - Dionysus rowing with the Frogs.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Frogs" (405 BC).</p>
+        <p>A satirical blend of literary criticism, political commentary, and mythological parody.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Dionysus's Wisdom & Resolve Chart
+            const ctx = document.getElementById('wisdomResolveChart').getContext('2d');
+            const wisdomResolveChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Initial Longing (Superficial)',
+                        "Heracles' Directions (Fearful)",
+                        "Charon's Ferry (Cowardly)",
+                        'Encountering Monsters (Role Swap)',
+                        'Meeting Mystics (Seeking Guidance)',
+                        "Arrival at Pluto's Palace (Judge)",
+                        'Poetic Agon (Deliberation)',
+                        'Final Decision (Wisdom for Athens)'
+                    ],
+                    datasets: [
+                        {
+                            label: "Dionysus's Wisdom/Resolve Index",
+                            data: [1, 2, 1, 3, 5, 6, 8, 9], /* Index 0-10 */
+                            borderColor: '#805ad5', // Light Purple
+                            backgroundColor: 'rgba(128, 90, 213, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#6b4f8c', // Dark Purple
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Dionysus longs for a great poet, but his reasons are initially superficial (personal pleasure).",
+                                        "Seeks Heracles' help, but is terrified by the prospect of Hades; relies on Xanthias.",
+                                        "Forced to row across the Acheron, a comically inept and cowardly oarsman.",
+                                        "Switches identity with Xanthias multiple times due to fear and convenience.",
+                                        "Finds guidance and courage from the Chorus of Mystics and prepares for his task.",
+                                        "Appointed judge of the poetic contest, takes on a serious role.",
+                                        "Actively engages in the debate, showing growing discernment and understanding of poetic merit and civic duty.",
+                                        "Makes a profound decision based on practical advice for Athens' recovery, demonstrating true wisdom."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Wisdom & Resolve',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-purple-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-purple-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // Poet Tabs
+            const poetTabs = document.querySelectorAll('.poet-tab');
+            const poetContents = document.querySelectorAll('.poet-content');
+
+            poetTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    poetTabs.forEach(t => {
+                        t.classList.remove('tab-active', 'text-gray-800');
+                        t.classList.add('text-gray-500');
+                    });
+                    tab.classList.add('tab-active', 'text-gray-800');
+                    tab.classList.remove('text-gray-500');
+
+                    const targetId = tab.getAttribute('data-target');
+
+                    poetContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden-content');
+                        } else {
+                            content.classList.add('hidden-content');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

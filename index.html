@@ -1,146 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rob's Static Sites</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            background-color: #f4f7f6;
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --muted-color: #475569;
+            --accent-primary: #0284c7;
+            --accent-secondary: #4f46e5;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
         }
 
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 0.5rem;
-        }
-
-        ul {
-            list-style-type: none;
+        * {
+            box-sizing: border-box;
+            margin: 0;
             padding: 0;
         }
 
-        li {
-            background: white;
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(2, 132, 199, 0.08), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(79, 70, 229, 0.08), transparent 30%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
         }
 
-        li:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        a {
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f172a 0%, var(--accent-primary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--muted-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .category {
+            margin-bottom: 3.5rem;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .category:nth-child(2) { animation-delay: 0.1s; }
+        .category:nth-child(3) { animation-delay: 0.2s; }
+        .category:nth-child(4) { animation-delay: 0.3s; }
+        .category:nth-child(5) { animation-delay: 0.4s; }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, #cbd5e1, transparent);
+            margin-left: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(2, 132, 199, 0.2);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title a {
+            color: var(--accent-primary);
             text-decoration: none;
-            color: #3498db;
-            font-weight: bold;
+            transition: color 0.3s ease;
         }
 
-        .description {
-            display: block;
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
+        .card-title a::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .card:hover .card-title a {
+            color: var(--accent-secondary);
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--muted-color);
+            line-height: 1.5;
+            position: relative;
+            z-index: 2; /* Keeps text above pseudo-link mostly for selection, but nested links need it */
+        }
+
+        .card-desc a {
+            color: var(--accent-secondary);
+            text-decoration: none;
+            position: relative;
+            z-index: 3; /* Must be above the absolute inset link to be clickable */
+        }
+        
+        .card-desc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-
 <body>
-    <h1>Rob's Static Sites</h1>
+    <div class="container">
+        <header>
+            <h1>Rob's Static Sites</h1>
+            <p class="subtitle">A curated collection of projects, courses, and developer utilities.</p>
+        </header>
 
-    <h2>Great Books of the Western World</h2>
-    <ul>
-        <li>
-            <a href="great-books/a-bibliophiles-odyssey/index.html">Published Books</a>
-            <span class="description">Based on Newsletter Posts: from <a href="https://www.readgreatbooks.info/">A
-                    Bibliophile's Odyssey: Reading The Great Books</a>: Brief Summaries and Contemporary Thoughts
-                from The Great Books of the Western World.</span>
-        </li>
-        <li>
-            <a href="great-books/western-world/index.html">The Original 1952 Collection</a>
-            <span class="description">A complete, premium listing of the 54 original Great Books of the Western World
-                volumes.</span>
-        </li>
-        <li>
-            <a href="great-books/herodotus/index.html">Herodotus: The History</a>
-            <span class="description">An interactive exploration of the nine books of Herodotus.</span>
-        </li>
-    </ul>
+        <section class="category">
+            <h2>Great Books of the Western World</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title"><a href="great-books/a-bibliophiles-odyssey/index.html">Published Books</a></div>
+                    <div class="card-desc">Based on Newsletter Posts: from <a href="https://www.readgreatbooks.info/" target="_blank" rel="noopener noreferrer">A Bibliophile's Odyssey: Reading The Great Books</a>: Brief Summaries and Contemporary Thoughts from The Great Books of the Western World.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="great-books/western-world/index.html">The Original 1952 Collection</a></div>
+                    <div class="card-desc">A complete, premium listing of the 54 original Great Books of the Western World volumes.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="great-books/book-summaries/index.html">Book Summaries</a></div>
+                    <div class="card-desc">Chapter-by-chapter breakdowns of the foundational texts of Western literature.</div>
+                </div>
+            </div>
+        </section>
 
-    <h2>Courses</h2>
-    <ul>
-        <li>
-            <a href="courses/data-privacy-mgmt/index.html">Data Privacy Management</a>
-            <span class="description">Master the principles and practices of privacy program management in the digital
-                age.</span>
-        </li>
-    </ul>
+        <section class="category">
+            <h2>Courses</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title"><a href="courses/data-privacy-mgmt/index.html">Data Privacy Management</a></div>
+                    <div class="card-desc">Master the principles and practices of privacy program management in the digital age.</div>
+                </div>
+            </div>
+        </section>
 
-    <h2>Developer Utilities</h2>
-    <ul>
-        <li>
-            <a href="utilities/regex-playbox/index.html">Regex Playbox</a>
-            <span class="description">An interactive, visual environment for testing and debugging Regular Expressions
-                locally.</span>
-        </li>
-        <li>
-            <a href="utilities/swiss-army-knife/index.html">Swiss Army Knife</a>
-            <span class="description">Essential local text tools: JSON Formatter, JWT Decoder, Base64 & URL
-                Encoders.</span>
-        </li>
-        <li>
-            <a href="utilities/chronos-time-converter/index.html">Chronos</a>
-            <span class="description">Epoch timestamp converter and visual Cron expression explorer.</span>
-        </li>
-        <li>
-            <a href="utilities/diff-tool/index.html">Text & Code Diff Tool</a>
-            <span class="description">Compare text or code side-by-side to visually identify additions and deletions
-                offline.</span>
-        </li>
-        <li>
-            <a href="utilities/markdown-table-builder/index.html">Markdown Table Builder</a>
-            <span class="description">Visually create nicely-formatted Markdown tables without wrestling with pipes and
-                dashes.</span>
-        </li>
-    </ul>
+        <section class="category">
+            <h2>Developer Utilities</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title"><a href="utilities/regex-playbox/index.html">Regex Playbox</a></div>
+                    <div class="card-desc">An interactive, visual environment for testing and debugging Regular Expressions locally.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="utilities/swiss-army-knife/index.html">Swiss Army Knife</a></div>
+                    <div class="card-desc">Essential local text tools: JSON Formatter, JWT Decoder, Base64 & URL Encoders.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="utilities/chronos-time-converter/index.html">Chronos</a></div>
+                    <div class="card-desc">Epoch timestamp converter and visual Cron expression explorer.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="utilities/diff-tool/index.html">Text & Code Diff Tool</a></div>
+                    <div class="card-desc">Compare text or code side-by-side to visually identify additions and deletions offline.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="utilities/markdown-table-builder/index.html">Markdown Table Builder</a></div>
+                    <div class="card-desc">Visually create nicely-formatted Markdown tables without wrestling with pipes and dashes.</div>
+                </div>
+            </div>
+        </section>
 
-    <h2>Networking & Security</h2>
-    <ul>
-        <li>
-            <a href="utilities/password-generator/index.html">Burner Password Generator</a>
-            <span class="description">100% local, cryptographically secure password generator with Entropy
-                calculation.</span>
-        </li>
-        <li>
-            <a href="utilities/cidr-calculator/index.html">Visual CIDR Calculator</a>
-            <span class="description">Determine subnet masks, broadcast addresses, and usable host ranges
-                visually.</span>
-        </li>
-    </ul>
+        <section class="category">
+            <h2>Networking & Security</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title"><a href="utilities/password-generator/index.html">Burner Password Generator</a></div>
+                    <div class="card-desc">100% local, cryptographically secure password generator with Entropy calculation.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="utilities/cidr-calculator/index.html">Visual CIDR Calculator</a></div>
+                    <div class="card-desc">Determine subnet masks, broadcast addresses, and usable host ranges visually.</div>
+                </div>
+            </div>
+        </section>
 
-    <h2>Educational Tools</h2>
-    <ul>
-        <li>
-            <a href="utilities/compression-visualizer/index.html">Compression Algorithm Visualizer</a>
-            <span class="description">An interactive playground demonstrating RLE, LZW, Huffman Coding, and TTTD
-                chunking.</span>
-        </li>
-        <li>
-            <a href="utilities/sorting-visualizer/index.html">Sorting Algorithm Visualizer</a>
-            <span class="description">Watch computer sorting algorithms organize arrays of data in real-time.</span>
-        </li>
-    </ul>
+        <section class="category">
+            <h2>Educational Tools</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title"><a href="utilities/compression-visualizer/index.html">Compression Algorithm Visualizer</a></div>
+                    <div class="card-desc">An interactive playground demonstrating RLE, LZW, Huffman Coding, and TTTD chunking.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><a href="utilities/sorting-visualizer/index.html">Sorting Algorithm Visualizer</a></div>
+                    <div class="card-desc">Watch computer sorting algorithms organize arrays of data in real-time.</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
 </body>
-
 </html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trachiniae: The Poisoned Gift</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #f0fdfa; color: #134e4a; }
+        h1, h2, .accent-font { font-family: 'Abril Fatface', serif; }
+        .masonry-card { background: white; border-radius: 20px; box-shadow: 10px 10px 0px #be185d; transition: all 0.3s; }
+        .masonry-card:hover { transform: translate(-5px, -5px); box-shadow: 15px 15px 0px #db2777; }
+        .plot-bubble { transition: all 0.3s; cursor: pointer; border: 3px solid transparent; }
+        .plot-bubble:hover { transform: translateY(-5px); border-color: #be185d; }
+        .plot-bubble.active { background-color: #be185d; color: white; transform: scale(1.05); }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+    <div class="max-w-6xl mx-auto space-y-16">
+        <header class="flex flex-col md:flex-row items-center gap-8 bg-teal-900 text-teal-50 p-12 rounded-[40px] shadow-2xl">
+            <div class="flex-1">
+                <h1 class="text-6xl md:text-8xl mb-4">Trachiniae</h1>
+                <p class="text-2xl font-light italic">When the cure is more lethal than the disease.</p>
+            </div>
+            <div class="w-48 h-48 bg-pink-500 rounded-full flex items-center justify-center rotate-12 shadow-inner">
+                <span class="accent-font text-5xl text-teal-950">FATAL</span>
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="md:col-span-2 lg:col-span-2 masonry-card p-8 flex flex-col justify-center">
+                <h2 class="text-4xl text-pink-700 mb-6">Toxic Irony</h2>
+                <div class="h-64"><canvas id="trachiniaeChart"></canvas></div>
+            </div>
+            <div class="space-y-4 lg:col-span-2" id="theme-masonry"></div>
+        </section>
+
+        <section class="space-y-12">
+            <h2 class="text-4xl text-center text-teal-900 mb-8">The Erosion of a Hero</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4" id="plot-bubbles"></div>
+            
+            <div id="content-focus" class="bg-white p-12 rounded-[50px] border-4 border-dashed border-pink-200 min-h-[350px] transition-all flex flex-col justify-center">
+                <h3 id="focus-title" class="text-5xl text-pink-600 accent-font mb-6">Select a Moment</h3>
+                <p id="focus-text" class="text-2xl leading-relaxed text-teal-800 italic">"I have done a deed that brings only ruin."</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const data = {
+            themes: [
+                { title: 'Destructive Eros', val: 95, color: '#be185d', desc: 'Love as a physical force that consumes the lover.' },
+                { title: 'Tragic Ignorance', val: 90, color: '#0d9488', desc: 'Acting with good intent but producing catastrophic results.' },
+                { title: 'Physical Agony', val: 85, color: '#ca8a04', desc: 'The detailed, visceral suffering of Heracles.' },
+                { title: 'Fickle Fortune', val: 80, color: '#0f172a', desc: 'The sudden fall from the height of victory to death.' }
+            ],
+            plot: [
+                { title: 'Anxiety', text: 'Deianeira waits in Trachis, fearing for Heracles who has been absent for over a year.' },
+                { title: 'Victory', text: 'Heracles destroys Oechalia and sends home a train of captive women, including Iole.' },
+                { title: 'Jealousy', text: 'Deianeira discovers that Iole is Heracles\'s new mistress and feels her status threatened.' },
+                { title: 'The Robe', text: 'She treats a fine robe with the "love charm" given to her by the centaur Nessus.' },
+                { title: 'The Horror', text: 'Heracles puts on the robe during a sacrifice; it begins to burn his flesh like acid.' },
+                { title: 'Despair', text: 'Realizing her fatal mistake, Deianeira kills herself in silence without a word of defense.' },
+                { title: 'The Pyre', text: 'The dying Heracles demands his son Hyllus burn him alive on Mount Oeta to end the pain.' }
+            ]
+        };
+
+        new Chart(document.getElementById('trachiniaeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: data.themes.map(t => t.title),
+                datasets: [{ data: data.themes.map(t => t.val), backgroundColor: data.themes.map(t => t.color), borderJoinStyle: 'round' }]
+            },
+            options: { plugins: { legend: { display: false } }, cutout: '60%' }
+        });
+
+        const masonry = document.getElementById('theme-masonry');
+        data.themes.forEach(t => {
+            masonry.innerHTML += `<div class="bg-white p-6 rounded-2xl shadow-md border-t-8" style="border-color: ${t.color}"><h4 class="font-bold text-teal-900 mb-1">${t.title}</h4><p class="text-sm italic text-teal-600">${t.desc}</p></div>`;
+        });
+
+        const bubbles = document.getElementById('plot-bubbles');
+        data.plot.forEach((p, i) => {
+            const b = document.createElement('div');
+            b.className = `plot-bubble bg-white p-4 rounded-3xl shadow text-center font-bold text-xs uppercase tracking-tighter`;
+            b.innerHTML = `${i+1}.<br>${p.title}`;
+            b.onclick = () => {
+                document.querySelectorAll('.plot-bubble').forEach(el => el.classList.remove('active'));
+                b.classList.add('active');
+                document.getElementById('focus-title').innerText = p.title;
+                document.getElementById('focus-text').innerText = p.text;
+            };
+            bubbles.appendChild(b);
+        });
+    </script>
+</body>
+</html>

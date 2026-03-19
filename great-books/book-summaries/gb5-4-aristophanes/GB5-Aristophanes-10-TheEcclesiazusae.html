@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ecclesiazusae: Utopian Experiments & Comic Chaos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Bright, fresh greens (#48bb78, #68d391) and sky blues (#81e6d9) for the utopian vision. Contrasting duller grays (#a0aec0, #718096) and browns for the traditional male-dominated Athens and its confusion. Exaggerated, perhaps grotesque, purples (#b794f4, #805ad5) and oranges (#f6ad55) for the Hags and their comic pursuits, reflecting the absurdity. A light, airy background (#fdfefb) for an open feel. -->
+    <!-- Application Structure Plan: This SPA is designed as a "Utopian Athens" dashboard, satirizing radical social experiments. It starts with the "Problem" (corrupt male governance) and the "Radical Solution" (women's takeover of the Assembly). It then details the "Implementation of New Laws" (communal property, food, and especially sexual equality). The core explores the "Comic Consequences," particularly the dilemmas arising from the sexual regulations. The dashboard concludes with a celebratory "Communal Feast," leaving the underlying critique of human nature and political idealism implied. This structure highlights the ambitious social experiment and its humorous unraveling. -->
+    <!-- Visualization & Content Choices:
+    1. Utopian Realization Index Arc: A line chart (Chart.js) illustrating the gap between Praxagora's idealistic vision and the chaotic/absurd reality of its implementation, showing levels of "Idealism" vs. "Chaos" or "Order" vs. "Disorder."
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Praxagora, Blepyrus, Chorus of Women, Three Hags, Young Man), detailing their roles, motivations, and key quotes.
+    3. The New Laws of Athens: A tabbed or expandable section outlining the radical communal laws (property, food, sexual partners) and their stated (and actual) justifications and effects.
+    4. The Sexual Hierarchy: A visual or textual explanation of the new sexual regulations (old before young, ugly before beautiful), highlighting the comic predicaments they create and the societal implications.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fdfefb; /* Very light cream/white */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #48bb78; /* Green for utopian theme */
+            color: #48bb78;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-green-100 selection:text-green-800">
+
+    <header class="bg-gray-900 text-white py-12 px-6 shadow-md border-b-4 border-green-500">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">The Ecclesiazusae <span class="text-green-400 font-light">Utopian Experiments & Comic Chaos</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive exploration of Aristophanes' satire on radical social and political ideals, where women take control of Athens to implement a communal society.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="utopian-realization-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">⚖️</span> Utopian Vision vs. Chaotic Reality
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart illustrates the trajectory of the women's utopian experiment, comparing the initial idealistic vision with the practical (and often absurd) realities of its implementation in Athenian society.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="utopiaChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <strong class="text-green-800">Idealistic Vision (Praxagora's Plan):</strong> High hopes for universal equality, prosperity, and a harmonious society.
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <strong class="text-yellow-800">Chaotic Reality (Implementation):</strong> The unforeseen and humorous consequences of applying utopian laws to human nature, leading to disorder.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> The Architects of Utopia & Its Subjects
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the women who dared to reimagine society and the men (and other women) who found themselves navigating its absurd new rules.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="leader" class="px-5 py-2 rounded-full bg-green-100 text-green-800 font-medium hover:bg-green-200 transition-colors">Praxagora (Leader)</button>
+                <button data-filter="male-citizen" class="px-5 py-2 rounded-full bg-gray-100 text-gray-800 font-medium hover:bg-gray-200 transition-colors">Male Citizens</button>
+                <button data-filter="female-chorus" class="px-5 py-2 rounded-full bg-pink-100 text-pink-800 font-medium hover:bg-pink-200 transition-colors">Chorus of Women</button>
+                <button data-filter="sexual-targets" class="px-5 py-2 rounded-full bg-purple-100 text-purple-800 font-medium hover:bg-purple-200 transition-colors">Sexual Regulations Targets</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="leader">
+                    <div class="text-4xl mb-3">🧠</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Praxagora</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Architect of Utopia</span>
+                    <p class="text-gray-600 text-sm mb-4">The intelligent, cunning, and charismatic Athenian woman who devises and leads the plan to seize control of the Assembly and implement radical communal laws.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"I move that now the womankind be asked To rule the State... For now no longer shall bold men be free To shame the city."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="male-citizen">
+                    <div class="text-4xl mb-3"> bewildered </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Blepyrus</h3>
+                    <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded mb-3">The Confused Husband</span>
+                    <p class="text-gray-600 text-sm mb-4">Praxagora's somewhat slow-witted husband, who wakes to find his clothes missing and Athens under new, bewildering female rule. He represents the perplexed male populace.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-gray-400 pl-3">"What’s up? Where’s my wife gone? Why, bless the woman, It’s almost daybreak and she can’t be found."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="female-chorus">
+                    <div class="text-4xl mb-3">👭</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Women</h3>
+                    <span class="inline-block px-2 py-1 bg-pink-100 text-pink-800 text-xs font-bold rounded mb-3">The Revolutionaries</span>
+                    <p class="text-gray-600 text-sm mb-4">Praxagora's followers who, disguised as men, successfully infiltrate the Athenian Assembly and vote to establish the new communal system.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-pink-400 pl-3">"Our sisters! My wits are gone gleaning! Our 'brothers,' of course, was my meaning."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="sexual-targets">
+                    <div class="text-4xl mb-3">👵</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Three Hags</h3>
+                    <span class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded mb-3">Beneficiaries of New Laws</span>
+                    <p class="text-gray-600 text-sm mb-4">Old, unattractive women who gain sexual priority over young men under the new communal laws, leading to some of the play's most outrageous comic scenes.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-purple-400 pl-3">"Be it enacted... if a youth would woo A maiden, he must first his duty do By some old beldame."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="sexual-targets">
+                    <div class="text-4xl mb-3"> Adonis </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Young Man</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">Victim of the New Laws</span>
+                    <p class="text-gray-600 text-sm mb-4">A handsome youth who is comically tormented by the Hags, desperately trying to evade their advances to be with a beautiful young girl.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"O that I now might my darling woo! Nor first be doomed to the foul embrace Of an ancient hag."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="male-citizen">
+                    <div class="text-4xl mb-3">🤔</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Citizen / Skeptic</h3>
+                    <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded mb-3">The Doubting Thomas</span>
+                    <p class="text-gray-600 text-sm mb-4">A neighbor who expresses skepticism and questions the practicality of the new communal laws, particularly regarding property and human nature.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-gray-400 pl-3">"What! think you men of sense will bring their goods? Not they! That’s not our custom: we’re disposed Rather to take than give."</blockquote>
+                </div>
+            </div>
+        </section>
+
+        <section id="the-new-laws-of-athens" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📜</span> Praxagora's Radical Reforms
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Under the women's new administration, Athens undergoes a complete societal overhaul, driven by principles of radical communalism and equality, with unexpected consequences.
+                </p>
+            </div>
+
+            <div class="flex border-b border-gray-200 px-8 pt-4" id="law-tabs">
+                <button class="px-6 py-3 text-lg law-tab tab-active" data-target="communal-property">Communal Property</button>
+                <button class="px-6 py-3 text-lg law-tab text-gray-500 hover:text-gray-800" data-target="food-distribution">Food & Feasts</button>
+                <button class="px-6 py-3 text-lg law-tab text-gray-500 hover:text-gray-800" data-target="sexual-regulations">Sexual Regulations</button>
+                <button class="px-6 py-3 text-lg law-tab text-gray-500 hover:text-gray-800" data-target="social-impact">Social Impact</button>
+            </div>
+
+            <div class="p-8 bg-gray-50 min-h-[300px]">
+
+                <div id="communal-property" class="law-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">All Things Shared: Wealth & Land</h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-700">All private property, including land, money, and personal possessions, is to be communalized and placed into a common fund. This aims to eliminate poverty, wealth disparity, and theft.</p>
+                        <p class="italic text-sm text-gray-500 mt-2">Praxagora: "All wealth and enjoyments, nor longer endure That one should be rich, and another be poor... All this I intend to correct and amend."</p>
+                        <p class="text-gray-700">Citizens are expected to voluntarily contribute their goods, though some characters remain skeptical and reluctant, leading to comic confrontations.</p>
+                    </div>
+                </div>
+
+                <div id="food-distribution" class="law-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Feast for All: Public Dining</h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-700">All citizens will dine communally in public spaces (like the Pnyx and agora), with ample food and wine provided from the common stores. This ensures everyone is fed and eliminates social distinctions based on private dining.</p>
+                        <p class="italic text-sm text-gray-500 mt-2">Praxagora: "Each court and arcade of the law shall be made A banqueting-hall for the citizens."</p>
+                        <p class="text-gray-700">Cowards will be shamed out of dining, and a complex system (by letter) will assign citizens to different dining halls.</p>
+                    </div>
+                </div>
+
+                <div id="sexual-regulations" class="law-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sexual Equality: The Hags' Advantage</h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-700">Perhaps the most radical law: all citizens are free and common in love. However, young men must first satisfy the sexual desires of older, less attractive women before they can be with younger, beautiful ones.</p>
+                        <p class="italic text-sm text-gray-500 mt-2">Praxagora: "By the side of the beauty, so stately and grand, The dwarf, the deformed, and the ugly will stand; And before you’re entitled the beauty to woo, Your court you must pay to the hag and the shrew."</p>
+                        <p class="text-gray-700">This aims to ensure sexual equality and prevent any woman from being left without a partner, but leads to farcical situations of young men desperately trying to escape the Hags.</p>
+                    </div>
+                </div>
+
+                <div id="social-impact" class="law-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">A Society Transformed (Comically)</h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-700">The new laws aim to eliminate crime (no theft if all is common), litigation (no lawsuits if no private property), and even gambling (nothing to stake). It promises universal happiness, but the implementation exposes human greed and desire.</p>
+                        <p class="italic text-sm text-gray-500 mt-2">Praxagora: "Now each will have all that a man can desire... Then why should he wish The wealth he has gotten by fraud to retain?"</p>
+                        <p class="text-gray-700">The play highlights the dramatic contrast between the theoretical benefits of such a system and the messy realities of human behavior and individual desires.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sexual-hierarchy" class="bg-purple-800 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    The New Sexual Order: The Hags' Reign
+                </h2>
+                <p class="text-purple-200 text-lg">
+                    The most controversial and comically absurd aspect of the women's new laws is the enforced sexual hierarchy, designed to ensure that no one goes without love, regardless of age or attractiveness.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="text-center">
+                    <div class="text-8xl mb-4">👵</div>
+                    <h3 class="text-2xl font-bold text-purple-400 mb-2">Priority for the Hags</h3>
+                    <ul class="list-disc list-inside text-purple-100 text-left mx-auto max-w-sm space-y-2">
+                        <li>Young men are legally obligated to satisfy older, less attractive women first.</li>
+                        <li>This rule ensures that all women, regardless of beauty, receive sexual attention.</li>
+                        <li>The Hags actively enforce this law, physically dragging reluctant young men to their homes.</li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <div class="text-8xl mb-4">💔</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-2">Frustration for the Young</h3>
+                    <ul class="list-disc list-inside text-purple-100 text-left mx-auto max-w-sm space-y-2">
+                        <li>Young men are forced into unwanted encounters with the Hags.</li>
+                        <li>They are prevented from being with young, beautiful women until their "duty" is fulfilled.</li>
+                        <li>The comical chases and laments of the young man highlight the reversal of traditional courtship and sexual dynamics.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-purple-300 italic text-md">
+                <p>"A crusty law! a Procrustean law!" - The Young Man on the new sexual regulations.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Ecclesiazusae" (392 BC).</p>
+        <p>A witty commentary on utopian political philosophy, gender roles, and human nature.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Utopian Realization Index Chart
+            const ctx = document.getElementById('utopiaChart').getContext('2d');
+            const utopiaChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Initial Vision (Praxagora)',
+                        'Assembly Infiltration',
+                        'Laws Proclaimed',
+                        'Property Communalization Begins',
+                        'Sexual Laws Enacted',
+                        'Hags Enforce Laws',
+                        'Communal Feast'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Idealistic Vision Level',
+                            data: [9, 8, 9, 7, 7, 5, 6], /* Index 0-10 */
+                            borderColor: '#48bb78', // Green
+                            backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#38a169',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Chaotic Reality Level',
+                            data: [1, 2, 2, 4, 6, 8, 7], /* Index 0-10 */
+                            borderColor: '#f6ad55', // Yellow/Orange
+                            backgroundColor: 'rgba(246, 173, 85, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ed8936',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Praxagora outlines her idealistic vision for a truly equal and prosperous communal society.",
+                                        "Women, disguised as men, successfully vote themselves into power, marking a triumph for the radical plan.",
+                                        "The new communal laws are proclaimed, promising universal benefits and an end to poverty and crime.",
+                                        "Citizens are encouraged to bring their property to the common stores; some resist, creating initial confusion.",
+                                        "The controversial sexual regulations are put into effect, aiming for universal sexual equality.",
+                                        "The Hags aggressively enforce the new sexual laws, leading to comic chases and desperate young men.",
+                                        "Despite the chaos, the play concludes with a grand communal feast, celebrating the new (and absurd) social order."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Idealism vs. Reality',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-green-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-green-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // Law Tabs
+            const lawTabs = document.querySelectorAll('.law-tab');
+            const lawContents = document.querySelectorAll('.law-content');
+
+            lawTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    lawTabs.forEach(t => {
+                        t.classList.remove('tab-active', 'text-gray-800');
+                        t.classList.add('text-gray-500');
+                    });
+                    tab.classList.add('tab-active', 'text-gray-800');
+                    tab.classList.remove('text-gray-500');
+
+                    const targetId = tab.getAttribute('data-target');
+
+                    lawContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden-content');
+                        } else {
+                            content.classList.add('hidden-content');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

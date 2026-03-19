@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wasps: Judicial Satire & Transformation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Muted yellows/browns (#d69e2e, #a06e2c) for the "wasp" imagery and aging dicasts, reflecting their obsession and the play's earthiness. Contrasting blues/silvers (#4299e1, #a0aec0) for Bdelycleon's refined attempts at reform. Vivid reds/oranges (#e53e3e, #f6ad55) for Philocleon's final chaotic revelry and the underlying anger/conflict. Neutral background (#fdf8f4) for readability. -->
+    <!-- Application Structure Plan: This SPA is structured as a "Behavioral Transformation" dashboard, mirroring the play's arc from diagnosis to ironic outcome. It begins with the "Problem" (Philocleon's jurymania) and Bdelycleon's attempts at a "Solution" (confinement, debate). It then details the "Treatment" (the domestic mock trial) and, crucially, the "Outcome" of this transformation, showing the ironic shift to a new, equally problematic extreme. This flow emphasizes the social critique and the character's journey. -->
+    <!-- Visualization & Content Choices:
+    1. Philocleon's Obsession Arc: A line chart (Chart.js) illustrating Philocleon's "Jurymania Index" vs. "Hedonism Index," showing his initial high judicial obsession, a dip during the "cure," and then a rise in hedonism post-cure.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Philocleon, Bdelycleon, Chorus of Wasps), detailing their role, motivations, and key quotes.
+    3. The Mock Trial: A tabbed section detailing the domestic court trial, including the "charges," "defense," and Philocleon's "verdict," with a summary of the satirical elements.
+    4. Philocleon's Lifestyle Comparison: A side-by-side display contrasting Philocleon's daily routine and values before and after his "cure," highlighting the ironic nature of his transformation.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fdf8f4; /* Floral White */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #d69e2e; /* Warm Yellow/Brown */
+            color: #d69e2e;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-100 selection:text-yellow-800">
+
+    <header class="bg-gray-800 text-white py-12 px-6 shadow-md border-b-4 border-yellow-600">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">The Wasps <span class="text-yellow-400 font-light">Judicial Satire & Transformation</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive exploration of Aristophanes' biting satire on the Athenian judicial system, demagoguery, and the unexpected consequences of social reform.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="philocleon-obsession-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">⚖️</span> Philocleon's Obsession Trajectory
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart tracks Philocleon's dominant obsession throughout the play – from his fervent "jurymania" to a period of forced withdrawal, culminating in a new, equally extreme, hedonistic lifestyle.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="philocleonObsessionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <strong class="text-yellow-800">Jurymania Index:</strong> Represents Philocleon's intense addiction to jury duty, including its perceived power and pay.
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Hedonism Index:</strong> Reflects his embrace of a wild, revelrous lifestyle after being "cured" of his jury obsession.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> The Cast of the Courtroom & Home
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the central figures whose conflicting desires and attempts at control drive the satirical narrative of "The Wasps."
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="protagonist-old" class="px-5 py-2 rounded-full bg-yellow-100 text-yellow-800 font-medium hover:bg-yellow-200 transition-colors">Philocleon (Old)</button>
+                <button data-filter="protagonist-young" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Bdelycleon (Young)</button>
+                <button data-filter="chorus" class="px-5 py-2 rounded-full bg-orange-100 text-orange-800 font-medium hover:bg-orange-200 transition-colors">Chorus of Wasps</button>
+                <button data-filter="slaves" class="px-5 py-2 rounded-full bg-gray-100 text-gray-800 font-medium hover:bg-gray-200 transition-colors">Slaves & Others</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="protagonist-old">
+                    <div class="text-4xl mb-3">🐝</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Philocleon</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">The Jurymaniac</span>
+                    <p class="text-gray-600 text-sm mb-4">An old Athenian obsessed with jury duty, he finds immense pleasure and a sense of power in condemning others and receiving his three obols. His name means "Lover of Cleon."</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"Judging is what he dotes on, and he weeps Unless he sit on the front bench of all."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="protagonist-young">
+                    <div class="text-4xl mb-3">🏛️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Bdelycleon</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Reformer</span>
+                    <p class="text-gray-600 text-sm mb-4">Philocleon's son, whose name means "Hater of Cleon." Educated and refined, he tries desperately to cure his father's jurymania and integrate him into respectable society.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"You’re a slave, and yet don’t know it."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="chorus">
+                    <div class="text-4xl mb-3">🦂</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Wasps</h3>
+                    <span class="inline-block px-2 py-1 bg-orange-100 text-orange-800 text-xs font-bold rounded mb-3">The Old Dicasts</span>
+                    <p class="text-gray-600 text-sm mb-4">A group of old Athenian jurymen, dressed as wasps, fiercely loyal to the judicial system and their demagogic leaders. They are aggressive and easily agitated.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-orange-400 pl-3">"Each wears beside his loins a deadly sting, Wherewith they smite, and on with yells and cries."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="slaves">
+                    <div class="text-4xl mb-3">🤫</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Xanthias & Sosias</h3>
+                    <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded mb-3">The Servants</span>
+                    <p class="text-gray-600 text-sm mb-4">Bdelycleon's slaves, often serving as weary commentators and providing comic relief as they try to guard Philocleon or deal with his antics.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-gray-400 pl-3">"To guard Scione than a sire like this."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="slaves">
+                    <div class="text-4xl mb-3">🐕</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Labes & Cydathon</h3>
+                    <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded mb-3">The Litigant Dogs</span>
+                    <p class="text-gray-600 text-sm mb-4">Dogs who act as prosecutor and defendant in the domestic mock trial, comically satirizing prominent Athenian figures and legal procedures.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-gray-400 pl-3">"Cur of Cydathon Hereby accuses Labes of Aexone, For that, embezzling a Sicilian cheese, Alone he ate it."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="the-mock-trial" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">👨‍⚖️</span> The Domestic Court: Labes vs. Cydathon
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    As part of his "cure," Bdelycleon sets up a private court at home for Philocleon. This mock trial, with dogs as litigants, comically mirrors the absurdities of the Athenian judicial system.
+                </p>
+            </div>
+
+            <div class="flex border-b border-gray-200 px-8 pt-4" id="trial-tabs">
+                <button class="px-6 py-3 text-lg trial-tab tab-active" data-target="charge">The Charge</button>
+                <button class="px-6 py-3 text-lg trial-tab text-gray-500 hover:text-gray-800" data-target="defense">The Defense</button>
+                <button class="px-6 py-3 text-lg trial-tab text-gray-500 hover:text-gray-800" data-target="verdict">The Verdict</button>
+            </div>
+
+            <div class="p-8 bg-gray-50 min-h-[300px]">
+
+                <div id="charge" class="trial-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Accusation: Cheese Theft!</h3>
+                    <div class="bg-white p-4 rounded-lg border border-red-200 shadow-sm">
+                        <h4 class="font-bold text-red-700 mb-2">Prosecutor: Cur of Cydathon</h4>
+                        <p class="text-gray-700 mb-2">Accuses Labes of embezzling and devouring a whole Sicilian cheese by himself, depriving the people (and the prosecutor) of their share.</p>
+                        <p class="italic text-sm text-gray-500">Evidence: Labes's cheesy breath. Satirizes Cleon's (Cydathon's) frequent public prosecutions and greed.</p>
+                    </div>
+                </div>
+
+                <div id="defense" class="trial-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Mitigation: A Good Dog!</h3>
+                    <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                        <h4 class="font-bold text-blue-700 mb-2">Defender: Bdelycleon (for Labes)</h4>
+                        <p class="text-gray-700 mb-2">Argues that Labes is a good dog who fights wolves and guards the door, serving the community. Calls witnesses (kitchen utensils) and introduces Labes's "puppies" to elicit sympathy.</p>
+                        <p class="italic text-sm text-gray-500">Strategy: Appeals to emotion, highlights past services, and uses common legal tricks (like parading children) to distract from the actual crime.</p>
+                    </div>
+                </div>
+
+                <div id="verdict" class="trial-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Accidental Acquittal!</h3>
+                    <div class="bg-white p-4 rounded-lg border border-green-200 shadow-sm">
+                        <h4 class="font-bold text-green-700 mb-2">Philocleon's Mistake</h4>
+                        <p class="text-gray-700 mb-2">Bdelycleon leads a distraught Philocleon, who is overcome with pity, to vote for acquittal. Philocleon, unfamiliar with the procedure, accidentally places his voting pebble in the "acquittal" urn instead of the "condemnation" urn.</p>
+                        <p class="italic text-sm text-gray-500">Outcome: Philocleon is horrified, believing he has committed an unforgivable sin by acquitting someone. This moment breaks his addiction to condemnation and public courts.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="philocleon-lifestyle-comparison" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔄</span> Old Philocleon vs. New Philocleon
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    A side-by-side look at Philocleon's behavior and interests before and after his "cure." While freed from jurymania, he merely swaps one extreme obsession for another, highlighting the challenges of true behavioral change.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <h3 class="text-xl font-bold text-yellow-700 mb-4">Before: The Jurymaniac</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li><strong>Daily Routine:</strong> Wakes before dawn, rushes to court, sleeps outside the courthouse door.</li>
+                        <li><strong>Social Life:</strong> Spends all time with fellow dicasts, discussing cases and condemnations.</li>
+                        <li><strong>Interests:</strong> Obsessed with legal procedures, voting, and the meager three obols pay.</li>
+                        <li><strong>Temperament:</strong> Grumpy, aggressive, eager to punish, easily swayed by demagogues.</li>
+                        <li><strong>Appearance:</strong> Wears old, worn clothes, neglected.</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
+                    <h3 class="text-xl font-bold text-red-700 mb-4">After: The Hedonist</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li><strong>Daily Routine:</strong> Sleeps late, attends feasts, revels, and causes drunken disturbances.</li>
+                        <li><strong>Social Life:</strong> Learns new social graces (badly), tries to tell witty anecdotes, insults guests.</li>
+                        <li><strong>Interests:</strong> Drinking, dancing (in an archaic, embarrassing style), flirting with flute-girls, causing mischief.</li>
+                        <li><strong>Temperament:</strong> Still aggressive and boorish, but now directed at social situations rather than legal ones.</li>
+                        <li><strong>Appearance:</strong> Dressed in fine (but ill-fitting) Persian clothes, still an embarrassment.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Wasps" (422 BC).</p>
+        <p>A satirical commentary on democracy, justice, and the difficulty of true change.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Philocleon's Obsession Trajectory Chart
+            const ctx = document.getElementById('philocleonObsessionChart').getContext('2d');
+            const philocleonObsessionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Initial Jurymania',
+                        'Confinement & Debate',
+                        'Mock Trial (Cure)',
+                        'Post-Cure Adjustment',
+                        'New Hedonistic Lifestyle',
+                        'Riotous Revelry'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Jurymania Index',
+                            data: [10, 8, 2, 0, 0, 0], /* Index 0-10 */
+                            borderColor: '#d69e2e', // Warm Yellow/Brown
+                            backgroundColor: 'rgba(214, 158, 46, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#a06e2c',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Hedonism/Rebellion Index',
+                            data: [0, 0, 1, 4, 8, 10], /* Index 0-10 */
+                            borderColor: '#e53e3e', // Red
+                            backgroundColor: 'rgba(229, 62, 62, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#c53030',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Philocleon is completely consumed by his passion for jury duty, condemning all.",
+                                        "Bdelycleon physically restrains him and debates the merits of the judicial system.",
+                                        "The mock trial 'cures' Philocleon of his addiction to condemning; he accidentally acquits.",
+                                        "Philocleon starts to adapt to a new, more refined lifestyle, but with difficulty.",
+                                        "He fully embraces a hedonistic life of feasting, drinking, and social disruption.",
+                                        "His new behavior becomes wild and boorish, embarrassing his son and causing chaos."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Obsession / Behavior Index',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-blue-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // Trial Tabs
+            const trialTabs = document.querySelectorAll('.trial-tab');
+            const trialContents = document.querySelectorAll('.trial-content');
+
+            trialTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    trialTabs.forEach(t => {
+                        t.classList.remove('tab-active', 'text-gray-800');
+                        t.classList.add('text-gray-500');
+                    });
+                    tab.classList.add('tab-active', 'text-gray-800');
+                    tab.classList.remove('text-gray-500');
+
+                    const targetId = tab.getAttribute('data-target');
+
+                    trialContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden-content');
+                        } else {
+                            content.classList.add('hidden-content');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

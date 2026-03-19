@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Seven Against Thebes | Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #e2e8f0;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 350px;
+        }
+        .tab-active {
+            border-left: 4px solid #ef4444;
+            background-color: #2d3748;
+            font-weight: 600;
+        }
+        .timeline-node {
+            transition: all 0.3s ease;
+        }
+        .timeline-node:hover, .timeline-node.active {
+            background-color: #ef4444;
+            color: white;
+            transform: scale(1.1);
+        }
+        .theme-card {
+            background-color: #2d3748;
+            transition: all 0.3s ease;
+            border: 1px solid #4a5568;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            border-color: #ef4444;
+            box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.3);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .iron-border {
+            border: 2px solid #4a5568;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-[#1a1a1a]/95 backdrop-blur border-b border-red-900 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-serif font-bold text-xl text-red-500 tracking-widest">
+                    AESCHYLUS: SEVEN AGAINST THEBES
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-slate-300 hover:text-red-500 transition">Shields</a>
+                    <a href="#narrative" class="text-slate-300 hover:text-red-500 transition">The Siege</a>
+                    <a href="#characters" class="text-slate-300 hover:text-red-500 transition">Warriors</a>
+                    <a href="#themes" class="text-slate-300 hover:text-red-500 transition">Fate</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="overview" class="relative py-24 bg-slate-900 overflow-hidden border-b-8 border-red-700">
+        <div class="absolute inset-0 opacity-30" style="background-image: repeating-linear-gradient(0deg, #000 0%, #000 1px, transparent 1px, transparent 20px);"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter text-red-600 uppercase">Seven Against Thebes</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed text-slate-400">
+                A martial symphony of blood and duty. Two brothers, one crown, and a city under siege as the ancient curse of Oedipus reaches its violent crescendo.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#narrative" class="bg-red-700 hover:bg-red-800 text-white px-10 py-4 rounded-none iron-border transition font-bold tracking-widest uppercase">To the Gates</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 space-y-32">
+
+        <section id="narrative" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-red-500 border-b border-red-900 pb-2 inline-block">The Battle for the Seven Gates</h2>
+                <p class="text-slate-400 mt-4">
+                    Follow the escalation of the conflict, from the first reports of the invading army to the tragic final encounter between brothers.
+                </p>
+            </div>
+
+            <div class="bg-slate-800/50 rounded-lg iron-border p-8 flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/3 relative">
+                    <div class="absolute left-6 top-0 bottom-0 w-1 bg-red-900"></div>
+                    <div class="space-y-8 relative z-10" id="timeline-container"></div>
+                </div>
+
+                <div class="w-full md:w-2/3 bg-slate-900 rounded-lg p-8 min-h-[350px] flex flex-col justify-center border-l-4 border-red-600 shadow-2xl" id="plot-detail-container">
+                    <h3 id="plot-title" class="text-3xl font-serif font-bold text-red-500 mb-4 uppercase">Select a tactical stage</h3>
+                    <p id="plot-desc" class="text-slate-300 text-lg leading-relaxed"></p>
+                    <div id="plot-quote" class="mt-6 italic text-red-400 border-l-4 border-red-600 pl-4 bg-red-950/30 py-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-red-500 border-b border-red-900 pb-2 inline-block">The Combatants</h2>
+                <p class="text-slate-400 mt-4">
+                    The radar chart compares the martial spirit and moral alignment of those caught in the storm of war. Piety, Power, Agency, and Aggression define their path.
+                </p>
+            </div>
+
+            <div class="bg-slate-800/50 rounded-lg iron-border p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="w-full">
+                    <div class="chart-container">
+                        <canvas id="characterRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-wrap border-b border-red-900 mb-6" id="character-tabs"></div>
+                    <div id="character-content" class="flex-grow bg-slate-900 p-8 rounded-lg border-t-4 border-red-600">
+                        <h3 id="char-name" class="text-3xl font-serif font-bold text-red-500 mb-2 uppercase"></h3>
+                        <div id="char-role" class="text-sm font-bold text-slate-500 mb-6 tracking-widest uppercase"></div>
+                        <p id="char-desc" class="text-slate-300 leading-relaxed text-lg"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-red-500 border-b border-red-900 pb-2 inline-block">The Grip of the Curse</h2>
+                <p class="text-slate-400 mt-4">
+                    Explore the underlying themes that turn a military siege into a cosmic tragedy of divine justice.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="themes-container"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black text-slate-500 py-16 mt-20 border-t-8 border-red-900">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif text-3xl tracking-widest text-red-700 mb-4">THE SEVEN AGAINST THEBES</p>
+            <p class="text-lg uppercase tracking-tighter">Blood is the Price of a City</p>
+        </div>
+    </footer>
+
+    <script>
+        const plotData = [
+            {
+                title: "1. The Gathering Storm",
+                desc: "King Eteocles prepares Thebes for an impending siege. A messenger arrives, reporting that seven Argive champions have taken a blood oath to either sack the city or die trying.",
+                quote: "Spilling bulls' blood in shield... they have taken a great oath... To raze these walls from battlement to base."
+            },
+            {
+                title: "2. The Shield Devices",
+                desc: "The messenger describes the seven Argive champions at the gates. Each bears a boastful and blasphemous shield device, symbolizing their hubris and the martial threat they pose.",
+                quote: "With or without God's will, by me the City shall be sacked! Though Zeus dispute my passage... it lets me not!"
+            },
+            {
+                title: "3. Eteocles' Defense",
+                desc: "Eteocles matches each boastful Argive with a humble and virtuous Theban defender. This strategic pairing sets the stage for a conflict of character as much as arms.",
+                quote: "I am not one to tremble at a plume: 'Tis not the brave device that deals the scar."
+            },
+            {
+                title: "4. The Fateful Seventh Gate",
+                desc: "The realization dawns: Eteocles' brother, Polyneices, is at the seventh gate. Despite the pleas of the Chorus, Eteocles chooses to face his brother, fulfilling their father Oedipus' curse.",
+                quote: "Blow, wind! Fill, sails! And where Cocytus' tide heaves dark... Down-wind let drift the last of Laius' line!"
+            },
+            {
+                title: "5. Fratricide and Deliverance",
+                desc: "The city is saved, but the brothers have killed each other in single combat. The play ends with a divided city mourning the loss of its leaders while celebrating its survival.",
+                quote: "The realm is safe: dark earth hath drunk their blood... Dealt mutually by fraternal hands."
+            }
+        ];
+
+        const charData = [
+            {
+                name: 'Eteocles',
+                role: 'King of Thebes',
+                desc: 'The pragmatic and resolute defender of his city. He is a master of tactical statecraft but remains haunted by his father\'s curse, eventually accepting his doom as inevitable.',
+                stats: [6, 9, 9, 8], // Piety, Power, Agency, Aggression
+                color: '#ef4444',
+                bgColor: 'rgba(239, 68, 68, 0.2)'
+            },
+            {
+                name: 'Polyneices',
+                role: 'The Invading Brother',
+                desc: 'Driven by a sense of injustice and vengeance, he brings a foreign army to his own home to claim his inheritance. His shield bears the image of Justice, though his actions are fratricidal.',
+                stats: [4, 8, 9, 10],
+                color: '#f59e0b',
+                bgColor: 'rgba(245, 158, 11, 0.2)'
+            },
+            {
+                name: 'The Messenger',
+                role: 'The Eye of the Army',
+                desc: 'A loyal and detailed observer who provides the tactical intelligence needed for the city\'s defense. His vivid descriptions of the shields are the play\'s poetic core.',
+                stats: [7, 3, 4, 5],
+                color: '#64748b',
+                bgColor: 'rgba(100, 116, 139, 0.2)'
+            },
+            {
+                name: 'Antigone',
+                role: 'The Sister of Mourning',
+                desc: 'Emerging after the battle, she represents the enduring ties of family over the edicts of the state, foreshadowing her own future tragedy in the Sophoclean tradition.',
+                stats: [9, 2, 8, 4],
+                color: '#8b5cf6',
+                bgColor: 'rgba(139, 92, 246, 0.2)'
+            }
+        ];
+
+        const themeData = [
+            {
+                title: "The Curse of Oedipus",
+                icon: "&#9760;",
+                brief: "Ancestral guilt and inescapable fate.",
+                detail: "The conflict is not merely political; it is the fulfillment of a paternal malediction. The blood-debt of the House of Laius must be paid in the death of the last of the line."
+            },
+            {
+                title: "Civic vs. Personal",
+                icon: "&#127984;",
+                brief: "The duty to the city vs. private ambition.",
+                detail: "Eteocles is a model of civic responsibility, while Polyneices represents the danger of private grievance overriding the collective safety of the polis."
+            },
+            {
+                title: "The Martial Ethos",
+                icon: "&#9876;",
+                brief: "Boastfulness vs. Disciplined Valor.",
+                detail: "Aeschylus contrasts the 'barbarous' noise and boastful shields of the invaders with the silent, pious, and disciplined courage of the Theban defenders."
+            },
+            {
+                title: "Divine Justice",
+                icon: "&#9878;",
+                brief: "The gods as judges of the gates.",
+                detail: "The outcome of the battle is seen as a divine judgment. Each gate is a courtroom where the gods decide the fate of the champions based on their piety and character."
+            }
+        ];
+
+        function initTimeline() {
+            const container = document.getElementById('timeline-container');
+            plotData.forEach((item, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center gap-6 cursor-pointer group mb-6';
+                wrapper.onclick = () => selectPlot(index);
+                
+                const btn = document.createElement('div');
+                btn.className = `timeline-node w-12 h-12 rounded-none border-2 border-red-900 bg-slate-900 flex items-center justify-center font-bold text-red-500 z-10 ${index === 0 ? 'active border-red-600 bg-red-600 text-white' : ''}`;
+                btn.innerText = index + 1;
+                btn.id = `node-${index}`;
+
+                const label = document.createElement('span');
+                label.className = 'font-serif font-semibold text-lg text-slate-500 group-hover:text-red-500 transition';
+                label.innerText = item.title.split('. ')[1];
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(label);
+                container.appendChild(wrapper);
+            });
+            updatePlot(0);
+        }
+
+        function selectPlot(index) {
+            document.querySelectorAll('.timeline-node').forEach(n => {
+                n.classList.remove('active', 'border-red-600', 'bg-red-600', 'text-white');
+                n.classList.add('bg-slate-900', 'text-red-500', 'border-red-900');
+            });
+            const active = document.getElementById(`node-${index}`);
+            active.classList.add('active', 'border-red-600', 'bg-red-600', 'text-white');
+            updatePlot(index);
+        }
+
+        function updatePlot(index) {
+            const data = plotData[index];
+            const container = document.getElementById('plot-detail-container');
+            container.classList.remove('fade-in');
+            void container.offsetWidth;
+            container.classList.add('fade-in');
+            
+            document.getElementById('plot-title').innerText = data.title;
+            document.getElementById('plot-desc').innerText = data.desc;
+            document.getElementById('plot-quote').innerText = data.quote;
+        }
+
+        let radarChart = null;
+        function initCharts() {
+            const tabs = document.getElementById('character-tabs');
+            charData.forEach((char, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-6 py-4 text-xs font-serif tracking-widest transition flex-grow text-center ${index === 0 ? 'tab-active' : 'border-l-4 border-transparent text-slate-500'}`;
+                btn.innerText = char.name.toUpperCase();
+                btn.onclick = (e) => selectChar(index, e.target);
+                tabs.appendChild(btn);
+            });
+
+            const ctx = document.getElementById('characterRadarChart').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['PIETY', 'POWER', 'AGENCY', 'AGGRESSION'],
+                    datasets: charData.map((char, i) => ({
+                        label: char.name,
+                        data: char.stats,
+                        backgroundColor: i === 0 ? char.bgColor : 'rgba(0,0,0,0)',
+                        borderColor: i === 0 ? char.color : 'rgba(74, 85, 104, 0.3)',
+                        borderWidth: i === 0 ? 3 : 1,
+                        pointRadius: i === 0 ? 5 : 0
+                    }))
+                },
+                options: {
+                    scales: { r: { min: 0, max: 10, ticks: { display: false }, grid: { color: 'rgba(239, 68, 68, 0.1)' }, pointLabels: { color: '#94a3b8', font: { family: 'Cinzel', size: 14, weight: 'bold' } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+            updateCharInfo(0);
+        }
+
+        function selectChar(index, btn) {
+            document.querySelectorAll('#character-tabs button').forEach(b => b.className = 'px-6 py-4 text-xs font-serif tracking-widest transition flex-grow text-center border-l-4 border-transparent text-slate-500');
+            btn.className = 'px-6 py-4 text-xs font-serif tracking-widest transition flex-grow text-center tab-active';
+            
+            radarChart.data.datasets.forEach((ds, i) => {
+                ds.backgroundColor = i === index ? charData[i].bgColor : 'rgba(0,0,0,0)';
+                ds.borderColor = i === index ? charData[i].color : 'rgba(74, 85, 104, 0.3)';
+                ds.borderWidth = i === index ? 3 : 1;
+                ds.pointRadius = i === index ? 5 : 0;
+            });
+            radarChart.update();
+            updateCharInfo(index);
+        }
+
+        function updateCharInfo(index) {
+            const char = charData[index];
+            const content = document.getElementById('character-content');
+            content.classList.remove('fade-in');
+            void content.offsetWidth;
+            content.classList.add('fade-in');
+            
+            document.getElementById('char-name').innerText = char.name;
+            document.getElementById('char-role').innerText = char.role;
+            document.getElementById('char-desc').innerText = char.desc;
+        }
+
+        function initThemes() {
+            const container = document.getElementById('themes-container');
+            themeData.forEach(theme => {
+                const card = document.createElement('div');
+                card.className = 'theme-card p-8 rounded-lg cursor-pointer';
+                card.innerHTML = `
+                    <div class="text-5xl text-red-600 mb-6">${theme.icon}</div>
+                    <h3 class="text-2xl font-serif font-bold text-red-500 mb-4">${theme.title}</h3>
+                    <p class="text-red-400 font-bold mb-4 italic text-sm uppercase tracking-widest">${theme.brief}</p>
+                    <p class="text-slate-400 leading-relaxed">${theme.detail}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initCharts();
+            initThemes();
+        });
+    </script>
+</body>
+</html>

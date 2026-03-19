@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prometheus Bound | Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #262626;
+            color: #d1d5db;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 350px;
+        }
+        .tab-active {
+            border-left: 4px solid #f97316;
+            background-color: #374151;
+            font-weight: 600;
+        }
+        .timeline-node {
+            transition: all 0.3s ease;
+        }
+        .timeline-node:hover, .timeline-node.active {
+            background-color: #f97316;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #f97316;
+        }
+        .theme-card {
+            background-color: #1f2937;
+            transition: all 0.3s ease;
+            border: 1px solid #374151;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            border-color: #f97316;
+            background-color: #111827;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .granite-gradient {
+            background: linear-gradient(to bottom, #4b5563, #1f2937);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-[#262626]/95 backdrop-blur border-b border-orange-700 shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-serif font-bold text-xl text-orange-500 tracking-widest">
+                    AESCHYLUS: PROMETHEUS BOUND
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-teal-400 hover:text-orange-400 transition">Fire</a>
+                    <a href="#narrative" class="text-teal-400 hover:text-orange-400 transition">The Rock</a>
+                    <a href="#characters" class="text-teal-400 hover:text-orange-400 transition">Titans</a>
+                    <a href="#themes" class="text-teal-400 hover:text-orange-400 transition">Intellect</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="overview" class="relative py-24 bg-stone-900 overflow-hidden border-b-4 border-orange-600">
+        <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(#f97316 1px, transparent 1px); background-size: 30px 30px;"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-stone-100">Prometheus Bound</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed text-teal-200">
+                A cosmic standoff at the edge of the world. Witness the defiant spirit of the Titan who stole fire for humanity, enduring eternal torment to preserve the secret of fate.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#narrative" class="bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded shadow-2xl transition font-bold tracking-widest uppercase border-2 border-orange-400">Endure the Chains</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 space-y-32">
+
+        <section id="narrative" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-orange-500 border-b-2 border-teal-700 pb-2 inline-block">The Suffering of the Titan</h2>
+                <p class="text-teal-100 mt-4">
+                    The stages of Prometheus' immobilization and his refusal to yield to the tyranny of the new Olympian order.
+                </p>
+            </div>
+
+            <div class="bg-stone-800 rounded-3xl shadow-2xl border border-stone-700 p-8 flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/3 relative">
+                    <div class="absolute left-6 top-0 bottom-0 w-1 bg-stone-700"></div>
+                    <div class="space-y-8 relative z-10" id="timeline-container"></div>
+                </div>
+
+                <div class="w-full md:w-2/3 bg-stone-900 rounded-2xl p-8 min-h-[350px] flex flex-col justify-center border-r-4 border-orange-600" id="plot-detail-container">
+                    <h3 id="plot-title" class="text-3xl font-serif font-bold text-teal-400 mb-4 uppercase">The Granite Silence</h3>
+                    <p id="plot-desc" class="text-stone-300 text-lg leading-relaxed"></p>
+                    <div id="plot-quote" class="mt-6 italic text-orange-300 border-l-4 border-orange-500 pl-4 bg-orange-900/10 py-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-orange-500 border-b-2 border-teal-700 pb-2 inline-block">Divine Powers & Victims</h2>
+                <p class="text-teal-100 mt-4">
+                    Comparing the enforcers of Zeus with the defiant Titan and his fellow victims. Values explore Piety, Power, Agency, and Aggression.
+                </p>
+            </div>
+
+            <div class="bg-stone-800 rounded-3xl shadow-2xl border border-stone-700 p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="w-full">
+                    <div class="chart-container">
+                        <canvas id="characterRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-wrap border-b border-stone-700 mb-6" id="character-tabs"></div>
+                    <div id="character-content" class="flex-grow bg-stone-900 p-8 rounded-2xl border-b-4 border-teal-500">
+                        <h3 id="char-name" class="text-3xl font-serif font-bold text-orange-400 mb-2"></h3>
+                        <div id="char-role" class="text-sm font-bold text-teal-300 mb-6 tracking-widest uppercase"></div>
+                        <p id="char-desc" class="text-stone-300 leading-relaxed text-lg"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-orange-500 border-b-2 border-teal-700 pb-2 inline-block">The Fires of Knowledge</h2>
+                <p class="text-teal-100 mt-4">
+                    The intellectual and moral core of the drama—where divine law meets human necessity.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="themes-container"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-950 text-stone-500 py-16 mt-20 border-t-4 border-orange-800">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif text-3xl tracking-widest text-orange-600 mb-4">PROMETHEUS BOUND</p>
+            <p class="text-lg uppercase tracking-widest text-teal-800">Knowledge is the Ultimate Defiance</p>
+        </div>
+    </footer>
+
+    <script>
+        const plotData = [
+            {
+                title: "1. The Chaining at Scythia",
+                desc: "Might (Kratos) and Force (Bia) lead Prometheus to a remote rock. They compel Hephaestus to nail the Titan to the stone, punishing him for stealing fire and championing humanity.",
+                quote: "Fetter this malefactor to the jagged rocks... For thine own blossom of all forging fire he stole and gave to mortals."
+            },
+            {
+                title: "2. The Solitary Defiance",
+                desc: "Left alone, Prometheus cries out to the elements. He reveals that he possesses a secret regarding the future downfall of Zeus, which he refuses to disclose despite his agony.",
+                quote: "I foresee all that shall come to pass... what's determined bear, as I can, I must, knowing the might of strong Necessity is unconquerable."
+            },
+            {
+                title: "3. The Catalog of Gifts",
+                desc: "Prometheus explains to the Chorus how he civilized humanity, teaching them architecture, medicine, astronomy, and mathematics—transforming them from 'blind' creatures into masters of the world.",
+                quote: "I speak not in contempt of man... I do but tell of good gifts I conferred... All manner of arts men from Prometheus learned."
+            },
+            {
+                title: "4. The Wandering of Io",
+                desc: "Io, transformed into a heifer and tormented by a gadfly, arrives at the rock. Prometheus prophesies her long journey to Egypt and reveals that her descendant (Heracles) will eventually free him.",
+                quote: "The thirteen generation shall beget... the lion's whelp, the archer bold, whose bow shall set me free."
+            },
+            {
+                title: "5. The Final Cataclysm",
+                desc: "Hermes arrives to demand the secret of Zeus' downfall. Prometheus mocks the messenger of the gods. As he refuses to yield, Zeus sends a thunderbolt that swallows the Titan and his rock into the abyss.",
+                quote: "The earth rocks... the thunder-crash bellows... behold the wrongs I suffer!"
+            }
+        ];
+
+        const charData = [
+            {
+                name: 'Prometheus',
+                role: 'The Forethinking Titan',
+                desc: 'A visionary who sacrificed his own freedom to elevate humanity. He represents the power of the intellect and the will to resist unjust authority, even under extreme physical torment.',
+                stats: [7, 4, 10, 3], // Piety, Power, Agency, Aggression
+                color: '#f97316',
+                bgColor: 'rgba(249, 115, 22, 0.2)'
+            },
+            {
+                name: 'Might (Kratos)',
+                role: 'Enforcer of Zeus',
+                desc: 'The cynical and brutal voice of raw power. He recognizes no law but the will of the tyrant and has no sympathy for the suffering of those who transgress.',
+                stats: [2, 9, 8, 10],
+                color: '#4b5563',
+                bgColor: 'rgba(75, 85, 99, 0.2)'
+            },
+            {
+                name: 'Hephaestus',
+                role: 'The Reluctant Smith',
+                desc: 'A divine craftsman who feels kinship with Prometheus. He performs his duty out of fear of Zeus but mourns the \'execrable work\' he is forced to do.',
+                stats: [8, 7, 4, 2],
+                color: '#06b6d4',
+                bgColor: 'rgba(6, 182, 212, 0.2)'
+            },
+            {
+                name: 'Io',
+                role: 'The Tormented Mortal',
+                desc: 'A victim of divine lust and jealousy. Her endless wanderings mirror Prometheus\' static torment, representing the vulnerability of mortals in the games of the gods.',
+                stats: [9, 1, 2, 1],
+                color: '#f472b6',
+                bgColor: 'rgba(244, 114, 182, 0.2)'
+            }
+        ];
+
+        const themeData = [
+            {
+                title: "Tyranny vs. Intellect",
+                icon: "&#9881;",
+                brief: "Brute force against the power of the mind.",
+                detail: "The central conflict is between Zeus' exercise of arbitrary power and Prometheus' use of foresight and knowledge. The Titan proves that while the body can be bound, the mind remains free."
+            },
+            {
+                title: "The Price of Progress",
+                icon: "&#128293;",
+                brief: "Suffering as a catalyst for civilization.",
+                detail: "Humanity's advancement is built on the sacrifice of the Titan. Every art and science is a 'gift' that came at the cost of eternal agony for its benefactor."
+            },
+            {
+                title: "Fate and Necessity",
+                icon: "&#9203;",
+                brief: "The laws that bind even the gods.",
+                detail: "Prometheus knows that Zeus is not the ultimate power; even the 'President of Heaven' is subject to the Fates. The 'Secret' is the knowledge of the divine's own obsolescence."
+            },
+            {
+                title: "The Martyrdom of the Rebel",
+                icon: "&#9971;",
+                brief: "Standing firm against cosmic injustice.",
+                detail: "Prometheus becomes the archetype of the noble rebel. His defiance is not for personal gain but for the sake of the weaker 'creatures of a day'—mankind."
+            }
+        ];
+
+        function initTimeline() {
+            const container = document.getElementById('timeline-container');
+            plotData.forEach((item, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center gap-6 cursor-pointer group mb-6';
+                wrapper.onclick = () => selectPlot(index);
+                
+                const btn = document.createElement('div');
+                btn.className = `timeline-node w-12 h-12 rounded-lg border-2 border-stone-600 bg-stone-900 flex items-center justify-center font-bold text-teal-400 z-10 ${index === 0 ? 'active border-orange-500 bg-orange-500 text-white' : ''}`;
+                btn.innerText = index + 1;
+                btn.id = `node-${index}`;
+
+                const label = document.createElement('span');
+                label.className = 'font-serif font-semibold text-lg text-stone-500 group-hover:text-orange-400 transition';
+                label.innerText = item.title.split('. ')[1];
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(label);
+                container.appendChild(wrapper);
+            });
+            updatePlot(0);
+        }
+
+        function selectPlot(index) {
+            document.querySelectorAll('.timeline-node').forEach(n => {
+                n.classList.remove('active', 'border-orange-500', 'bg-orange-500', 'text-white');
+                n.classList.add('bg-stone-900', 'text-teal-400', 'border-stone-600');
+            });
+            const active = document.getElementById(`node-${index}`);
+            active.classList.add('active', 'border-orange-500', 'bg-orange-500', 'text-white');
+            updatePlot(index);
+        }
+
+        function updatePlot(index) {
+            const data = plotData[index];
+            const container = document.getElementById('plot-detail-container');
+            container.classList.remove('fade-in');
+            void container.offsetWidth;
+            container.classList.add('fade-in');
+            
+            document.getElementById('plot-title').innerText = data.title;
+            document.getElementById('plot-desc').innerText = data.desc;
+            document.getElementById('plot-quote').innerText = data.quote;
+        }
+
+        let radarChart = null;
+        function initCharts() {
+            const tabs = document.getElementById('character-tabs');
+            charData.forEach((char, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-6 py-4 text-xs font-serif tracking-widest transition flex-grow text-center ${index === 0 ? 'tab-active' : 'border-l-4 border-transparent text-stone-500'}`;
+                btn.innerText = char.name.toUpperCase();
+                btn.onclick = (e) => selectChar(index, e.target);
+                tabs.appendChild(btn);
+            });
+
+            const ctx = document.getElementById('characterRadarChart').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['PIETY', 'POWER', 'AGENCY', 'AGGRESSION'],
+                    datasets: charData.map((char, i) => ({
+                        label: char.name,
+                        data: char.stats,
+                        backgroundColor: i === 0 ? char.bgColor : 'rgba(0,0,0,0)',
+                        borderColor: i === 0 ? char.color : 'rgba(107, 114, 128, 0.3)',
+                        borderWidth: i === 0 ? 3 : 1,
+                        pointRadius: i === 0 ? 5 : 0
+                    }))
+                },
+                options: {
+                    scales: { r: { min: 0, max: 10, ticks: { display: false }, grid: { color: 'rgba(20, 184, 166, 0.2)' }, pointLabels: { color: '#2dd4bf', font: { family: 'Cinzel', size: 14, weight: 'bold' } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+            updateCharInfo(0);
+        }
+
+        function selectChar(index, btn) {
+            document.querySelectorAll('#character-tabs button').forEach(b => b.className = 'px-6 py-4 text-xs font-serif tracking-widest transition flex-grow text-center border-l-4 border-transparent text-stone-500');
+            btn.className = 'px-6 py-4 text-xs font-serif tracking-widest transition flex-grow text-center tab-active';
+            
+            radarChart.data.datasets.forEach((ds, i) => {
+                ds.backgroundColor = i === index ? charData[i].bgColor : 'rgba(0,0,0,0)';
+                ds.borderColor = i === index ? charData[i].color : 'rgba(107, 114, 128, 0.3)';
+                ds.borderWidth = i === index ? 3 : 1;
+                ds.pointRadius = i === index ? 5 : 0;
+            });
+            radarChart.update();
+            updateCharInfo(index);
+        }
+
+        function updateCharInfo(index) {
+            const char = charData[index];
+            const content = document.getElementById('character-content');
+            content.classList.remove('fade-in');
+            void content.offsetWidth;
+            content.classList.add('fade-in');
+            
+            document.getElementById('char-name').innerText = char.name;
+            document.getElementById('char-role').innerText = char.role;
+            document.getElementById('char-desc').innerText = char.desc;
+        }
+
+        function initThemes() {
+            const container = document.getElementById('themes-container');
+            themeData.forEach(theme => {
+                const card = document.createElement('div');
+                card.className = 'theme-card p-8 rounded-xl cursor-pointer shadow-lg';
+                card.innerHTML = `
+                    <div class="text-5xl text-orange-600 mb-6">${theme.icon}</div>
+                    <h3 class="text-2xl font-serif font-bold text-teal-400 mb-4">${theme.title}</h3>
+                    <p class="text-orange-300 font-bold mb-4 italic text-sm uppercase tracking-widest">${theme.brief}</p>
+                    <p class="text-stone-400 leading-relaxed">${theme.detail}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initCharts();
+            initThemes();
+        });
+    </script>
+</body>
+</html>

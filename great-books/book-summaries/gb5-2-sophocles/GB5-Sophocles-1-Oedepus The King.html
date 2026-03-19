@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oedipus The King: Interactive Analysis</title>
+
+    <!-- Chosen Palette: Warm Antiquity (Stone backgrounds, Amber/Bronze accents, Slate text) -->
+    <!-- Application Structure Plan: The SPA is designed as a "Literary Dashboard" to transform a linear summary into an exploratory experience. It is divided into two main functional areas. First, 'Thematic Architecture' visualizes the core concepts to provide immediate high-level context before diving into the plot. Second, the 'Tragic Arc Explorer' allows users to navigate the plot chronologically or non-linearly while simultaneously observing the narrative tension build via an adjacent chart. This structure was chosen because understanding tragedy requires seeing both the overarching themes and the step-by-step escalation of the plot. -->
+    <!-- Visualization & Content Choices:
+         1. Themes -> Goal: Organize & Compare -> Viz: Radar Chart -> Interaction: Hover for details -> Justification: Shows the multi-faceted nature of the tragedy's philosophical underpinnings. -> Library: Chart.js.
+         2. Plot Progression -> Goal: Change & Inform -> Viz: Interactive Step Navigator + Line Chart (Narrative Tension) -> Interaction: Click steps to update plot details and highlight the tension curve -> Justification: Transforms static reading into active discovery, mapping story beats to emotional stakes. -> Library: JS + Chart.js.
+         CONFIRMING: No SVG or Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #292524; /* stone-800 */
+        }
+        h1, h2, h3, .title-font {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Required Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Interactive Elements Styling */
+        .plot-step {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        .plot-step:hover {
+            background-color: #f5f5f4; /* stone-100 */
+            border-left-color: #d97706; /* amber-600 */
+        }
+        .plot-step.active {
+            background-color: #fef3c7; /* amber-50 */
+            border-left-color: #b45309; /* amber-700 */
+            font-weight: 600;
+        }
+
+        /* Custom scrollbar for text areas */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+
+    <div class="w-full max-w-7xl space-y-12">
+
+        <!-- Header -->
+        <header class="text-center space-y-4 border-b border-stone-300 pb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 tracking-tight">Oedipus The King</h1>
+            <p class="text-xl text-stone-600 italic max-w-3xl mx-auto">A drama of discovery, tracing a man's relentless pursuit of truth that ultimately leads to his own destruction. Widely considered the masterpiece of Sophocles and a cornerstone of Western tragedy.</p>
+        </header>
+
+        <!-- Section 1: Thematic Architecture -->
+        <section aria-labelledby="thematic-title" class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+            <h2 id="thematic-title" class="text-2xl font-bold text-stone-800 mb-4 border-b border-stone-100 pb-2">I. Thematic Architecture</h2>
+            <p class="mb-8 text-stone-600 leading-relaxed">
+                This section dissects the philosophical framework of the play. By visualizing the core themes, we can understand the forces acting upon the protagonist. The chart visualizes the relative conceptual weight of these themes throughout the narrative, while the interactive cards below provide the analytical context.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <!-- Theme Chart -->
+                <div class="w-full flex justify-center">
+                    <div class="chart-container">
+                        <canvas id="themeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Theme Details -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="theme-cards-container">
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Tragic Arc Explorer -->
+        <section aria-labelledby="arc-title" class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+            <h2 id="arc-title" class="text-2xl font-bold text-stone-800 mb-4 border-b border-stone-100 pb-2">II. The Tragic Arc Explorer</h2>
+            <p class="mb-8 text-stone-600 leading-relaxed">
+                Explore the chronological progression of Oedipus's downfall. This interactive dashboard pairs a visual representation of "Narrative Tension"—the rising stakes as the truth approaches—with detailed summaries of each plot stage. Select a stage from the timeline to reveal the events that unfold.
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                <!-- Tension Chart (Visual Context) -->
+                <div class="lg:col-span-12 mb-4 border-b border-stone-100 pb-8">
+                     <div class="chart-container !h-[250px] !max-h-[300px] !max-w-4xl">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Navigation List -->
+                <div class="lg:col-span-4 bg-stone-50 rounded-lg p-4 h-[400px] overflow-y-auto custom-scroll border border-stone-200 shadow-inner">
+                    <h3 class="font-bold text-stone-700 mb-4 uppercase tracking-wider text-sm">Chronology of Ruin</h3>
+                    <ul id="plot-nav" class="space-y-2">
+                        <!-- Nav items injected by JS -->
+                    </ul>
+                </div>
+
+                <!-- Dynamic Content Display -->
+                <div class="lg:col-span-8 bg-stone-50 rounded-lg p-6 md:p-8 h-[400px] overflow-y-auto custom-scroll border border-stone-200 shadow-inner">
+                    <div id="plot-content-display" class="prose prose-stone max-w-none">
+                        <h3 class="text-2xl font-bold text-amber-800 mb-2 title-font" id="display-title">Select a Plot Stage</h3>
+                        <div class="w-16 h-1 bg-amber-600 mb-6"></div>
+                        <p class="text-lg leading-relaxed text-stone-700" id="display-text">
+                            Use the navigation menu on the left to explore the narrative stages of Oedipus The King.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA STORAGE ---
+        const reportData = {
+            themes: [
+                { id: 'fate', title: 'Fate vs. Free Will', weight: 95, text: "The tension between the Oracle's prophecy and Oedipus's active choices to avoid it.", icon: '⚖️' },
+                { id: 'truth', title: 'The Pursuit of Truth', weight: 85, text: "Oedipus's commitment to the truth is both his greatest virtue as a king and his undoing as a man.", icon: '🔍' },
+                { id: 'blindness', title: 'Sight and Blindness', weight: 90, text: "Literal and metaphorical blindness recur throughout the play, particularly in the characters of Teiresias and the blinded Oedipus.", icon: '👁️' },
+                { id: 'hubris', title: 'Hubris', weight: 80, text: "Oedipus’s excessive pride and confidence in his own intellect lead him to defy the gods and the prophet.", icon: '👑' }
+            ],
+            plotPoints: [
+                { id: 1, tension: 20, title: 'I. The Scourge of Thebes', text: "The play opens with a city in crisis. A devastating plague has struck Thebes, causing crops to fail and women to die in childbirth. A delegation of citizens, led by the Priest of Zeus, appeals to King Oedipus for help. Oedipus, who famously saved the city years earlier by solving the riddle of the Sphinx, has already taken action by sending his brother-in-law, Creon, to the Oracle at Delphi." },
+                { id: 2, tension: 35, title: 'II. The Oracle\'s Command', text: "Creon returns with a message from Apollo: the plague will only end when the murderer of the previous king, Laius, is found and either executed or exiled. Oedipus, unaware of his own history, vows to find the culprit and pronounces a terrible curse upon the murderer and anyone who shelters him." },
+                { id: 3, tension: 55, title: 'III. The Blind Seer', text: "Oedipus summons the blind prophet Teiresias to identify the killer. Teiresias is initially reluctant to speak, but when Oedipus insults and accuses him of conspiracy, the prophet reveals the horrific truth: 'Thou art the slayer of the man whose slayer thou seekest.' Oedipus, blinded by his own pride (hubris), suspects that Creon and Teiresias are plotting to overthrow him." },
+                { id: 4, tension: 65, title: 'IV. The Shadow of the Past', text: "Iocasta, the Queen, enters to calm the dispute. She attempts to reassure Oedipus that oracles are fallible by citing one given to Laius: it predicted he would be killed by his son, but Laius was supposedly killed by foreign robbers at a place where three highways meet. This detail—the 'triple crossroads'—disturbs Oedipus, as he remembers killing an old man in a similar location years ago during his journey from Corinth." },
+                { id: 5, tension: 85, title: 'V. The Messenger & Shepherd', text: "A messenger arrives from Corinth with news that Polybus, the man Oedipus believed to be his father, is dead. Oedipus is relieved, thinking he has escaped the prophecy that he would kill his father, but he still fears the second part—that he would marry his mother. The messenger reveals that Polybus and Merope were not his biological parents, having received the infant Oedipus from a shepherd. This second shepherd, a former servant of Laius, is brought in and confesses the truth: the baby was the son of Laius and Iocasta, meant to be exposed to die." },
+                { id: 6, tension: 100, title: 'VI. The Catastrophe', text: "The realization hits with devastating force. Iocasta, realizing the truth before Oedipus, rushes into the palace and hangs herself. Oedipus, finally seeing the full scope of his fate, finds her body and uses the golden brooches from her gown to gouge out his eyes, choosing physical blindness to match the spiritual blindness he has suffered." },
+                { id: 7, tension: 40, title: 'VII. The Exodos', text: "The play concludes with the broken Oedipus pleading for exile. Creon assumes the regency and Oedipus is led away, a tragic figure who serves as a reminder of the fragility of human happiness. The Chorus's final lines emphasize that no man should be considered happy until he has passed life's border free from pain." }
+            ]
+        };
+
+        // --- STATE MANAGEMENT ---
+        let appState = {
+            activePlotId: 1 // Default to first section
+        };
+
+        // --- CORE INTERACTION & INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderThemeCards();
+            initThemeChart();
+            renderPlotNavigation();
+            initTensionChart();
+
+            // Set initial state
+            updatePlotDisplay(appState.activePlotId);
+        });
+
+        // --- DOM MANIPULATION FUNCTIONS ---
+        function renderThemeCards() {
+            const container = document.getElementById('theme-cards-container');
+            reportData.themes.forEach(theme => {
+                const card = document.createElement('div');
+                card.className = 'bg-stone-50 border border-stone-200 p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow';
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span class="text-2xl">${theme.icon}</span>
+                        <h4 class="font-bold text-stone-800">${theme.title}</h4>
+                    </div>
+                    <p class="text-sm text-stone-600">${theme.text}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderPlotNavigation() {
+            const nav = document.getElementById('plot-nav');
+            reportData.plotPoints.forEach(point => {
+                const li = document.createElement('li');
+                li.className = 'plot-step p-3 rounded text-stone-700 font-medium text-sm md:text-base';
+                li.dataset.id = point.id;
+                li.textContent = point.title;
+
+                li.addEventListener('click', () => {
+                    updatePlotDisplay(point.id);
+                });
+
+                nav.appendChild(li);
+            });
+        }
+
+        function updatePlotDisplay(id) {
+            appState.activePlotId = id;
+            const point = reportData.plotPoints.find(p => p.id === id);
+
+            // Update Text
+            document.getElementById('display-title').textContent = point.title;
+            document.getElementById('display-text').textContent = point.text;
+
+            // Update UI Highlighting
+            document.querySelectorAll('.plot-step').forEach(el => {
+                if (parseInt(el.dataset.id) === id) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            // Highlight corresponding point on the tension chart
+            highlightTensionChart(id);
+        }
+
+        // --- CHART.JS IMPLEMENTATIONS ---
+
+        // 1. Theme Radar Chart
+        function initThemeChart() {
+            const ctx = document.getElementById('themeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: reportData.themes.map(t => t.title),
+                    datasets: [{
+                        label: 'Thematic Weight',
+                        data: reportData.themes.map(t => t.weight),
+                        backgroundColor: [
+                            'rgba(180, 83, 9, 0.7)',  // amber-700
+                            'rgba(67, 20, 7, 0.7)',   // orange-950
+                            'rgba(120, 113, 108, 0.7)',// stone-500
+                            'rgba(28, 25, 23, 0.7)'    // stone-900
+                        ],
+                        borderWidth: 1,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            ticks: { display: false },
+                            grid: { color: 'rgba(214, 211, 209, 0.5)' } // stone-300
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { font: { family: "'Lora', serif" }, color: '#44403c' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    // Custom wrap logic for tooltips if needed, though short here
+                                    return ` ${context.label} (Prominence: ${context.raw})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Plot Tension Line Chart
+        let tensionChartInstance = null;
+        function initTensionChart() {
+            const ctx = document.getElementById('tensionChart').getContext('2d');
+
+            // Extract Roman Numerals for labels to keep them short and wrap-friendly
+            const labels = reportData.plotPoints.map(p => p.title.split('.')[0]);
+            const data = reportData.plotPoints.map(p => p.tension);
+
+            tensionChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Narrative Tension',
+                        data: data,
+                        borderColor: '#b45309', // amber-700
+                        backgroundColor: 'rgba(180, 83, 9, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#b45309',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        tension: 0.3 // Smooth curves
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeElements) => {
+                        if (activeElements.length > 0) {
+                            const dataIndex = activeElements[0].index;
+                            const pointId = reportData.plotPoints[dataIndex].id;
+                            updatePlotDisplay(pointId);
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 110,
+                            title: { display: true, text: 'Tension / Stakes', font: {family: "'Lora', serif"} },
+                            grid: { color: 'rgba(231, 229, 228, 0.5)' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: {family: "'Lora', serif", weight: 'bold'} }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            titleFont: { family: "'Lora', serif" },
+                            bodyFont: { family: "'Lora', serif" },
+                            callbacks: {
+                                title: (context) => reportData.plotPoints[context[0].dataIndex].title,
+                                label: () => "Click to view section details"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function highlightTensionChart(plotId) {
+            if (!tensionChartInstance) return;
+
+            const index = reportData.plotPoints.findIndex(p => p.id === plotId);
+            const dataset = tensionChartInstance.data.datasets[0];
+
+            // Reset all point colors
+            dataset.pointBackgroundColor = Array(reportData.plotPoints.length).fill('#fff');
+            dataset.pointRadius = Array(reportData.plotPoints.length).fill(6);
+
+            // Highlight active
+            dataset.pointBackgroundColor[index] = '#b45309'; // Fill with amber
+            dataset.pointRadius[index] = 10; // Make bigger
+
+            tensionChartInstance.update();
+        }
+    </script>
+</body>
+</html>

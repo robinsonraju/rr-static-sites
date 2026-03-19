@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Bacchantes: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #701a75;
+            color: #701a75;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">The Bacchantes <span class="text-amber-500 font-light">The Revels of Blood</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                Perhaps the most terrifying of all tragedies. The young king Pentheus tries to suppress the new religion of Dionysus, only to be seduced and destroyed by the very god he denies.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> The Struggle for Thebes
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Comparing Dionysus' effortless manipulation against Pentheus' collapsing order.
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Dionysus's Path:</strong> Starts as a mysterious 'stranger' in bonds, ends as an all-powerful, vengeful god atop the ruins of a family.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Pentheus's Path:</strong> Starts as a rigid, angry king, is slowly driven mad/infatuated with the god, and ends as a sacrifice to his own mother.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="divine" class="px-5 py-2 rounded-full bg-purple-100 text-purple-800 font-medium transition-colors mx-1">The Dionysian Revel</button><button data-filter="state" class="px-5 py-2 rounded-full bg-slate-100 text-slate-800 font-medium transition-colors mx-1">Theban Authority</button><button data-filter="maenad" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium transition-colors mx-1">The Maddened Women</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="divine">
+            <div class="text-4xl mb-3">🍷</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Dionysus</h3>
+            <span class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded mb-3">The God of Ecstasy</span>
+            <p class="text-stone-600 text-sm mb-4">A god who brings both joy and total destruction, challenging the limits of reason.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Thebes shall learn what it is to mock a god."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="state">
+            <div class="text-4xl mb-3">🏰</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Pentheus</h3>
+            <span class="inline-block px-2 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded mb-3">The Rigid King</span>
+            <p class="text-stone-600 text-sm mb-4">A young ruler whose obsession with order makes him the perfect victim for chaos.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I will put a stop to these midnight revels."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="maenad">
+            <div class="text-4xl mb-3">🩸</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Agave</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Mother</span>
+            <p class="text-stone-600 text-sm mb-4">Pentheus' mother, who in her madness mistakes her son for a lion.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"See the prize I have brought from the hills!"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="state">
+            <div class="text-4xl mb-3">👴</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Cadmus</h3>
+            <span class="inline-block px-2 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded mb-3">The Founder</span>
+            <p class="text-stone-600 text-sm mb-4">The old king who tries to appease the god through ritual, but loses everything.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Even if he be no god, call him so."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="state">
+            <div class="text-4xl mb-3">🦯</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Tiresias</h3>
+            <span class="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded mb-3">The Blind Seer</span>
+            <p class="text-stone-600 text-sm mb-4">The wise man who understands that some forces cannot be fought.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Do not mistake your own anger for wisdom."</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: Nature vs. Civilization
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    The play explores the primal forces that exist beneath the thin veneer of social order.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">The Sparagmos</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Seduction</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Sparagmos</h3>
+                <p class="text-stone-600">The ritual tearing apart of a living being (sparagmos) represents the total dissolution of the individual into the collective madness of the god.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Rite</h4>
+                    <p class="text-sm text-stone-600">Agave's awakening with her son's head is the play's most horrific moment.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🥩</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Seduction</h3>
+                <p class="text-stone-600">Dionysus doesn't use a sword; he uses Pentheus' own suppressed desires and curiosity to lead him to his doom.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Psychology</h4>
+                    <p class="text-sm text-stone-600">The 'Palace Miracle' and the changing of Pentheus' mind.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">👁️</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">A city shattered and a dynasty exiled.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">The Divine Triumph</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> Dionysus is recognized as a god</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Thebes is humbled in blood</li><li class="flex gap-3"><span class="text-amber-500">✔</span> The skeptics are punished</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">The Human Ruins</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Agave awakens to her crime</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Cadmus is turned into a serpent</li><li class="flex gap-3"><span class="text-slate-500">✖</span> The royal house of Thebes is extinct</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "The Bacchantes".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Arrival", "The Arrest", "The Seduction", "The Cithaeron Trip", "The Revel Reveal"],
+                    datasets: [
+                        {
+                            label: 'Dionysus',
+                            data: [7, 8, 9, 10, 10],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Pentheus',
+                            data: [8, 7, 4, 2, 0],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Dionysus": ["Appears as a Lydian stranger", "Allows himself to be bound by Pentheus", "Hypnotizes Pentheus into wearing women\\'s clothes", "Leads the \\'victim\\' to the mountain", "Reveals his true divine form"], "Pentheus": ["Rages against the \\'new\\' god", "Orders the arrest of the Bacchae", "Becomes obsessed with seeing the Maenads", "Dressed as a woman, loses his dignity", "Torn apart by his mother Agave"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

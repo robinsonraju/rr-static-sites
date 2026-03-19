@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Persians | Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcf9f2;
+            color: #2d2d2d;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .tab-active {
+            border-left: 4px solid #b59410;
+            background-color: #f8f1d9;
+            font-weight: 600;
+        }
+        .timeline-node {
+            transition: all 0.3s ease;
+        }
+        .timeline-node:hover, .timeline-node.active {
+            background-color: #b59410;
+            color: white;
+            transform: scale(1.1);
+        }
+        .theme-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bg-imperial {
+            background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-[#fcf9f2]/90 backdrop-blur border-b border-amber-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-serif font-bold text-xl text-amber-900 tracking-wider">
+                    AESCHYLUS: THE PERSIANS
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-amber-800 hover:text-purple-700 transition">Overview</a>
+                    <a href="#narrative" class="text-amber-800 hover:text-purple-700 transition">Fall of Empire</a>
+                    <a href="#characters" class="text-amber-800 hover:text-purple-700 transition">Dramatis Personae</a>
+                    <a href="#themes" class="text-amber-800 hover:text-purple-700 transition">Themes</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="overview" class="relative py-24 bg-purple-900 text-amber-100 overflow-hidden">
+        <div class="absolute inset-0 opacity-20" style="background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-amber-400">The Persians</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto leading-relaxed text-purple-100">
+                A tragedy of imperial hubris. Witness the collapse of the Persian might through the eyes of the defeated, where the wealth of Susa meets the iron will of Hellas.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#narrative" class="bg-amber-500 hover:bg-amber-600 text-purple-950 px-8 py-3 rounded shadow-lg transition font-bold tracking-wide uppercase">Behold the Ruin</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-16 space-y-32">
+
+        <section id="narrative" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-purple-900 border-b-2 border-amber-400 pb-2 inline-block">The Imperial Collapse</h2>
+                <p class="text-gray-700 mt-4">
+                    Explore the chronological descent of the Persian Empire from the height of its confidence to the depths of its despair.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-amber-100 p-8 flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/3 relative">
+                    <div class="absolute left-6 top-0 bottom-0 w-1 bg-amber-100"></div>
+                    <div class="space-y-8 relative z-10" id="timeline-container"></div>
+                </div>
+
+                <div class="w-full md:w-2/3 bg-amber-50 rounded-xl p-8 min-h-[350px] flex flex-col justify-center border border-amber-200" id="plot-detail-container">
+                    <h3 id="plot-title" class="text-3xl font-serif font-bold text-purple-800 mb-4">Select a stage of the fall</h3>
+                    <p id="plot-desc" class="text-gray-700 text-lg leading-relaxed"></p>
+                    <div id="plot-quote" class="mt-6 italic text-purple-700 border-l-4 border-amber-500 pl-4 font-medium"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-purple-900 border-b-2 border-amber-400 pb-2 inline-block">The Mourning Court</h2>
+                <p class="text-gray-700 mt-4">
+                    The radar chart below visualizes the psychological and political traits of the central figures. Witness how hubris and wisdom diverge in the face of fate.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-amber-100 p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="w-full">
+                    <div class="chart-container">
+                        <canvas id="characterRadarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-wrap border-b border-amber-200 mb-6" id="character-tabs"></div>
+                    <div id="character-content" class="flex-grow bg-purple-50 p-8 rounded-xl border border-purple-100">
+                        <h3 id="char-name" class="text-3xl font-serif font-bold text-purple-900 mb-2"></h3>
+                        <div id="char-role" class="text-sm font-bold text-amber-700 mb-6 tracking-widest uppercase"></div>
+                        <p id="char-desc" class="text-gray-700 leading-relaxed text-lg"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="scroll-mt-20">
+            <div class="mb-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl font-bold mb-4 font-serif text-purple-900 border-b-2 border-amber-400 pb-2 inline-block">Philosophical Foundations</h2>
+                <p class="text-gray-700 mt-4">
+                    The core conflicts of the play—between arrogance and piety, and between eastern monarchy and western freedom.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="themes-container"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-purple-950 text-amber-200 py-16 mt-20 border-t-4 border-amber-500">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif text-3xl tracking-widest text-amber-400 mb-4">THE PERSIANS</p>
+            <p class="text-lg opacity-80">Aeschylus' Masterpiece of Imperial Grief</p>
+            <div class="mt-8 text-sm opacity-60">
+                &copy; Great Books Interactive Series
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const plotData = [
+            {
+                title: "1. The Anxiety of the Elders",
+                desc: "The Chorus of Persian Elders, ministers of state, express deep foreboding for the massive host Xerxes led into Greece. They have heard no news, only the silence of a land stripped of its men.",
+                quote: "Asia is stripped of manhood; A young king hath his will... the boding heart is harried with auguries of ill."
+            },
+            {
+                title: "2. Atossa's Ominous Dream",
+                desc: "Queen Atossa describes a vision where Xerxes tries to yoke two women (Persia and Greece). Greece breaks the harness and Xerxes falls, while the ghost of his father Darius looks on in pity.",
+                quote: "The other struggled; tore the tackle up... Snapped the strong yoke asunder. My son fell."
+            },
+            {
+                title: "3. The Messenger's Lament",
+                desc: "A messenger arrives with the catastrophic news: the Persian fleet has been annihilated at Salamis. He recounts the slaughter in the narrows and the death of dozens of noble commanders.",
+                quote: "O Salamis! thou execrable name! Athens! My spirit mourns remembering thee!"
+            },
+            {
+                title: "4. The Ghost of Darius",
+                desc: "Through ritual libations, the ghost of King Darius is summoned. He condemns Xerxes for his hubris in trying to chain the Hellespont and warns that the gods punish those who overstep mortal bounds.",
+                quote: "Zeus is a chastener of froward wills and he correcteth with a heavy hand."
+            },
+            {
+                title: "5. Xerxes' Bitter Return",
+                desc: "The King arrives in rags, his army lost and his glory shattered. The play ends with a communal song of mourning, a public funeral for the pride of Persia.",
+                quote: "My fate is upon me; My star hath declined; A grief hath undone me; A doom none divined."
+            }
+        ];
+
+        const charData = [
+            {
+                name: 'Atossa',
+                role: 'Queen Mother of Persia',
+                desc: 'The widow of Darius and mother of Xerxes. She embodies the dignity and the crushing anxiety of the Persian state. Her concern is both for her son and for the stability of the empire they built.',
+                stats: [8, 7, 4, 2], // Piety, Power, Agency, Aggression
+                color: '#7e22ce',
+                bgColor: 'rgba(126, 34, 206, 0.2)'
+            },
+            {
+                name: 'Xerxes',
+                role: 'The Great King',
+                desc: 'The catalyst of the tragedy. Driven by youthful hubris, he sought to conquer Greece and bridge the sea. He returns not as a victor, but as a broken man who has led his people to ruin.',
+                stats: [3, 9, 8, 9],
+                color: '#b91c1c',
+                bgColor: 'rgba(185, 28, 28, 0.2)'
+            },
+            {
+                name: 'Ghost of Darius',
+                role: 'The Divine Father',
+                desc: 'Representing the wisdom and success of the past. He speaks from the underworld to provide a moral perspective on the defeat, emphasizing that even kings are subject to divine justice.',
+                stats: [10, 9, 5, 3],
+                color: '#b45309',
+                bgColor: 'rgba(180, 83, 9, 0.2)'
+            },
+            {
+                name: 'The Messenger',
+                role: 'The Voice of Truth',
+                desc: 'The bearer of the catastrophic reality. His vivid descriptions of the battle of Salamis bridge the gap between the battlefield and the palace, making the distant ruin immediate.',
+                stats: [6, 2, 3, 4],
+                color: '#4b5563',
+                bgColor: 'rgba(75, 85, 99, 0.2)'
+            }
+        ];
+
+        const themeData = [
+            {
+                title: "Hubris (Arrogance)",
+                icon: "&#9881;",
+                brief: "The challenge to the divine order.",
+                detail: "Xerxes' attempt to 'yoke' the Hellespont and his belief in his own god-like status are the direct causes of his downfall. The play warns that Nemesis always follows Hubris."
+            },
+            {
+                title: "Contrast of Cultures",
+                icon: "&#9878;",
+                brief: "Monarchy vs. Democracy.",
+                detail: "Aeschylus contrasts the absolute rule of the Persian King with the freedom of the Athenians, who are 'subject unto no man' yet defeat the 'matchless millions' of the East."
+            },
+            {
+                title: "Imperial Grief",
+                icon: "&#128167;",
+                brief: "A funeral for a generation.",
+                detail: "The play serves as a public lamentation. It focuses not on the victory of the Greeks, but on the profound loss suffered by the Persians, humanizing the enemy through shared sorrow."
+            },
+            {
+                title: "Fate and Retribution",
+                icon: "&#9203;",
+                brief: "The inescapable scale of Justice.",
+                detail: "The gods are seen as active participants in history. They weigh the actions of men and intervene when the balance of the world is threatened by mortal ambition."
+            }
+        ];
+
+        function initTimeline() {
+            const container = document.getElementById('timeline-container');
+            plotData.forEach((item, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center gap-6 cursor-pointer group mb-6';
+                wrapper.onclick = () => selectPlot(index);
+                
+                const btn = document.createElement('div');
+                btn.className = `timeline-node w-12 h-12 rounded-full border-4 border-amber-300 bg-white flex items-center justify-center font-bold text-purple-900 z-10 ${index === 0 ? 'active border-purple-600 bg-purple-600 text-white' : ''}`;
+                btn.innerText = index + 1;
+                btn.id = `node-${index}`;
+
+                const label = document.createElement('span');
+                label.className = 'font-serif font-semibold text-lg text-gray-600 group-hover:text-purple-700 transition';
+                label.innerText = item.title.split('. ')[1];
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(label);
+                container.appendChild(wrapper);
+            });
+            updatePlot(0);
+        }
+
+        function selectPlot(index) {
+            document.querySelectorAll('.timeline-node').forEach(n => {
+                n.classList.remove('active', 'border-purple-600', 'bg-purple-600', 'text-white');
+                n.classList.add('bg-white', 'text-purple-900', 'border-amber-300');
+            });
+            const active = document.getElementById(`node-${index}`);
+            active.classList.add('active', 'border-purple-600', 'bg-purple-600', 'text-white');
+            updatePlot(index);
+        }
+
+        function updatePlot(index) {
+            const data = plotData[index];
+            const container = document.getElementById('plot-detail-container');
+            container.classList.remove('fade-in');
+            void container.offsetWidth;
+            container.classList.add('fade-in');
+            
+            document.getElementById('plot-title').innerText = data.title;
+            document.getElementById('plot-desc').innerText = data.desc;
+            document.getElementById('plot-quote').innerText = data.quote;
+        }
+
+        let radarChart = null;
+        function initCharts() {
+            const tabs = document.getElementById('character-tabs');
+            charData.forEach((char, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-6 py-4 text-sm font-serif tracking-widest transition flex-grow text-center ${index === 0 ? 'tab-active' : 'border-l-4 border-transparent text-gray-500'}`;
+                btn.innerText = char.name.toUpperCase();
+                btn.onclick = (e) => selectChar(index, e.target);
+                tabs.appendChild(btn);
+            });
+
+            const ctx = document.getElementById('characterRadarChart').getContext('2d');
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['PIETY', 'POWER', 'AGENCY', 'AGGRESSION'],
+                    datasets: charData.map((char, i) => ({
+                        label: char.name,
+                        data: char.stats,
+                        backgroundColor: i === 0 ? char.bgColor : 'rgba(0,0,0,0)',
+                        borderColor: i === 0 ? char.color : 'rgba(200, 200, 200, 0.2)',
+                        borderWidth: i === 0 ? 3 : 1,
+                        pointRadius: i === 0 ? 5 : 0
+                    }))
+                },
+                options: {
+                    scales: { r: { min: 0, max: 10, ticks: { display: false }, grid: { color: 'rgba(180, 140, 50, 0.2)' }, pointLabels: { font: { family: 'Cinzel', size: 14, weight: 'bold' } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+            updateCharInfo(0);
+        }
+
+        function selectChar(index, btn) {
+            document.querySelectorAll('#character-tabs button').forEach(b => b.className = 'px-6 py-4 text-sm font-serif tracking-widest transition flex-grow text-center border-l-4 border-transparent text-gray-500');
+            btn.className = 'px-6 py-4 text-sm font-serif tracking-widest transition flex-grow text-center tab-active';
+            
+            radarChart.data.datasets.forEach((ds, i) => {
+                ds.backgroundColor = i === index ? charData[i].bgColor : 'rgba(0,0,0,0)';
+                ds.borderColor = i === index ? charData[i].color : 'rgba(200, 200, 200, 0.2)';
+                ds.borderWidth = i === index ? 3 : 1;
+                ds.pointRadius = i === index ? 5 : 0;
+            });
+            radarChart.update();
+            updateCharInfo(index);
+        }
+
+        function updateCharInfo(index) {
+            const char = charData[index];
+            const content = document.getElementById('character-content');
+            content.classList.remove('fade-in');
+            void content.offsetWidth;
+            content.classList.add('fade-in');
+            
+            document.getElementById('char-name').innerText = char.name;
+            document.getElementById('char-role').innerText = char.role;
+            document.getElementById('char-desc').innerText = char.desc;
+        }
+
+        function initThemes() {
+            const container = document.getElementById('themes-container');
+            themeData.forEach(theme => {
+                const card = document.createElement('div');
+                card.className = 'theme-card bg-white p-8 rounded-2xl border border-amber-100 shadow-lg cursor-pointer';
+                card.innerHTML = `
+                    <div class="text-5xl text-amber-500 mb-6">${theme.icon}</div>
+                    <h3 class="text-2xl font-serif font-bold text-purple-900 mb-4">${theme.title}</h3>
+                    <p class="text-purple-700 font-bold mb-4 italic">${theme.brief}</p>
+                    <p class="text-gray-600 leading-relaxed">${theme.detail}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initCharts();
+            initThemes();
+        });
+    </script>
+</body>
+</html>

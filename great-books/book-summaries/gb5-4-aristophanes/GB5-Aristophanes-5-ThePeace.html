@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Peace: A Plea for Harmony</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Predominantly greens (#38a169, #68d391) and earthy tones (#a06e2c, #d69e2e) for peace, agriculture, and prosperity. Contrasting reds and grays (#e53e3e, #718096) for war and suffering. Celestial blues (#4299e1) and golds (#f6e05e) for Olympus and divine elements. Neutral background (#fcfbf8) for readability. -->
+    <!-- Application Structure Plan: This SPA is designed as a "Quest for Peace" dashboard. It starts with the grim reality of "War's Dominance" and Trygaeus's desperate "Heroic Journey" to Olympus. It then details the "Discovery" of Peace's imprisonment and the collective "Rescue Operation." The dashboard culminates in the "Triumph of Peace," showcasing its blessings and satirizing those who benefit from conflict. This structure guides the user through the narrative while emphasizing the play's central message of anti-war sentiment and the desire for rural tranquility. -->
+    <!-- Visualization & Content Choices:
+    1. Hope for Peace Index Arc: A line chart (Chart.js) illustrating the fluctuating "Hope for Peace Index" throughout Trygaeus's journey, from initial despair to the ultimate triumph of Peace.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Trygaeus, Peace, War, Hermes, Chorus), detailing their role, motivations, and key quotes.
+    3. War's Mortar: An interactive section showing "War's Ingredients" (city-states) being ground in the mortar, with tooltips for the suffering each represents.
+    4. Peace's Gifts vs. War's Losses: A side-by-side comparison illustrating the tangible benefits of Peace (e.g., agricultural bounty, festivals) against the severe detriments of War (e.g., famine, destruction, profiteering).
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fcfbf8; /* Mint Cream - soft neutral */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #38a169; /* Green for Peace */
+            color: #38a169;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-green-100 selection:text-green-800">
+
+    <header class="bg-indigo-900 text-white py-12 px-6 shadow-md border-b-4 border-green-500">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">The Peace <span class="text-green-400 font-light">A Plea for Harmony</span></h1>
+            <p class="text-xl text-indigo-200 max-w-3xl leading-relaxed">
+                An interactive journey through Aristophanes' fervent call to end the Peloponnesian War, highlighting the devastating impact of conflict and the joyous return of prosperity.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="hope-for-peace-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🕊️</span> Hope for Peace Index
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart illustrates the fluctuating "Hope for Peace" throughout Trygaeus's daring quest, from the despair of war-torn Hellas to the ultimate triumph and joyful restoration of the goddess Peace.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="peaceHopeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Despair of War:</strong> Humanity suffering, gods are absent, War reigns supreme, Peace is imprisoned.
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <strong class="text-green-800">Triumph of Peace:</strong> Peace is rescued, celebrated, and her blessings return, leading to prosperity and harmony.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Cast of the Cosmic Comedy
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the divine and mortal players in this allegorical quest for peace, from the desperate farmer to the personified forces of conflict and harmony.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="mortal" class="px-5 py-2 rounded-full bg-green-100 text-green-800 font-medium hover:bg-green-200 transition-colors">Mortal Protagonists</button>
+                <button data-filter="divine" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Divine Figures</button>
+                <button data-filter="allegory" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium hover:bg-red-200 transition-colors">Personified Concepts</button>
+                <button data-filter="chorus" class="px-5 py-2 rounded-full bg-yellow-100 text-yellow-800 font-medium hover:bg-yellow-200 transition-colors">Chorus of Farmers</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="mortal">
+                    <div class="text-4xl mb-3">👨‍🌾</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Trygaeus</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Peace-Seeker</span>
+                    <p class="text-gray-600 text-sm mb-4">An Athenian farmer, desperate for peace. He flies to Olympus on a giant dung-beetle to confront Zeus about the ongoing war.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"O Zeus, what seekest thou to do? Lay down thy besom, sweep not Hellas bare!"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="divine">
+                    <div class="text-4xl mb-3">✉️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Hermes</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Divine Messenger</span>
+                    <p class="text-gray-600 text-sm mb-4">The only god left in Olympus; he explains the gods' disgust with humanity's wars and reveals Peace's imprisonment.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"They were so vexed with Hellas: therefore here... they’ve established War."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="allegory">
+                    <div class="text-4xl mb-3">⚔️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">War (Polemos)</h3>
+                    <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Destroyer</span>
+                    <p class="text-gray-600 text-sm mb-4">The personification of War, a brutal deity who has imprisoned Peace and intends to pound all the Greek city-states into oblivion in his giant mortar.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-red-400 pl-3">"O mortals! mortals! wondrous-woeful mortals! How ye will suffer in your jaws directly!"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="allegory">
+                    <div class="text-4xl mb-3">🕊️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Peace (Eirene)</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Goddess of Harmony</span>
+                    <p class="text-gray-600 text-sm mb-4">The beautiful goddess, freed from her prison by Trygaeus. Her return symbolizes the restoration of prosperity, festivals, and rural life.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Welcome, welcome, best and dearest, welcome, welcome, welcome, home." (Chorus to Peace)</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="allegory">
+                    <div class="text-4xl mb-3">🍇</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Harvest-Home (Opora)</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">Blessing of Peace</span>
+                    <p class="text-gray-600 text-sm mb-4">An attendant of Peace, symbolizing agricultural bounty and the fruits of the earth. She becomes Trygaeus's bride.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"O Harvesthome! come here and let me kiss you." (Trygaeus)</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="chorus">
+                    <div class="text-4xl mb-3">🧑‍🌾</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Farmers</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Common Citizens</span>
+                    <p class="text-gray-600 text-sm mb-4">Representing the rural population, they are the main sufferers of war and eagerly assist Trygaeus in rescuing Peace, longing for a return to their fields.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Come then, heart and soul, my comrades, haste to win this great salvation."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="war-s-mortar" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🍲</span> War's Mortar: Grinding down Hellas
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    War, the terrifying personified deity, prepares to pulverize the Greek city-states in his giant mortar. Each "ingredient" represents a city or region and the suffering inflicted upon it by the ongoing conflict.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Prasiae (Leeks)
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Prasiae (a Laconian region) is symbolically crushed by War, highlighting the widespread suffering on both sides of the Peloponnesian War.</p>
+                        <p class="italic text-sm text-gray-500">Quote: "O Prasiae! O thrice wretched... how you’ll be crushed to-day!"</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Megara (Garlic)
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Megara, long suffering under the Athenian embargo (Megarian Decree), is represented by garlic, signifying its bitter and pungent plight due to the war.</p>
+                        <p class="italic text-sm text-gray-500">Quote: "O Megara! Megara!... how you’ll be worn, and torn, and ground to salad!"</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Sicily (Cheese)
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Sicily is added as cheese, indicating its vulnerability to Athenian expansionist desires and the fear that it too would be "grated" by the conflict.</p>
+                        <p class="italic text-sm text-gray-500">Quote: "O Sicily! and you’ll be ruined too."</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Attic Honey (Athens)
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Even Athens' own prosperity ("Attic honey") is threatened by War, albeit sparingly used, symbolizing that no state is immune to the conflict's destructive nature.</p>
+                        <p class="italic text-sm text-gray-500">Quote: "And now I’ll pour some Attic honey in."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="peace-vs-war" class="bg-indigo-900 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    The Contrast: Gifts of Peace vs. Costs of War
+                </h2>
+                <p class="text-indigo-200 text-lg">
+                    The play starkly contrasts the abundant blessings brought by the return of Peace with the devastating losses and suffering inflicted by War.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="bg-indigo-800 rounded-xl p-8 border border-green-700">
+                    <h3 class="text-2xl font-bold text-green-400 mb-4 text-center">Peace's Gifts 🕊️</h3>
+                    <ul class="list-disc list-inside text-indigo-100 space-y-3">
+                        <li><strong>Agricultural Abundance:</strong> Figs, olives, wine, myrtles, luscious fruits, sweet shoots.</li>
+                        <li><strong>Festivals & Joy:</strong> Banquets, flutes, thrushes, plays, singing, dancing, joyous celebration.</li>
+                        <li><strong>Domestic Harmony:</strong> Happy days, stirring the fire, mistress at side, family life.</li>
+                        <li><strong>Economic Prosperity:</strong> Sickle-makers, farmers, artisans thrive; end of war-profiteering.</li>
+                        <li><strong>Return to Rural Idyl:</strong> Cultivation of fields, personal vineyards, tranquility.</li>
+                    </ul>
+                </div>
+                <div class="bg-indigo-800 rounded-xl p-8 border border-red-700">
+                    <h3 class="text-2xl font-bold text-red-400 mb-4 text-center">War's Losses ⚔️</h3>
+                    <ul class="list-disc list-inside text-indigo-100 space-y-3">
+                        <li><strong>Destruction & Suffering:</strong> City-states ground in a mortar, widespread tears, famine.</li>
+                        <li><strong>Economic Ruin:</strong> War-profiteers (crest-makers, spear-sellers) thrive, but overall economy suffers; farmers lose crops.</li>
+                        <li><strong>Human Cost:</strong> Constant fighting, soldiers' toil, fear, anxiety, prayers for an end to conflict.</li>
+                        <li><strong>Divine Disgust:</strong> Gods abandon humanity due to incessant fighting and prayers.</li>
+                        <li><strong>Corruption:</strong> Demagogues and leaders benefit from prolonged conflict, gaining bribes and power.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-indigo-300 italic text-md">
+                <p>"Oh the joy, the bliss, the rapture, really to behold thee come." - Chorus upon Peace's return.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-indigo-900 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Peace" (421 BC).</p>
+        <p>A timeless commentary on the human cost of conflict and the universal desire for harmony.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Hope for Peace Index Chart
+            const ctx = document.getElementById('peaceHopeChart').getContext('2d');
+            const peaceHopeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Prolonged War & Despair',
+                        'Trygaeus Flies to Olympus',
+                        "Discovery of Peace's Imprisonment",
+                        "Farmers' Arrival / Rescue Attempt",
+                        'Peace Rescued!',
+                        'Return to Athens / Celebration',
+                        'Wedding of Trygaeus & Harvest-Home'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Hope for Peace Index',
+                            data: [1, 3, 2, 5, 8, 9, 10], /* Index 0-10 */
+                            borderColor: '#38a169', // Green 600
+                            backgroundColor: 'rgba(56, 161, 105, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#2f855a', // Green 700
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Hellas is ravaged by war; gods have abandoned humanity.",
+                                        "Trygaeus takes matters into his own hands, flying to Olympus.",
+                                        "Hermes reveals War's plot and Peace's imprisonment in a pit.",
+                                        "Farmers arrive, eager to help. Collective effort begins to rescue Peace.",
+                                        "Peace, Harvest-Home, and Mayfair are successfully pulled from the pit.",
+                                        "Joyful return to Athens; preparations for a grand celebration.",
+                                        "Trygaeus marries Harvest-Home, symbolizing lasting prosperity under Peace."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Hope for Peace',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-green-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-green-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // War's Mortar Accordion
+            const accordionHeaders = document.querySelectorAll('#war-s-mortar .accordion-header');
+
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span');
+
+                    if (content.classList.contains('active')) {
+                        content.classList.remove('active');
+                        icon.textContent = '➕';
+                    } else {
+                        // Close other open accordions
+                        document.querySelectorAll('#war-s-mortar .accordion-content.active').forEach(openContent => {
+                            openContent.classList.remove('active');
+                            openContent.previousElementSibling.querySelector('span').textContent = '➕';
+                        });
+                        content.classList.add('active');
+                        icon.textContent = '➖';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

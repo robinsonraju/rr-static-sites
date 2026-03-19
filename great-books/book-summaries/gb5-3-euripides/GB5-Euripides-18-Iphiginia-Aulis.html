@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iphigenia in Aulis: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #991b1b;
+            color: #991b1b;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Iphigenia in Aulis <span class="text-amber-500 font-light">The Price of Ambition</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                A heart-wrenching tragedy about the betrayal of a child for the sake of political power. Agamemnon must decide whether to save his daughter or sacrifice her to lead the Greeks to Troy.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> The Sacrifice Choice
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Comparing Agamemnon's shifting vacillation with Iphigenia's growth into heroic martyrdom.
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Agamemnon's Path:</strong> Starts in a trap of his own making, wavering between love and ambition, and ends in a compromised, silent grief.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Iphigenia's Path:</strong> Starts as a happy, innocent child, descends into terror, and rises to a voluntary, heroic sacrifice.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="leaders" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium transition-colors mx-1">The Greek Commanders</button><button data-filter="victims" class="px-5 py-2 rounded-full bg-stone-100 text-stone-800 font-medium transition-colors mx-1">The House of Atreus</button><button data-filter="heroic" class="px-5 py-2 rounded-full bg-slate-100 text-slate-800 font-medium transition-colors mx-1">The Disillusioned</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="leaders">
+            <div class="text-4xl mb-3">👑</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Agamemnon</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The General</span>
+            <p class="text-stone-600 text-sm mb-4">A man caught in the machinery of his own ambition and the army's demand.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I am a slave to my own host."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="victims">
+            <div class="text-4xl mb-3">🕊️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Iphigenia</h3>
+            <span class="inline-block px-2 py-1 bg-stone-100 text-stone-800 text-xs font-bold rounded mb-3">The Martyr</span>
+            <p class="text-stone-600 text-sm mb-4">A girl who transforms her victimization into a noble act of patriotism.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I give my life for the glory of Hellas."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="victims">
+            <div class="text-4xl mb-3">💔</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Clytemnestra</h3>
+            <span class="inline-block px-2 py-1 bg-stone-100 text-stone-800 text-xs font-bold rounded mb-3">The Mother</span>
+            <p class="text-stone-600 text-sm mb-4">A mother whose trust is shattered, planting the seeds of her future revenge.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Is this the marriage thou hast prepared?"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="heroic">
+            <div class="text-4xl mb-3">⚔️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Achilles</h3>
+            <span class="inline-block px-2 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded mb-3">The Misused Hero</span>
+            <p class="text-stone-600 text-sm mb-4">A hero whose name was used in the lie, and who fights to protect the girl out of honor.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"My name shall not be a tool for murder."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="leaders">
+            <div class="text-4xl mb-3">🐍</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Menelaus</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Rival</span>
+            <p class="text-stone-600 text-sm mb-4">The brother who pushes for the sacrifice until he sees the pain it causes.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I see thy tears and my heart is changed."</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: The Ambivalence of Power
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    The play is a scathing critique of the 'heroic' motivations behind the Trojan War.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">The False Marriage</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Army's Demand</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The False Marriage</h3>
+                <p class="text-stone-600">The use of Achilles' name as a lure for Iphigenia represents the total corruption of heroic values for political ends.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Ruse</h4>
+                    <p class="text-sm text-stone-600">Marriage and Death become synonymous in the imagery of the play.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">👰</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Army's Demand</h3>
+                <p class="text-stone-600">Agamemnon's fear of the army's 'mob rule' highlights the fragility of individual morality in the face of collective desire.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Mob</h4>
+                    <p class="text-sm text-stone-600">The 'thousand ships' as a prison for the King's conscience.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🛡️</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">A sacrifice that starts a ten-year war and a lifelong feud.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">The Greek Departure</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> The winds change and the fleet sails</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Iphigenia is 'taken' by Artemis (or killed)</li><li class="flex gap-3"><span class="text-amber-500">✔</span> The glory of Troy is within reach</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">The Domestic Ruin</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Clytemnestra returns to Argos with hate</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Agamemnon's fate is sealed by his own act</li><li class="flex gap-3"><span class="text-slate-500">✖</span> The family is forever broken</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "Iphigenia in Aulis".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Summons", "The Regret", "The Arrival", "The Revelation", "The Sacrifice"],
+                    datasets: [
+                        {
+                            label: 'Agamemnon',
+                            data: [5, 3, 4, 2, 1],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Iphigenia',
+                            data: [10, 9, 8, 3, 10],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Agamemnon": ["Sends for his daughter under a false pretext", "Tries to send a secret letter to stop her", "Forced by Menelaus to proceed", "Confronted by Clytemnestra\\'s rage", "Oversees the sacrifice with a veiled face"], "Iphigenia": ["Arrives expecting a marriage to Achilles", "Greets her father with joy", "Learns the horrific truth", "Begs for her life", "Willingly goes to the altar to save Greece"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

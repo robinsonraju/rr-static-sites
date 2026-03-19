@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutus: The God of Wealth Restored</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Rich golds (#f6e05e, #d69e2e) and emerald greens (#38a169, #68d391) for wealth and prosperity. Stark grays (#718096, #a0aec0) and browns (#6b4f2c) for poverty and its accompanying hardship. Bright blues (#4299e1) for divine intervention, healing, and hope. A clean, light background (#fcfbf8) for contrast. -->
+    <!-- Application Structure Plan: This SPA is designed as an "Economic Allegory" dashboard. It begins with the "Problem" (unjust wealth distribution) and Chremylus's "Quest for Justice." It details the "Divine Intervention" (Plutus's healing) and the subsequent "New Economic Order" and its "Societal Impact" (reversal of fortunes). The dashboard features a "Philosophical Debate" (Poverty's arguments) and highlights the "Divine Repercussions" (gods losing status). It concludes with the "New World Order" under Plutus, emphasizing the play's allegorical nature and its commentary on economic justice and human motivation. -->
+    <!-- Visualization & Content Choices:
+    1. Justice & Prosperity Index Arc: A line chart (Chart.js) showing the transformation of Athens from an unjust, impoverished state to a (theoretically) just, wealthy one for the virtuous, and the corresponding decline of the wicked.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Chremylus, Cario, Plutus, Poverty, Informer, Hermes), detailing their roles, motivations, and changes in fortune.
+    3. The Healing Ritual: A step-by-step description of Plutus's healing in Asclepius's temple, highlighting its divine and comic elements.
+    4. Poverty's Philosophical Defense: A detailed summary or interactive comparison of Poverty's arguments for her necessity in society versus Chremylus's vision of a world without her.
+    5. Societal Repercussions: A section illustrating the humorous and satirical changes across various societal segments (Informer ruined, Old Lady abandoned, gods affected) due to the new wealth distribution.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fcfbf8; /* Mint Cream - soft neutral */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #f6e05e; /* Gold for Wealth */
+            color: #f6e05e;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-100 selection:text-yellow-800">
+
+    <header class="bg-gray-900 text-white py-12 px-6 shadow-md border-b-4 border-yellow-500">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">Plutus <span class="text-yellow-400 font-light">The God of Wealth Restored</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive exploration of Aristophanes' moral allegory, where the blind god of Wealth regains his sight, distributing riches to the virtuous and upending Athenian society.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="justice-prosperity-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">⚖️</span> Justice & Prosperity Index
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart tracks the dramatic reversal of fortunes in Athens after Plutus regains his sight, illustrating the shift from an unjust distribution of wealth to one that (theoretically) favors the virtuous.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="prosperityIndexChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <strong class="text-gray-800">Old Order (Unjust):</strong> Virtuous are poor, wicked prosper, gods benefit from human sacrifice.
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <strong class="text-green-800">New Order (Just):</strong> Virtuous become rich, wicked become poor, traditional gods suffer, Plutus is elevated.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> The Beneficiaries & The Ruined
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the diverse cast whose lives are profoundly altered by Plutus's restored vision and the subsequent redistribution of wealth.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="protagonist" class="px-5 py-2 rounded-full bg-yellow-100 text-yellow-800 font-medium hover:bg-yellow-200 transition-colors">Chremylus & Plutus</button>
+                <button data-filter="divine" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Divine Figures</button>
+                <button data-filter="social-commentary" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium hover:bg-red-200 transition-colors">Social Archetypes</button>
+                <button data-filter="allegory" class="px-5 py-2 rounded-full bg-green-100 text-green-800 font-medium hover:bg-green-200 transition-colors">Personified Allegory</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="protagonist">
+                    <div class="text-4xl mb-3">👨‍🌾</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chremylus</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">The Virtuous Poor Man</span>
+                    <p class="text-gray-600 text-sm mb-4">An old Athenian farmer, virtuous but impoverished. He seeks to rectify the unjust distribution of wealth by restoring Plutus's sight.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"I’ve been a virtuous and religious man Yet always poor and luckless."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="protagonist">
+                    <div class="text-4xl mb-3"> blinded </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Plutus</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">The God of Wealth</span>
+                    <p class="text-gray-600 text-sm mb-4">Initially blind, he distributes wealth indiscriminately. Upon regaining his sight, he promises to visit only the virtuous, causing a societal upheaval.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"’Twas Zeus that caused it, jealous of mankind... he therefore made me blind, That I might ne’er distinguish which was which."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="allegory">
+                    <div class="text-4xl mb-3"> rags </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Poverty</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">Personified Necessity</span>
+                    <p class="text-gray-600 text-sm mb-4">A fierce and eloquent goddess who argues passionately that she is the mother of all arts and crafts, essential for human industry and progress. She warns of a world without labor if wealth is freely given.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Why, if Wealth should allot himself equally out... Then none would to science his talents devote or practise a craft any more."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="social-commentary">
+                    <div class="text-4xl mb-3">🗣️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Informer (Sycophant)</h3>
+                    <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Ruined Parasite</span>
+                    <p class="text-gray-600 text-sm mb-4">A professional litigant and blackmailer who thrives on the old, unjust system. He is ruined by Plutus's new distribution, as there's no longer profit in accusing others when all are honest.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-red-400 pl-3">"O me unlucky! O my hard, hard fate! ... Why, all my goods are spirited away Through this same God."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="divine">
+                    <div class="text-4xl mb-3">✉️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Hermes</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Starving God</span>
+                    <p class="text-gray-600 text-sm mb-4">The messenger god, who finds himself starving because the new wealth distribution means no one sacrifices to the traditional gods anymore. He seeks employment in Chremylus's household.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"No laurel, meal-cake, victim, frankincense, Has any man on any altar laid... I idly cross my legs and starve."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="social-commentary">
+                    <div class="text-4xl mb-3">💔</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Old Lady & Youth</h3>
+                    <span class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded mb-3">Mercenary Love Exposed</span>
+                    <p class="text-gray-600 text-sm mb-4">The Old Lady's young lover abandons her once he becomes wealthy and no longer needs her financial support, comically exposing the true nature of their relationship.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-purple-400 pl-3">Old Lady: "He'd never leave me all my life, he said." Chremylus: "And rightly too; but now he counts you dead."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="healing-ritual" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">✨</span> The Healing Ritual of Plutus
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Plutus regains his sight through a miraculous (and comically described) healing ritual in the temple of Asclepius, the god of medicine. This event is the turning point for the entire social order.
+                </p>
+            </div>
+
+            <div class="space-y-6 text-gray-700 leading-relaxed">
+                <div class="p-4 bg-blue-50 rounded-lg border border-blue-200 shadow-sm">
+                    <h4 class="font-bold text-blue-700 mb-2">Preparation & Vigil</h4>
+                    <p>Chremylus, Cario, and Plutus travel to Asclepius's temple. After ritual bathing and offerings, everyone lies down to sleep, with strict instructions not to stir, creating an atmosphere of anticipation.</p>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg border border-green-200 shadow-sm">
+                    <h4 class="font-bold text-green-700 mb-2">Comic Interludes</h4>
+                    <p>Cario, unable to sleep, recounts humorous incidents: a priest pilfering altar offerings and an old woman's discomfort leading to a noisy "wind explosion," which Iaso and Panacea (healing goddesses) comically react to.</p>
+                </div>
+                <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200 shadow-sm">
+                    <h4 class="font-bold text-yellow-700 mb-2">The Miracle of Sight</h4>
+                    <p>Asclepius himself appears, cleanses Plutus's eyelids with a white cloth, and then two great serpents emerge from the shrine to lick his eyes. Almost instantly, Plutus regains his sight.</p>
+                    <p class="italic text-sm text-gray-500 mt-2">Cario: "And, mistress dear, before you could have drunk Of wine ten goblets, Wealth arose and saw."</p>
+                </div>
+                <div class="p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-sm">
+                    <h4 class="font-bold text-purple-700 mb-2">Simultaneous Satire</h4>
+                    <p>As Plutus is cured, Neocleides, a corrupt, blear-eyed informer, is given an agonizing plaster to make him even blinder, humorously emphasizing the play's theme of justice and retribution.</p>
+                    <p class="italic text-sm text-gray-500 mt-2">Cario: "making Neocleides still more blind."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="poverty-s-defense" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🗣️</span> Poverty's Eloquent Plea
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    The personified goddess Poverty fiercely defends her essential role in human society, arguing against Chremylus's vision of a world where wealth is universally distributed.
+                </p>
+            </div>
+
+            <div class="flex border-b border-gray-200 px-8 pt-4" id="poverty-tabs">
+                <button class="px-6 py-3 text-lg poverty-tab tab-active" data-target="poverty-benefits">Poverty's Benefits</button>
+                <button class="px-6 py-3 text-lg poverty-tab text-gray-500 hover:text-gray-800" data-target="wealth-drawbacks">Wealth's Drawbacks (in a just world)</button>
+            </div>
+
+            <div class="p-8 bg-gray-50 min-h-[300px]">
+
+                <div id="poverty-benefits" class="poverty-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Poverty as the Mother of Industry & Art</h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-700">Poverty argues that she is the essential motivator for all human labor, skill, and innovation. Without the drive to escape her, people would not work, invent, or create.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2 mt-2">
+                            <li><strong>Motivation for Labor:</strong> "If Wealth should allot himself equally out... Then none would to science his talents devote or practise a craft any more."</li>
+                            <li><strong>Source of Creativity:</strong> All arts and crafts (tanning, smithy, weaving, etc.) are born from the necessity imposed by Poverty.</li>
+                            <li><strong>Moral Character:</strong> Claims her people are "modest and orderly," while Wealth's are "insolence flushed and with wine."</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="wealth-drawbacks" class="poverty-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">The Pitfalls of Universal Wealth</h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-700">Poverty predicts that if everyone were rich, society would collapse into laziness and chaos, devoid of culture and necessary services.</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2 mt-2">
+                            <li><strong>No Labor:</strong> Who would work the fields, tan leather, or be a smith if they were already rich?</li>
+                            <li><strong>No Slaves:</strong> Without poverty, there would be no need for slave labor, disrupting the economic system.</li>
+                            <li><strong>Loss of Arts & Comforts:</strong> No beds, carpets, fine clothes, or perfumes, as no one would be motivated to produce them.</li>
+                        </ul>
+                        <p class="italic text-sm text-gray-500 mt-2">"No more on a bed will you pillow your head, for there won’t be a bed in the land."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="divine-downturn" class="bg-blue-800 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    The Olympian Crisis: Gods in Decline
+                </h2>
+                <p class="text-blue-200 text-lg">
+                    Plutus's new policy of distributing wealth only to the virtuous has a drastic, comically negative impact on the traditional Olympian gods, who depend on human sacrifices for their sustenance and status.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="bg-blue-700 rounded-xl p-6 border border-red-400 shadow-sm">
+                    <h3 class="text-xl font-bold text-red-300 mb-2">Hermes: The Starving Messenger</h3>
+                    <ul class="list-disc list-inside text-blue-100 space-y-2">
+                        <li>Complains of acute hunger; no more sacrifices mean no food or offerings for him.</li>
+                        <li>Recalls former delights: figs, honey, tipsy-cake, gammon.</li>
+                        <li>Seeks employment in Chremylus's household, willing to abandon Olympus.</li>
+                    </ul>
+                    <p class="italic text-sm text-blue-300 mt-2">"I idly cross my legs and starve."</p>
+                </div>
+                <div class="bg-blue-700 rounded-xl p-6 border border-orange-400 shadow-sm">
+                    <h3 class="text-xl font-bold text-orange-300 mb-2">Priest of Zeus: Jobless & Penniless</h3>
+                    <ul class="list-disc list-inside text-blue-100 space-y-2">
+                        <li>Faced with an empty stomach because no one sacrifices to Zeus anymore.</li>
+                        <li>Virtuous people are now wealthy and have no need to make vows or thank offerings.</li>
+                        <li>Proposes abandoning his priesthood to work for Chremylus, highlighting the mercenary nature of divine service.</li>
+                    </ul>
+                    <p class="italic text-sm text-blue-300 mt-2">"No man will slay a victim now... I’m downright famished."</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-blue-300 italic text-md">
+                <p>"Where most I prosper, there’s my father-land." - Hermes, expressing his willingness to abandon Olympus for personal gain.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "Plutus" (388 BC).</p>
+        <p>A satirical exploration of economic justice, social philosophy, and divine morality.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Justice & Prosperity Index Chart
+            const ctx = document.getElementById('prosperityIndexChart').getContext('2d');
+            const prosperityIndexChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Initial Unjust Order',
+                        "Chremylus's Quest",
+                        'Plutus Healing Ritual',
+                        'Plutus Regains Sight',
+                        'New Order Established',
+                        "Poverty's Challenge",
+                        'Divine Distress',
+                        'Plutus in Acropolis (New Deity)'
+                    ],
+                    datasets: [
+                        {
+                            label: 'Virtuous Prosperity Index',
+                            data: [1, 2, 4, 7, 9, 8, 9, 10], /* Index 0-10 */
+                            borderColor: '#38a169', // Green
+                            backgroundColor: 'rgba(56, 161, 105, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#2f855a',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Wicked Prosperity Index',
+                            data: [9, 8, 6, 3, 1, 2, 1, 0], /* Index 0-10 */
+                            borderColor: '#e53e3e', // Red
+                            backgroundColor: 'rgba(229, 62, 62, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#c53030',
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Virtuous are poor, wicked are rich. Chremylus seeks change.",
+                                        "Chremylus finds and decides to help Plutus regain sight.",
+                                        "Plutus undergoes a healing ritual in Asclepius's temple.",
+                                        "Plutus regains his sight, promising to visit only the virtuous.",
+                                        "The economic and social order reverses: good become rich, wicked become poor.",
+                                        "Poverty makes a compelling, but ultimately rejected, case for her necessity.",
+                                        "Gods like Hermes and Zeus's priest suffer from lack of sacrifices and status.",
+                                        "Plutus is installed in the Acropolis, effectively replacing Zeus as the patron deity of Athens."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Prosperity Level',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-yellow-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-yellow-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // Poverty Tabs
+            const povertyTabs = document.querySelectorAll('.poverty-tab');
+            const povertyContents = document.querySelectorAll('.poverty-content');
+
+            povertyTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    povertyTabs.forEach(t => {
+                        t.classList.remove('tab-active', 'text-gray-800');
+                        t.classList.add('text-gray-500');
+                    });
+                    tab.classList.add('tab-active', 'text-gray-800');
+                    tab.classList.remove('text-gray-500');
+
+                    const targetId = tab.getAttribute('data-target');
+
+                    povertyContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden-content');
+                        } else {
+                            content.classList.add('hidden-content');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

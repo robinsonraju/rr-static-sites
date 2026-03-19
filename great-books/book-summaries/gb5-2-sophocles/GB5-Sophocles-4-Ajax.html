@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax: The Fallen Hero</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Libre Baskerville', serif; background-color: #1a1a1a; color: #d4d4d4; }
+        h1, h2, .honor-font { font-family: 'Staatliches', cursive; letter-spacing: 0.05em; }
+        .bronze-panel { background: linear-gradient(145deg, #2a2a2a, #333); border: 1px solid #8b4513; border-radius: 0; position: relative; }
+        .bronze-panel::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #8b4513; }
+        .ajax-step { transition: all 0.2s; border: 1px solid #444; background: #222; cursor: pointer; }
+        .ajax-step:hover { border-color: #991b1b; color: #ef4444; }
+        .ajax-step.active { background: #991b1b; color: white; border-color: #991b1b; transform: scale(1.02); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-12">
+        <header class="border-b-8 border-red-900 pb-6 flex flex-col md:flex-row justify-between items-end">
+            <div>
+                <h1 class="text-8xl text-red-700 leading-none">AJAX</h1>
+                <p class="text-2xl italic text-stone-500">The tragedy of absolute honor.</p>
+            </div>
+            <div class="text-right mt-4 md:mt-0">
+                <span class="honor-font text-3xl text-stone-600">STAKES: HIGH</span>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1 space-y-8">
+                <section class="bronze-panel p-6 shadow-2xl">
+                    <h2 class="text-3xl text-orange-400 mb-6">Warrior Ethos</h2>
+                    <div class="h-64"><canvas id="radarChart"></canvas></div>
+                </section>
+                <div class="grid grid-cols-1 gap-4" id="theme-cards"></div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                <h2 class="text-4xl text-stone-300 honor-font">The Collapse of the Hero</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="plot-grid"></div>
+                <div id="content-focus" class="bronze-panel p-8 min-h-[350px] flex flex-col justify-center border-l-8 border-red-800">
+                    <h3 id="focus-title" class="text-5xl text-red-600 honor-font mb-6">Select Stage</h3>
+                    <p id="focus-text" class="text-xl leading-relaxed italic text-stone-300">"No more words; the time for action is past."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            themes: [
+                { title: 'Honor', val: 98, desc: 'The warrior\'s internal code of excellence.' },
+                { title: 'Madness', val: 80, desc: 'The divine fog that strips a hero of reason.' },
+                { title: 'Mercy', val: 65, desc: 'Odysseus\'s eventual shift toward humanity.' },
+                { title: 'Mutability', val: 85, desc: 'The shifting tides of friendship and fortune.' }
+            ],
+            plot: [
+                { title: 'The Delusion', text: 'Struck by Athena, Ajax slaughters the army\'s livestock, believing them to be his Greek rivals.' },
+                { title: 'The Awakening', text: 'Returning to sanity, Ajax realizes his shame is public and permanent.' },
+                { title: 'The Farewell', text: 'Ajax bids a final, subtly coded goodbye to his wife Tecmessa and their infant son.' },
+                { title: 'The Deception', text: 'Ajax claims he will "wash away his stains" and yield to the gods, misleading his friends.' },
+                { title: 'The Sword', text: 'In a lonely spot on the Trojan shore, Ajax falls upon the sword of Hector.' },
+                { title: 'The Corpse', text: 'Teucer finds his brother and defies the Greek kings who wish to leave Ajax unburied.' },
+                { title: 'The Reconciliation', text: 'Odysseus convinces Agamemnon that even an enemy is entitled to the dignity of burial.' }
+            ]
+        };
+
+        new Chart(document.getElementById('radarChart'), {
+            type: 'polarArea',
+            data: {
+                labels: data.themes.map(t => t.title),
+                datasets: [{ data: data.themes.map(t => t.val), backgroundColor: ['rgba(153, 27, 27, 0.7)', 'rgba(217, 119, 6, 0.7)', 'rgba(75, 85, 99, 0.7)', 'rgba(31, 41, 55, 0.7)'] }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { r: { ticks: { display: false }, grid: { color: '#444' } } } }
+        });
+
+        const cards = document.getElementById('theme-cards');
+        data.themes.forEach(t => {
+            cards.innerHTML += `<div class="bg-stone-900 p-4 border-l-2 border-orange-500"><h4 class="honor-font text-orange-500">${t.title}</h4><p class="text-xs text-stone-400 italic">${t.desc}</p></div>`;
+        });
+
+        const grid = document.getElementById('plot-grid');
+        data.plot.forEach((p, i) => {
+            const btn = document.createElement('div');
+            btn.className = `ajax-step p-4 honor-font text-xl uppercase`;
+            btn.innerHTML = `${i+1}. ${p.title}`;
+            btn.onclick = () => {
+                document.querySelectorAll('.ajax-step').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('focus-title').innerText = p.title;
+                document.getElementById('focus-text').innerText = p.text;
+            };
+            grid.appendChild(btn);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Suppliant Maidens | Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7;
+            color: #334155;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-active {
+            border-left: 4px solid #0284c7;
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+        .timeline-node {
+            transition: all 0.3s ease;
+        }
+        .timeline-node:hover, .timeline-node.active {
+            background-color: #0284c7;
+            color: white;
+            transform: scale(1.1);
+        }
+        .theme-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Chosen Palette: Parchment & Mediterranean (Off-white background #fdfbf7, Slate text #334155, Sky Blue accents #0284c7 for Argos/Divine, Crimson accents #dc2626 for Threat/Egypt) -->
+    <!-- Application Structure Plan: A dashboard-style linear flow optimizing user exploration. 1. Hero/Intro sets the stage. 2. Interactive Timeline breaks down the plot sequentially, allowing users to digest the narrative at their own pace without overwhelming text. 3. Character Matrix uses a Radar Chart to compare key traits (Piety, Power, Agency) alongside textual analysis, illustrating power dynamics visually. 4. Thematic Grid organizes the philosophical undertones, making the dense Greek themes accessible via interactive cards. -->
+    <!-- Visualization & Content Choices: 1. Plot -> Goal: Change/Timeline -> UI Timeline with dynamic text update -> Justifies non-linear reading of linear events -> Vanilla JS. 2. Characters -> Goal: Compare -> Radar Chart -> Shows power disparities instantly (e.g., Herald's hostility vs King's piety) -> Chart.js. 3. Themes -> Goal: Organize -> Card Grid with hover states -> Chunking complex ideas into digestible pieces -> Tailwind CSS + JS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="sticky top-0 z-50 bg-[#fdfbf7]/90 backdrop-blur border-b border-slate-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="font-serif font-bold text-xl text-slate-800 tracking-wider">
+                    AESCHYLUS
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-sky-600 transition">Overview</a>
+                    <a href="#narrative" class="text-slate-600 hover:text-sky-600 transition">The Journey</a>
+                    <a href="#characters" class="text-slate-600 hover:text-sky-600 transition">Dramatis Personae</a>
+                    <a href="#themes" class="text-slate-600 hover:text-sky-600 transition">Core Themes</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="overview" class="relative py-20 bg-slate-50 border-b border-slate-200 overflow-hidden">
+        <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, #cbd5e1 25%, transparent 25%, transparent 75%, #cbd5e1 75%, #cbd5e1), repeating-linear-gradient(45deg, #cbd5e1 25%, #f8fafc 25%, #f8fafc 75%, #cbd5e1 75%, #cbd5e1); background-position: 0 0, 10px 10px; background-size: 20px 20px;"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-slate-800 mb-6 tracking-tight">The Suppliant Maidens</h1>
+            <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                An interactive exploration of one of the oldest surviving Greek tragedies. Discover the profound political, moral, and divine dilemmas faced when fifty fugitive women seek sanctuary on the shores of Argos.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#narrative" class="bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded shadow transition font-semibold tracking-wide">Explore the Narrative</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-24">
+
+        <section id="narrative" class="scroll-mt-20">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4 font-serif text-slate-800">The Journey of the Danaides</h2>
+                <p class="text-slate-600">
+                    This section maps the chronological progression of the play. By interacting with the timeline, you can track the physical and emotional journey of the suppliants from their flight out of Egypt to the looming threat of war in Argos. It highlights how the plot unfolds interactively.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 flex flex-col md:flex-row gap-12 items-center">
+
+                <div class="w-full md:w-1/3 relative">
+                    <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+                    <div class="space-y-8 relative z-10" id="timeline-container">
+                    </div>
+                </div>
+
+                <div class="w-full md:w-2/3 bg-slate-50 rounded-lg p-8 min-h-[300px] flex flex-col justify-center border border-slate-100" id="plot-detail-container">
+                    <h3 id="plot-title" class="text-2xl font-serif font-bold text-sky-700 mb-4">Select a stage on the timeline</h3>
+                    <p id="plot-desc" class="text-slate-600 text-lg leading-relaxed">
+                        Begin exploring the narrative by clicking the nodes to the left.
+                    </p>
+                    <div id="plot-quote" class="mt-6 italic text-slate-500 border-l-4 border-sky-300 pl-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="scroll-mt-20">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4 font-serif text-slate-800">Dramatis Personae & Power Dynamics</h2>
+                <p class="text-slate-600">
+                    This section analyzes the key figures driving the tragedy. The interactive radar chart below visualizes the disparate traits of each entity—comparing their political power, religious piety, autonomy, and aggression. Select a character to highlight their specific attributes and read their analysis.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                <div class="w-full">
+                    <div class="chart-container">
+                        <canvas id="characterRadarChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-slate-400 mt-4">Values represent relative influence and disposition within the narrative structure.</p>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-wrap border-b border-slate-200 mb-6" id="character-tabs">
+                    </div>
+
+                    <div id="character-content" class="flex-grow bg-slate-50 p-6 rounded-lg border border-slate-100">
+                        <h3 id="char-name" class="text-2xl font-serif font-bold text-slate-800 mb-2"></h3>
+                        <div id="char-role" class="text-sm font-semibold text-sky-600 mb-4 tracking-wider uppercase"></div>
+                        <p id="char-desc" class="text-slate-600 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="scroll-mt-20">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4 font-serif text-slate-800">Core Philosophical Themes</h2>
+                <p class="text-slate-600">
+                    Aeschylus embeds profound civic and moral questions within the drama. This section isolates those themes. Click on any concept below to reveal how the text explores the tension between human governance and divine law.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="themes-container">
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 py-10 mt-20">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="font-serif text-xl tracking-widest text-slate-400 mb-4">AESCHYLUS</p>
+            <p class="text-sm">Interactive Analysis of The Suppliant Maidens</p>
+            <p class="text-xs mt-4 text-slate-500">Designed for exploratory reading and structural understanding.</p>
+        </div>
+    </footer>
+
+    <script>
+        const plotData = [
+            {
+                id: 'step-1',
+                title: "1. Self-Exile from Egypt",
+                desc: "The fifty daughters of Danaus, accompanied by their father, flee Egypt. They are not outlaws, but 'self-exiled' to escape what they deem an unholy, incestuous marriage to their cousins, the fifty sons of King Aegyptus.",
+                quote: "No way but this to escape abhorred embraces, / Marriage rites unholy that true love shuns..."
+            },
+            {
+                id: 'step-2',
+                title: "2. The Suppliants' Plea in Argos",
+                desc: "Arriving on the shores of Argos, the maidens claim sanctuary. They prove their right to Argive protection by recounting their lineage from Io, an Argive priestess loved by Zeus. They bear the traditional olive branches of suppliants.",
+                quote: "Where else the world o’er should we welcome find, / Having no arms but the suppliant’s feeble weapons..."
+            },
+            {
+                id: 'step-3',
+                title: "3. The King's Dilemma",
+                desc: "King Pelasgus arrives and is faced with an impossible choice. Protecting the women means inviting a devastating war with Egypt. Rejecting them means incurring the wrath of Zeus Hikesios (Protector of Suppliants) and polluting the city.",
+                quote: "If I shall fail towards you... ye threaten me / With such pollution, strain words how ye will, / Hyperbole cannot o’ershoot the mark."
+            },
+            {
+                id: 'step-4',
+                title: "4. The Democratic Decision",
+                desc: "Unwilling to act as an absolute tyrant, Pelasgus defers to the 'sovran voice' of the Argive people. The assembly votes unanimously to grant the women sanctuary and promises to defend them, reflecting Athenian democratic ideals.",
+                quote: "The Argives have decreed that we shall hold / This soil with them, immune from all reprisals..."
+            },
+            {
+                id: 'step-5',
+                title: "5. The Egyptian Threat Arrives",
+                desc: "The Egyptian fleet lands. A violent Herald attempts to drag the women away, showing utter contempt for Greek gods. King Pelasgus intervenes, standing firm on the people's decree, setting the stage for an inevitable war.",
+                quote: "Thou wilt find / That thy wild shooting misses the just scope / And aim of action... we yield not to force."
+            }
+        ];
+
+        const timelineContainer = document.getElementById('timeline-container');
+        const plotTitle = document.getElementById('plot-title');
+        const plotDesc = document.getElementById('plot-desc');
+        const plotQuote = document.getElementById('plot-quote');
+
+        function renderTimeline() {
+            plotData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `timeline-node w-12 h-12 rounded-full bg-white border-2 border-slate-300 flex items-center justify-center font-bold text-slate-500 relative z-10 cursor-pointer mb-4 ${index === 0 ? 'active border-sky-600 bg-sky-600 text-white' : ''}`;
+                btn.innerHTML = index + 1;
+                btn.onclick = () => selectPlotNode(index, btn);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center gap-4 cursor-pointer group';
+                wrapper.onclick = () => selectPlotNode(index, btn);
+
+                const label = document.createElement('span');
+                label.className = 'font-semibold text-slate-600 group-hover:text-sky-600 transition';
+                label.innerText = item.title.substring(3);
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(label);
+                timelineContainer.appendChild(wrapper);
+            });
+            updatePlotDetail(0);
+        }
+
+        function selectPlotNode(index, buttonElement) {
+            document.querySelectorAll('.timeline-node').forEach(el => {
+                el.classList.remove('active', 'border-sky-600', 'bg-sky-600', 'text-white');
+                el.classList.add('bg-white', 'text-slate-500', 'border-slate-300');
+            });
+            buttonElement.classList.remove('bg-white', 'text-slate-500', 'border-slate-300');
+            buttonElement.classList.add('active', 'border-sky-600', 'bg-sky-600', 'text-white');
+
+            const detailContainer = document.getElementById('plot-detail-container');
+            detailContainer.classList.remove('fade-in');
+            void detailContainer.offsetWidth;
+            detailContainer.classList.add('fade-in');
+
+            updatePlotDetail(index);
+        }
+
+        function updatePlotDetail(index) {
+            const data = plotData[index];
+            plotTitle.innerText = data.title;
+            plotDesc.innerText = data.desc;
+            plotQuote.innerText = `"${data.quote}"`;
+        }
+
+        const charData = [
+            {
+                id: 'danaides',
+                name: 'The Chorus (Danaides)',
+                role: 'The Protagonists & Suppliants',
+                desc: 'The fifty daughters of Danaus. Unlike typical tragic victims, they actively seek autonomy. They wield their piety and the threat of suicide at the altars as weapons to force a political intervention. Their primary drive is the preservation of their "virgin liberty".',
+                stats: [9, 1, 8, 2],
+                color: 'rgba(2, 132, 199, 1)',
+                bgColor: 'rgba(2, 132, 199, 0.2)'
+            },
+            {
+                id: 'pelasgus',
+                name: 'King Pelasgus',
+                role: 'Constitutional Monarch of Argos',
+                desc: 'A model ruler who refuses to act without the consent of his citizens. He is caught in a paralyzing bind between practical statecraft (avoiding war) and religious obligation (honoring Zeus Hikesios). He ultimately chooses righteousness guided by democratic consensus.',
+                stats: [8, 8, 5, 2],
+                color: 'rgba(51, 65, 85, 1)',
+                bgColor: 'rgba(51, 65, 85, 0.2)'
+            },
+            {
+                id: 'herald',
+                name: 'The Egyptian Herald',
+                role: 'The Antagonist Force',
+                desc: 'Represents the sons of Aegyptus. He is characterized by brute force, arrogance, and a complete disregard for Greek customs and gods. He embodies the concept of "might over right," recognizing only the power of the Nile and his masters.',
+                stats: [0, 7, 7, 10],
+                color: 'rgba(220, 38, 38, 1)',
+                bgColor: 'rgba(220, 38, 38, 0.2)'
+            },
+            {
+                id: 'danaus',
+                name: 'Danaus',
+                role: 'Father & Strategist',
+                desc: 'The "counsel-in-chief" who guides his daughters. While he is their protector, he largely operates in the background, securing alliances and gathering intelligence while the women take the forefront in pleading their case.',
+                stats: [7, 4, 6, 1],
+                color: 'rgba(15, 118, 110, 1)',
+                bgColor: 'rgba(15, 118, 110, 0.2)'
+            }
+        ];
+
+        let radarChartInstance = null;
+
+        function initCharacters() {
+            const tabsContainer = document.getElementById('character-tabs');
+
+            charData.forEach((char, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-3 text-sm transition text-slate-600 hover:text-sky-600 focus:outline-none w-1/2 md:w-auto text-left md:text-center ${index === 0 ? 'tab-active' : 'border-l-4 border-transparent'}`;
+                btn.innerText = char.name;
+                btn.onclick = () => selectCharacter(index, btn);
+                tabsContainer.appendChild(btn);
+            });
+
+            renderChart();
+            updateCharacterContent(0);
+        }
+
+        function selectCharacter(index, btnElement) {
+            const tabs = document.getElementById('character-tabs').children;
+            for(let i=0; i<tabs.length; i++) {
+                tabs[i].classList.remove('tab-active', 'border-sky-600');
+                tabs[i].classList.add('border-transparent');
+            }
+            btnElement.classList.add('tab-active');
+            btnElement.classList.remove('border-transparent');
+
+            updateCharacterContent(index);
+            highlightChartDataset(index);
+        }
+
+        function updateCharacterContent(index) {
+            const data = charData[index];
+            document.getElementById('char-name').innerText = data.name;
+            document.getElementById('char-role').innerText = data.role;
+            document.getElementById('char-desc').innerText = data.desc;
+
+            const contentDiv = document.getElementById('character-content');
+            contentDiv.classList.remove('fade-in');
+            void contentDiv.offsetWidth;
+            contentDiv.classList.add('fade-in');
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('characterRadarChart').getContext('2d');
+
+            const datasets = charData.map((char, index) => ({
+                label: char.name,
+                data: char.stats,
+                backgroundColor: index === 0 ? char.bgColor : 'rgba(0,0,0,0)',
+                borderColor: index === 0 ? char.color : 'rgba(203, 213, 225, 0.5)',
+                pointBackgroundColor: char.color,
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: char.color,
+                borderWidth: index === 0 ? 3 : 1,
+                pointRadius: index === 0 ? 4 : 0
+            }));
+
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Piety / Law', 'Political Power', 'Agency / Will', 'Hostility / Aggression'],
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            pointLabels: {
+                                font: { family: "'Cinzel', serif", size: 12, weight: 'bold' },
+                                color: '#334155'
+                            },
+                            ticks: { display: false, min: 0, max: 10 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(51, 65, 85, 0.9)',
+                            titleFont: { family: "'Inter', sans-serif" },
+                            bodyFont: { family: "'Inter', sans-serif" },
+                            callbacks: {
+                                title: function(context) { return context[0].dataset.label; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function highlightChartDataset(activeIndex) {
+            radarChartInstance.data.datasets.forEach((dataset, index) => {
+                if (index === activeIndex) {
+                    dataset.backgroundColor = charData[index].bgColor;
+                    dataset.borderColor = charData[index].color;
+                    dataset.borderWidth = 3;
+                    dataset.pointRadius = 4;
+                } else {
+                    dataset.backgroundColor = 'rgba(0,0,0,0)';
+                    dataset.borderColor = 'rgba(203, 213, 225, 0.4)';
+                    dataset.borderWidth = 1;
+                    dataset.pointRadius = 0;
+                }
+            });
+            radarChartInstance.update();
+        }
+
+        const themeData = [
+            {
+                title: "Sanctuary (Xenia)",
+                icon: "&#9962;",
+                brief: "The sacred duty to protect refugees.",
+                detail: "The central conflict pits the practical safety of the state against the absolute divine obligation of hospitality. Rejecting the suppliants brings ruin; accepting them brings war."
+            },
+            {
+                title: "Democracy",
+                icon: "&#10038;",
+                brief: "The power of the 'sovran voice'.",
+                detail: "Aeschylus projects 5th-century Athenian democratic ideals onto the heroic age. Pelasgus refuses absolute power, showing that true authority rests on the consensus of the people."
+            },
+            {
+                title: "Female Agency",
+                icon: "&#9792;",
+                brief: "A 'woman's war' against coercion.",
+                detail: "The Danaides are highly active protagonists. They manipulate religious law, threaten suicide, and negotiate fiercely to maintain their autonomy and avoid forced marriage."
+            },
+            {
+                title: "Divine Justice",
+                icon: "&#9876;",
+                brief: "The inescapable wrath of Zeus.",
+                detail: "Human laws and military might are secondary to divine retribution. The play asserts that an 'unforgetting instrument of wrath' pursues those who ignore the cries of the vulnerable."
+            }
+        ];
+
+        function initThemes() {
+            const container = document.getElementById('themes-container');
+
+            themeData.forEach(theme => {
+                const card = document.createElement('div');
+                card.className = 'theme-card bg-white p-6 rounded-xl border border-slate-100 shadow-sm cursor-pointer flex flex-col h-full';
+
+                card.innerHTML = `
+                    <div class="text-4xl text-sky-600 mb-4 opacity-80">${theme.icon}</div>
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2">${theme.title}</h3>
+                    <p class="text-slate-600 font-semibold mb-3 text-sm">${theme.brief}</p>
+                    <div class="theme-detail overflow-hidden max-h-0 opacity-0 transition-all duration-500 ease-in-out">
+                        <p class="text-slate-500 text-sm mt-2 pt-4 border-t border-slate-100">${theme.detail}</p>
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    const detail = card.querySelector('.theme-detail');
+                    const isExpanded = detail.classList.contains('max-h-40');
+
+                    document.querySelectorAll('.theme-detail').forEach(el => {
+                        el.classList.remove('max-h-40', 'opacity-100');
+                        el.classList.add('max-h-0', 'opacity-0');
+                    });
+
+                    if (!isExpanded) {
+                        detail.classList.remove('max-h-0', 'opacity-0');
+                        detail.classList.add('max-h-40', 'opacity-100');
+                    }
+                };
+
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimeline();
+            initCharacters();
+            initThemes();
+        });
+
+    </script>
+</body>
+</html>

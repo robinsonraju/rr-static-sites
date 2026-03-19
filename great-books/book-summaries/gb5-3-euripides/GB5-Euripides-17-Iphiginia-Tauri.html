@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iphigenia in Tauris: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #0891b2;
+            color: #0891b2;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Iphigenia in Tauris <span class="text-amber-500 font-light">The Escape from the Barbarians</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                A high-adventure tragicomedy. Iphigenia, saved from Aulis and living as a priestess in a foreign land, must recognize and save her brother Orestes before she is forced to sacrifice him.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> Recognition & Rescue
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Tracking the convergence of the long-lost siblings in a land of blood.
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Iphigenia's Path:</strong> Starts as a lonely, grieving priestess, finds her brother, and uses her wit to orchestrate a daring escape.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Orestes's Path:</strong> Starts as a hounded fugitive seeking relief from the Furies, and finds his sister and his redemption.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="greek" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium transition-colors mx-1">The Greek Siblings</button><button data-filter="barbarian" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium transition-colors mx-1">The Taurian Court</button><button data-filter="divine" class="px-5 py-2 rounded-full bg-cyan-100 text-cyan-800 font-medium transition-colors mx-1">Divine Protection</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="greek">
+            <div class="text-4xl mb-3">🕯️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Iphigenia</h3>
+            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Priestess</span>
+            <p class="text-stone-600 text-sm mb-4">A woman who has turned her trauma into a mask of duty, until her past returns.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I am a Greek in a land that hates my kind."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="greek">
+            <div class="text-4xl mb-3">🗡️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Orestes</h3>
+            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Exile</span>
+            <p class="text-stone-600 text-sm mb-4">A man seeking the end of his suffering at the edge of the world.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Sister, is it truly thou, from the knife\'s edge?"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="barbarian">
+            <div class="text-4xl mb-3">👑</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Thoas</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Taurian King</span>
+            <p class="text-stone-600 text-sm mb-4">A king who follows ancient, bloody laws but is outwitted by Greek cleverness.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"No Greek shall leave this shore alive."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="greek">
+            <div class="text-4xl mb-3">🤝</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Pylades</h3>
+            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Friend</span>
+            <p class="text-stone-600 text-sm mb-4">The steadfast companion who facilitates the recognition and the escape.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"We will win through or die together."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="divine">
+            <div class="text-4xl mb-3">🦉</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Athena</h3>
+            <span class="inline-block px-2 py-1 bg-cyan-100 text-cyan-800 text-xs font-bold rounded mb-3">The Goddess</span>
+            <p class="text-stone-600 text-sm mb-4">The one who stops the King's pursuit and blesses the return to Athens.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"It is the will of Zeus that they return home."</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: The Recognition Scene
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Aristotle praised this recognition (Anagnorisis) as one of the best in Greek drama.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">The Letter</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Barbaric Rite</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Letter</h3>
+                <p class="text-stone-600">The letter Iphigenia writes is the catalyst for the recognition, as she recites its contents to Orestes.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Device</h4>
+                    <p class="text-sm text-stone-600">A perfect blend of emotional weight and structural cleverness.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">📜</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Barbaric Rite</h3>
+                <p class="text-stone-600">The play contrasts the 'barbaric' human sacrifice of the Taurians with the 'civilized' laws the Greeks are trying to restore.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Theme</h4>
+                    <p class="text-sm text-stone-600">A study of foreign vs. native customs.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🩸</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">A successful flight across the wine-dark sea.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">The Greek Return</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> The siblings are reunited and safe</li><li class="flex gap-3"><span class="text-amber-500">✔</span> The statue of Artemis is brought to Attica</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Orestes' madness is finally cured</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">The Taurian Loss</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Thoas is left at the shore</li><li class="flex gap-3"><span class="text-slate-500">✖</span> The bloody sacrifices are ended by decree</li><li class="flex gap-3"><span class="text-slate-500">✖</span> The Greeks have won through wit</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "Iphigenia in Tauris".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Dream", "The Capture", "The Letter", "The Recognition", "The Sea Escape"],
+                    datasets: [
+                        {
+                            label: 'Iphigenia',
+                            data: [4, 5, 7, 10, 10],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Orestes',
+                            data: [2, 1, 6, 9, 10],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Iphigenia": ["Haunted by dreams of her home", "Ordered to sacrifice the Greek captives", "Writes a letter to be sent to Argos", "Recognizes Orestes through his knowledge of their family", "Tricks the King and sails for Greece"], "Orestes": ["Arrives to steal the statue of Artemis", "Captured by the Taurians", "Hears the name of the priestess", "Reveals his identity to his sister", "Fights the Taurian guards at the shore"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

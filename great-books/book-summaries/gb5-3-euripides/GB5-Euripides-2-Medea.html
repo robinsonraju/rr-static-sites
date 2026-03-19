@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medea: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #b91c1c;
+            color: #b91c1c;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Medea <span class="text-amber-500 font-light">The Sorceress's Revenge</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                One of the most powerful and controversial tragedies ever written. A study of betrayal, exile, and the horrific cost of a woman's fury against a husband who treats her as a disposable asset.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> Domestic War: Medea vs. Jason
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Tracking the shift in power from Jason's social ascent to Medea's catastrophic psychological victory.
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Medea's Path:</strong> Starts in suicidal despair, finds her resolve through dark planning, and ascends to divine-like vengeance.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Jason's Path:</strong> Starts at his peak, marrying into royalty, but is systematically stripped of his future, legacy, and sanity.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="sorceress" class="px-5 py-2 rounded-full bg-purple-100 text-purple-800 font-medium transition-colors mx-1">The Outcast</button><button data-filter="royalty" class="px-5 py-2 rounded-full bg-amber-100 text-amber-800 font-medium transition-colors mx-1">Corinthian Royalty</button><button data-filter="innocents" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium transition-colors mx-1">The Victims</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="sorceress">
+            <div class="text-4xl mb-3">🐉</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Medea</h3>
+            <span class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded mb-3">Colchian Princess</span>
+            <p class="text-stone-600 text-sm mb-4">A woman of high intellect and divine heritage who will not be scorned.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I am a wretched suffering woman I!"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="royalty">
+            <div class="text-4xl mb-3">🚢</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Jason</h3>
+            <span class="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded mb-3">Argonaut Hero</span>
+            <p class="text-stone-600 text-sm mb-4">An opportunist who believes his past deeds justify his current betrayal.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Every single man cares for himself more than for his neighbour."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="royalty">
+            <div class="text-4xl mb-3">👑</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Creon</h3>
+            <span class="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded mb-3">King of Corinth</span>
+            <p class="text-stone-600 text-sm mb-4">A ruler whose fear of Medea's wisdom leads him to grant her the very day she needs to destroy him.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I fear thee... thou art a sorceress."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="innocents">
+            <div class="text-4xl mb-3">👦👦</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">The Children</h3>
+            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">Sons of Jason</span>
+            <p class="text-stone-600 text-sm mb-4">The ultimate pawns in their parents' war of ego and vengeance.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Ah, me! what shall I do? whither fly from my mother\'s hands?"</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="royalty">
+            <div class="text-4xl mb-3">🏛️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Aegeus</h3>
+            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">King of Athens</span>
+            <p class="text-stone-600 text-sm mb-4">The unsuspecting king who provides Medea with her 'safety net'.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"May I never be a source of grief to my friends!"</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: The Sorcery of Vengeance
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    How Medea uses her status as a 'barbarian' and a witch to overturn the Greek social order.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">The Poisoned Gifts</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Sun Chariot</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Poisoned Gifts</h3>
+                <p class="text-stone-600">The robe and crown represent the 'trappings' of civilization and royalty, turned into instruments of agonizing death by Medea's craft.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Chemistry</h4>
+                    <p class="text-sm text-stone-600">The fire that consumes the princess is no ordinary flame; it is the distilled essence of Medea's divine lineage and earthly hate.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">👗</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Sun Chariot</h3>
+                <p class="text-stone-600">Medea's escape in the chariot of Helios (the Sun) signifies that the gods do not necessarily punish the wicked—they sometimes facilitate the powerful.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Deus Ex</h4>
+                    <p class="text-sm text-stone-600">By ending the play in the sky, Medea moves beyond the reach of human law and Jason's grief.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">☀️</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">The household of Jason is erased from history.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">Medea's Triumph</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> Escapes to Athens with impunity</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Destroyed Jason's future lineage</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Asserted her divine power</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">Jason's Ruin</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Loses his bride, king, and children</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Loses his reputation as a hero</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Left to rot in a house of ghosts</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "Medea".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Betrayal", "The Decree", "The Poison Gift", "The Infanticide", "The Dragon Chariot"],
+                    datasets: [
+                        {
+                            label: 'Medea',
+                            data: [1, 3, 6, 8, 10],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Jason',
+                            data: [9, 8, 7, 2, 0],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Medea": ["Abandoned and weeping in the house", "Negotiates one final day in Corinth", "Sends the poisoned robe to the princess", "Kills her sons to destroy Jason\\'s legacy", "Escapes in the Sun\\'s chariot"], "Jason": ["Marries the princess for \\'security\\'", "Offers Medea money for her exile", "Accepts gifts for his new bride", "Discovers his children are dead", "Left alone, cursed and broken"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

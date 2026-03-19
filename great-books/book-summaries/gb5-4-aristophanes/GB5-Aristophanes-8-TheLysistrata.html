@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lysistrata: The Women's Revolution for Peace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Vibrant purples (#a78bfa, #c4b5fd) and pinks (#fbcfe8, #fce7f3) for the women's strength, femininity, and unity. Golds (#fcd34d, #fbbd24) for their triumph. Contrasting drab grays and browns (#4b5563, #6b7280) for the men's militarism, frustration, and eventual defeat. Bright greens (#10b981, #34d399) for peace and fertility. Neutral background (#fffafa) for clarity. -->
+    <!-- Application Structure Plan: This SPA is designed as a "Revolution of the Sexes" dashboard. It begins with the "Problem" (the war's impact on women) and Lysistrata's "Radical Solution" (the sex-strike and Acropolis seizure). It details the "Implementation" through various confrontations (Choruses, Magistrate), the "Psychological Warfare" waged by the women (Cinesias incident), and the ultimate "Climax" (peace negotiations facilitated by Reconciliation). The dashboard concludes with the "Triumph of Peace" and new societal harmony. This structure highlights the audacious action of the women and the humor in their method. -->
+    <!-- Visualization & Content Choices:
+    1. Sex-Strike Effectiveness Index: A line chart (Chart.js) showing the rising effectiveness of the women's strike (e.g., men's desperation levels), correlating with a declining "War Enthusiasm Index" for men, illustrating the political impact of the personal sacrifice.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Lysistrata, Myrrhina, Lampito, Magistrate, Cinesias, Reconciliation), detailing their roles, motivations, and key quotes.
+    3. The Oath & Acropolis Seizure: A section describing the women's initial pact and their strategic takeover of the Acropolis and its treasury.
+    4. Cinesias's Plight: A detailed narrative or series of interactive elements illustrating Cinesias's escalating sexual frustration and Myrrhina's teasing, exemplifying the strike's power.
+    5. Mapping Peace: A symbolic description of Reconciliation's body, used as a literal map for negotiating disputed territories, highlighting the women's practical diplomacy.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fffafa; /* Snow */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #a78bfa; /* Purple for women's unity */
+            color: #a78bfa;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-100 selection:text-purple-800">
+
+    <header class="bg-gray-900 text-white py-12 px-6 shadow-md border-b-4 border-purple-500">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">Lysistrata <span class="text-purple-400 font-light">The Women's Revolution for Peace</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive exploration of Aristophanes' iconic comedy, where women use a radical strategy to force an end to the Peloponnesian War.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="sex-strike-effectiveness-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> Sex-Strike Effectiveness Index
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart tracks the escalating impact of the women's sex-strike on the men's "War Enthusiasm," illustrating how increasing sexual frustration directly correlates with a diminishing will to fight.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="strikeEffectivenessChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <strong class="text-purple-800">Women's Resolve / Strike Effectiveness:</strong> Represents the women's increasing unity and the growing pressure exerted on the men.
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Men's War Enthusiasm / Frustration:</strong> Shows the decline in men's desire for war as their sexual frustration mounts due to the strike.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Architects of Peace & War-Weary Warriors
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the women who dared to challenge the status quo and the men who faced their unexpected, irresistible revolution.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="female-leader" class="px-5 py-2 rounded-full bg-purple-100 text-purple-800 font-medium hover:bg-purple-200 transition-colors">Female Leaders</button>
+                <button data-filter="male-authority" class="px-5 py-2 rounded-full bg-gray-100 text-gray-800 font-medium hover:bg-gray-200 transition-colors">Male Authority</button>
+                <button data-filter="female-ally" class="px-5 py-2 rounded-full bg-pink-100 text-pink-800 font-medium hover:bg-pink-200 transition-colors">Female Allies</button>
+                <button data-filter="male-affected" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium hover:bg-red-200 transition-colors">Men Affected by Strike</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="female-leader">
+                    <div class="text-4xl mb-3">🧠</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Lysistrata</h3>
+                    <span class="inline-block px-2 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded mb-3">The Army-Disbander</span>
+                    <p class="text-gray-600 text-sm mb-4">The intelligent and courageous Athenian woman who masterminds the sex-strike to compel an end to the Peloponnesian War.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-purple-400 pl-3">"O ladies! sisters! if we really mean To make the men make Peace, there’s but one way, We must abstain—"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="female-ally">
+                    <div class="text-4xl mb-3">💪</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Lampito</h3>
+                    <span class="inline-block px-2 py-1 bg-pink-100 text-pink-800 text-xs font-bold rounded mb-3">The Spartan Ally</span>
+                    <p class="text-gray-600 text-sm mb-4">A strong, athletic Spartan woman who is key to uniting the women of Greece in the anti-war effort, showing cross-state female solidarity.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-pink-400 pl-3">"Haith, by the Twa’, ’Tis sair to bide your lane, withouten men. Still it maun be: we maun hae Peace, at a’ risks."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="male-authority">
+                    <div class="text-4xl mb-3">👴</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Magistrate (Proboulos)</h3>
+                    <span class="inline-block px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded mb-3">Pompous Authority</span>
+                    <p class="text-gray-600 text-sm mb-4">A bewildered Athenian official who embodies male civic authority, rendered impotent and humiliated by the women's actions. He is dressed in female attire.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-gray-400 pl-3">"Has then the women’s wantonness blazed out, Their constant timbrels and Sabaziuses?"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="male-affected">
+                    <div class="text-4xl mb-3">😩</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Cinesias</h3>
+                    <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">Myrrhina's Frustrated Husband</span>
+                    <p class="text-gray-600 text-sm mb-4">The husband of Myrrhina, whose escalating sexual frustration vividly portrays the effectiveness of the women's strike.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-red-400 pl-3">"O me! these pangs and paroxysms of love, Riving my heart, keen as a torturer’s wheel!"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="female-ally">
+                    <div class="text-4xl mb-3">💃</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Myrrhina</h3>
+                    <span class="inline-block px-2 py-1 bg-pink-100 text-pink-800 text-xs font-bold rounded mb-3">The Teaser</span>
+                    <p class="text-gray-600 text-sm mb-4">An Athenian woman who expertly tantalizes her husband Cinesias, pushing him to the brink of desperation to highlight the power of the strike.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-pink-400 pl-3">"No, no—and yet I won’t say I don’t love you." (to Cinesias)</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="female-leader">
+                    <div class="text-4xl mb-3">🤝</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Reconciliation (Diallage)</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">Personified Peace</span>
+                    <p class="text-gray-600 text-sm mb-4">A beautiful, naked female figure, personifying peace, whose body is used by Lysistrata as a map to facilitate the peace negotiations between the warring parties.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Go, Reconciliation, Bring those Laconians hither..." (Lysistrata to her)</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="the-oath-and-acropolis-seizure" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🤝</span> The Radical Plan: Oath & Acropolis Seizure
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Lysistrata's revolution begins with a powerful, unifying oath among women from across Greece and a strategic takeover of Athens' most sacred and financially important site.
+                </p>
+            </div>
+
+            <div class="space-y-6 text-gray-700 leading-relaxed">
+                <div class="p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-sm">
+                    <h4 class="font-bold text-purple-700 mb-2">The Sex-Strike Oath</h4>
+                    <p>Women from Athens, Sparta, Boeotia, and Corinth gather to swear a solemn oath over a giant wine-cup: they will abstain from all sexual relations with their husbands until the men negotiate peace. This is the core strategy to compel the men.</p>
+                    <p class="italic text-sm text-gray-500 mt-2">"I will abstain from Love and Love’s delights... And sleep a vestal all alone at nights."</p>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg border border-green-200 shadow-sm">
+                    <h4 class="font-bold text-green-700 mb-2">Seizure of the Acropolis</h4>
+                    <p>Simultaneously with the oath, the elder women of Athens occupy the Acropolis, the fortified citadel housing the state treasury. This cuts off funding for the war effort and provides a secure base for the women's operations.</p>
+                    <p class="italic text-sm text-gray-500 mt-2">"This very morn we seize the Acropolis... Keeping the silver securely in custody, lest for its sake ye continue the war."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cinesias-plight" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🥵</span> Cinesias's Plight: The Agony of Frustration
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    The encounter between Cinesias and Myrrhina is the most extended and explicit depiction of the psychological and physical toll of the sex-strike, showcasing the women's unwavering resolve against male desperation.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-6 border border-red-200 shadow-sm space-y-4">
+                <h3 class="font-bold text-red-700 text-xl mb-2">Escalating Desire and Denial</h3>
+                <p class="text-gray-700">Cinesias arrives at the Acropolis, tormented by sexual longing, bringing their baby to elicit sympathy. Myrrhina appears, teasing him with promises of intimacy, only to prolong his agony by repeatedly feigning preparations (bedding, perfume) before finally retreating.</p>
+                <p class="italic text-sm text-gray-500 mt-2">"O me! these pangs and paroxysms of love, Riving my heart, keen as a torturer’s wheel!"</p>
+                <p class="text-gray-700 mt-4">This scene is a masterclass in comedic psychological warfare, demonstrating the women's power to manipulate male desire for political ends. It highlights the profound connection between personal and political spheres.</p>
+            </div>
+        </section>
+
+        <section id="peace-negotiations" class="bg-green-800 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    The Climax: Negotiating Peace with Reconciliation
+                </h2>
+                <p class="text-green-200 text-lg">
+                    With both Athenian and Laconian men driven to extreme desperation by the sex-strike, Lysistrata brings forth the beautiful goddess, Reconciliation, whose body becomes a literal map for peace.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="text-center">
+                    <div class="text-8xl mb-4">😫</div>
+                    <h3 class="text-2xl font-bold text-red-400 mb-2">Men's Desperation</h3>
+                    <ul class="list-disc list-inside text-green-100 text-left mx-auto max-w-sm space-y-2">
+                        <li>Laconian and Athenian ambassadors arrive with visible signs of extreme sexual frustration.</li>
+                        <li>Their only desire is to end the strike and regain access to their wives.</li>
+                        <li>They are willing to concede political points for immediate relief.</li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <div class="text-8xl mb-4">🗺️</div>
+                    <h3 class="text-2xl font-bold text-green-400 mb-2">Reconciliation as Map</h3>
+                    <ul class="list-disc list-inside text-green-100 text-left mx-auto max-w-sm space-y-2">
+                        <li>Lysistrata presents the naked goddess Reconciliation to the ambassadors.</li>
+                        <li>Her body's features (breasts, buttocks, thighs) are used to represent disputed territories.</li>
+                        <li>This highly visual and comedic negotiation quickly leads to an agreement, highlighting the absurdity of territorial disputes when confronted with raw human desire.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-green-300 italic text-md">
+                <p>"O Lady, noblest and best of all! ... They come to Thee to adjust their claims, disputes to settle, and strifes to heal." - Chorus to Lysistrata, recognizing her diplomatic skill.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "Lysistrata" (411 BC).</p>
+        <p>A timeless commentary on war, gender, and the unexpected paths to peace.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Sex-Strike Effectiveness Index Chart
+            const ctx = document.getElementById('strikeEffectivenessChart').getContext('2d');
+            const strikeEffectivenessChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Initial Oath',
+                        'Acropolis Seizure',
+                        'Battle of Choruses',
+                        'Magistrate Humiliation',
+                        "Women's Resolve Tested",
+                        'Cinesias Incident',
+                        'Envoys Arrive',
+                        'Peace Treaty Signed'
+                    ],
+                    datasets: [
+                        {
+                            label: "Women's Resolve / Strike Effectiveness",
+                            data: [7, 8, 8.5, 9, 7.5, 9.5, 10, 10], /* Index 0-10 */
+                            borderColor: '#a78bfa', // Purple
+                            backgroundColor: 'rgba(167, 139, 250, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#8b5cf6', // Darker Purple
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: "Men's War Enthusiasm / Frustration",
+                            data: [8, 7, 6, 5, 5.5, 2, 1, 0], /* Index 0-10 (high enthusiasm / low frustration at start, vice versa at end) */
+                            borderColor: '#ef4444', // Red
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#dc2626', // Darker Red
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Women from various Greek states swear an oath to abstain from sex until peace is achieved.",
+                                        "The women seize the Acropolis, taking control of the war treasury, intensifying the strike's impact.",
+                                        "Initial physical confrontation between the Choruses of Men and Women, showcasing women's unexpected resolve.",
+                                        "The Magistrate, symbol of male authority, is humiliated and stripped of power by Lysistrata.",
+                                        "Some women show signs of weakening resolve, but Lysistrata rallies them, preventing defection.",
+                                        "Myrrhina's tantalizing of Cinesias vividly demonstrates the extreme sexual frustration among men.",
+                                        "Ambassadors from Athens and Sparta arrive, driven by desperation to negotiate peace.",
+                                        "Lysistrata mediates a peace treaty using the body of Reconciliation as a map, leading to general celebration."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Intensity / Effect',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-purple-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-purple-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    }
+                );
+            });
+        });
+    });
+    </script>
+</body>
+</html>

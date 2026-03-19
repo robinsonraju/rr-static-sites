@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oedipus at Colonus: The Sacred Grove</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Crimson Pro', serif; background-color: #f7fdf9; color: #1e3a29; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .sacred-border { border: 2px solid #d4af37; border-radius: 50px 5px 50px 5px; }
+        .step-node { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .step-node:hover { transform: scale(1.1); background-color: #d4af37 !important; color: white; }
+        .step-node.active { background-color: #2d6a4f !important; color: #f7fdf9; box-shadow: 0 0 15px rgba(45, 106, 79, 0.4); }
+        .custom-scroll::-webkit-scrollbar { height: 8px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+    <div class="max-w-5xl mx-auto space-y-16">
+        <header class="text-center space-y-6">
+            <h1 class="text-5xl md:text-7xl font-bold text-emerald-900">Oedipus at Colonus</h1>
+            <div class="w-32 h-1 bg-yellow-600 mx-auto"></div>
+            <p class="text-2xl italic text-emerald-800 max-w-2xl mx-auto">A sacred journey of transfiguration, where the blind wanderer finds peace in the whispering groves of Athens.</p>
+        </header>
+
+        <section class="bg-white p-8 md:p-12 sacred-border shadow-xl">
+            <h2 class="text-3xl font-bold mb-8 text-center text-emerald-900 italic">I. Spiritual Resonance</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="h-[350px]"><canvas id="themeRadar"></canvas></div>
+                <div class="space-y-4" id="theme-list"></div>
+            </div>
+        </section>
+
+        <section class="space-y-8">
+            <h2 class="text-3xl font-bold text-center text-emerald-900 italic">II. The Path to Transfiguration</h2>
+            <div class="overflow-x-auto custom-scroll pb-4">
+                <div class="flex space-x-4 min-w-[800px] justify-between px-4" id="plot-timeline"></div>
+            </div>
+            <div id="content-focus" class="bg-emerald-50 p-10 rounded-3xl border-2 border-emerald-100 transition-all duration-500 min-h-[300px]">
+                <h3 id="focus-title" class="text-3xl font-bold text-emerald-900 mb-4 italic">Begin the Journey</h3>
+                <p id="focus-text" class="text-xl leading-relaxed text-emerald-800">Select a stage of the journey above to explore Oedipus's final hours.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const data = {
+            themes: [
+                { title: 'Redemption', val: 95, color: '#2d6a4f', text: 'The transformation of a curse into a divine blessing for Athens.' },
+                { title: 'Sanctuary', val: 88, color: '#d4af37', text: 'The holy ground of the Eumenides as a place of final rest.' },
+                { title: 'Filial Piety', val: 82, color: '#7b906b', text: 'The unwavering devotion of Antigone and Ismene.' },
+                { title: 'Divine Will', val: 90, color: '#1b4332', text: 'The thunder of Zeus signaling the end of a tragic cycle.' }
+            ],
+            plot: [
+                { id: 1, title: 'Arrival', text: 'Oedipus and Antigone enter the sacred grove of the Eumenides, unaware of its holiness.' },
+                { id: 2, title: 'Asylum', text: 'King Theseus of Athens offers protection and citizenship to the exiled King.' },
+                { id: 3, title: 'Threats', text: 'Creon arrives from Thebes to seize Oedipus for political advantage.' },
+                { id: 4, title: 'Rescue', text: 'The Athenian army rescues Oedipus\'s daughters from Creon\'s clutches.' },
+                { id: 5, title: 'The Curse', text: 'Oedipus delivers a blistering judgment on his son Polyneices.' },
+                { id: 6, title: 'The Sign', text: 'Celestial thunder calls Oedipus to his mysterious, sacred end.' },
+                { id: 7, title: 'Vanishing', text: 'In a secret location known only to Theseus, Oedipus is taken by the gods.' }
+            ]
+        };
+
+        new Chart(document.getElementById('themeRadar'), {
+            type: 'radar',
+            data: {
+                labels: data.themes.map(t => t.title),
+                datasets: [{ data: data.themes.map(t => t.val), backgroundColor: 'rgba(45, 106, 79, 0.2)', borderColor: '#2d6a4f', pointBackgroundColor: '#d4af37' }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { r: { angleLines: { display: false }, ticks: { display: false } } } }
+        });
+
+        const themeList = document.getElementById('theme-list');
+        data.themes.forEach(t => {
+            themeList.innerHTML += `<div class="p-4 rounded-lg bg-emerald-50 border-l-4 border-yellow-600"><h4 class="font-bold text-emerald-900">${t.title}</h4><p class="text-emerald-800 italic text-sm">${t.text}</p></div>`;
+        });
+
+        const timeline = document.getElementById('plot-timeline');
+        data.plot.forEach((p, i) => {
+            const btn = document.createElement('button');
+            btn.className = `step-node w-24 h-24 rounded-full bg-white border-4 border-emerald-100 font-bold text-emerald-900 shadow-lg flex items-center justify-center text-center p-2 text-sm`;
+            btn.innerHTML = `${i+1}.<br>${p.title}`;
+            btn.onclick = () => {
+                document.querySelectorAll('.step-node').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('focus-title').innerText = `${p.id}. ${p.title}`;
+                document.getElementById('focus-text').innerText = p.text;
+            };
+            timeline.appendChild(btn);
+        });
+    </script>
+</body>
+</html>

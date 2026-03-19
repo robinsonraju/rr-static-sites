@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orestes: Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #faf8f5;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #1e293b;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+    <header class="bg-stone-900 text-stone-100 py-12 px-6 shadow-md border-b-4 border-amber-700">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Orestes <span class="text-amber-500 font-light">The Trial of Argos</span></h1>
+            <p class="text-xl text-stone-400 max-w-3xl leading-relaxed">
+                A dark, intense tragedy about the aftermath of matricide. Orestes and Electra are besieged by a city that has condemned them to death, while their supposed allies abandon them to their fate.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-20">
+        <section id="narrative-arc" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📈</span> The Descent into Anarchy
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Comparing Orestes' survival instincts with the political cowardice of Menelaus.
+                </p>
+            </div>
+            <div class="w-full flex flex-col items-center justify-center bg-stone-50 rounded-xl p-4 border border-stone-100">
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                    <strong class="text-amber-800">Orestes's Path:</strong> Starts in a state of hallucinatory madness, fights for his life at the trial, and ends in a desperate act of kidnapping.
+                </div>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <strong class="text-slate-800">Menelaus's Path:</strong> Starts as a hopeful savior, but retreats into political self-preservation, abandoning his kin.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-factions" class="bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> Character Alignments & Roles
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Filter the cast to explore the motivations of those driving the tragedy.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-8" id="faction-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-stone-800 text-white font-medium hover:bg-stone-700 transition-colors">All</button>
+                <button data-filter="outcast" class="px-5 py-2 rounded-full bg-stone-100 text-stone-800 font-medium transition-colors mx-1">The Condemned</button><button data-filter="political" class="px-5 py-2 rounded-full bg-slate-100 text-slate-800 font-medium transition-colors mx-1">The Argive Court</button><button data-filter="divine" class="px-5 py-2 rounded-full bg-amber-100 text-amber-800 font-medium transition-colors mx-1">Divine Order</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+                
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="outcast">
+            <div class="text-4xl mb-3">🗡️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Orestes</h3>
+            <span class="inline-block px-2 py-1 bg-stone-100 text-stone-800 text-xs font-bold rounded mb-3">The Outcast</span>
+            <p class="text-stone-600 text-sm mb-4">A man driven to the edge of sanity by his own crimes and the gods' commands.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"I am a shadow of myself, hounded by the dark."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="outcast">
+            <div class="text-4xl mb-3">🥀</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Electra</h3>
+            <span class="inline-block px-2 py-1 bg-stone-100 text-stone-800 text-xs font-bold rounded mb-3">The Loyal Sister</span>
+            <p class="text-stone-600 text-sm mb-4">The caretaker who shares her brother's guilt and his death sentence.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"We will die together, as we lived."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="political">
+            <div class="text-4xl mb-3">👑</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Menelaus</h3>
+            <span class="inline-block px-2 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded mb-3">The Politician</span>
+            <p class="text-stone-600 text-sm mb-4">A king who values his throne more than his family's blood.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"The people\'s voice is a terrible thing."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="outcast">
+            <div class="text-4xl mb-3">🤝</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Pylades</h3>
+            <span class="inline-block px-2 py-1 bg-stone-100 text-stone-800 text-xs font-bold rounded mb-3">The True Friend</span>
+            <p class="text-stone-600 text-sm mb-4">The one who stays when all others flee, plotting the final act of defiance.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Friendship is proven in the storm."</blockquote>
+        </div>
+        
+        <div class="character-card bg-stone-50 rounded-xl p-6 border border-stone-200 interactive-card" data-faction="divine">
+            <div class="text-4xl mb-3">☀️</div>
+            <h3 class="text-xl font-bold text-stone-800 mb-1">Apollo</h3>
+            <span class="inline-block px-2 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded mb-3">The God</span>
+            <p class="text-stone-600 text-sm mb-4">The divine author of the tragedy who appears at the last second to stop the bloodbath.</p>
+            <blockquote class="italic text-stone-500 text-sm border-l-2 border-amber-400 pl-3">"Peace! I have settled the strife of men."</blockquote>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="deep-dive" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+            <div class="p-8 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🔍</span> Deep-Dive: The Trial of Argos
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Euripides examines the shift from ancient blood-feuds to the rule of the assembly.
+                </p>
+            </div>
+            <div class="flex border-b border-stone-200 px-8 pt-4" id="dive-tabs">
+                <button class="px-6 py-3 text-lg dive-tab tab-active" data-target="dive-0">The Mob Mentality</button><button class="px-6 py-3 text-lg dive-tab text-stone-500 hover:text-stone-800" data-target="dive-1">The Deus Ex Machina</button>
+            </div>
+            <div class="p-8 bg-stone-50 min-h-[300px]">
+                
+        <div id="dive-0" class="dive-content  flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Mob Mentality</h3>
+                <p class="text-stone-600">The Argive assembly is depicted as a fickle, dangerous mob, easily swayed by rhetoric over justice.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Politics</h4>
+                    <p class="text-sm text-stone-600">A critique of late 5th-century Athenian radical democracy.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🗣️</span>
+            </div>
+        </div>
+        
+        <div id="dive-1" class="dive-content hidden-content flex flex-col md:flex-row gap-8 items-center">
+            <div class="flex-1 space-y-4">
+                <h3 class="text-2xl font-bold text-stone-800">The Deus Ex Machina</h3>
+                <p class="text-stone-600">The sudden ending by Apollo is seen by many as a commentary on the absurdity of the situation—only a god could fix such a mess.</p>
+                <div class="bg-white p-4 rounded-lg border border-stone-200 mt-4">
+                    <h4 class="font-bold text-stone-700 mb-2 uppercase text-xs tracking-wider">The Ending</h4>
+                    <p class="text-sm text-stone-600">A forced 'happy' ending that leaves the audience unsettled.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 text-center p-8 bg-stone-200 rounded-full aspect-square flex flex-col items-center justify-center">
+                <span class="text-6xl">🎭</span>
+            </div>
+        </div>
+        
+            </div>
+        </section>
+
+        <section id="the-finale" class="bg-stone-900 text-stone-100 rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">The Final Resolution</h2>
+                <p class="text-stone-400 text-lg">A bloodbath averted by a miracle.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-4">The Outcasts' Fate</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-amber-500">✔</span> Orestes is purified and destined for a throne</li><li class="flex gap-3"><span class="text-amber-500">✔</span> Electra is married to Pylades</li><li class="flex gap-3"><span class="text-amber-500">✔</span> The blood-debt is cleared by the god</li></ul>
+                </div>
+                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700">
+                    <h3 class="text-2xl font-bold text-slate-400 mb-4">The Political Settlement</h3>
+                    <ul class="space-y-4 text-stone-300"><li class="flex gap-3"><span class="text-slate-500">✖</span> Menelaus keeps his crown</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Helen is deified</li><li class="flex gap-3"><span class="text-slate-500">✖</span> Hermione is saved from the knife</li></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Euripides' "Orestes".</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["The Sickness", "The Arrival", "The Trial", "The Kidnapping", "The Intervention"],
+                    datasets: [
+                        {
+                            label: 'Orestes',
+                            data: [1, 2, 4, 8, 9],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Menelaus',
+                            data: [8, 9, 3, 1, 5],
+                            borderColor: '#64748b',
+                            backgroundColor: 'rgba(100, 116, 139, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const events = {"Orestes": ["Tormented by Furies and nursing sister", "Hopes for Menelaus\\' aid", "Condemned to death by the Argive assembly", "Holds a knife to Hermione\\'s throat", "Spares Helen and escapes via Apollo"], "Menelaus": ["Arrives in glory from Troy", "Promises to speak for Orestes", "Shrinks from the crowd\\'s anger", "Helpless as his daughter is seized", "Saved from loss by divine decree"]};
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: { y: { min: 0, max: 10, ticks: { display: false } } }
+                }
+            });
+
+            const filterBtns = document.querySelectorAll('#faction-filters button');
+            const cards = document.querySelectorAll('.character-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const f = btn.getAttribute('data-filter');
+                    cards.forEach(c => {
+                        if (f === 'all' || c.getAttribute('data-faction') === f) c.style.display = 'block';
+                        else c.style.display = 'none';
+                    });
+                });
+            });
+
+            const tabs = document.querySelectorAll('.dive-tab');
+            const contents = document.querySelectorAll('.dive-content');
+            tabs.forEach(t => {
+                t.addEventListener('click', () => {
+                    tabs.forEach(x => x.classList.remove('tab-active'));
+                    t.classList.add('tab-active');
+                    const target = t.getAttribute('data-target');
+                    contents.forEach(c => {
+                        if (c.id === target) c.classList.remove('hidden-content');
+                        else c.classList.add('hidden-content');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

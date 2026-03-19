@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thesmophoriazusae: A Burlesque of Euripides</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Rich blues (#2a4365, #4299e1) and golds (#f6e05e, #d69e2e) for dramatic and theatrical elements, highlighting the meta-theatrical nature. Feminine pinks (#d53f8c, #f6ad55) and purples (#805ad5) for the women's festival, their collective power, and the comic gender inversion. Earthy browns and grays (#a0aec0, #6b4f2c) for the more mundane and comic elements involving Mnesilochus. A light neutral background (#fdfdfd) for readability. -->
+    <!-- Application Structure Plan: This SPA is designed as a "Dramatic Burlesque & Gender Battle" dashboard. It begins with "Euripides in Peril" and his motivation for infiltration. It then details the "Infiltration Attempt" (Mnesilochus's disguise) and the subsequent "Exposure and Capture." The core focuses on "Euripides's Rescue Strategies," which are elaborate parodies of his own tragedies. The dashboard concludes with the "Resolution" – Mnesilochus's escape and Euripides's promise. This structure highlights the play's meta-theatrical humor, its satirical take on gender and tragedy, and the farcical nature of the plot. -->
+    <!-- Visualization & Content Choices:
+    1. Mnesilochus's Peril Index Arc: A line chart (Chart.js) illustrating Mnesilochus's escalating danger, discomfort, and comic indignities, from his initial agreement to his eventual desperate escape.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Euripides, Mnesilochus, Agathon, Chorus of Women, Scythian), detailing their roles, motivations, and key quotes.
+    3. Euripides's "Crimes" Against Women: A section summarizing the women's specific grievances and accusations against Euripides' portrayals in his plays.
+    4. Tragic Parodies in Action: An interactive list or accordion detailing Euripides's various rescue attempts, explicitly linking them to the Euripidean tragedies they parody (e.g., Andromeda, Helen), and explaining the original plot points alongside their comic distortion.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fdfdfd; /* Off-white */
+            color: #2d3748; /* Dark Gray */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #2a4365; /* Dark Blue for dramatic theme */
+            color: #2a4365;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+    <header class="bg-gray-900 text-white py-12 px-6 shadow-md border-b-4 border-indigo-700">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">The Thesmophoriazusae <span class="text-indigo-400 font-light">A Burlesque of Euripides</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive journey into Aristophanes' meta-theatrical comedy, satirizing Euripides' tragedies and the battle of the sexes at a women's festival.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="mnesilochus-peril-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🚨</span> Mnesilochus's Peril & Indignity Index
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart tracks the escalating danger, discomfort, and comic indignities suffered by Mnesilochus, from his reluctant agreement to disguise himself to his desperate attempts at escape.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="perilIndexChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <strong class="text-blue-800">Initial Reluctance:</strong> Mnesilochus is convinced to undergo a humiliating disguise to help Euripides.
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Extreme Jeopardy:</strong> Exposed, captured, and tied to a plank, Mnesilochus faces severe punishment, prompting frantic rescue attempts.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> The Schemers, the Victims, and the Avengers
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the central figures who drive this farcical plot of literary revenge and gender-bending antics.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="character-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="protagonist" class="px-5 py-2 rounded-full bg-indigo-100 text-indigo-800 font-medium hover:bg-indigo-200 transition-colors">Euripides</button>
+                <button data-filter="victim" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium hover:bg-red-200 transition-colors">Mnesilochus</button>
+                <button data-filter="women-chorus" class="px-5 py-2 rounded-full bg-pink-100 text-pink-800 font-medium hover:bg-pink-200 transition-colors">Chorus of Women</button>
+                <button data-filter="ally" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Allies & Antagonists</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="protagonist">
+                    <div class="text-4xl mb-3">📝</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Euripides</h3>
+                    <span class="inline-block px-2 py-1 bg-indigo-100 text-indigo-800 text-xs font-bold rounded mb-3">The Poet in Peril</span>
+                    <p class="text-gray-600 text-sm mb-4">The tragic poet, portrayed as cunning and resourceful but paranoid about the women's wrath over his supposedly misogynistic plays. He orchestrates Mnesilochus's infiltration.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-indigo-400 pl-3">"There’s a great danger brewing for my life... On this day the womankind have sworn To hold a great assembly, to discuss How best to serve me out."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="victim">
+                    <div class="text-4xl mb-3">👴</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Mnesilochus</h3>
+                    <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Impersonator</span>
+                    <p class="text-gray-600 text-sm mb-4">Euripides' elderly father-in-law, a traditionalist persuaded to disguise himself as a woman. He endures shaving, singeing, and eventual capture, becoming the play's main comic victim.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-red-400 pl-3">"I’m not to hear or see at all, I see... What a thing it is to talk with Poets!"</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="ally">
+                    <div class="text-4xl mb-3">💅</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Agathon</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Effeminate Poet</span>
+                    <p class="text-gray-600 text-sm mb-4">A young, effeminate tragic poet whose appearance and lifestyle are themselves targets of Aristophanes' satire. He refuses to infiltrate the women's festival, citing his "womanlike" nature.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"A poet, sir, must needs adapt his ways To the high thoughts which animate his soul. And when he sings of women, he assumes A woman’s garb."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="women-chorus">
+                    <div class="text-4xl mb-3">👩‍⚖️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Thesmophoriazusae</h3>
+                    <span class="inline-block px-2 py-1 bg-pink-100 text-pink-800 text-xs font-bold rounded mb-3">The Women's Assembly</span>
+                    <p class="text-gray-600 text-sm mb-4">The women participating in the Thesmophoria festival, unified and fiercely determined to punish Euripides for his perceived slander. They represent a powerful (and comically exaggerated) female collective.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-pink-400 pl-3">"We all admit. Who will address the meeting? ... How best to serve him out."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="ally">
+                    <div class="text-4xl mb-3">🕵️‍♂️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Cleisthenes</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Effeminate Informer</span>
+                    <p class="text-gray-600 text-sm mb-4">An effeminate man who is a friend of Euripides but whose loyalty is ambiguous. He warns the women about the infiltrator (Mnesilochus) and later fetches the policeman.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"Euripides, they say, has sent a cousin, A bad old man, amongst you here to-day."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-filter="ally">
+                    <div class="text-4xl mb-3">🏹</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Scythian Archer</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">The Guard</span>
+                    <p class="text-gray-600 text-sm mb-4">A barbarian policeman, speaking broken Greek, tasked with guarding the captive Mnesilochus. He is comically obtuse and easily tricked by Euripides' various disguises and schemes.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"Dere now bemoany to de ouder air."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="euripides-crimes" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl"> обвинить </span> Euripides' "Crimes" Against Women
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    The women are furious with Euripides for his unflattering portrayals of women in his tragedies. Their grievances highlight themes of perceived misogyny and how art can influence societal perception.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                    <h3 class="font-bold text-red-700 mb-2">Exposing Women's Vices</h3>
+                    <p class="text-gray-700">The women accuse Euripides of constantly portraying them as double-dealers, false, faithless, tippling, mischievous gossips, thereby slandering the entire sex.</p>
+                    <p class="italic text-sm text-gray-500 mt-2">"He’d bring some single mourner on, seated and veiled... an empty show of tragic woe, who uttered not one thing."</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                    <h3 class="font-bold text-red-700 mb-2">Creating Suspicion in Husbands</h3>
+                    <p class="text-gray-700">His plays make husbands paranoid and suspicious, constantly checking on their wives, leading to a loss of freedom and simple pleasures for women.</p>
+                    <p class="italic text-sm text-gray-500 mt-2">"The men come home Looking so sour—O, we can see them peeping In every closet, thinking friends are there."</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                    <h3 class="font-bold text-red-700 mb-2">Deterring Marriage of Older Men</h3>
+                    <p class="text-gray-700">His portrayal of older women in a negative light (e.g., "An old man weds a tyrant, not a wife") allegedly discourages wealthy old men from marrying, impacting the women's financial prospects.</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 border border-red-200 shadow-sm">
+                    <h3 class="font-bold text-red-700 mb-2">Revealing Household Secrets</h3>
+                    <p class="text-gray-700">The women imply that Euripides reveals private household secrets and tricks, making it harder for them to maintain certain domestic "perquisites" (like pilfering wine or corn).</p>
+                    <p class="italic text-sm text-gray-500 mt-2">"They’ve got such keys, our husbands have... Then in old times we only had to buy A farthing ring, and pantry-doors flew open. But now this wretch Euripides has made them Wear such worm-eaten perforated seals, ’Tis hopeless now to try it."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tragic-parodies" class="bg-indigo-900 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    Euripides' Rescue Parodies: Meta-Theatrical Humor
+                </h2>
+                <p class="text-indigo-200 text-lg">
+                    To rescue Mnesilochus, Euripides stages elaborate, self-parodic rescue attempts, drawing directly from the plots and characters of his own famous tragedies, much to the confusion of the Scythian guard.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-indigo-800 rounded-xl p-6 border border-purple-700 shadow-sm">
+                    <h3 class="text-xl font-bold text-purple-400 mb-2">Parody of "Andromeda"</h3>
+                    <p class="text-indigo-100">Euripides appears as Perseus, the hero who rescued Andromeda from a sea monster while she was chained to a rock. Mnesilochus plays Andromeda, tied to a plank, appealing to "Perseus" for rescue. The Scythian guard, misunderstanding, just sees an old man in distress.</p>
+                    <p class="italic text-sm text-indigo-300 mt-2">Original: Princess Andromeda chained to a rock. Parody: Mnesilochus chained to a plank. Hero: Perseus (Euripides). Monster: Scythian guard.</p>
+                </div>
+                <div class="bg-indigo-800 rounded-xl p-6 border border-yellow-700 shadow-sm">
+                    <h3 class="text-xl font-bold text-yellow-400 mb-2">Parody of "Helen"</h3>
+                    <p class="text-indigo-100">Euripides next appears as Menelaus, searching for his wife Helen, who was thought to be in Egypt. Mnesilochus plays Helen, and the scene is a comic reenactment of their tearful reunion and planned escape. The Scythian again fails to grasp the dramatic context.</p>
+                    <p class="italic text-sm text-indigo-300 mt-2">Original: Menelaus reunites with the "true" Helen in Egypt. Parody: Euripides "reunites" with "Helen" (Mnesilochus) at the festival. Obstacle: Scythian guard.</p>
+                </div>
+                <div class="bg-indigo-800 rounded-xl p-6 border border-green-700 shadow-sm">
+                    <h3 class="text-xl font-bold text-green-400 mb-2">Disguise as Music-Woman</h3>
+                    <p class="text-indigo-100">Finally, Euripides disguises himself as an old music-woman, distracting the Scythian with promises of a dancing girl and a kiss, allowing Mnesilochus to make his escape.</p>
+                    <p class="italic text-sm text-indigo-300 mt-2">Strategy: Exploiting the Scythian's simple desires and offering a bribe, which highlights the common tricks used in comedies for escape.</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-indigo-300 italic text-md">
+                <p>"O, Perseus, Perseus, wilt thou leave me so?" - Mnesilochus, appealing to Euripides in the Andromeda parody.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Thesmophoriazusae" (411 BC).</p>
+        <p>A witty exploration of dramatic criticism, gender satire, and meta-theatrical humor.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Mnesilochus's Peril Index Chart
+            const ctx = document.getElementById('perilIndexChart').getContext('2d');
+            const perilIndexChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Reluctant Agreement',
+                        'Shaving & Singeing',
+                        'Disguise Complete',
+                        'Infiltration',
+                        'Clumsy Defense',
+                        'Exposure & Capture',
+                        'Chained to Plank',
+                        'Parody Rescue Attempts',
+                        'Escape!'
+                    ],
+                    datasets: [
+                        {
+                            label: "Mnesilochus's Peril & Indignity Level",
+                            data: [3, 5, 4, 6, 8, 9, 10, 8, 2], /* Index 0-10 */
+                            borderColor: '#e53e3e', // Red
+                            backgroundColor: 'rgba(229, 62, 62, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#c53030', // Darker Red
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#2d3748'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = [
+                                        "Mnesilochus reluctantly agrees to help Euripides by disguising himself.",
+                                        "He endures the painful process of shaving and singeing to appear female.",
+                                        "The disguise is complete, but he is uncomfortable and awkward in women's clothing.",
+                                        "He successfully infiltrates the women's assembly at the Thesmophoria festival.",
+                                        "His clumsy defense of Euripides and his revelations about women's vices lead to suspicion and outrage.",
+                                        "He is exposed as a man, captured, and tied to a plank as punishment.",
+                                        "Chained and guarded, Mnesilochus is at his most vulnerable and desperate.",
+                                        "Euripides attempts several comical rescue operations, causing further indignity but offering hope.",
+                                        "Euripides finally succeeds in distracting the guard, and Mnesilochus escapes."
+                                    ];
+                                    return "\nEvent: " + events[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Peril & Indignity',
+                                color: '#2d3748',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: true }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const characterFilters = document.querySelectorAll('#character-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            characterFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    characterFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-indigo-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-indigo-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-filter') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // Accordions for Euripides' Crimes
+            const accordionHeaders = document.querySelectorAll('#euripides-crimes .accordion-header');
+
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span');
+
+                    if (content.classList.contains('active')) {
+                        content.classList.remove('active');
+                        icon.textContent = '➕';
+                    } else {
+                        // Close other open accordions
+                        document.querySelectorAll('#euripides-crimes .accordion-content.active').forEach(openContent => {
+                            openContent.classList.remove('active');
+                            openContent.previousElementSibling.querySelector('span').textContent = '➕';
+                        });
+                        content.classList.add('active');
+                        icon.textContent = '➖';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

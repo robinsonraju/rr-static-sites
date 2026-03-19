@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electra: The Unending Lament</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sorts Mill Goudy', serif; background-color: #0c0a09; color: #d6d3d1; }
+        h1, h2, .accent-font { font-family: 'Cinzel Decorative', cursive; letter-spacing: 0.15em; }
+        .nocturnal-card { background-color: #1c1917; border: 1px solid #44403c; transition: all 0.5s; }
+        .nocturnal-card:hover { border-color: #a855f7; box-shadow: 0 0 20px rgba(168, 85, 247, 0.2); }
+        .retribution-step { border-bottom: 1px solid #292524; cursor: pointer; transition: all 0.3s; }
+        .retribution-step:hover { color: #a855f7; padding-left: 10px; }
+        .retribution-step.active { color: #e9d5ff; border-bottom-color: #a855f7; border-bottom-width: 2px; }
+    </style>
+</head>
+<body class="p-6 md:p-16">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
+        
+        <!-- Sidebar: Themes & Stats -->
+        <aside class="w-full lg:w-1/3 space-y-12">
+            <header>
+                <h1 class="text-6xl text-purple-200 mb-2">Electra</h1>
+                <p class="text-xl italic text-purple-400">A vigil of blood and memory.</p>
+            </header>
+
+            <section class="nocturnal-card p-8 rounded-sm">
+                <h2 class="text-2xl text-purple-300 mb-6 uppercase">Thematic Intensity</h2>
+                <div class="h-64"><canvas id="electraChart"></canvas></div>
+                <div class="mt-8 space-y-6" id="theme-details"></div>
+            </section>
+        </aside>
+
+        <!-- Main Content: Plot Arc -->
+        <main class="w-full lg:w-2/3">
+            <section class="mb-12">
+                <h2 class="text-3xl text-stone-400 accent-font mb-8 uppercase border-b border-stone-800 pb-2">The Path to Retribution</h2>
+                <div class="grid grid-cols-1 gap-6" id="plot-list"></div>
+            </section>
+
+            <section id="content-focus" class="p-12 border border-purple-900 bg-stone-950 rounded-lg min-h-[400px] flex flex-col justify-center transition-all duration-700">
+                <div class="w-24 h-px bg-purple-500 mb-8"></div>
+                <h3 id="focus-title" class="text-4xl text-purple-100 accent-font mb-6">Awaiting the Return</h3>
+                <p id="focus-text" class="text-2xl leading-relaxed italic text-stone-400">"My life is but a long sigh in the dark."</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const data = {
+            themes: [
+                { title: 'Revenge', val: 95, desc: 'The absolute moral imperative to kill the killers.' },
+                { title: 'Grief', val: 90, desc: 'A ritualized, permanent state of mourning.' },
+                { title: 'Deception', val: 75, desc: 'The tools used to penetrate the palace walls.' },
+                { title: 'Justice', val: 85, desc: 'The restoration of the rightful house of Atreus.' }
+            ],
+            plot: [
+                { title: 'The Secret Return', text: 'Orestes and Pylades arrive in Mycenae, planning a ruse involving a false report of Orestes\' death.' },
+                { title: 'The Lamentation', text: 'Electra appears, pouring out her soul in grief, clashing with her more compliant sister Chrysothemis.' },
+                { title: 'The False News', text: 'The Tutor describes Orestes\' horrific death in a chariot race, bringing joy to Clytemnestra and despair to Electra.' },
+                { title: 'The Urn', text: 'Electra cradles the urn supposedly containing her brother\'s ashes, delivering a speech of profound heartbreak.' },
+                { title: 'The Recognition', text: 'Orestes reveals himself through a signet ring; the siblings\' reunion is a burst of fierce, dark joy.' },
+                { title: 'The Matricide', text: 'Orestes enters the palace; Electra stands guard, urging him on as he strikes their mother.' },
+                { title: 'The Final Trap', text: 'Aegisthus is lured into the palace, discovering too late that the body he expects to be Orestes is actually his wife.' }
+            ]
+        };
+
+        new Chart(document.getElementById('electraChart'), {
+            type: 'doughnut',
+            data: {
+                labels: data.themes.map(t => t.title),
+                datasets: [{ data: data.themes.map(t => t.val), backgroundColor: ['#7e22ce', '#4c1d95', '#1e1b4b', '#312e81'], borderColor: '#0c0a09' }]
+            },
+            options: { plugins: { legend: { display: false } }, cutout: '70%' }
+        });
+
+        const details = document.getElementById('theme-details');
+        data.themes.forEach(t => {
+            details.innerHTML += `<div><h4 class="text-purple-200 font-bold uppercase text-xs tracking-widest mb-1">${t.title}</h4><p class="text-stone-500 italic text-sm">${t.desc}</p></div>`;
+        });
+
+        const list = document.getElementById('plot-list');
+        data.plot.forEach((p, i) => {
+            const item = document.createElement('div');
+            item.className = `retribution-step py-4 flex items-center gap-6`;
+            item.innerHTML = `<span class="accent-font text-purple-600 text-xl">${i+1}</span> <span class="text-lg uppercase tracking-widest">${p.title}</span>`;
+            item.onclick = () => {
+                document.querySelectorAll('.retribution-step').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById('focus-title').innerText = p.title;
+                document.getElementById('focus-text').innerText = p.text;
+            };
+            list.appendChild(item);
+        });
+    </script>
+</body>
+</html>

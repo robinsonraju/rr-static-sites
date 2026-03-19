@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Knights: Political Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chosen Palette: Earthy tones (#4a2d0c for leather, #8b0000 for raw meat/vulgarity) for corruption and demagoguery, transitioning to richer, more regal blues/golds (#daa520, #00008b) for the rejuvenated Demus and the wisdom he gains. Neutral background (#fdf5e6) for readability. -->
+    <!-- Application Structure Plan: This SPA is structured as a "Political Arena" dashboard, reflecting the play's core as a contest for influence. It starts with a dynamic chart showing the "Favor of Demus," then delves into character profiles (the contestants), followed by a section dissecting their manipulative "oracles" and political tactics. It concludes with Demus's transformation. This non-linear flow allows users to analyze the ebb and flow of political power and the specific methods used to sway public opinion. -->
+    <!-- Visualization & Content Choices:
+    1. Favor of Demus Arc: A line chart (Chart.js) illustrating Demus's fluctuating allegiance between Paphlagon and the Sausage-Seller across key plot points, culminating in his stable, wise rule.
+    2. Character Profiles: Interactive cards (JS filtering) for main characters (Demus, Paphlagon, Sausage-Seller, Demosthenes, Nicias, Chorus), detailing their role, alignment, and key characteristics/quotes.
+    3. Battle of Oracles: Tabbed content (JS) to compare the "oracles" presented by each demagogue and their self-serving interpretations, exposing the manipulation.
+    4. Demagogic Tactics: A section with expandable/collapsible details (JS) on the specific rhetorical and manipulative tactics used.
+    NO SVG or Mermaid used; relying entirely on structured HTML/Tailwind, Canvas, and Unicode for visual elements.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            background-color: #fdf5e6; /* Old Lace */
+            color: #36454f; /* Charcoal */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+        }
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-active {
+            border-bottom: 3px solid #00008b; /* Dark Blue */
+            color: #00008b;
+            font-weight: 600;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .accordion-header {
+            cursor: pointer;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-100 selection:text-yellow-800">
+
+    <header class="bg-gray-800 text-gold-100 py-12 px-6 shadow-md border-b-4 border-indigo-700">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">The Knights <span class="text-yellow-400 font-light">Political Arena</span></h1>
+            <p class="text-xl text-gray-300 max-w-3xl leading-relaxed">
+                An interactive exploration of Aristophanes' biting satire on Athenian demagoguery, public opinion, and the unlikely rise of a sausage-seller to power.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="favor-of-demus-arc" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🗳️</span> The Fluctuating Favor of Demus
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    This chart tracks the perceived influence and favor enjoyed by Paphlagon (Cleon) and the Sausage-Seller in the eyes of Demus (the Athenian populace) throughout the play's key rhetorical battles and shifts in power. Note Demus's ultimate stabilization.
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div class="chart-container">
+                    <canvas id="demusFavorChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <strong class="text-red-800">Paphlagon's Influence:</strong> Starts high due to flattery and fear, declines sharply as the Sausage-Seller exposes his corruption and out-maneuvers him.
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <strong class="text-green-800">Sausage-Seller's Influence:</strong> Begins from nothing, rises rapidly through aggressive demagoguery, and eventually stabilizes into benevolent guidance.
+                </div>
+            </div>
+        </section>
+
+        <section id="character-profiles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🎭</span> The Players in the Political Game
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Meet the central figures who drive the satirical narrative. Filter them by their primary allegiance to understand their roles in the contest for Demus's favor.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-8" id="allegiance-filters">
+                <button data-filter="all" class="px-5 py-2 rounded-full bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">All Characters</button>
+                <button data-filter="demus" class="px-5 py-2 rounded-full bg-blue-100 text-blue-800 font-medium hover:bg-blue-200 transition-colors">Demus</button>
+                <button data-filter="paphlagon" class="px-5 py-2 rounded-full bg-red-100 text-red-800 font-medium hover:bg-red-200 transition-colors">Pro-Paphlagon</button>
+                <button data-filter="sausage-seller" class="px-5 py-2 rounded-full bg-green-100 text-green-800 font-medium hover:bg-green-200 transition-colors">Pro-Sausage-Seller</button>
+                <button data-filter="instigator" class="px-5 py-2 rounded-full bg-yellow-100 text-yellow-800 font-medium hover:bg-yellow-200 transition-colors">Instigators</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="character-grid">
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-allegiance="demus">
+                    <div class="text-4xl mb-3">👴</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Demus</h3>
+                    <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded mb-3">The Populace</span>
+                    <p class="text-gray-600 text-sm mb-4">The personification of the Athenian people. Initially gullible and easily swayed by flattery, but capable of wisdom and justice when properly guided.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-blue-400 pl-3">"I've been waiting, till I loathe you both, for thirty thousand ages, ages, ages."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-allegiance="paphlagon">
+                    <div class="text-4xl mb-3">👞</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Paphlagon (Cleon)</h3>
+                    <span class="inline-block px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded mb-3">The Demagogue</span>
+                    <p class="text-gray-600 text-sm mb-4">A loud, aggressive tanner and politician, representing Cleon. He exploits Demus's weaknesses for personal gain through flattery, false promises, and slanders.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-red-400 pl-3">"This tanning-Paphlagon, he soon finds out Master’s weak points; and cringing down before him Flatters, and fawns, and wheedles, and cajoles..."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-allegiance="sausage-seller">
+                    <div class="text-4xl mb-3">🌭</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Sausage-Seller (Agoracritus)</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Unlikely Hero</span>
+                    <p class="text-gray-600 text-sm mb-4">A vulgar, shameless, and cunning vendor who, according to an oracle, is destined to overthrow Paphlagon. He eventually guides Demus to wisdom.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Why, that’s the very thing will make you great, Your roguery, impudence, and agora-training."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-allegiance="instigator">
+                    <div class="text-4xl mb-3">🗣️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Demosthenes</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">The Strategist (Slave)</span>
+                    <p class="text-gray-600 text-sm mb-4">One of Demus's slaves, representing the general Demosthenes. He devises the plan to recruit the Sausage-Seller to overthrow Paphlagon.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"Steal from Paphlagon, While yet he sleeps, those oracles of his, And bring them out."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-allegiance="instigator">
+                    <div class="text-4xl mb-3">🤫</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Nicias</h3>
+                    <span class="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded mb-3">The Reluctant Aid (Slave)</span>
+                    <p class="text-gray-600 text-sm mb-4">Another of Demus's slaves, representing the general Nicias. He is fearful but assists Demosthenes in recruiting the Sausage-Seller and gathering intelligence.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-yellow-400 pl-3">"I will; and yet I’m fearful That I may meet with most unhappy Fortune."</blockquote>
+                </div>
+
+                <div class="character-card bg-gray-50 rounded-xl p-6 border border-gray-200 interactive-card" data-allegiance="sausage-seller">
+                    <div class="text-4xl mb-3">🐎</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chorus of Knights</h3>
+                    <span class="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded mb-3">The Support</span>
+                    <p class="text-gray-600 text-sm mb-4">Wealthy Athenian cavalrymen, staunch opponents of Cleon. They enthusiastically support the Sausage-Seller against Paphlagon.</p>
+                    <blockquote class="italic text-gray-500 text-sm border-l-2 border-green-400 pl-3">"Smite the rascal, smite him, smite him, troubler of our Knightly train, Foul extortioner, Charybdis, bottomless abyss of gain."</blockquote>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="battle-of-oracles" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">📜</span> The Prophetic Showdown
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Both Paphlagon and the Sausage-Seller use cryptic oracles to predict their own triumph and slander their opponent. Explore their 'prophecies' and how they manipulate Demus with self-serving interpretations.
+                </p>
+            </div>
+
+            <div class="flex border-b border-gray-200 px-8 pt-4" id="oracle-tabs">
+                <button class="px-6 py-3 text-lg oracle-tab tab-active" data-target="paphlagon-oracles">Paphlagon's Oracles</button>
+                <button class="px-6 py-3 text-lg oracle-tab text-gray-500 hover:text-gray-800" data-target="sausage-seller-oracles">Sausage-Seller's Oracles</button>
+            </div>
+
+            <div class="p-8 bg-gray-50 min-h-[300px]">
+
+                <div id="paphlagon-oracles" class="oracle-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Paphlagon's Misleading Prophecies</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg border border-red-200 shadow-sm">
+                            <h4 class="font-bold text-red-700 mb-2">The Guard Dog Oracle</h4>
+                            <p class="text-gray-700 italic mb-2">"Heed thou well, Erechtheides, the oracle’s drift... Keep thou safely the dog... Yapping before thy feet... He thy pay will provide..."</p>
+                            <p class="text-gray-600"><strong>Paphlagon's Interpretation:</strong> He is the loyal "dog" protecting Demus, providing his pay, and should be cherished.</p>
+                            <p class="text-red-500 mt-2"><strong>The Deceit:</strong> A thinly veiled attempt to portray himself as indispensable and silence critics. The "dog" is his aggressive, corrupt presence.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-red-200 shadow-sm">
+                            <h4 class="font-bold text-red-700 mb-2">The Lion Oracle</h4>
+                            <p class="text-gray-700 italic mb-2">"Woman she is, but a lion she’ll bear us in Athens... One who for Demus will fight... whom see thou guard with devotion..."</p>
+                            <p class="text-gray-600"><strong>Paphlagon's Interpretation:</strong> He is the valiant "lion" born to protect Athens, and Demus should build a "wooden wall and an iron fort" (i.e., protect him from challengers).</p>
+                            <p class="text-red-500 mt-2"><strong>The Deceit:</strong> Another self-aggrandizing prophecy, twisting the words to ensure his continued power and immunity, ironically hinting at imprisonment for himself.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sausage-seller-oracles" class="oracle-content hidden-content">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sausage-Seller's Counter-Oracles</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-green-700 mb-2">The Cerberus Ban-Dog Oracle</h4>
+                            <p class="text-gray-700 italic mb-2">"Heed thou well, Erechtheides, the kidnapping Cerberus ban-dog; Wagging his tail he stands... waiting thy slice to devour..."</p>
+                            <p class="text-gray-600"><strong>Sausage-Seller's Interpretation:</strong> Paphlagon is the "Cerberus ban-dog" (a mythical three-headed dog), stealing from Demus while fawning over him.</p>
+                            <p class="text-green-500 mt-2"><strong>The Revelation:</strong> A direct counter to Paphlagon's "dog" oracle, exposing his true predatory nature and the way he "cleans out the plates and the islands."</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-green-700 mb-2">The Five-Holed Pillory Oracle</h4>
+                            <p class="text-gray-700 italic mb-2">Paphlagon's "lion" oracle is countered by the Sausage-Seller, who clarifies the "wooden wall and iron fort."</p>
+                            <p class="text-gray-600"><strong>Sausage-Seller's Interpretation:</strong> The "wooden wall and iron fort" where Loxias bids Demus keep Paphlagon safely refers to the five-holed pillory-stocks.</p>
+                            <p class="text-green-500 mt-2"><strong>The Revelation:</strong> This interpretation humorously subverts Paphlagon's self-serving prophecy, turning his supposed protection into his predicted downfall and punishment.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-green-200 shadow-sm">
+                            <h4 class="font-bold text-green-700 mb-2">The Sausage-Seller Prophecy</h4>
+                            <p class="text-gray-700 italic mb-2">"A sausage-seller ousts the leather-seller."</p>
+                            <p class="text-gray-600"><strong>Sausage-Seller's Interpretation:</strong> This is the ultimate prophecy confirming his destiny to replace Paphlagon.</p>
+                            <p class="text-green-500 mt-2"><strong>The Confirmation:</strong> This direct and vulgar prophecy, discovered by Demosthenes, is the catalyst for the entire plot, confirming the Sausage-Seller's fate.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="demagogic-tactics" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    <span class="text-2xl">🗣️</span> Art of the Demagogue: Tactics Exposed
+                </h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    Both Paphlagon and the Sausage-Seller employ a range of unscrupulous tactics to win over Demus and undermine each other. Click to reveal the methods they use to manipulate the Athenian populace.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Flattery and False Promises
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Both demagogues constantly tell Demus how much they "love" him and how they only work for his benefit. They promise him gifts, feasts, and an easy life, distracting him from their own corruption.</p>
+                        <p class="italic text-sm text-gray-500">Example: Paphlagon serving "confiscation pasties" to Demus, or the Sausage-Seller offering "splendid scoops of bread."</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Slander and Insults
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">A primary weapon is relentless personal attack and baseless accusations against opponents. This includes calling them traitors, thieves, and highlighting their low birth or supposed moral failings.</p>
+                        <p class="italic text-sm text-gray-500">Example: Paphlagon accusing the slaves of conspiring, or the Sausage-Seller calling Paphlagon a "public-treasury thief!"</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Manipulation of Oracles
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Oracles, believed to be divine prophecies, are twisted and reinterpreted to suit the demagogue's agenda, predicting their own rise and their opponent's downfall. This plays on Demus's superstition.</p>
+                        <p class="italic text-sm text-gray-500">Example: Both claiming to be the "eagle" or "lion" in an oracle, or interpreting a "wooden wall" as a pillory.</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div class="accordion-header flex justify-between items-center font-bold text-xl text-gray-800">
+                        Exploiting Public Weaknesses
+                        <span class="text-gray-500 text-2xl">➕</span>
+                    </div>
+                    <div class="accordion-content mt-4 text-gray-700">
+                        <p class="mb-2">Demagogues prey on the populace's desire for easy money (the triobol payment), food, entertainment, and avoidance of effort. They offer trivial comforts over true policy.</p>
+                        <p class="italic text-sm text-gray-500">Example: The "pilchard" incident where the Sausage-Seller wins over the Council by promising cheap fish, or Paphlagon offering "barley-meal" and the Sausage-Seller "barley-cakes."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="demus-transformation" class="bg-indigo-900 text-white rounded-2xl shadow-xl p-8 lg:p-12 mb-12">
+            <div class="mb-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    The Rejuvenation of Demus
+                </h2>
+                <p class="text-indigo-200 text-lg">
+                    After the Sausage-Seller's victory, Demus undergoes a miraculous transformation from a gullible old man to a wise and just ruler, embodying the ideal Athenian citizen.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="text-center">
+                    <div class="text-8xl mb-4">✨</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-2">Before: The Gullible Elder</h3>
+                    <ul class="list-disc list-inside text-indigo-100 text-left mx-auto max-w-sm space-y-2">
+                        <li>Easily swayed by flattery and trivial gifts.</li>
+                        <li>Prone to irrational decisions and suspicion.</li>
+                        <li>Blind to the corruption of his "favorite" demagogues.</li>
+                        <li>Dependent on others for basic provisions and ideas.</li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <div class="text-8xl mb-4">👑</div>
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-2">After: The Wise Sovereign</h3>
+                    <ul class="list-disc list-inside text-indigo-100 text-left mx-auto max-w-sm space-y-2">
+                        <li>Rejuvenated, thoughtful, and discerning.</li>
+                        <li>Pays sailors arrears, ensures fair treatment for hoplites.</li>
+                        <li>Discourages idle talk and encourages productive citizenship.</li>
+                        <li>Capable of recognizing genuine virtue and rejecting deceit.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center text-indigo-300 italic text-md">
+                <p>"O Agoracritus, my dearest friend, What good your stewing did me!" - Demus after his transformation.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 text-center py-8 text-sm">
+        <p>Interactive Analysis based on Aristophanes' "The Knights" (424 BC).</p>
+        <p>A satirical commentary on democracy, leadership, and public manipulation.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Demus Favor Chart
+            const ctx = document.getElementById('demusFavorChart').getContext('2d');
+            const demusFavorChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Initial State',
+                        'Oracle Discovery',
+                        'S-S Recruited',
+                        'Council Contest',
+                        'Pnyx Debate',
+                        'SS Victory',
+                        'Demus Transformed'
+                    ],
+                    datasets: [
+                        {
+                            label: "Paphlagon's Influence (Red)",
+                            data: [9, 8, 7, 5, 3, 1, 0],
+                            borderColor: '#ef4444', // Red 500
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#dc2626', // Red 600
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: "Sausage-Seller's Influence (Green)",
+                            data: [1, 2, 4, 6, 8, 10, 10],
+                            borderColor: '#22c55e', // Green 500
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#16a34a', // Green 600
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: "Demus's Wisdom (Blue)",
+                            data: [2, 2, 3, 4, 5, 7, 9], /* Represents growing wisdom */
+                            borderColor: '#3b82f6', // Blue 500
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#2563eb', // Blue 600
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.2,
+                            fill: false,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: "'Segoe UI', sans-serif",
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#36454f'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Influence Level ' + context.parsed.y + '/10';
+                                    }
+                                    return label;
+                                },
+                                afterLabel: function(context) {
+                                    const events = {
+                                        "Paphlagon's Influence (Red)": [
+                                            "Dominates Demus through flattery and intimidation.",
+                                            "His power is questioned by the slaves.",
+                                            "Begins to lose ground as SS emerges.",
+                                            "Outmaneuvered in the Council meeting.",
+                                            "Struggles against SS in direct debate.",
+                                            "Defeated and stripped of power.",
+                                            "Reduced to selling sausages."
+                                        ],
+                                        "Sausage-Seller's Influence (Green)": [
+                                            "A common vendor, unknown to Demus.",
+                                            "Discovered by Demosthenes as the prophesied successor.",
+                                            "Convinced to challenge Paphlagon.",
+                                            "Wins first major victory in the Council.",
+                                            "Successfully debates Paphlagon before Demus.",
+                                            "Triumphs and takes Paphlagon's place.",
+                                            "Guides Demus to wise and just rule."
+                                        ],
+                                        "Demus's Wisdom (Blue)": [
+                                            "Gullible, easily flattered, manipulated.",
+                                            "Unaware of Paphlagon's true nature.",
+                                            "Begins to question current state.",
+                                            "Slightly swayed by SS's tactics.",
+                                            "Actively judging the contest, still prone to flattery.",
+                                            "Recognizes SS's superior demagoguery, makes a choice.",
+                                            "Rejuvenated, discerning, and just ruler."
+                                        ]
+                                    };
+                                    return "\nEvent: " + events[context.dataset.label][context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 11,
+                            title: {
+                                display: true,
+                                text: 'Influence / Wisdom Index',
+                                color: '#36454f',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: { display: false }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#555',
+                                font: { weight: '600' }
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Character Filter
+            const allegianceFilters = document.querySelectorAll('#allegiance-filters button');
+            const characterCards = document.querySelectorAll('.character-card');
+
+            allegianceFilters.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    allegianceFilters.forEach(b => {
+                        b.classList.remove('ring-2', 'ring-offset-2', 'ring-indigo-400');
+                    });
+                    btn.classList.add('ring-2', 'ring-offset-2', 'ring-indigo-400');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    characterCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-allegiance') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 200);
+                        }
+                    });
+                });
+            });
+
+            // Oracle Tabs
+            const oracleTabs = document.querySelectorAll('.oracle-tab');
+            const oracleContents = document.querySelectorAll('.oracle-content');
+
+            oracleTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    oracleTabs.forEach(t => {
+                        t.classList.remove('tab-active', 'text-gray-800');
+                        t.classList.add('text-gray-500');
+                    });
+                    tab.classList.add('tab-active', 'text-gray-800');
+                    tab.classList.remove('text-gray-500');
+
+                    const targetId = tab.getAttribute('data-target');
+
+                    oracleContents.forEach(content => {
+                        if (content.id === targetId) {
+                            content.classList.remove('hidden-content');
+                        } else {
+                            content.classList.add('hidden-content');
+                        }
+                    });
+                });
+            });
+
+            // Accordion for Demagogic Tactics
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('span');
+
+                    if (content.classList.contains('active')) {
+                        content.classList.remove('active');
+                        icon.textContent = '➕';
+                    } else {
+                        // Close other open accordions
+                        document.querySelectorAll('.accordion-content.active').forEach(openContent => {
+                            openContent.classList.remove('active');
+                            openContent.previousElementSibling.querySelector('span').textContent = '➕';
+                        });
+                        content.classList.add('active');
+                        icon.textContent = '➖';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
