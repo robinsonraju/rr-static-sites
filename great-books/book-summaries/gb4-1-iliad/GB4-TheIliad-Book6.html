@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book VI - Interludes of Fate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Gentium+Plus:ital,wght@0,400;0,700;1,400&display=swap');
+        body {
+            font-family: 'Gentium Plus', serif;
+            background-color: #f5f3ff; /* Lavender Tint */
+            color: #2e1065;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #ede9fe;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c084fc;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-200 selection:text-purple-900">
+
+    <nav class="sticky top-0 z-50 bg-purple-950 text-purple-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-purple-300">&#127807;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider">THE ILIAD <span class="text-purple-200 text-base font-normal italic">| BOOK VI</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium tracking-wide">
+                        <a href="#overview" class="hover:text-purple-300 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-purple-300 transition-colors">Chronicle</a>
+                        <a href="#analytics" class="hover:text-purple-300 transition-colors">Analytics</a>
+                        <a href="#themes" class="hover:text-purple-300 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-purple-950">Interludes of Fate</h1>
+            <p class="text-lg md:text-xl text-purple-800 leading-relaxed italic">
+                "Men come and go as leaves year by year upon the trees... the new spring up as the old are passing away."
+            </p>
+            <p class="text-md text-purple-700 max-w-2xl mx-auto">
+                Book VI provides a profound pause in the carnage. It explores the bond of guest-friendship (Xenia) that transcends war, the desperate prayers of Trojan women, and the heartbreaking farewell between Hector and Andromache, highlighting the human cost of the impending doom.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-purple-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#129309;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Xenia</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128124;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Domestic Love</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128461;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Fragile Hope</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-purple-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-purple-900 mb-4">Chronicle of Pathways</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-3xl shadow-xl border border-purple-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-purple-50/30 rounded-2xl p-8 flex flex-col justify-center border border-purple-100 relative">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-purple-400"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-purple-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-purple-900 mb-4">Thematic Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-3xl shadow-md border border-purple-50">
+                    <h3 class="text-xl font-serif font-bold text-purple-800 mb-2 text-center">Narrative Pathos</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-md border border-purple-50">
+                    <h3 class="text-xl font-serif font-bold text-purple-800 mb-2 text-center">Core Motivating Forces</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-purple-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-purple-900 mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-purple-50">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book5.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Glory of Diomedes</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book7.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Wall and the Duel</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-purple-950 text-purple-200 py-12 text-center">
+        <p class="font-serif text-lg mb-4 italic">"May I lie dead... ere I hear your cry as they carry you into bondage."</p>
+        <p class="text-xs uppercase tracking-widest">Interactive Analysis &bull; The Iliad Book VI</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'Exchange of Glaucus & Diomedes',
+                summary: 'Glaucus and Diomedes meet to fight but discover their grandfathers were guest-friends. They exchange armour and vow to avoid each other in battle.',
+                quote: '“we two, then, will exchange armour, that all present may know of the old ties that subsist between us.”',
+                icon: '&#129309;'
+            },
+            {
+                id: 't2',
+                title: 'Hector\'s Return to Troy',
+                summary: 'Hector returns to the city to bid his mother Hecuba and the Trojan matrons to offer sacrifice and prayers to Minerva to stave off Diomedes.',
+                quote: '“Honoured mother... Get the matrons together, and go with offerings to the temple of Minerva.”',
+                icon: '&#127984;'
+            },
+            {
+                id: 't3',
+                title: 'The Rejected Prayer',
+                summary: 'The matrons lay a magnificent robe on Minerva\'s knees, but the goddess turns her head away, rejecting their pleas for mercy.',
+                quote: '“Thus she prayed, but Pallas Minerva granted not her prayer.”',
+                icon: '&#128591;'
+            },
+            {
+                id: 't4',
+                title: 'Rebuke of Paris',
+                summary: 'Hector finds Paris at home with Helen, polishing his armour instead of fighting. He shames him back into the conflict.',
+                quote: '“Sir, you do ill to nurse this rancour; the people perish fighting round this our town.”',
+                icon: '&#129324;'
+            },
+            {
+                id: 't5',
+                title: 'Hector & Andromache',
+                summary: 'The most famous domestic scene in the epic. Hector finds his wife and son at the Scaean Gates. She begs him not to return to the field.',
+                quote: '“Dear husband, your valour will bring you to destruction; think on your infant son, and on my hapless self.”',
+                icon: '&#128106;'
+            },
+            {
+                id: 't6',
+                title: 'Astyanax\'s Fear',
+                summary: 'The infant Astyanax is terrified by Hector\'s plumed helmet. Hector removes it, laughs, and prays for his son\'s future glory.',
+                quote: '“The boy cried and nestled in his nurse’s bosom, scared at the sight of his father’s armour.”',
+                icon: '&#128118;'
+            },
+            {
+                id: 't7',
+                title: 'Return to Battle',
+                summary: 'Hector and Paris, both now in full armour, stride out of the gates together, ready to rejoin the slaughter.',
+                quote: '“As a horse, stabled and full fed, breaks loose and gallops gloriously over the plain...”',
+                icon: '&#127943;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'xenia',
+                title: 'Xenia (Guest-Friendship)',
+                content: 'The encounter between Glaucus and Diomedes demonstrates the power of Xenia. Even in a war of annihilation, the ancestral bonds of hospitality create "islands of peace" on the battlefield, showing that human relationships can occasionally transcend political and military conflict.',
+                keywords: ['Hospitality', 'Heritage', 'Civilization']
+            },
+            {
+                id: 'duty-love',
+                title: 'Duty vs. Domesticity',
+                content: 'Hector is torn between his role as Troy\'s defender and his identity as a husband and father. He knows Troy is doomed, yet his sense of "Aidos" (shame/duty) compels him to fight, even if it ensures the very outcome Andromache fears.',
+                keywords: ['Pathos', 'Patriarchy', 'Sacrifice']
+            },
+            {
+                id: 'inevitability',
+                title: 'The Inevitability of Fate',
+                content: 'The poem repeatedly stresses that Troy will fall. Minerva\'s rejection of the prayer and Hector\'s own prophecy to Andromache create a sense of tragic irony; the characters act with nobility despite knowing their efforts are ultimately in vain.',
+                keywords: ['Doom', 'Prophecy', 'Irony']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-2xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-purple-700 text-white border-purple-700 shadow-lg' : 'bg-white text-purple-900 border-purple-100 hover:bg-purple-50'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-lg">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-purple-700', 'text-white', 'border-purple-700', 'shadow-lg');
+                        b.classList.add('bg-white', 'text-purple-900', 'border-purple-100');
+                    });
+                    btn.classList.add('bg-purple-700', 'text-white', 'border-purple-700', 'shadow-lg');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-purple-950">${item.title}</h3>
+                            </div>
+                            <p class="text-purple-900 text-lg leading-relaxed mb-8 italic">${item.summary}</p>
+                            <div class="bg-purple-100 border-l-4 border-purple-500 p-6 rounded-r-2xl italic text-purple-950 font-serif text-xl">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-2xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-purple-500 bg-purple-50 text-purple-900' : 'border-transparent bg-white text-purple-700 hover:bg-purple-50'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-purple-500', 'bg-purple-50', 'text-purple-900');
+                        b.classList.add('border-transparent', 'bg-white', 'text-purple-700');
+                    });
+                    btn.classList.add('border-purple-500', 'bg-purple-50', 'text-purple-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-purple-950 mb-4">${item.title}</h3>
+                        <p class="text-lg text-purple-900 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-purple-200 text-purple-800 text-xs font-bold uppercase rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Combat', 'Xenia Pact', 'Trojan Gates', 'The Prayer', 'Helen\'s Regret', 'The Farewell', 'Return'],
+                    datasets: [{
+                        label: 'Pathos & Intensity',
+                        data: [8, 4, 5, 6, 7, 10, 8],
+                        borderColor: '#7c3aed',
+                        backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Martial Duty', 'Ancestral Honor', 'Family Love', 'Spiritual Pity', 'Individual Ego'],
+                    datasets: [
+                        {
+                            label: 'Hector',
+                            data: [10, 9, 10, 7, 4],
+                            borderColor: '#4c1d95',
+                            backgroundColor: 'rgba(76, 29, 149, 0.2)'
+                        },
+                        {
+                            label: 'Andromache',
+                            data: [2, 5, 10, 10, 1],
+                            borderColor: '#c084fc',
+                            backgroundColor: 'rgba(192, 132, 252, 0.2)'
+                        }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

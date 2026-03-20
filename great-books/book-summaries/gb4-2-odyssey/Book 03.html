@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book III - Nestor's Pylos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fdf2e9;
+            color: #4a2c2a;
+        }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .ritual-card {
+            background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+            border-top: 5px solid #9b1c1c;
+        }
+        .tab-btn.active {
+            background-color: #9b1c1c;
+            color: white;
+        }
+        .hero-node {
+            transition: all 0.3s ease;
+        }
+        .hero-node:hover {
+            transform: scale(1.1);
+            color: #9b1c1c;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+
+    <header class="bg-[#9b1c1c] text-[#fdf2e9] py-16 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 flex justify-center items-center pointer-events-none">
+            <span class="text-[20rem] font-cinzel">⚖️</span>
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-black font-cinzel mb-4 tracking-widest">SACRED PYLOS</h1>
+            <p class="text-2xl font-light italic">"Man cannot live without God in the world."</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
+            
+            <!-- Left Column: Navigation & Summary -->
+            <aside class="lg:w-1/4">
+                <div class="sticky top-8 space-y-4">
+                    <button onclick="switchTab('sacrifices')" id="btn-sacrifices" class="tab-btn active w-full text-left px-6 py-4 font-cinzel font-bold rounded-lg shadow-md transition-all hover:bg-red-800 hover:text-white">I. THE HECATOMB</button>
+                    <button onclick="switchTab('chronicle')" id="btn-chronicle" class="tab-btn w-full text-left px-6 py-4 font-cinzel font-bold rounded-lg shadow-md transition-all hover:bg-red-800 hover:text-white">II. NESTOR'S CHRONICLE</button>
+                    <button onclick="switchTab('hospitality')" id="btn-hospitality" class="tab-btn w-full text-left px-6 py-4 font-cinzel font-bold rounded-lg shadow-md transition-all hover:bg-red-800 hover:text-white">III. LAWS OF XENIA</button>
+                    
+                    <div class="mt-8 p-6 bg-amber-100 rounded-xl border border-amber-200">
+                        <h4 class="font-cinzel font-bold text-amber-900 mb-2">Location Profile</h4>
+                        <p class="text-sm"><strong>City:</strong> Pylos, City of Neleus</p>
+                        <p class="text-sm"><strong>Ruler:</strong> Nestor, Gerenian Knight</p>
+                        <p class="text-sm"><strong>Atmosphere:</strong> Orderly, devout, traditional.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Column: Content -->
+            <div class="lg:w-3/4">
+                
+                <!-- Tab: Sacrifices -->
+                <section id="sacrifices" class="tab-section block animate-in fade-in duration-500">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="ritual-card p-8 rounded-xl shadow-lg">
+                            <h3 class="font-cinzel text-3xl font-bold mb-6 text-red-900">The Offering</h3>
+                            <p class="mb-6 leading-relaxed">The Pylians are gathered on the shore, offering black bulls to Neptune. This ritual establishes the profound piety of Nestor's kingdom.</p>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <span class="font-bold">Guilds</span>
+                                    <span>9 Units</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <span class="font-bold">Men per Guild</span>
+                                    <span>500 Men</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <span class="font-bold">Bulls per Guild</span>
+                                    <span>9 Bulls</span>
+                                </div>
+                                <div class="flex justify-between items-center pt-2 font-bold text-red-800">
+                                    <span>Total Offering</span>
+                                    <span>81 Bulls</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg flex flex-col items-center">
+                            <h3 class="font-cinzel text-xl font-bold mb-6">Sacrifice Composition</h3>
+                            <canvas id="sacChart" width="200" height="200"></canvas>
+                            <p class="text-xs text-slate-500 mt-6 text-center italic">The "Inward Meats" (organs) are consumed by the people, while "Thigh Bones" are burned for the gods.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-white p-8 rounded-xl shadow-lg border-l-8 border-yellow-500">
+                        <h3 class="font-cinzel text-2xl font-bold mb-4">The Ritual of the Heifer</h3>
+                        <p class="mb-4 text-sm leading-relaxed">Later, Nestor sacrifices a heifer with gilded horns to Minerva. This detailed process involves:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="p-4 bg-slate-50 rounded">🔨<br><span class="text-xs uppercase font-bold">Gilding Horns</span></div>
+                            <div class="p-4 bg-slate-50 rounded">🌾<br><span class="text-xs uppercase font-bold">Barley Sprinkling</span></div>
+                            <div class="p-4 bg-slate-50 rounded">🪓<br><span class="text-xs uppercase font-bold">The Axe Blow</span></div>
+                            <div class="p-4 bg-slate-50 rounded">🔥<br><span class="text-xs uppercase font-bold">The Pyre</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Chronicle -->
+                <section id="chronicle" class="tab-section hidden animate-in fade-in duration-500">
+                    <div class="bg-white p-10 rounded-xl shadow-2xl border border-red-100">
+                        <h3 class="font-cinzel text-3xl font-bold mb-8 text-center text-red-900 underline underline-offset-8">THE FATE OF THE ACHAEANS</h3>
+                        <p class="text-center italic mb-10 text-slate-600">Nestor recounts the return of the heroes from Troy. Click a name to reveal their fate.</p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                            <div class="hero-node cursor-pointer p-4 border rounded text-center bg-slate-50" onclick="showFate('Achilles', 'Fell at Troy. His son Neoptolemus returned safely with the Myrmidons.')">
+                                <span class="text-2xl">🛡️</span><br><span class="font-bold">Achilles</span>
+                            </div>
+                            <div class="hero-node cursor-pointer p-4 border rounded text-center bg-slate-50" onclick="showFate('Agamemnon', 'Murdered by Aegisthus and Clytemnestra upon his return. Avenged by his son Orestes.')">
+                                <span class="text-2xl">👑</span><br><span class="font-bold">Agamemnon</span>
+                            </div>
+                            <div class="hero-node cursor-pointer p-4 border rounded text-center bg-slate-50" onclick="showFate('Menelaus', 'Wandered to Egypt for 8 years, gathering gold and treasure before returning to Sparta.')">
+                                <span class="text-2xl">🌍</span><br><span class="font-bold">Menelaus</span>
+                            </div>
+                            <div class="hero-node cursor-pointer p-4 border rounded text-center bg-slate-50" onclick="showFate('Ajax', 'A mighty warrior who fell at Troy (The Great Ajax).')">
+                                <span class="text-2xl">⚔️</span><br><span class="font-bold">Ajax</span>
+                            </div>
+                            <div class="hero-node cursor-pointer p-4 border rounded text-center bg-slate-50" onclick="showFate('Diomed', 'Returned safely to Argos within four days of sailing from Troy.')">
+                                <span class="text-2xl">🐎</span><br><span class="font-bold">Diomed</span>
+                            </div>
+                            <div class="hero-node cursor-pointer p-4 border rounded text-center bg-slate-50" onclick="showFate('Ulysses', 'The great outlier. Disappeared after a quarrel between the sons of Atreus.')">
+                                <span class="text-2xl">❓</span><br><span class="font-bold">Ulysses</span>
+                            </div>
+                        </div>
+                        
+                        <div id="fate-display" class="mt-8 p-6 bg-red-900 text-white rounded-lg min-h-[100px] flex items-center justify-center text-center italic">
+                            Select a hero to consult the chronicle.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Hospitality -->
+                <section id="hospitality" class="tab-section hidden animate-in fade-in duration-500">
+                    <div class="max-w-2xl mx-auto space-y-8">
+                        <div class="text-center mb-10">
+                            <h3 class="font-cinzel text-4xl font-bold text-red-900">The Laws of Xenia</h3>
+                            <p class="text-slate-600">How Nestor treats the "unknown" travelers.</p>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex gap-4 items-start">
+                                <div class="w-12 h-12 bg-red-900 text-white flex-shrink-0 flex items-center justify-center rounded-full font-bold">1</div>
+                                <div class="bg-white p-4 rounded shadow flex-grow">
+                                    <h4 class="font-bold mb-1 uppercase tracking-tighter">The Welcome</h4>
+                                    <p class="text-sm">Before asking their names, Nestor provides food, wine, and a place by the fire. "Now that our guests have done their dinner, it will be best to ask them who they are."</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="w-12 h-12 bg-red-900 text-white flex-shrink-0 flex items-center justify-center rounded-full font-bold">2</div>
+                                <div class="bg-white p-4 rounded shadow flex-grow">
+                                    <h4 class="font-bold mb-1 uppercase tracking-tighter">The Shared Ritual</h4>
+                                    <p class="text-sm">Pisistratus gives the cup to Minerva (Mentor) first because she is older, showing respect for age and the gods.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="w-12 h-12 bg-red-900 text-white flex-shrink-0 flex items-center justify-center rounded-full font-bold">3</div>
+                                <div class="bg-white p-4 rounded shadow flex-grow">
+                                    <h4 class="font-bold mb-1 uppercase tracking-tighter">The Provision</h4>
+                                    <p class="text-sm">Nestor refuses to let Telemachus sleep on the ship, providing rugs, cloaks, and eventually a chariot with his own son to Sparta.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2002.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book II
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2004.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book IV <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="mt-20 border-t border-red-200 py-12 bg-white text-center">
+        <p class="font-cinzel text-red-900 font-bold mb-2">THE ODYSSEY: BOOK III</p>
+        <p class="text-sm text-slate-500">Interactive Sacred Text Analysis</p>
+    </footer>
+
+    <script>
+        function switchTab(id) {
+            document.querySelectorAll('.tab-section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'bg-red-800', 'text-white'));
+            
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById('btn-' + id).classList.add('active', 'bg-red-800', 'text-white');
+            
+            if (id === 'sacrifices') initSacChart();
+        }
+
+        function showFate(name, fate) {
+            const display = document.getElementById('fate-display');
+            display.innerHTML = `<strong>${name.toUpperCase()}:</strong> ${fate}`;
+            display.classList.remove('bg-red-900');
+            display.classList.add('bg-red-800');
+        }
+
+        let sacChart = null;
+        function initSacChart() {
+            if (sacChart) return;
+            const ctx = document.getElementById('sacChart').getContext('2d');
+            sacChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Consumer (The People)', 'Burnt Offering (The Gods)'],
+                    datasets: [{
+                        data: [75, 25],
+                        backgroundColor: ['#4a2c2a', '#eab308'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initSacChart();
+        });
+    </script>
+</body>
+</html>

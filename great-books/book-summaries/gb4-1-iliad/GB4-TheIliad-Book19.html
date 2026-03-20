@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XIX - The Renunciation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fcfbf9;
+            /* Light parchment */
+            color: #334155;
+            /* Slate 700 */
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-display {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Crucial Chart Container Styling as per requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+
+        /* Custom Scrollbar for Timeline */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .active-tab {
+            background-color: #1e293b;
+            /* slate-800 */
+            color: #f8fafc;
+            /* slate-50 */
+            border-color: #1e293b;
+        }
+
+        .active-tab span:first-child {
+            color: #fbbf24;
+            /* amber-400 */
+        }
+
+        .active-theme {
+            border-color: #b45309;
+            /* amber-700 */
+            background-color: #fffbeb;
+            /* amber-50 */
+            color: #78350f;
+            /* amber-900 */
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+
+    <!-- Chosen Palette: Mycenaean Bronze (Background: Parchment #fcfbf9, Text: Slate #334155 / #1e293b, Accents: Bronze/Amber #b45309 / #fbbf24, Highlights: Muted Crimson #be123c) -->
+
+    <!-- Application Structure Plan: This SPA uses a modular dashboard structure to dissect Book XIX of The Iliad. The structure departs from a linear reading to provide a thematic and analytical view of the text's pivotal turning point—Achilles' return. 
+    1. Overview: Establishes context.
+    2. Chronicle of Reconciliation (Timeline): An interactive chronological breakdown of the rapid events of this specific day (Dawn to Afternoon), allowing users to explore the sequence of the assembly, the debate, and the arming without reading walls of text.
+    3. Analytics of War (Charts): Visualizes the abstract conflicts of the chapter. A line chart compares the readiness of Achilles vs. the Army, and a radar chart contrasts the mindsets of Achilles and Ulysses during their crucial debate on logistics.
+    4. Thematic Explorer: Allows users to dive into the core literary concepts (Folly, Fate, Practicality) highlighted in the summary report. This structure is chosen to make ancient epic poetry digestible, interactive, and analytical for a modern audience. -->
+
+    <!-- Visualization & Content Choices: 
+         1. Timeline: Goal -> Organize/Inform. Method -> Interactive HTML List with side-panel detail. Justification -> Breaks down the dense sequence of events (Assembly, Apology, Feast, Arming) into manageable, chronological bites.
+         2. Readiness Tracker: Goal -> Change/Compare. Method -> Chart.js Line Chart. Justification -> Visually demonstrates the emotional vs. physical escalation leading up to battle, highlighting Achilles' divine sustenance vs. the army's need for food.
+         3. Mindset Comparison: Goal -> Compare. Method -> Chart.js Radar Chart. Justification -> Effectively compares the multi-dimensional priorities (Vengeance, Logistics, Patience, Glory) of Achilles and Ulysses during their central debate.
+         4. Thematic Explorer: Goal -> Inform/Relationships. Method -> Tabbed HTML interface. Justification -> Encourages self-directed exploration of the report's key themes (Shift of Rage, Folly/Ate, Practicality of War).
+         Library/Method Confirmations: Canvas used for charts. HTML/Tailwind for UI. NO SVG used. NO Mermaid JS used. -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-slate-900 text-slate-50 shadow-md border-b-4 border-amber-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl text-amber-500">&#9876;</span>
+                    <span class="font-display text-xl font-bold tracking-widest text-slate-50">THE ILIAD <span
+                            class="text-amber-500 font-normal">| BOOK XIX</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 text-sm font-semibold tracking-wide uppercase">
+                        <a href="#overview" class="hover:text-amber-400 transition-colors">The Renunciation</a>
+                        <a href="#timeline" class="hover:text-amber-400 transition-colors">Chronicle</a>
+                        <a href="#analytics" class="hover:text-amber-400 transition-colors">Analytics</a>
+                        <a href="#themes" class="hover:text-amber-400 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
+
+        <!-- Overview Section -->
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1
+                class="text-4xl md:text-5xl font-bold text-slate-900 uppercase tracking-widest drop-shadow-sm font-display mb-4">
+                The Renunciation of Quarrel</h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                Book XIX marks the monumental turning point of the Trojan War. The devastating wrath of Achilles,
+                previously directed inward at his own commander, Agamemnon, is formally renounced. Forged in the fires
+                of grief over Patroclus, his fury now turns outward toward Hector and the Trojans. This section explores
+                the delicate politics of reconciliation, the logistics of warfare, and the heavy shadow of fate.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6 md:gap-12 pt-6 text-slate-700">
+                <div class="flex flex-col items-center bg-white px-6 py-4 rounded-lg shadow-sm border border-slate-200">
+                    <span class="text-4xl text-rose-700 mb-2">&#128148;</span>
+                    <span class="text-sm uppercase tracking-widest font-bold">Grief & Vengeance</span>
+                </div>
+                <div class="flex flex-col items-center bg-white px-6 py-4 rounded-lg shadow-sm border border-slate-200">
+                    <span class="text-4xl text-amber-600 mb-2">&#9878;</span>
+                    <span class="text-sm uppercase tracking-widest font-bold">Reconciliation</span>
+                </div>
+                <div class="flex flex-col items-center bg-white px-6 py-4 rounded-lg shadow-sm border border-slate-200">
+                    <span class="text-4xl text-slate-800 mb-2">&#10024;</span>
+                    <span class="text-sm uppercase tracking-widest font-bold">Fate & Prophecy</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="pt-8 scroll-mt-20">
+            <div class="mb-8 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 font-display">The Chronicle of the Final Day</h2>
+                <p class="text-slate-600 max-w-4xl leading-relaxed text-lg">
+                    This section breaks down the rapid sequence of events that occur from dawn to afternoon. Click
+                    through the timeline on the left to explore the narrative progression, key character interactions,
+                    and critical plot developments that bridge Achilles' mourning and his return to the battlefield.
+                </p>
+            </div>
+
+            <div
+                class="flex flex-col lg:flex-row gap-8 bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <!-- Timeline Navigation -->
+                <div class="w-full lg:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-4"
+                    id="timeline-buttons">
+                    <!-- JavaScript will populate this -->
+                </div>
+
+                <!-- Timeline Content Display -->
+                <div
+                    class="w-full lg:w-2/3 bg-slate-50 rounded-xl p-6 md:p-10 flex flex-col justify-center border border-slate-200 relative overflow-hidden shadow-inner">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                        <!-- JavaScript will populate this -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="pt-8 scroll-mt-20">
+            <div class="mb-10 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 font-display">Analytics of War & Leadership</h2>
+                <p class="text-slate-600 max-w-4xl leading-relaxed text-lg">
+                    The assembly in Book XIX is not just a truce; it is a clash of ideologies. This section visualizes
+                    the core conflicts of the chapter. The first chart contrasts the differing priorities of Achilles
+                    (driven by passion) and Ulysses (driven by practicality). The second tracks the escalation of
+                    battle-readiness throughout the morning.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Radar Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
+                    <div class="mb-4 text-center">
+                        <h3 class="text-xl font-display font-bold text-slate-900">The Debate on Logistics</h3>
+                        <p class="text-sm text-slate-500 mt-1">Comparing the mindsets of Achilles vs. Ulysses</p>
+                    </div>
+                    <!-- CHART CONTAINER -->
+                    <div class="chart-container flex-grow">
+                        <canvas id="mindsetRadarChart"></canvas>
+                    </div>
+                    <div
+                        class="mt-4 text-sm text-slate-600 text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <strong>Insight:</strong> Ulysses prioritizes logistics (food/rest) and protocol (public oaths),
+                        recognizing the physical limits of the army. Achilles, fueled by grief and divine armor,
+                        abandons practical patience for immediate vengeance.
+                    </div>
+                </div>
+
+                <!-- Line Chart -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
+                    <div class="mb-4 text-center">
+                        <h3 class="text-xl font-display font-bold text-slate-900">The Trajectory of Battle Readiness
+                        </h3>
+                        <p class="text-sm text-slate-500 mt-1">Physical vs. Emotional preparation over the timeline</p>
+                    </div>
+                    <!-- CHART CONTAINER -->
+                    <div class="chart-container flex-grow">
+                        <canvas id="readinessLineChart"></canvas>
+                    </div>
+                    <div
+                        class="mt-4 text-sm text-slate-600 text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <strong>Insight:</strong> While the army's readiness drops as hunger sets in (requiring Ulysses'
+                        feast to recover), Achilles' emotional and physical readiness skyrockets continuously, sustained
+                        secretly by Minerva's divine nectar.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Themes Section -->
+        <section id="themes" class="pt-8 pb-16 scroll-mt-20">
+            <div class="mb-10 border-b-2 border-slate-200 pb-4">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 font-display">Thematic Explorer</h2>
+                <p class="text-slate-600 max-w-4xl leading-relaxed text-lg">
+                    Book XIX is rich with classical Greek philosophical and literary themes. Select a theme below to
+                    explore the core concepts that define this chapter, complete with insights drawn from the text's
+                    events.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Theme Navigation -->
+                <div class="md:col-span-4 flex flex-col gap-3" id="theme-buttons">
+                    <!-- JavaScript will populate this -->
+                </div>
+
+                <!-- Theme Content -->
+                <div
+                    class="md:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10 min-h-[350px]">
+                    <div id="theme-content">
+                        <!-- JavaScript will populate this -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book18.html"
+                class="w-1/3 flex justify-start items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span>
+                <span class="hidden sm:inline">Previous: The Shield of Achilles</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html"
+                class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book20.html"
+                class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Great Council</span><span class="sm:hidden">Next</span>
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-10 text-center border-t-4 border-slate-800">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="font-display tracking-widest uppercase text-sm mb-4">Interactive Summary & Analysis</p>
+            <p class="text-base text-slate-500">Based on Homer's <span class="text-amber-500">The Iliad, Book XIX</span>
+            </p>
+            <div class="mt-6 flex justify-center space-x-4 text-2xl">
+                <span>&#9876;</span>
+                <span>&#9878;</span>
+                <span>&#128052;</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA STRUCTURES ---
+
+        const timelineData = [
+            {
+                id: 't1',
+                time: 'Dawn',
+                title: 'The Divine Armor',
+                summary: 'Thetis delivers the magnificent armor forged by Vulcan to Achilles. While the other Myrmidons are terrified by its brilliance, Achilles is invigorated. Thetis preserves Patroclus\' body with nectar and ambrosia.',
+                icon: '&#9876;',
+                color: 'text-amber-600',
+                bg: 'bg-amber-100'
+            },
+            {
+                id: 't2',
+                time: 'Morning',
+                title: 'The Assembly & Renunciation',
+                summary: 'Achilles calls a general assembly. He officially renounces his anger toward Agamemnon, admitting the quarrel only brought death to the Greeks and joy to Hector. He demands an immediate return to battle.',
+                icon: '&#128227;',
+                color: 'text-blue-600',
+                bg: 'bg-blue-100'
+            },
+            {
+                id: 't3',
+                time: 'Mid-Morning',
+                title: 'Agamemnon\'s Defense (Folly)',
+                summary: 'Agamemnon speaks from his place, still wounded. He blames his previous actions on Folly (Ate), a divine force that blinds men, noting even Jove was once fooled. He offers all previously promised gifts as atonement.',
+                icon: '&#127983;',
+                color: 'text-purple-600',
+                bg: 'bg-purple-100'
+            },
+            {
+                id: 't4',
+                time: 'Late Morning',
+                title: 'The Debate on Fasting',
+                summary: 'Achilles, desiring only revenge, demands the army attack immediately without eating. Ulysses wisely argues that men need "strength and stay" from food to fight all day, insisting on a public feast and the formal presentation of gifts.',
+                icon: '&#9878;',
+                color: 'text-emerald-600',
+                bg: 'bg-emerald-100'
+            },
+            {
+                id: 't5',
+                time: 'Noon',
+                title: 'The Oath and Briseis\' Lament',
+                summary: 'The gifts are brought out. Agamemnon swears an oath before the gods he never touched Briseis. Upon seeing Patroclus\' body, Briseis breaks into a bitter lament, mourning the man who promised to make her Achilles\' lawful wife.',
+                icon: '&#128148;',
+                color: 'text-rose-600',
+                bg: 'bg-rose-100'
+            },
+            {
+                id: 't6',
+                time: 'Early Afternoon',
+                title: 'Divine Sustenance',
+                summary: 'While the army eats, Achilles stubbornly fasts. Pitying him, Jove sends Minerva to secretly instill nectar and ambrosia into Achilles\' breast so he does not weaken. The army then marches out like a thick snowstorm.',
+                icon: '&#10024;',
+                color: 'text-indigo-600',
+                bg: 'bg-indigo-100'
+            },
+            {
+                id: 't7',
+                time: 'Afternoon',
+                title: 'The Prophecy of Xanthus',
+                summary: 'Achilles dons his new armor and mounts his chariot. He chides his horses for Patroclus\' death. The horse Xanthus, given human speech by Juno, prophesies that Achilles\' own death at the hands of a god and a man is near.',
+                icon: '&#128052;',
+                color: 'text-slate-700',
+                bg: 'bg-slate-200'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-rage',
+                title: 'The Shift from Private to Public Rage',
+                content: 'Book XIX represents the redirection of Achilles\' defining emotion: Mēnis (Rage). In Book I, his anger is private and political, directed at Agamemnon over a loss of status. In Book XIX, the object of his wrath shifts entirely to Hector and the Trojans. This is a terrifying evolution; his anger is no longer about honor, but about pure, destructive vengeance for the loss of a loved one. He renounces the quarrel not out of forgiveness, but because a far greater hatred has eclipsed it.',
+                keywords: ['Vengeance', 'Renunciation', 'Mēnis']
+            },
+            {
+                id: 'theme-folly',
+                title: 'Folly (Ate) and Fate',
+                content: 'Agamemnon\'s apology introduces the concept of \'Ate\'—translated as Folly, ruin, or divine blindness. By claiming that Jove, Fate, and the Erinys "struck me mad," Agamemnon highlights the Greek view of diminished human culpability. Errors of pride are often seen as the result of divine interference. Yet, human beings still bear the physical and political consequences of this divinely inspired blindness, hence his need to pay the material ransom of tripods, horses, and women.',
+                keywords: ['Ate (Folly)', 'Divine Blindness', 'Accountability']
+            },
+            {
+                id: 'theme-practicality',
+                title: 'The Practicality of War',
+                content: 'The debate between Achilles and Ulysses perfectly contrasts the divine/heroic ideal with the gritty reality of mortal warfare. Achilles, sustained by grief (and later, literally by gods), wishes to fight immediately, treating food as an insult to the dead. Ulysses represents practical human endurance. He knows that an army marches on its stomach and that "hunger and thirst will find [them] out." This grounds the epic in the realistic logistics of military leadership.',
+                keywords: ['Logistics', 'Endurance', 'Heroism vs Reality']
+            },
+            {
+                id: 'theme-prophecy',
+                title: 'The Foreknowledge of Death',
+                content: 'The climax of the book features the eerie prophecy of the horse, Xanthus. When warned of his impending doom, Achilles does not flinch. "I well know that I am to fall here," he replies. This acceptance elevates Achilles to a truly tragic hero. He is fully conscious of his fate—a short, glorious life ending in Troy—and he actively chooses to charge toward it anyway. His arming scene is essentially him preparing for his own magnificent funeral.',
+                keywords: ['Prophecy', 'Tragic Hero', 'Acceptance of Mortality']
+            }
+        ];
+
+        // --- INITIALIZATION FUNCTIONS ---
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                // Base classes
+                btn.className = `w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 focus:outline-none flex flex-col`;
+
+                // Styling based on state (handled in click listener, but set initial state here)
+                if (index === 0) {
+                    btn.classList.add('active-tab');
+                } else {
+                    btn.classList.add('bg-white', 'text-slate-600', 'border-slate-100', 'hover:bg-slate-50', 'hover:border-slate-300');
+                }
+
+                btn.innerHTML = `
+                    <span class="text-xs font-bold uppercase tracking-widest mb-1 ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${item.time}</span>
+                    <span class="font-display font-bold text-lg leading-tight">${item.title}</span>
+                `;
+
+                btn.onclick = () => {
+                    // Reset all buttons
+                    const allBtns = btnContainer.querySelectorAll('button');
+                    allBtns.forEach(b => {
+                        b.className = 'w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 focus:outline-none flex flex-col bg-white text-slate-600 border-slate-100 hover:bg-slate-50 hover:border-slate-300';
+                        b.querySelector('span:first-child').className = 'text-xs font-bold uppercase tracking-widest mb-1 text-slate-400';
+                    });
+
+                    // Set active button
+                    btn.className = 'w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 focus:outline-none flex flex-col active-tab shadow-md';
+                    btn.querySelector('span:first-child').className = 'text-xs font-bold uppercase tracking-widest mb-1 text-amber-400';
+
+                    // Update Content with fade effect
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-start gap-5 mb-6">
+                                <div class="w-16 h-16 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center text-3xl border border-white shadow-sm shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div class="pt-1">
+                                    <h3 class="text-3xl font-display font-bold text-slate-900 leading-tight mb-2">${item.title}</h3>
+                                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider rounded-md">${item.time}</span>
+                                </div>
+                            </div>
+                            <div class="prose prose-slate max-w-none">
+                                <p class="text-slate-700 text-xl leading-relaxed font-serif">${item.summary}</p>
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 200);
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            // Trigger first item
+            if (timelineData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+
+                if (index === 0) {
+                    btn.className = `w-full text-left px-6 py-5 rounded-xl font-display font-bold text-lg transition-all duration-200 border-2 active-theme shadow-sm`;
+                } else {
+                    btn.className = `w-full text-left px-6 py-5 rounded-xl font-display font-bold text-lg transition-all duration-200 border-2 border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100 hover:border-slate-200`;
+                }
+
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    // Reset
+                    const allBtns = btnContainer.querySelectorAll('button');
+                    allBtns.forEach(b => {
+                        b.className = 'w-full text-left px-6 py-5 rounded-xl font-display font-bold text-lg transition-all duration-200 border-2 border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100 hover:border-slate-200';
+                    });
+
+                    // Activate
+                    btn.className = 'w-full text-left px-6 py-5 rounded-xl font-display font-bold text-lg transition-all duration-200 border-2 active-theme shadow-sm';
+
+                    // Update Content
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-display font-bold text-slate-900 mb-6 pb-4 border-b border-slate-100">${item.title}</h3>
+                        <p class="text-xl text-slate-700 leading-relaxed mb-10 font-serif">${item.content}</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1 mr-2">Keywords:</span>
+                            ${item.keywords.map(kw => `<span class="px-4 py-1.5 bg-slate-100 text-slate-700 text-sm font-bold uppercase tracking-wider rounded-lg border border-slate-200 shadow-sm">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (themesData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initCharts() {
+            // Chart.js global defaults
+            Chart.defaults.font.family = "'Lora', serif";
+            Chart.defaults.color = '#64748b';
+
+            // 1. Mindset Radar Chart (Achilles vs Ulysses)
+            const radarCtx = document.getElementById('mindsetRadarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Desire for Vengeance', 'Practical Logistics', 'Adherence to Protocol', 'Patience', 'Grief/Emotion'],
+                    datasets: [
+                        {
+                            label: 'Achilles',
+                            data: [10, 1, 2, 1, 10],
+                            backgroundColor: 'rgba(190, 18, 60, 0.2)', // Rose-700
+                            borderColor: '#be123c',
+                            pointBackgroundColor: '#be123c',
+                            borderWidth: 2,
+                            pointRadius: 4
+                        },
+                        {
+                            label: 'Ulysses',
+                            data: [5, 10, 9, 8, 3],
+                            backgroundColor: 'rgba(51, 65, 85, 0.2)', // Slate-700
+                            borderColor: '#334155',
+                            pointBackgroundColor: '#334155',
+                            borderWidth: 2,
+                            pointRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: "'Cinzel', serif", size: 14, weight: 'bold' },
+                                color: '#1e293b',
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                            titleFont: { family: "'Cinzel', serif", size: 14 },
+                            bodyFont: { family: "'Lora', serif", size: 13 },
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                font: { family: "'Cinzel', serif", size: 11, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            ticks: { display: false, min: 0, max: 10 }
+                        }
+                    }
+                }
+            });
+
+            // 2. Readiness Line Chart
+            const lineCtx = document.getElementById('readinessLineChart').getContext('2d');
+            new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Dawn', 'Assembly', 'Debate', 'Feast/Fasting', 'Arming'],
+                    datasets: [
+                        {
+                            label: 'Achilles (Emotional/Divine Readiness)',
+                            data: [5, 7, 8, 9, 10],
+                            borderColor: '#b45309', // Amber-700
+                            backgroundColor: 'rgba(180, 83, 9, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#b45309',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Achaean Army (Physical Readiness)',
+                            data: [6, 6, 4, 8, 9], // Dips during debate due to hunger, spikes after feast
+                            borderColor: '#475569', // Slate-600
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            pointBackgroundColor: '#475569',
+                            pointRadius: 4,
+                            fill: false,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12 },
+                                boxWidth: 20,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                            titleFont: { family: "'Cinzel', serif", size: 14 },
+                            bodyFont: { family: "'Lora', serif", size: 13 },
+                            padding: 12
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 11,
+                            ticks: { display: false },
+                            grid: { color: '#f1f5f9', drawBorder: false },
+                            title: { display: true, text: 'Readiness for Battle', font: { family: "'Cinzel', serif", weight: 'bold' }, color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false },
+                            ticks: {
+                                font: { family: "'Cinzel', serif", weight: 'bold' },
+                                color: '#475569'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- RUN ON LOAD ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+
+</html>

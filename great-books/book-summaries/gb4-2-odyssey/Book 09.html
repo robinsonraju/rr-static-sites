@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book IX Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #1a1a1a; /* Primal Dark */
+            color: #e5e7eb;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .bg-primal-red { background-color: #7f1d1d; }
+        .text-primal-yellow { color: #facc15; }
+        .border-primal-stone { border-color: #4b5563; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #facc15;
+            color: #facc15;
+            font-weight: 600;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-section {
+            display: none;
+        }
+        .step-card:hover {
+            border-color: #facc15;
+            background-color: #262626;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-black text-white py-12 shadow-2xl border-b-4 border-primal-red">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-6xl mb-4">👁️ 🍷 🐏</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-widest text-primal-yellow">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-3xl font-light italic text-red-500">Book IX: I am Noman</h2>
+        </div>
+    </header>
+
+    <nav class="bg-neutral-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-neutral-800">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active bg-transparent inline-block py-4 px-4 md:px-8 text-neutral-400 hover:text-white font-cinzel text-sm md:text-base transition-colors" data-target="identity">The Revelation</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-transparent inline-block py-4 px-4 md:px-8 text-neutral-400 hover:text-white font-cinzel text-sm md:text-base transition-colors" data-target="losses">The Toll of Folly</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-transparent inline-block py-4 px-4 md:px-8 text-neutral-400 hover:text-white font-cinzel text-sm md:text-base transition-colors" data-target="cyclops">The Eye of the Monster</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-transparent inline-block py-4 px-4 md:px-8 text-neutral-400 hover:text-white font-cinzel text-sm md:text-base transition-colors" data-target="curse">Neptune's Wrath</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-16">
+
+        <section id="identity" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto mb-12 text-center bg-neutral-800 p-8 rounded-3xl border-2 border-primal-red">
+                <h3 class="text-3xl font-cinzel font-bold text-primal-yellow mb-6">"I am Ulysses, Son of Laertes"</h3>
+                <p class="text-neutral-300 mb-8 italic leading-relaxed">
+                    "Renowned among mankind for all manner of subtlety... there is nothing dearer to a man than his own country and his parents."
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <div class="p-4 bg-black rounded-xl border-l-4 border-primal-yellow">
+                        <h4 class="font-cinzel text-white mb-2">The Name</h4>
+                        <p class="text-xs text-neutral-400">By revealing his name, Ulysses ends his anonymity but seals his fate with Polyphemus's father.</p>
+                    </div>
+                    <div class="p-4 bg-black rounded-xl border-l-4 border-primal-yellow">
+                        <h4 class="font-cinzel text-white mb-2">The Mission</h4>
+                        <p class="text-xs text-neutral-400">He begins the "Apologoi"—the flashback narrative of his nine-year wandering.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="losses" class="content-section hidden-section fade-in">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <h3 class="text-3xl font-cinzel font-bold text-red-600 mb-6">The Casualty Count</h3>
+                    <p class="text-neutral-300 mb-8">Ulysses' journey is marked by the gradual erosion of his fleet. At Ismarus, the men's greed costs lives; at the Lotus island, they lose their will to return.</p>
+                    <canvas id="lossChart" class="bg-neutral-900 p-4 rounded-xl"></canvas>
+                </div>
+                <div class="order-1 lg:order-2 space-y-4">
+                    <div class="p-6 bg-neutral-800 rounded-2xl border border-neutral-700">
+                        <h4 class="font-cinzel text-primal-yellow text-xl mb-2">Ismarus (Cicones)</h4>
+                        <p class="text-sm text-neutral-400">The men stayed to drink and feast against Ulysses' orders. Result: Six men per ship killed in a counter-attack.</p>
+                    </div>
+                    <div class="p-6 bg-neutral-800 rounded-2xl border border-neutral-700">
+                        <h4 class="font-cinzel text-emerald-400 text-xl mb-2">The Lotus-Eaters</h4>
+                        <p class="text-sm text-neutral-400">"Those who ate of it left off caring about home." Ulysses had to drag them back to the ships by force.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cyclops" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-10 text-center">
+                <h3 class="text-4xl font-cinzel font-bold text-white mb-4">Escape from the Cave</h3>
+                <p class="text-neutral-400">A step-by-step interactive log of the stratagem used to blind Polyphemus and escape his reach.</p>
+            </div>
+
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <div class="bg-neutral-800 p-6 rounded-xl border-l-8 border-red-900 cursor-pointer hover:bg-neutral-700 transition-all" onclick="toggleStep(1)">
+                    <h4 class="font-cinzel font-bold text-primal-yellow">1. The Maron Wine</h4>
+                    <p id="step-1" class="hidden mt-2 text-sm text-neutral-300">Ulysses brings a skin of black wine so potent it requires 20 parts water. He gives it to the Cyclops "neat" to induce a heavy stupor.</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl border-l-8 border-red-900 cursor-pointer hover:bg-neutral-700 transition-all" onclick="toggleStep(2)">
+                    <h4 class="font-cinzel font-bold text-primal-yellow">2. The "Noman" Logic</h4>
+                    <p id="step-2" class="hidden mt-2 text-sm text-neutral-300">When asked his name, Ulysses says "Noman." This prevents the other Cyclopes from helping when they hear: "Noman is killing me by fraud!"</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl border-l-8 border-red-900 cursor-pointer hover:bg-neutral-700 transition-all" onclick="toggleStep(3)">
+                    <h4 class="font-cinzel font-bold text-primal-yellow">3. The Olive Stake</h4>
+                    <p id="step-3" class="hidden mt-2 text-sm text-neutral-300">A six-foot beam of green olive wood is sharpened, charred, and driven into the Cyclops' single eye while he sleeps.</p>
+                </div>
+                <div class="bg-neutral-800 p-6 rounded-xl border-l-8 border-red-900 cursor-pointer hover:bg-neutral-700 transition-all" onclick="toggleStep(4)">
+                    <h4 class="font-cinzel font-bold text-primal-yellow">4. Under the Bellies</h4>
+                    <p id="step-4" class="hidden mt-2 text-sm text-neutral-300">The men are bound in threes under the fat sheep. Ulysses clings to the fleece of the lead ram. Polyphemus feels the backs of the sheep, never the undersides.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="curse" class="content-section hidden-section fade-in">
+            <div class="max-w-3xl mx-auto bg-black p-12 rounded-full border-4 border-primal-red text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-red-900 opacity-5"></div>
+                <h3 class="text-3xl font-cinzel font-bold text-red-600 mb-6">The Hubris of the Hero</h3>
+                <p class="text-neutral-300 mb-8">Safely at sea, Ulysses cannot resist shouting his true name. Polyphemus then prays to Neptune with a specific four-part curse:</p>
+                
+                <ul class="text-left space-y-4 max-w-md mx-auto">
+                    <li class="flex items-center space-x-3 text-sm">
+                        <span class="text-primal-yellow">⚔️</span>
+                        <span>Grant that Ulysses never reach his home alive.</span>
+                    </li>
+                    <li class="flex items-center space-x-3 text-sm">
+                        <span class="text-primal-yellow">⚔️</span>
+                        <span>Or, if he must return, let it be late and in sore plight.</span>
+                    </li>
+                    <li class="flex items-center space-x-3 text-sm">
+                        <span class="text-primal-yellow">⚔️</span>
+                        <span>Let him reach home after losing all his men.</span>
+                    </li>
+                    <li class="flex items-center space-x-3 text-sm">
+                        <span class="text-primal-yellow">⚔️</span>
+                        <span>Let him reach home in another man's ship and find trouble.</span>
+                    </li>
+                </ul>
+                <p class="mt-8 text-xs text-neutral-500 font-bold uppercase">"And Neptune heard his prayer."</p>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2008.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book VIII
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2010.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book X <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-neutral-600 py-8 text-center text-sm mt-auto border-t border-neutral-800">
+        <p>Book IX of Homer's <i>The Odyssey</i>: The Land of the Cyclopes.</p>
+    </footer>
+
+    <script>
+        function initLossChart() {
+            const ctx = document.getElementById('lossChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ismarus', 'Lotus-Eaters', 'Cyclops\'s Cave'],
+                    datasets: [{
+                        label: 'Men Lost',
+                        data: [72, 0, 6],
+                        backgroundColor: '#7f1d1d',
+                        borderColor: '#facc15',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#262626' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                    }
+                }
+            });
+        }
+
+        function toggleStep(n) {
+            const el = document.getElementById(`step-${n}`);
+            el.classList.toggle('hidden');
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(targetId).classList.remove('hidden-section');
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+            if(targetId === 'losses') initLossChart();
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => switchTab(e.target.getAttribute('data-target')));
+        });
+    </script>
+</body>
+</html>

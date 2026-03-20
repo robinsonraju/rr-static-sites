@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Summaries - The Great Books</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -28,7 +31,7 @@
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background-color: var(--bg-color);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 15% 50%, rgba(2, 132, 199, 0.08), transparent 30%),
                 radial-gradient(circle at 85% 30%, rgba(79, 70, 229, 0.08), transparent 30%);
             color: var(--text-color);
@@ -111,7 +114,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
             cursor: pointer;
         }
 
@@ -122,17 +125,44 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
             pointer-events: none;
         }
 
-        .theme-red { --card-accent: #ef4444; border-left: 4px solid var(--card-accent); }
-        .theme-blue { --card-accent: #3b82f6; border-left: 4px solid var(--card-accent); }
-        .theme-purple { --card-accent: #a855f7; border-left: 4px solid var(--card-accent); }
-        .theme-emerald { --card-accent: #10b981; border-left: 4px solid var(--card-accent); }
-        .theme-amber { --card-accent: #f59e0b; border-left: 4px solid var(--card-accent); }
-        .theme-rose { --card-accent: #f43f5e; border-left: 4px solid var(--card-accent); }
-        .theme-indigo { --card-accent: #4f46e5; border-left: 4px solid var(--card-accent); }
+        .theme-red {
+            --card-accent: #ef4444;
+            border-left: 4px solid var(--card-accent);
+        }
+
+        .theme-blue {
+            --card-accent: #3b82f6;
+            border-left: 4px solid var(--card-accent);
+        }
+
+        .theme-purple {
+            --card-accent: #a855f7;
+            border-left: 4px solid var(--card-accent);
+        }
+
+        .theme-emerald {
+            --card-accent: #10b981;
+            border-left: 4px solid var(--card-accent);
+        }
+
+        .theme-amber {
+            --card-accent: #f59e0b;
+            border-left: 4px solid var(--card-accent);
+        }
+
+        .theme-rose {
+            --card-accent: #f43f5e;
+            border-left: 4px solid var(--card-accent);
+        }
+
+        .theme-indigo {
+            --card-accent: #4f46e5;
+            border-left: 4px solid var(--card-accent);
+        }
 
         .card:hover {
             transform: translateY(-6px);
@@ -192,25 +222,46 @@
 
         /* Animations */
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .grid { grid-template-columns: 1fr; }
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <a href="../../index.html" class="back-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Back to Home
@@ -218,52 +269,61 @@
 
         <header>
             <h1>Book Summaries</h1>
-            <p class="subtitle">Chapter-by-chapter breakdowns of the foundational texts of Western literature.</p>
+            <p class="subtitle">Chapter-by-chapter breakdowns of the foundational texts of Western literature.
+                Interactive Webpages created using <a href="https://gemini.google.com/" target="_blank">Gemini</a>.</p>
         </header>
 
         <div class="grid">
             <div class="card theme-red">
                 <div class="card-title"><a href="gb4-1-iliad/index.html">The Iliad</a></div>
-                <div class="card-desc">Homer's epic poem of the Trojan War, highlighting the wrath of Achilles and the siege of Troy.</div>
+                <div class="card-desc">Homer's epic poem of the Trojan War, highlighting the wrath of Achilles and the
+                    siege of Troy.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
 
             <div class="card theme-blue">
                 <div class="card-title"><a href="gb4-2-odyssey/index.html">The Odyssey</a></div>
-                <div class="card-desc">The arduous ten-year journey of Odysseus seeking to return home after the fall of Troy.</div>
+                <div class="card-desc">The arduous ten-year journey of Odysseus seeking to return home after the fall of
+                    Troy.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
 
             <div class="card theme-purple">
                 <div class="card-title"><a href="gb5-1-aeschylus/index.html">The Plays of Aeschylus</a></div>
-                <div class="card-desc">The father of tragedy, exploring themes of justice, divine law, and human suffering.</div>
+                <div class="card-desc">The father of tragedy, exploring themes of justice, divine law, and human
+                    suffering.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
 
             <div class="card theme-emerald">
                 <div class="card-title"><a href="gb5-2-sophocles/index.html">The Plays of Sophocles</a></div>
-                <div class="card-desc">Masterpieces of dramatic structure focusing on fate, hubris, and the limits of free will.</div>
+                <div class="card-desc">Masterpieces of dramatic structure focusing on fate, hubris, and the limits of
+                    free will.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
 
             <div class="card theme-amber">
                 <div class="card-title"><a href="gb5-3-euripides/index.html">The Plays of Euripides</a></div>
-                <div class="card-desc">Psychologically complex texts examining passion, the marginalized, and the consequences of war.</div>
+                <div class="card-desc">Psychologically complex texts examining passion, the marginalized, and the
+                    consequences of war.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
 
             <div class="card theme-rose">
                 <div class="card-title"><a href="gb5-4-aristophanes/index.html">The Plays of Aristophanes</a></div>
-                <div class="card-desc">Classic comic drama filled with political satire, bawdy humor, and fantastical scenarios.</div>
+                <div class="card-desc">Classic comic drama filled with political satire, bawdy humor, and fantastical
+                    scenarios.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
 
             <div class="card theme-indigo">
                 <div class="card-title"><a href="gb6-1-herodotus/index.html">The History by Herodotus</a></div>
-                <div class="card-desc">The first work of history in Western literature, covering the Greco-Persian Wars and cultural inquiries.</div>
+                <div class="card-desc">The first work of history in Western literature, covering the Greco-Persian Wars
+                    and cultural inquiries.</div>
                 <div class="card-meta"><span>Explore →</span></div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

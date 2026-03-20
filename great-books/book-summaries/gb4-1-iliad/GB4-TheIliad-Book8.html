@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book VIII - The Tide of Battle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #020617; /* Deep Midnight */
+            color: #f8fafc;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+            color: #fde047; /* Star Yellow */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #fde047;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-500 selection:text-black">
+
+    <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md text-white border-b border-yellow-500/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-yellow-400">&#10024;</span>
+                    <span class="font-serif text-xl font-bold tracking-widest">THE ILIAD <span class="text-white text-base font-normal">| BOOK VIII</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium uppercase tracking-tighter">
+                        <a href="#overview" class="hover:text-yellow-400 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-yellow-400 transition-colors">Chronicle</a>
+                        <a href="#analytics" class="hover:text-yellow-400 transition-colors">Fate Analytics</a>
+                        <a href="#themes" class="hover:text-yellow-400 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-7xl font-black uppercase drop-shadow-[0_0_15px_rgba(253,224,71,0.3)]">The Tide of Battle</h1>
+            <p class="text-lg md:text-xl text-slate-300 leading-relaxed italic">
+                "A thousand camp-fires gleamed upon the plain... even thus shone the watchfires of the Trojans before Ilius."
+            </p>
+            <p class="text-md text-slate-400 max-w-2xl mx-auto">
+                Book VIII is the turning point of Jove's plan. Forbidding divine interference, the King of Gods weighs the fates of the two armies. The Achaeans are driven back to their very ships, while the Trojans, emboldened by omens, camp on the open plain, ready for a final strike.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-yellow-500">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9881;</span>
+                    <span class="text-xs uppercase font-bold mt-2">Golden Scales</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9889;</span>
+                    <span class="text-xs uppercase font-bold mt-2">Divine Will</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128293;</span>
+                    <span class="text-xs uppercase font-bold mt-2">Watchfires</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-yellow-500/20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">Chronicle of Despair</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-slate-900/50 p-6 rounded-2xl border border-yellow-500/10">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-slate-800/50 rounded-xl p-8 flex flex-col justify-center border border-yellow-500/20 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-yellow-500"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-yellow-500/20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">Fate Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-slate-900/80 p-6 rounded-2xl border border-yellow-500/10">
+                    <h3 class="text-xl font-serif font-bold mb-2 text-center">Narrative Momentum</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 p-6 rounded-2xl border border-yellow-500/10">
+                    <h3 class="text-xl font-serif font-bold mb-2 text-center">Teucer's Archery Impact</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-yellow-500/20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-slate-900/80 rounded-2xl p-8 border border-yellow-500/10">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book7.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Wall and the Duel</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book9.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Embassy to Achilles</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-slate-500 py-12 text-center border-t border-yellow-500/10">
+        <p class="font-serif text-lg mb-4 text-yellow-500/50">"Jove thundered from the heights of Ida."</p>
+        <p class="text-xs uppercase tracking-widest">Interactive Analysis &bull; The Iliad Book VIII</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Golden Chain',
+                summary: 'Jove calls a council and forbids any god from intervening in the war, threatening to hurl them into Tartarus. He asserts his absolute sovereignty.',
+                quote: '“Hang me a golden chain from heaven... tug as you will, you will not drag Jove... from heaven to earth.”',
+                icon: '&#128279;'
+            },
+            {
+                id: 't2',
+                title: 'The Scales of Fate',
+                summary: 'Jove weighs the fates of the Trojans and Achaeans. The Greek scale sinks, signaling their impending defeat for the day.',
+                quote: '“the sire of all balanced his golden scales... the death-fraught scale of the Achaeans settled down.”',
+                icon: '&#9878;'
+            },
+            {
+                id: 't3',
+                title: 'Nestor in Peril',
+                summary: 'Nestor is stranded on the field when Paris shoots one of his horses. Hector charges him, but Diomedes arrives just in time to rescue the old king.',
+                quote: '“Hector’s fleet horses bore down upon him... Diomed was quick to mark.”',
+                icon: '&#128052;'
+            },
+            {
+                id: 't4',
+                title: 'The Eagle Omen',
+                summary: 'As the Greeks are driven back to the wall, Agamemnon prays to Jove. Jove sends an eagle with a fawn, which drops it by the altar—a sign of temporary hope.',
+                quote: '“father Jove... sent them an eagle... with a young fawn in its talons.”',
+                icon: '&#129413;'
+            },
+            {
+                id: 't5',
+                title: 'Teucer\'s Archery',
+                summary: 'Teucer, hiding behind Ajax\'s shield, kills many Trojans with his bow, but Hector eventually wounds him with a massive stone.',
+                quote: '“Teucer... took his place under cover of the shield of Ajax... ninth came Teucer with his bow.”',
+                icon: '&#127993;'
+            },
+            {
+                id: 't6',
+                title: 'Rejected Intervention',
+                summary: 'Juno and Minerva attempt to sneak onto the field to help the Greeks, but Jove sends Iris to threaten them with lightning, forcing them back.',
+                quote: '“Go, fleet Iris, turn them back... for if we come to fighting there will be mischief.”',
+                icon: '&#9729;'
+            },
+            {
+                id: 't7',
+                title: 'The Watchfires',
+                summary: 'The Trojans, victorious, spend the night on the plain. They light a thousand fires, turning the night into day as they prepare for a dawn attack.',
+                quote: '“A thousand camp-fires gleamed upon the plain... and in the glow of each there sat fifty men.”',
+                icon: '&#128293;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'sovereignty',
+                title: 'Divine Sovereignty',
+                content: 'Book VIII establishes Jove\'s absolute power over the other gods. His "Golden Chain" speech and the use of the "Scales of Fate" show that the outcome of the war is no longer a matter of divine squabbling, but a fixed decree of the supreme ruler.',
+                keywords: ['Hierarchy', 'Will', 'Fate']
+            },
+            {
+                id: 'despair',
+                title: 'Collective Despair',
+                content: 'The psychological state of the Achaean host shifts from confidence to raw panic. Agamemnon\'s "desperate prayer" and the flight of the major heroes (except Diomedes) illustrate the fragility of human morale when divine favor is withdrawn.',
+                keywords: ['Panic', 'Morale', 'Supplication']
+            },
+            {
+                id: 'omen',
+                title: 'The Language of Omens',
+                content: 'Nature itself becomes a medium for Jove\'s messages. The lightning from Ida and the eagle with the fawn are interpreted by the characters as literal translations of divine intent, guiding their tactical decisions on the field.',
+                keywords: ['Nature', 'Signs', 'Interpretation']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-yellow-500 text-black border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.4)]' : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-yellow-500/50 hover:text-white'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-sm uppercase tracking-widest">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-yellow-500', 'text-black', 'border-yellow-500', 'shadow-[0_0_15px_rgba(234,179,8,0.4)]');
+                        b.classList.add('bg-slate-900', 'text-slate-400', 'border-slate-800');
+                    });
+                    btn.classList.add('bg-yellow-500', 'text-black', 'border-yellow-500', 'shadow-[0_0_15px_rgba(234,179,8,0.4)]');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl text-yellow-400 drop-shadow-lg">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-yellow-400">${item.title}</h3>
+                            </div>
+                            <p class="text-slate-300 text-lg leading-relaxed mb-8 italic">${item.summary}</p>
+                            <div class="bg-slate-900/80 border-l-4 border-yellow-500 p-6 rounded-r-xl italic text-yellow-100 font-serif text-xl shadow-inner">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-yellow-500 bg-yellow-500/10 text-yellow-400' : 'border-slate-800 bg-slate-900 text-slate-500 hover:text-yellow-200'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-yellow-500', 'bg-yellow-500/10', 'text-yellow-400');
+                        b.classList.add('border-slate-800', 'bg-slate-900', 'text-slate-500');
+                    });
+                    btn.classList.add('border-yellow-500', 'bg-yellow-500/10', 'text-yellow-400');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-yellow-400 mb-4 uppercase tracking-widest">${item.title}</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-bold uppercase rounded-full border border-yellow-500/30">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Chain', 'Scales', 'Nestor Save', 'Omen', 'Teucer Arc', 'Iris Halt', 'Night Fires'],
+                    datasets: [{
+                        label: 'Fate/Tension',
+                        data: [5, 8, 9, 7, 8, 6, 10],
+                        borderColor: '#fde047',
+                        backgroundColor: 'rgba(253, 224, 71, 0.1)',
+                        fill: true,
+                        tension: 0.2,
+                        pointBackgroundColor: '#fde047'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Orsilochus', 'Ormenus', 'Chromius', 'Lyconphontes', 'Amopaon', 'Melanippus'],
+                    datasets: [{
+                        label: 'Teucer\'s Confirmed Kills',
+                        data: [1, 1, 1, 1, 1, 1],
+                        backgroundColor: '#facc15'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

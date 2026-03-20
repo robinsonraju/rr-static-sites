@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey - Book 22: The Slaughter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            background-color: #0f0f0f;
+            color: #d1d5db;
+        }
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+        }
+        .blood-gradient {
+            background: linear-gradient(180deg, #450a0a 0%, #0f0f0f 100%);
+        }
+        .steel-border {
+            border-color: #4b5563;
+        }
+        .tab-active {
+            border-bottom: 2px solid #dc2626;
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="blood-gradient py-12 px-6 text-center border-b border-red-900">
+        <h1 class="text-5xl md:text-7xl font-bold text-red-600 mb-4 uppercase tracking-widest">Book XXII: The Slaughter</h1>
+        <p class="text-xl italic text-gray-400">"Dogs, did you think that I should not come back from Troy?"</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto py-12 px-6">
+        <!-- Overview Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="md:col-span-2 bg-zinc-900 p-8 border border-red-900 rounded-lg shadow-2xl">
+                <h2 class="text-2xl text-red-500 mb-6 border-b border-red-900 pb-2">The Vengeance of Ulysses</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    The contest of the bow is over, and the contest of blood begins. Ulysses sheds his rags, takes his stand upon the threshold, and begins the systematic execution of those who defiled his home. From the first arrow through the throat of Antinous to the final purification of the hall with sulphur, Book 22 is a masterclass in swift, merciless justice.
+                </p>
+                <div class="flex gap-4 mt-8">
+                    <button onclick="switchTab('plan')" id="btn-plan" class="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-700 transition">The Battle Plan</button>
+                    <button onclick="switchTab('execution')" id="btn-execution" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded hover:bg-zinc-700 transition">The Execution</button>
+                    <button onclick="switchTab('purge')" id="btn-purge" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded hover:bg-zinc-700 transition">The Purge</button>
+                </div>
+                <div id="tab-content" class="mt-6 p-4 bg-black rounded border border-zinc-800">
+                    <!-- Dynamic Content -->
+                    <div id="content-plan">
+                        <h3 class="text-red-400 font-bold mb-2 uppercase">Tactical Advantage</h3>
+                        <ul class="list-disc list-inside text-gray-400">
+                            <li>Control the Threshold: Ulysses blocks the only exit.</li>
+                            <li>Disarm the Enemy: Telemachus had previously hidden all spears and shields.</li>
+                            <li>Superior Range: The Great Bow provides early-stage dominance.</li>
+                            <li>Divine Support: Minerva watches from the rafters as a swallow.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-zinc-900 p-6 border border-zinc-700 rounded-lg shadow-xl">
+                <h2 class="text-xl text-gray-300 mb-4 font-bold text-center">Casualty Distribution</h2>
+                <canvas id="casualtyChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Active Learning: Casualty Report -->
+        <section class="mb-16">
+            <h2 class="text-3xl text-red-600 mb-8 text-center uppercase tracking-widest">Active Learning: Casualty Report</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse bg-zinc-900 border border-zinc-800">
+                    <thead>
+                        <tr class="bg-red-950 text-red-200">
+                            <th class="p-4 border border-zinc-800">Target</th>
+                            <th class="p-4 border border-zinc-800">Offense</th>
+                            <th class="p-4 border border-zinc-800">Executioner</th>
+                            <th class="p-4 border border-zinc-800">Method</th>
+                            <th class="p-4 border border-zinc-800">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-400">
+                        <tr class="hover:bg-zinc-800">
+                            <td class="p-4 border border-zinc-800 font-bold text-gray-200">Antinous</td>
+                            <td class="p-4 border border-zinc-800">Ringleader, plotted murder of Telemachus.</td>
+                            <td class="p-4 border border-zinc-800">Ulysses</td>
+                            <td class="p-4 border border-zinc-800">Arrow to the throat (while drinking).</td>
+                            <td class="p-4 border border-zinc-800 text-red-600 font-bold">TERMINATED</td>
+                        </tr>
+                        <tr class="hover:bg-zinc-800">
+                            <td class="p-4 border border-zinc-800 font-bold text-gray-200">Eurymachus</td>
+                            <td class="p-4 border border-zinc-800">Deceit, attempted to rally suitors.</td>
+                            <td class="p-4 border border-zinc-800">Ulysses</td>
+                            <td class="p-4 border border-zinc-800">Arrow to the liver/nipple.</td>
+                            <td class="p-4 border border-zinc-800 text-red-600 font-bold">TERMINATED</td>
+                        </tr>
+                        <tr class="hover:bg-zinc-800">
+                            <td class="p-4 border border-zinc-800 font-bold text-gray-200">Amphinomus</td>
+                            <td class="p-4 border border-zinc-800">General insolence.</td>
+                            <td class="p-4 border border-zinc-800">Telemachus</td>
+                            <td class="p-4 border border-zinc-800">Spear between the shoulders.</td>
+                            <td class="p-4 border border-zinc-800 text-red-600 font-bold">TERMINATED</td>
+                        </tr>
+                        <tr class="hover:bg-zinc-800">
+                            <td class="p-4 border border-zinc-800 font-bold text-gray-200">Melanthius</td>
+                            <td class="p-4 border border-zinc-800">Treason, arming the suitors.</td>
+                            <td class="p-4 border border-zinc-800">Eumaeus/Philoetius</td>
+                            <td class="p-4 border border-zinc-800">Mutilation (Nose, ears, hands, feet).</td>
+                            <td class="p-4 border border-zinc-800 text-red-600 font-bold">TERMINATED</td>
+                        </tr>
+                        <tr class="hover:bg-zinc-800">
+                            <td class="p-4 border border-zinc-800 font-bold text-gray-200">Disloyal Maids (12)</td>
+                            <td class="p-4 border border-zinc-800">Sleeping with suitors, disrespect.</td>
+                            <td class="p-4 border border-zinc-800">Telemachus</td>
+                            <td class="p-4 border border-zinc-800">Mass hanging (ship's cable).</td>
+                            <td class="p-4 border border-zinc-800 text-red-600 font-bold">TERMINATED</td>
+                        </tr>
+                        <tr class="hover:bg-zinc-800">
+                            <td class="p-4 border border-zinc-800 font-bold text-gray-200">Phemius & Medon</td>
+                            <td class="p-4 border border-zinc-800">Forced service vs. Loyalty.</td>
+                            <td class="p-4 border border-zinc-800">N/A</td>
+                            <td class="p-4 border border-zinc-800">Mercy granted by Telemachus.</td>
+                            <td class="p-4 border border-green-600 text-green-600 font-bold">SPARED</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Flip Cards for Key Moments -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="group h-64 [perspective:1000px]">
+                <div class="relative h-full w-full rounded-xl shadow-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    <div class="absolute inset-0 bg-red-950 flex items-center justify-center p-4 text-center rounded-xl border border-red-800">
+                        <p class="text-xl font-bold uppercase">The First Blood</p>
+                    </div>
+                    <div class="absolute inset-0 h-full w-full rounded-xl bg-zinc-800 px-6 py-8 text-center text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        <p class="text-sm">Antinous is struck mid-drink. The gold cup falls as blood gushes from his nostrils. The shock of the suitors marks the end of their revelry.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="group h-64 [perspective:1000px]">
+                <div class="relative h-full w-full rounded-xl shadow-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    <div class="absolute inset-0 bg-red-950 flex items-center justify-center p-4 text-center rounded-xl border border-red-800">
+                        <p class="text-xl font-bold uppercase">The Treachery</p>
+                    </div>
+                    <div class="absolute inset-0 h-full w-full rounded-xl bg-zinc-800 px-6 py-8 text-center text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        <p class="text-sm">Melanthius steals into the storeroom to arm the suitors. He is caught by the swineherd and stockman, strung up to the rafters to await a cruel end.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="group h-64 [perspective:1000px]">
+                <div class="relative h-full w-full rounded-xl shadow-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    <div class="absolute inset-0 bg-red-950 flex items-center justify-center p-4 text-center rounded-xl border border-red-800">
+                        <p class="text-xl font-bold uppercase">Minerva's Test</p>
+                    </div>
+                    <div class="absolute inset-0 h-full w-full rounded-xl bg-zinc-800 px-6 py-8 text-center text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        <p class="text-sm">Disguised as Mentor, Minerva scolds Ulysses to test his courage. She eventually holds up her deadly aegis, sending the suitors into a panicked flight.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="group h-64 [perspective:1000px]">
+                <div class="relative h-full w-full rounded-xl shadow-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    <div class="absolute inset-0 bg-red-950 flex items-center justify-center p-4 text-center rounded-xl border border-red-800">
+                        <p class="text-xl font-bold uppercase">The Purification</p>
+                    </div>
+                    <div class="absolute inset-0 h-full w-full rounded-xl bg-zinc-800 px-6 py-8 text-center text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        <p class="text-sm">Ulysses orders the halls scrubbed of blood and the bodies removed. Sulphur and fire are used to cleanse the pollution of the suitors' presence.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2021.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XXI
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2023.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XXIII <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black py-8 text-center border-t border-red-900 mt-12">
+        <p class="text-gray-500">The Odyssey - Book XXII Interactive Dashboard</p>
+    </footer>
+
+    <script>
+        // Tab switching logic
+        function switchTab(tab) {
+            const content = document.getElementById('tab-content');
+            const btns = ['btn-plan', 'btn-execution', 'btn-purge'];
+            
+            btns.forEach(id => {
+                document.getElementById(id).classList.remove('bg-red-900', 'text-white');
+                document.getElementById(id).classList.add('bg-zinc-800', 'text-gray-300');
+            });
+
+            document.getElementById('btn-' + tab).classList.add('bg-red-900', 'text-white');
+            document.getElementById('btn-' + tab).classList.remove('bg-zinc-800', 'text-gray-300');
+
+            if (tab === 'plan') {
+                content.innerHTML = `
+                    <h3 class="text-red-400 font-bold mb-2 uppercase">Tactical Advantage</h3>
+                    <ul class="list-disc list-inside text-gray-400">
+                        <li>Control the Threshold: Ulysses blocks the only exit.</li>
+                        <li>Disarm the Enemy: Telemachus had previously hidden all spears and shields.</li>
+                        <li>Superior Range: The Great Bow provides early-stage dominance.</li>
+                        <li>Divine Support: Minerva watches from the rafters as a swallow.</li>
+                    </ul>`;
+            } else if (tab === 'execution') {
+                content.innerHTML = `
+                    <h3 class="text-red-400 font-bold mb-2 uppercase">The Killing Blows</h3>
+                    <p class="text-gray-400 mb-2">Ulysses starts with Antinous. Eurymachus tries to bargain, then fight, but is cut down. Telemachus secures more armor from the storeroom. The battle shifts from bow to spear as the range closes.</p>
+                    <p class="text-gray-400 italic">"They were like fishes which fishermen have netted out of the sea... gasping for water till the heat of the sun makes an end of them."</p>`;
+            } else if (tab === 'purge') {
+                content.innerHTML = `
+                    <h3 class="text-red-400 font-bold mb-2 uppercase">The Moral Cleanup</h3>
+                    <p class="text-gray-400">The 12 disloyal maids are forced to clean the gore of their lovers before being executed. Melanthius is tortured and killed. The hall is purified with sulphur to remove the spiritual and physical stench of the suitors.</p>`;
+            }
+        }
+
+        // Chart.js initialization
+        const ctx = document.getElementById('casualtyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Arrows', 'Spears', 'Hanging', 'Mutilation'],
+                datasets: [{
+                    label: 'Casualties by Method',
+                    data: [20, 78, 12, 1], // Representative of the "over 100" suitors + 12 maids + 1 goatherd
+                    backgroundColor: [
+                        '#991b1b',
+                        '#450a0a',
+                        '#1f2937',
+                        '#dc2626'
+                    ],
+                    borderColor: '#000',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#d1d5db',
+                            font: {
+                                family: 'EB Garamond'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

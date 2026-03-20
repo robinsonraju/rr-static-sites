@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XVIII Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <!-- Theme: The Fight with Irus (Raw Strength, Challenge, Tension) -->
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #1a1a1a; /* Dark charcoal */
+            color: #e2e8f0;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .strength-crimson { color: #dc2626; }
+        .bg-strength { background-color: #dc2626; }
+        .tension-orange { color: #f97316; }
+        .bg-tension { background-color: #f97316; }
+        .iron-grey { color: #94a3b8; }
+        .bg-iron { background-color: #475569; }
+        
+        .tab-btn {
+            color: #94a3b8;
+            border-bottom: 4px solid transparent;
+        }
+        .tab-btn.active {
+            border-bottom: 4px solid #dc2626;
+            color: #fca5a5;
+            font-weight: 600;
+        }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .boxing-ring {
+            border: 4px solid #475569;
+            background: #262626;
+            position: relative;
+            overflow: hidden;
+        }
+        .punch-fx {
+            position: absolute;
+            animation: flash 0.2s ease-out;
+            pointer-events: none;
+        }
+        @keyframes flash {
+            0% { background: white; opacity: 0.8; }
+            100% { background: transparent; opacity: 0; }
+        }
+        
+        .muscle-card {
+            perspective: 1000px;
+        }
+        .muscle-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .muscle-card:hover .muscle-inner {
+            transform: rotateY(180deg);
+        }
+        .muscle-front, .muscle-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .muscle-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-gradient-to-b from-black to-stone-900 py-12 shadow-2xl relative overflow-hidden border-b-4 border-strength">
+        <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/criss-cross.png')]"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="text-4xl mb-2">🥊 🩸 🦴</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-wide text-white">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-strength-crimson">Book XVIII: The King of Beggars</h2>
+        </div>
+    </header>
+
+    <nav class="bg-neutral-900 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-neutral-800">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active py-4 px-6 font-cinzel transition-colors" data-target="fight">The Brawl</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 font-cinzel transition-colors" data-target="penelope">The Queen's Guile</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 font-cinzel transition-colors" data-target="gifts">Tribute Gallery</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 font-cinzel transition-colors" data-target="tension">Rising Chaos</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Brawl -->
+        <section id="fight" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="text-3xl font-cinzel mb-4 strength-crimson uppercase tracking-widest">Odysseus vs. Irus</h3>
+                <p class="text-lg text-stone-400 italic mb-10">"The stranger has brought such a thigh out of his old rags that there will soon be nothing left of Irus."</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="muscle-card w-full h-80 relative cursor-pointer">
+                        <div class="muscle-inner w-full h-full relative">
+                            <div class="muscle-front bg-neutral-800 rounded-2xl flex flex-col items-center justify-center border-2 border-neutral-700 shadow-xl">
+                                <div class="text-6xl mb-4">🧥</div>
+                                <h4 class="font-cinzel text-xl">The Old Tramp</h4>
+                                <p class="text-sm text-stone-500 mt-2">"Wretchedly thin... perished with cold."</p>
+                                <p class="mt-6 text-xs uppercase tracking-tighter text-stone-600">Hover to reveal the King</p>
+                            </div>
+                            <div class="muscle-back bg-stone-900 rounded-2xl flex flex-col items-center justify-center border-2 border-strength-crimson shadow-2xl">
+                                <div class="text-6xl mb-4">💪</div>
+                                <h4 class="font-cinzel text-xl strength-crimson">Stalwart Might</h4>
+                                <p class="text-sm text-stone-300 mt-2 px-6">"Broad chest and shoulders, and his mighty arms... Minerva made his limbs even stronger."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-neutral-800 p-8 rounded-2xl border border-neutral-700">
+                        <h4 class="font-cinzel text-xl mb-6 tension-orange">The Fatal Blow</h4>
+                        <div id="boxingConsole" class="space-y-4">
+                            <button onclick="playFight('shoulder')" class="w-full py-3 bg-neutral-700 hover:bg-neutral-600 rounded-lg text-sm font-bold transition-all border border-neutral-600">Irus strikes the shoulder</button>
+                            <button onclick="playFight('neck')" class="w-full py-3 bg-strength-crimson hover:bg-red-700 rounded-lg text-sm font-bold transition-all shadow-lg">Odysseus strikes the neck</button>
+                        </div>
+                        <div id="fightResult" class="mt-6 p-4 bg-black rounded-lg text-xs font-mono text-green-400 hidden">
+                            <!-- JS Output -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Queen's Guile -->
+        <section id="penelope" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-neutral-800 p-10 rounded-3xl border border-neutral-700 shadow-2xl relative">
+                    <div class="absolute top-4 right-4 text-4xl opacity-20">✨</div>
+                    <h3 class="text-3xl font-cinzel mb-6 text-stone-100">Athena's Enhancement</h3>
+                    <p class="text-stone-300 mb-8 leading-relaxed">
+                        Minerva sheds grace and beauty over Penelope while she sleeps. Her complexion becomes whiter than sawn ivory, her stature taller and more commanding.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="p-6 bg-neutral-900 rounded-xl border-l-4 border-strength-crimson">
+                            <h4 class="font-bold text-stone-100 mb-2">The Rebuke</h4>
+                            <p class="text-sm text-stone-400">She scolds Telemachus for allowing the beggar to be abused, asserting her authority while charming the suitors.</p>
+                        </div>
+                        <div class="p-6 bg-neutral-900 rounded-xl border-l-4 border-tension-orange">
+                            <h4 class="font-bold text-stone-100 mb-2">The Ruse</h4>
+                            <p class="text-sm text-stone-400">She complains that the suitors are wasting her wealth, suggesting that true suitors should bring gifts rather than consume the estate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Tribute Gallery -->
+        <section id="gifts" class="content-section hidden-section fade-in">
+            <div class="max-w-5xl mx-auto">
+                <h3 class="text-2xl font-cinzel mb-8 text-center tension-orange">The Price of Courting</h3>
+                <div class="h-80 mb-12 bg-neutral-800 p-4 rounded-xl">
+                    <canvas id="giftsChart"></canvas>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 bg-neutral-800 rounded-xl border border-neutral-700 text-center hover:border-strength transition-all">
+                        <div class="text-4xl mb-4">👘</div>
+                        <h4 class="font-bold">Antinous</h4>
+                        <p class="text-xs text-stone-500 mt-1">A large robe, beautifully enriched with embroidery, and twelve gold brooches.</p>
+                    </div>
+                    <div class="p-6 bg-neutral-800 rounded-xl border border-neutral-700 text-center hover:border-strength transition-all">
+                        <div class="text-4xl mb-4">📿</div>
+                        <h4 class="font-bold">Eurymachus</h4>
+                        <p class="text-xs text-stone-500 mt-1">A gold necklace of beautiful workmanship, set with amber beads that glittered like the sun.</p>
+                    </div>
+                    <div class="p-6 bg-neutral-800 rounded-xl border border-neutral-700 text-center hover:border-strength transition-all">
+                        <div class="text-4xl mb-4">👂</div>
+                        <h4 class="font-bold">Eurydamas</h4>
+                        <p class="text-xs text-stone-500 mt-1">A pair of earrings, with three pendant drops fashioned like mulberries.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Rising Chaos -->
+        <section id="tension" class="content-section hidden-section fade-in">
+            <div class="max-w-3xl mx-auto text-center">
+                <h3 class="text-3xl font-cinzel mb-8 strength-crimson">The Boiling Point</h3>
+                <div class="space-y-6 text-left">
+                    <div class="p-6 bg-black rounded-2xl border border-neutral-800 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 h-full w-1 bg-tension-orange group-hover:w-2 transition-all"></div>
+                        <h4 class="font-bold text-stone-200">Melantho's Insolence</h4>
+                        <p class="text-sm text-stone-500 mt-1">The maid Melantho insults the beggar, unaware he is her King. Odysseus threatens her with Telemachus's wrath.</p>
+                    </div>
+                    <div class="p-6 bg-black rounded-2xl border border-neutral-800 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 h-full w-1 bg-strength-crimson group-hover:w-2 transition-all"></div>
+                        <h4 class="font-bold text-stone-200">Eurymachus's Footstool</h4>
+                        <p class="text-sm text-stone-500 mt-1">Mocking the beggar's belly, Eurymachus hurls a stool. Odysseus ducks, and the stool strikes a cup-bearer, causing a riot of noise.</p>
+                    </div>
+                    <div class="p-6 bg-black rounded-2xl border border-neutral-800 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 h-full w-1 bg-stone-500 group-hover:w-2 transition-all"></div>
+                        <h4 class="font-bold text-stone-200">The Dispersal</h4>
+                        <p class="text-sm text-stone-500 mt-1">Telemachus boldly tells the suitors they have drunk too much and should go to bed. Astonished by his courage, they depart.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2017.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XVII
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2019.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XIX <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-stone-600 py-8 text-center text-sm border-t border-neutral-800">
+        <p class="font-cinzel mb-2 text-stone-400">The Odyssey: Book XVIII</p>
+        <p>&copy; Great Books Interactive Series</p>
+    </footer>
+
+    <script>
+        function playFight(type) {
+            const result = document.getElementById('fightResult');
+            result.classList.remove('hidden');
+            result.classList.add('fade-in');
+            
+            if (type === 'shoulder') {
+                result.innerHTML = "> IRUS HITS RIGHT SHOULDER...<br>> NO EFFECT ON THE KING.<br>> TENSION GROWS...";
+                result.style.color = "#f97316";
+            } else {
+                result.innerHTML = "> ODYSSEUS STRIKES THE NECK UNDER THE EAR...<br>> SKULL BONES CRUSHED.<br>> BLOOD GUSHES FROM MOUTH.<br>> IRUS FALLS GROANING IN THE DUST.";
+                result.style.color = "#dc2626";
+            }
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.remove('hidden-section');
+            
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+            if (targetId === 'gifts') {
+                initGiftsChart();
+            }
+        }
+
+        function initGiftsChart() {
+            const ctx = document.getElementById('giftsChart').getContext('2d');
+            if (window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Antinous (Brooches)', 'Eurymachus (Necklace)', 'Eurydamas (Earrings)', 'Pisander (Chestlet)', 'Others (Misc)'],
+                    datasets: [{
+                        label: 'Estimated Value (Divine Drachmas)',
+                        data: [90, 95, 75, 80, 60],
+                        backgroundColor: '#dc2626',
+                        borderColor: '#991b1b',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        title: { display: true, text: 'The Suitors\' Toll: Gifts Extorted by Penelope', color: '#e2e8f0' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#444' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.target));
+        });
+    </script>
+</body>
+</html>

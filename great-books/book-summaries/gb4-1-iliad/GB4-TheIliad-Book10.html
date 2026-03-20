@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book X - The Doloneia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* Obsidian Black */
+            color: #e2e8f0;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+            color: #94a3b8; /* Silver */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3b0764; /* Dark Purple */
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-900 selection:text-white">
+
+    <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-md text-slate-300 border-b border-purple-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-purple-500">&#128065;</span>
+                    <span class="font-serif text-xl font-bold tracking-widest text-slate-100 uppercase">The Iliad <span class="text-purple-400 text-base font-normal">| Book X</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-xs font-bold uppercase tracking-widest">
+                        <a href="#overview" class="hover:text-purple-400 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-purple-400 transition-colors">The Raid</a>
+                        <a href="#analytics" class="hover:text-purple-400 transition-colors">Analytics</a>
+                        <a href="#themes" class="hover:text-purple-400 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <section id="overview" class="text-center space-y-8 max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-bold uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-slate-100 to-purple-900">The Doloneia</h1>
+            <p class="text-xl text-slate-400 leading-relaxed italic">
+                "They went their way like two lions prowling by night amid the armour and blood-stained bodies."
+            </p>
+            <p class="text-lg text-slate-500 max-w-3xl mx-auto leading-relaxed">
+                Book X, often called the 'Doloneia', stands apart as a nocturne of espionage and slaughter. In the dead of night, while both armies rest fitfully, a Greek mission of stealth encounters a Trojan scout. The result is a brutal collision of wits and blades that leaves the Trojan allies in ruin.
+            </p>
+            <div class="flex justify-center gap-16 pt-4 text-purple-500">
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128100;</span>
+                    <span class="text-xs uppercase font-bold mt-2 tracking-widest">Espionage</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128058;</span>
+                    <span class="text-xs uppercase font-bold mt-2 tracking-widest">The Wolf-Skin</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128014;</span>
+                    <span class="text-xs uppercase font-bold mt-2 tracking-widest">The White Steeds</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-purple-900/30">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-4">Chronicle of the Night Raid</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-12 bg-slate-900/40 p-8 rounded-sm border border-purple-900/20">
+                <div class="w-full md:w-1/3 flex flex-col gap-4 h-[450px] overflow-y-auto custom-scrollbar pr-4" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-black/60 p-10 flex flex-col justify-center border border-purple-900/30 relative">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-purple-600"></div>
+                    <div id="timeline-content" class="min-h-[350px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-purple-900/30">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold mb-4">Stealth Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-slate-900/60 p-8 border border-purple-900/20 rounded-xl">
+                    <h3 class="text-2xl font-bold text-center mb-6">Suspense & Risk Levels</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/60 p-8 border border-purple-900/20 rounded-xl">
+                    <h3 class="text-2xl font-bold text-center mb-6">Character Contrast: Diomedes vs. Dolon</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-24 border-t border-purple-900/30">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold mb-4 text-center uppercase tracking-widest">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-slate-900/40 p-10 border border-purple-900/20 rounded-sm">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book9.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Embassy to Achilles</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book11.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Dawn of Wounds</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-slate-600 py-16 text-center border-t border-purple-900/20">
+        <p class="font-serif text-lg mb-4 italic">"The night wanes and dawn is at hand."</p>
+        <p class="text-xs uppercase tracking-[0.4em]">Shadow Intelligence &bull; Book X Analysis</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Sleepless Kings',
+                summary: 'Agamemnon and Menelaus, unable to sleep for fear of the Trojans, rouse the leaders for an emergency council at the trench.',
+                quote: '“my heart beats as though it would leap out of my body, and my limbs fail me.”',
+                icon: '&#128564;'
+            },
+            {
+                id: 't2',
+                title: 'The Call for a Spy',
+                summary: 'Nestor asks for a volunteer to venture into the Trojan camp. Diomedes steps forward and chooses Ulysses as his companion for his quick wit and Minerva\'s favor.',
+                quote: '“if he were to go with me we should pass safely through fire itself.”',
+                icon: '&#128100;'
+            },
+            {
+                id: 't3',
+                title: 'Dolon\'s Foolish Mission',
+                summary: 'Hector, also awake, sends the scout Dolon to spy on the Greeks, promising him Achilles\' horses. Dolon dresses in a grey wolf-skin and a ferret-skin cap.',
+                quote: '“I, Hector, will go to the ships and will exploit them. But first... swear that you will give me the chariot... of Peleus.”',
+                icon: '&#128058;'
+            },
+            {
+                id: 't4',
+                title: 'The Ambush of Dolon',
+                summary: 'Ulysses and Diomedes spot Dolon and ambush him. Terror-stricken, Dolon reveals the entire layout of the Trojan camp and the arrival of King Rhesus.',
+                quote: '“Take me alive; I will ransom myself; we have great store of gold, bronze, and wrought iron...”',
+                icon: '&#129309;'
+            },
+            {
+                id: 't5',
+                title: 'The Fate of the Scout',
+                summary: 'Despite his information, Diomedes kills Dolon to ensure he never spies again. Ulysses hangs his gear on a tamarisk tree as an offering to Minerva.',
+                quote: '“Diomed struck him in the middle of his neck with his sword... so that his head fell rolling in the dust.”',
+                icon: '&#128128;'
+            },
+            {
+                id: 't6',
+                title: 'The Massacre of the Thracians',
+                summary: 'Following Dolon\'s lead, the pair reach the Thracian camp. Diomedes slaughters twelve soldiers and King Rhesus in their sleep while Ulysses unties the horses.',
+                quote: '“As a lion springs furiously upon a flock of sheep... so did the son of Tydeus set upon the Thracian soldiers.”',
+                icon: '&#9876;'
+            },
+            {
+                id: 't7',
+                title: 'Escape with the Horses',
+                summary: 'Minerva warns them to return before other gods rouse the Trojans. They mount Rhesus\' magnificent white horses and gallop back to the Greek camp in triumph.',
+                quote: '“Diomed... at once sprang upon the horses... they flew onward nothing loth towards the ships.”',
+                icon: '&#128014;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'deception',
+                title: 'Night & Deception',
+                content: 'Book X operates in a different moral universe than the daytime battles. Stealth, espionage, and killing men in their sleep are the primary actions. It highlights the darker, more pragmatic side of the heroic age where survival and intelligence supersede open valor.',
+                keywords: ['Ambush', 'Shadows', 'Pragmatism']
+            },
+            {
+                id: 'ethics',
+                title: 'The Ethics of the Raid',
+                content: 'The treatment of Dolon—capturing him for information then executing him—contrasts with the chivalry seen in daytime duels (like Ajax and Hector). It shows that under the pressure of imminent destruction, the codes of honor can be suspended for military necessity.',
+                keywords: ['Espionage', 'Execution', 'Necessity']
+            },
+            {
+                id: 'resource',
+                title: 'Resourcefulness',
+                content: 'The pairing of Diomedes (strength) and Ulysses (wit) is the ultimate toolkit for this mission. Their ability to read the terrain, use Dolon\'s fear, and execute a surgical strike shows the importance of "metis" (cunning) alongside "biē" (force).',
+                keywords: ['Metis', 'Synergy', 'Skill']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-6 py-4 rounded-sm border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-purple-900 text-white border-purple-700 shadow-lg' : 'bg-slate-900/50 text-slate-400 border-slate-800 hover:border-purple-500/50 hover:text-white'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-sm tracking-widest uppercase">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-purple-900', 'text-white', 'border-purple-700', 'shadow-lg');
+                        b.classList.add('bg-slate-900/50', 'text-slate-400', 'border-slate-800');
+                    });
+                    btn.classList.add('bg-purple-900', 'text-white', 'border-purple-700', 'shadow-lg');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-8 mb-8">
+                                <div class="text-6xl text-purple-500 shadow-purple-500/50">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-slate-100">${item.title}</h3>
+                            </div>
+                            <p class="text-slate-400 text-xl leading-relaxed mb-10">${item.summary}</p>
+                            <div class="bg-purple-900/20 p-8 italic text-slate-300 font-serif text-2xl border-l-4 border-purple-600 shadow-inner">
+                                "${item.quote}"
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-8 py-5 font-bold text-sm transition-all border-l-2 ${index === 0 ? 'border-purple-500 bg-purple-950 text-purple-300' : 'border-slate-800 bg-slate-900 text-slate-500 hover:text-purple-400'}`;
+                btn.innerText = item.title.toUpperCase();
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-purple-500', 'bg-purple-950', 'text-purple-300');
+                        b.classList.add('border-slate-800', 'bg-slate-900', 'text-slate-500');
+                    });
+                    btn.classList.add('border-purple-500', 'bg-purple-950', 'text-purple-300');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-serif text-purple-400 mb-6 uppercase tracking-widest">${item.title}</h3>
+                        <p class="text-xl text-slate-400 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-3">
+                            ${item.keywords.map(kw => `<span class="px-4 py-2 bg-purple-900/30 text-purple-400 text-xs font-bold uppercase rounded-full border border-purple-800/50">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Midnight Wake', 'Council', 'Raid Start', 'Dolon Spotted', 'The Capture', 'Thracian Slaughter', 'Escape'],
+                    datasets: [{
+                        label: 'Suspense Level',
+                        data: [6, 5, 8, 9, 10, 8, 7],
+                        borderColor: '#a855f7',
+                        backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+                        x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Stealth', 'Courage', 'Greed', 'Knowledge', 'Martial Success'],
+                    datasets: [
+                        {
+                            label: 'Diomedes',
+                            data: [10, 10, 2, 8, 10],
+                            borderColor: '#94a3b8',
+                            backgroundColor: 'rgba(148, 163, 184, 0.2)'
+                        },
+                        {
+                            label: 'Dolon',
+                            data: [4, 3, 10, 6, 1],
+                            borderColor: '#7e22ce',
+                            backgroundColor: 'rgba(126, 34, 206, 0.2)'
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: { grid: { color: 'rgba(255,255,255,0.1)' }, angleLines: { color: 'rgba(255,255,255,0.1)' } }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

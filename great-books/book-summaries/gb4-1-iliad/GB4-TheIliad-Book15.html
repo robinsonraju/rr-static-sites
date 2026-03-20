@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XV - The Battle at the Ships</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Crimson+Pro:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Crimson Pro', serif;
+            background-color: #1a1a1a;
+            color: #e2e8f0;
+        }
+        h1, h2, h3, h4, .font-ancient {
+            font-family: 'Uncial Antiqua', system-ui;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ef4444;
+            border-radius: 10px;
+        }
+        .fire-gradient {
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+        }
+        .smoke-overlay {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-orange-500 selection:text-white">
+
+    <nav class="sticky top-0 z-50 bg-black/90 text-orange-500 border-b border-red-900/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🔥</span>
+                    <span class="font-ancient text-xl font-bold tracking-wider text-red-600">THE ILIAD <span class="text-orange-500 text-base font-normal">| BOOK XV</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-white transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-white transition-colors">The Charge</a>
+                        <a href="#analytics" class="hover:text-white transition-colors">Battle Data</a>
+                        <a href="#themes" class="hover:text-white transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-red-600 uppercase tracking-widest drop-shadow-lg">The Battle at the Ships</h1>
+            <p class="text-lg md:text-xl text-gray-400 leading-relaxed italic">
+                "Now has Jove vouchsafed us a day that will pay us for all the rest..."
+            </p>
+            <p class="text-lg text-gray-300 leading-relaxed">
+                Book XV witnesses the absolute assertion of Zeus's will. As the king of gods awakens to find his plans thwarted by Neptune and Juno, he restores the Trojan momentum with terrifying force. Hector, healed by Apollo, leads a desperate charge to fire the Greek fleet, while Ajax stands as the last bastion of Achaean hope.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-orange-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">☄️</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-ancient">Divine Decree</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🏹</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-ancient">Broken Defenses</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🔥</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-ancient">The Burning Fleet</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-red-900/30">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-red-500 mb-4">The Tide of Fire</h2>
+                <p class="text-gray-400 max-w-3xl leading-relaxed">
+                    Follow the rapid escalation as Jove's awakening shifts the battle from a Trojan rout to a near-total Greek catastrophe at the water's edge.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-black/40 p-6 rounded-xl border border-red-900/20">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 fire-gradient rounded-lg p-6 md:p-8 flex flex-col justify-center border border-red-900/40 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-orange-500"></div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-red-900/30">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-red-500 mb-4 uppercase">Strategic Analysis</h2>
+                <p class="text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    Visualizing the absolute dominance of Jove's plan and the desperate mortal resistance that met it.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-black/50 p-6 rounded-xl border border-red-900/30 flex flex-col">
+                    <h3 class="text-xl font-ancient text-orange-500 mb-2 text-center">Narrative Tension Peaks</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-black/50 p-6 rounded-xl border border-red-900/30 flex flex-col">
+                    <h3 class="text-xl font-ancient text-orange-500 mb-2 text-center">Sphere of Influence</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="influenceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-red-900/30">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-red-500 mb-4">Metaphysical Foundations</h2>
+                <p class="text-gray-400 max-w-3xl leading-relaxed">
+                    Book XV explores the limits of divine disobedience and the raw physical toll of total war.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-red-950/20 rounded-xl border border-red-900/30 p-8 min-h-[300px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book14.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Beguiling of Jove</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book16.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Death of Patroclus</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-gray-600 py-8 text-center text-sm border-t border-red-950">
+        <p>Book XV Interactive Analysis — The Fire at the Ships</p>
+        <p class="mt-2 text-red-900 text-2xl tracking-widest">🔥 🗡️ 🛡️</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                time: 'Moment of Awakening',
+                title: 'Jove\'s Fury',
+                summary: 'Zeus wakes on Mt. Ida to find the Trojans routed and Neptune aiding the Greeks. He fiercely rebukes Juno for her deception and reminds her of his absolute power, citing her past punishment.',
+                quote: '“I see, Juno... your cunning has stayed Hector from fighting and has caused the rout of his host. I am in half a mind to thrash you...”',
+                icon: '👁️'
+            },
+            {
+                id: 't2',
+                time: 'The Decree',
+                title: 'The Great Design',
+                summary: 'Jove reveals his master plan: Neptune must depart, Apollo must restore Hector, and the Trojans will reach the ships. This will lead to Patroclus\' death, Hector\'s fall, and the eventual sack of Troy.',
+                quote: '“...drive the Achaeans back in confusion till they fall among the ships of Achilles... Achilles will then send his comrade Patroclus into battle, and Hector will kill him...”',
+                icon: '📜'
+            },
+            {
+                id: 't3',
+                time: 'Divine Retreat',
+                title: 'Neptune Yields',
+                summary: 'Iris delivers Jove\'s warning to Neptune. The Earth-shaker is initially defiant, claiming equal status with his brother, but ultimately yields to avoid a cosmic conflict.',
+                quote: '“Nevertheless it cuts me to the very heart that any one should rebuke so angrily another who is his own peer, and of like empire with himself.”',
+                icon: '🌊'
+            },
+            {
+                id: 't4',
+                time: 'The Restoration',
+                title: 'Hector Reborn',
+                summary: 'Apollo finds the wounded Hector and breathes fresh strength into him. Hector returns to the field with the speed of a stabled horse breaking loose, terrifying the Achaeans.',
+                quote: '“Take heart; the son of Saturn has sent you a mighty helper from Ida to stand by you and defend you, even me, Phoebus Apollo...”',
+                icon: '🐎'
+            },
+            {
+                id: 't5',
+                time: 'The Breach',
+                title: 'The Wall Falls',
+                summary: 'Apollo leads the Trojans, using the aegis to strike panic. He kicks down the Greek wall as easily as a child destroys a sandcastle, clearing the way for the chariots.',
+                quote: '“He kicked down the wall of the Achaeans as easily as a child who playing on the sea shore has built a house of sand and then kicks it down again...”',
+                icon: '🧱'
+            },
+            {
+                id: 't6',
+                time: 'Failed Intervention',
+                title: 'Teucer\'s Broken Bow',
+                summary: 'Teucer aims a killing shot at Hector, but Zeus snaps his bowstring. This sign of divine disfavor demoralizes the Greeks and signals Jove\'s direct protection of the Trojan hero.',
+                quote: '“Jove, however, who kept watch over Hector, had his eyes on Teucer, and deprived him of his triumph, by breaking his bowstring...”',
+                icon: '🏹'
+            },
+            {
+                id: 't7',
+                time: 'The Last Stand',
+                title: 'Ajax on the Decks',
+                summary: 'As Hector seizes the ship of Protesilaus and calls for fire, Ajax alone defends the fleet, leaping from deck to deck with a massive sea-pike, slaying twelve men in hand-to-hand combat.',
+                quote: '“Ajax could not bring himself to retreat... but strode from deck to deck with a great sea-pike in his hands twelve cubits long...”',
+                icon: '🛡️'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-zeus',
+                title: 'The Sovereignty of Zeus',
+                content: 'In Book XV, Zeus\'s authority is absolute and undisputed. He overrides the other gods\' desires (Neptune\'s pity, Juno\'s tricks) to ensure the fulfillment of his promise to Thetis. His "Design" becomes the inescapable framework of the war, proving that even the most heroic mortal efforts are secondary to divine will.',
+                keywords: ['Fate', 'Autocracy', 'Cosmic Order']
+            },
+            {
+                id: 'theme-endurance',
+                title: 'Heroic Desperation (Ajax)',
+                content: 'Ajax represents the pinnacle of mortal resistance against overwhelming odds. Unlike Achilles, who is driven by pride, or Hector, who is bolstered by Apollo, Ajax is driven by duty and the cold reality of survival. His defense of the ships is a masterclass in endurance and tactical grit.',
+                keywords: ['Duty', 'Bastion', 'Last Stand']
+            },
+            {
+                id: 'theme-inevitability',
+                title: 'The Looming Tragedy',
+                content: 'Zeus\'s speech to Juno explicitly lays out the coming deaths of Sarpedon, Patroclus, and Hector. This creates a sense of tragic inevitability. Every Trojan success in this book is shadowed by the knowledge that it is merely a step toward their eventual destruction.',
+                keywords: ['Prophecy', 'Doom', 'Mortal Folly']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-red-600 text-white border-red-500 shadow-lg shadow-red-900/40' : 'bg-black/40 text-gray-400 border-red-900/20 hover:bg-red-900/10 hover:border-red-900/40'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-orange-300' : 'text-red-900'}">${item.time}</span><span class="font-ancient text-sm">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-red-600', 'text-white', 'border-red-500', 'shadow-lg');
+                        b.classList.add('bg-black/40', 'text-gray-400', 'border-red-900/20');
+                    });
+                    btn.classList.add('bg-red-600', 'text-white', 'border-red-500', 'shadow-lg');
+                    
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-orange-500 text-black flex items-center justify-center text-2xl border-2 border-orange-300 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-ancient text-white">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-orange-300">${item.time}</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-100 text-lg leading-relaxed mb-6">${item.summary}</p>
+                            <div class="bg-black/40 border-l-4 border-orange-500 p-4 rounded-r-lg italic text-orange-100 font-serif">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-ancient transition-all duration-200 border-2 ${index === 0 ? 'border-orange-500 bg-red-900/30 text-orange-400' : 'border-transparent bg-black/40 text-gray-500 hover:bg-red-900/20'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-orange-500', 'bg-red-900/30', 'text-orange-400');
+                        b.classList.add('border-transparent', 'bg-black/40', 'text-gray-500');
+                    });
+                    btn.classList.add('border-orange-500', 'bg-red-900/30', 'text-orange-400');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-ancient text-red-500 mb-6">${item.title}</h3>
+                        <p class="text-lg text-gray-300 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-red-900/40 text-orange-300 text-xs font-bold uppercase tracking-wider rounded-full border border-orange-500/30">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Awakening', 'Decree', 'Retreat', 'Healing', 'Breach', 'Sabotage', 'The Stern'],
+                    datasets: [{
+                        label: 'Narrative Tension',
+                        data: [3, 5, 4, 7, 8, 9, 10],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#f97316'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { display: false, max: 11 },
+                        x: { ticks: { color: '#991b1b', font: { family: 'Uncial Antiqua' } } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            new Chart(document.getElementById('influenceChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Divine Will', 'Mortal Grit', 'Fate\'s Hand'],
+                    datasets: [{
+                        data: [9, 7, 8],
+                        backgroundColor: ['#7f1d1d', '#b91c1c', '#ef4444'],
+                        borderColor: '#f97316',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 10, ticks: { color: '#ef4444' } },
+                        x: { ticks: { color: '#f97316', font: { family: 'Uncial Antiqua' } } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

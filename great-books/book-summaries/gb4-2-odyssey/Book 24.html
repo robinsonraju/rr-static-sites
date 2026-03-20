@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey - Book 24: The Final Peace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+        }
+        .ethereal-bg {
+            background: linear-gradient(135deg, #1f2937 0%, #4b5563 100%);
+        }
+        .stone-border {
+            border-color: #9ca3af;
+        }
+        .covenant-paper {
+            background-color: #f3f4f6;
+            background-image: url("https://www.transparenttextures.com/patterns/paper.png");
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .ghost-tab {
+            transition: all 0.3s ease;
+        }
+        .ghost-tab:hover {
+            color: #9ca3af;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="ethereal-bg py-20 px-6 text-center text-gray-100 border-b-8 stone-border">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4 uppercase tracking-[0.2em]">Book XXIV: The Final Peace</h1>
+        <p class="text-xl italic text-gray-400">"Cease this dreadful war, and settle the matter at once."</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto py-12 px-6">
+        <!-- The Meadow of Asphodel -->
+        <section class="mb-16">
+            <h2 class="text-3xl text-gray-800 mb-8 text-center uppercase tracking-widest border-b-2 border-gray-300 pb-2">The Meadow of Asphodel</h2>
+            <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+                <p class="text-lg mb-6 italic text-center text-gray-600">
+                    "Mercury summoned the ghosts of the suitors... they followed whining and gibbering behind him as bats fly squealing in some great cave."
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="showGhost('achilles')" class="ghost-tab p-4 bg-gray-800 text-white rounded font-bold uppercase tracking-tighter">Achilles & Agamemnon</button>
+                    <button onclick="showGhost('suitors')" class="ghost-tab p-4 bg-gray-800 text-white rounded font-bold uppercase tracking-tighter">The Suitors' Arrival</button>
+                    <button onclick="showGhost('penelope')" class="ghost-tab p-4 bg-gray-800 text-white rounded font-bold uppercase tracking-tighter">The Praise of Penelope</button>
+                </div>
+                
+                <div id="ghost-content" class="mt-8 p-6 bg-gray-50 rounded border italic text-gray-700 min-h-[150px]">
+                    <p>Select a spectral dialogue to witness the conversations of the dead.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Orchard of Laertes -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-center">
+            <div>
+                <h2 class="text-3xl text-gray-800 mb-6 uppercase tracking-widest">The Orchard of Laertes</h2>
+                <p class="text-lg leading-relaxed mb-4 text-gray-700">
+                    Ulysses finds his father, old and worn, hoeing his vineyard in rags. He tests him with a crafty story before revealing himself through the memory of the trees given to him as a child: 13 pear trees, 10 apple trees, 40 fig trees, and 50 rows of vines.
+                </p>
+                <div class="p-6 bg-stone-200 border-l-4 border-gray-500 rounded">
+                    <h3 class="font-bold text-gray-800 mb-2">The Proof of the Trees</h3>
+                    <canvas id="orchardChart"></canvas>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="bg-gray-300 h-96 w-full rounded-2xl shadow-inner border-4 border-white flex items-center justify-center overflow-hidden">
+                    <div class="text-center p-8">
+                        <svg class="w-24 h-24 mx-auto mb-4 text-gray-500 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                        </svg>
+                        <h3 class="text-2xl font-bold text-gray-600 mb-2 uppercase">The Last Stand</h3>
+                        <p class="text-gray-500 italic">"Laertes hit Eupeithes' helmet, and the spear went right through it... then Minerva raised her voice aloud, and made every one pause."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Active Learning: The Covenant -->
+        <section class="mb-16">
+            <h2 class="text-3xl text-gray-800 mb-8 text-center uppercase tracking-widest">Active Learning: The Covenant</h2>
+            <div class="covenant-paper max-w-4xl mx-auto p-12 rounded-sm border border-gray-300 relative">
+                <!-- Seal -->
+                <div class="absolute top-8 right-8 w-24 h-24 bg-red-800/20 rounded-full border-4 border-red-900/30 flex items-center justify-center opacity-40">
+                    <span class="text-red-900 font-bold text-xs uppercase text-center">Seal of<br>Olympus</span>
+                </div>
+                
+                <h3 class="text-4xl text-center mb-12 text-gray-800 italic font-bold">A Covenant of Peace</h3>
+                
+                <div class="space-y-8 text-xl text-gray-700 leading-loose">
+                    <p class="border-b border-gray-300 pb-2"><strong>I. FORGIVENESS:</strong> The people of Ithaca shall forgive and forget the massacre of their sons and brothers.</p>
+                    <p class="border-b border-gray-300 pb-2"><strong>II. SOVEREIGNTY:</strong> Ulysses, son of Laertes, shall continue to rule as the rightful King of Ithaca.</p>
+                    <p class="border-b border-gray-300 pb-2"><strong>III. PLENTY:</strong> Peace and plenty shall reign throughout the land, as decreed by the Son of Saturn.</p>
+                    <p class="border-b border-gray-300 pb-2"><strong>IV. DIVINE MANDATE:</strong> No further warful strife shall be permitted, lest the wrath of Jove be kindled.</p>
+                </div>
+                
+                <div class="mt-16 grid grid-cols-2 gap-12 italic">
+                    <div class="text-center">
+                        <p class="border-t border-gray-500 pt-2 text-gray-500">Ulysses of Ithaca</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="border-t border-gray-500 pt-2 text-gray-500">Mentor (Minerva)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2023.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XXIII
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <div class="w-1/3"></div>
+        </nav>
+    </main>
+
+    <footer class="ethereal-bg py-12 text-center text-gray-400 border-t-8 stone-border mt-20">
+        <p class="uppercase tracking-widest text-sm mb-2">The End of the Journey</p>
+        <p class="text-gray-500">The Odyssey - Book XXIV Interactive Dashboard</p>
+    </footer>
+
+    <script>
+        function showGhost(id) {
+            const content = document.getElementById('ghost-content');
+            if (id === 'achilles') {
+                content.innerHTML = `<p class="mb-4 font-bold text-gray-800">Achilles to Agamemnon:</p>
+                <p>"Better for you had you fallen at Troy in the hey-day of your renown... whereas it has now been your lot to come to a most miserable end."</p>
+                <p class="mt-4 text-sm text-gray-500">Agamemnon describes the grand funeral of Achilles, contrasting it with his own treacherous death.</p>`;
+            } else if (id === 'suitors') {
+                content.innerHTML = `<p class="mb-4 font-bold text-gray-800">Agamemnon to Amphimedon:</p>
+                <p>"What has happened to all you fine young men—all of an age too—that you are come down here under the ground? Did Neptune raise his winds and waves against you?"</p>
+                <p class="mt-4 text-sm text-gray-500">Amphimedon explains the trick of the shroud and the sudden return of Ulysses.</p>`;
+            } else if (id === 'penelope') {
+                content.innerHTML = `<p class="mb-4 font-bold text-gray-800">Agamemnon on Penelope:</p>
+                <p>"Happy Ulysses... you are indeed blessed in the possession of a wife endowed with such rare excellence... her fame shall never die, and the immortals shall compose a song in her honour."</p>
+                <p class="mt-4 text-sm text-gray-500">The ghost of the king, murdered by his own wife, praises the constancy of Ulysses' wife.</p>`;
+            }
+        }
+
+        const ctx = document.getElementById('orchardChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Pear Trees', 'Apple Trees', 'Fig Trees', 'Vine Rows'],
+                datasets: [{
+                    label: 'The Gift of Laertes',
+                    data: [13, 10, 40, 50],
+                    backgroundColor: [
+                        'rgba(156, 163, 175, 0.8)',
+                        'rgba(75, 85, 99, 0.8)',
+                        'rgba(31, 41, 55, 0.8)',
+                        'rgba(107, 114, 128, 0.8)'
+                    ],
+                    borderColor: '#4b5563',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

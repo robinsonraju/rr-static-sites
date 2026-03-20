@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book X Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f3f0f5; /* Ethereal Mist */
+            color: #2d1b3d;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .bg-magic-violet { background-color: #5b21b6; }
+        .text-magic-pink { color: #db2777; }
+        .border-magic-gold { border-color: #fbbf24; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #5b21b6;
+            color: #5b21b6;
+            font-weight: 600;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-section {
+            display: none;
+        }
+        .transform-card:hover {
+            transform: rotateY(10deg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .wind-bag {
+            transition: all 0.5s ease;
+        }
+        .wind-bag.open {
+            transform: scale(1.1);
+            filter: hue-rotate(90deg);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-indigo-950 text-indigo-50 py-12 shadow-2xl border-b-4 border-magic-violet">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-6xl mb-4">🌬️ 🐗 🌿</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-widest text-purple-300">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-3xl font-light italic text-indigo-200">Book X: The Witch & The Winds</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-indigo-100">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active bg-white inline-block py-4 px-4 md:px-8 text-indigo-900 hover:text-magic-violet font-cinzel text-sm md:text-base transition-colors" data-target="aeolia">Aeolus's Gift</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-indigo-900 hover:text-magic-violet font-cinzel text-sm md:text-base transition-colors" data-target="cannibals">The Giant Ogres</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-indigo-900 hover:text-magic-violet font-cinzel text-sm md:text-base transition-colors" data-target="circe">Circe's Aeaea</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-indigo-900 hover:text-magic-violet font-cinzel text-sm md:text-base transition-colors" data-target="moly">Divine Talismans</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-16">
+
+        <section id="aeolia" class="content-section fade-in">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="bg-white p-10 rounded-3xl shadow-xl border-t-8 border-indigo-500">
+                    <h3 class="text-3xl font-cinzel font-bold text-indigo-900 mb-6">The Bag of Roaring Winds</h3>
+                    <p class="text-indigo-800 mb-6 leading-relaxed">
+                        Aeolus, captain over the winds, binds all the stormy gales into an ox-hide sack with silver thread. He lets only the West Wind blow to carry Ulysses home.
+                    </p>
+                    <div id="wind-bag-ui" class="text-center p-8 bg-indigo-50 rounded-2xl cursor-pointer wind-bag" onclick="toggleWinds()">
+                        <div class="text-8xl mb-4" id="bag-icon">🎒</div>
+                        <p class="font-bold text-indigo-600 uppercase tracking-widest" id="bag-status">The Bag is Sealed</p>
+                        <p class="text-xs text-indigo-400 mt-2 italic" id="bag-hint">Click to let the men open it...</p>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 bg-indigo-900 text-indigo-50 rounded-2xl shadow-lg transform transition-transform hover:scale-105">
+                        <h4 class="font-cinzel text-xl mb-2">The Sight of Home</h4>
+                        <p class="text-sm opacity-80">"On the tenth day our native land showed on the horizon. We got so close we could see the stubble fires burning."</p>
+                    </div>
+                    <div class="p-6 bg-red-900 text-red-50 rounded-2xl shadow-lg transform transition-transform hover:scale-105">
+                        <h4 class="font-cinzel text-xl mb-2">The Fatal Sleep</h4>
+                        <p class="text-sm opacity-80">While Ulysses sleeps, his men suspect the bag holds gold. They open it, and the howling winds drive them back to Aeolus, who rejects them as "abhorred of heaven."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cannibals" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-12 text-center">
+                <h3 class="text-3xl font-cinzel font-bold text-indigo-950 mb-4">Disaster at Telepylus</h3>
+                <p class="text-indigo-800">The Laestrygonians are not men, but mountain-sized ogres. In a single hour, Ulysses loses almost his entire fleet.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto bg-white p-8 rounded-3xl shadow-2xl border-2 border-red-200">
+                <h4 class="font-cinzel text-center text-xl mb-8">Fleet Survival Status</h4>
+                <canvas id="fleetChart"></canvas>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500 text-xs text-red-900">
+                        <strong>11 Ships Lost:</strong> Destroyed within the land-locked harbour by rocks hurled from cliffs. Men "speared like fishes."
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500 text-xs text-green-900">
+                        <strong>1 Ship Survives:</strong> Ulysses' own ship, moored outside the point, manages to cut its cable and escape.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="circe" class="content-section hidden-section fade-in">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-white p-10 rounded-3xl shadow-xl border-t-8 border-magic-violet">
+                    <h3 class="text-3xl font-cinzel font-bold text-indigo-900 mb-6">The Enchantress of Aeaea</h3>
+                    <p class="text-indigo-800 mb-8 leading-relaxed">
+                        Circe, daughter of the Sun, works at a dazzling loom and sings beautifully to lure men to her table. Those who drink her drugged Pramnian wine are transformed by her wand.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="transformation-grid">
+                        <div class="p-6 bg-purple-50 rounded-2xl border-2 border-magic-violet text-center group cursor-pointer" onclick="transformCrew()">
+                            <div class="text-6xl mb-4" id="crew-icon">👨‍✈️</div>
+                            <h4 class="font-cinzel font-bold text-indigo-900" id="crew-label">The Crew (Men)</h4>
+                            <p class="text-xs text-indigo-500 mt-2" id="crew-desc">"Thinking no evil, they followed her..."</p>
+                        </div>
+                        <div class="p-6 bg-indigo-950 text-indigo-50 rounded-2xl border-2 border-magic-violet">
+                            <h4 class="font-cinzel font-bold text-purple-300 mb-2">The Witch's Oath</h4>
+                            <p class="text-xs leading-relaxed opacity-80">Ulysses demands: "Take your solemn oath to plot no further harm against me... or else when you have got me naked you will unman me."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-indigo-900 p-8 rounded-3xl shadow-2xl text-indigo-50">
+                    <h4 class="font-cinzel text-xl mb-6 text-purple-300">The Circean Bestiary</h4>
+                    <ul class="space-y-6">
+                        <li class="flex items-start space-x-4">
+                            <span class="text-3xl">🐺</span>
+                            <div>
+                                <p class="font-bold text-sm">Mountain Wolves</p>
+                                <p class="text-xs opacity-70">Bewitched creatures who fawn like hounds, wagging tails.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4">
+                            <span class="text-3xl">🦁</span>
+                            <div>
+                                <p class="font-bold text-sm">Forest Lions</p>
+                                <p class="text-xs opacity-70">Drugged into subjection, they rub noses lovingly against strangers.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start space-x-4">
+                            <span class="text-3xl">🐷</span>
+                            <div>
+                                <p class="font-bold text-sm">The Swine</p>
+                                <p class="text-xs opacity-70">"Head, hair, and all... but their senses were the same as before."</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="moly" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-12 rounded-3xl shadow-2xl border-4 border-magic-gold relative">
+                    <div class="absolute -top-6 -left-6 w-24 h-24 bg-magic-gold rounded-full flex items-center justify-center text-4xl shadow-lg">🌿</div>
+                    <h3 class="text-3xl font-cinzel font-bold text-indigo-900 mb-6 text-center">Herbology: The Moly</h3>
+                    <p class="text-center text-indigo-700 italic mb-10">"The root was black, while the flower was as white as milk; the gods call it Moly."</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="p-4">
+                            <div class="text-3xl mb-2">🪽</div>
+                            <h5 class="font-bold text-indigo-900 uppercase text-xs mb-2">The Provider</h5>
+                            <p class="text-xs text-indigo-500">Mercury, the messenger god, pulls it from the earth for Ulysses.</p>
+                        </div>
+                        <div class="p-4 border-x border-indigo-100">
+                            <div class="text-3xl mb-2">🛡️</div>
+                            <h5 class="font-bold text-indigo-900 uppercase text-xs mb-2">The Virtue</h5>
+                            <p class="text-xs text-indigo-500">Makes the bearer spell-proof. Circe's drugs lose all power to charm.</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="text-3xl mb-2">⛏️</div>
+                            <h5 class="font-bold text-indigo-900 uppercase text-xs mb-2">The Difficulty</h5>
+                            <p class="text-xs text-indigo-500">"Mortal men cannot uproot it, but the gods can do whatever they like."</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 bg-neutral-900 text-neutral-400 p-6 rounded-xl text-center text-xs">
+                    <p><strong>Memorial:</strong> Elpenor, "not very remarkable for sense or courage," who fell from Circe's roof and broke his neck while drunk.</p>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2009.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book IX
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2011.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XI <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-indigo-950 text-indigo-400 py-8 text-center text-sm mt-auto border-t-4 border-magic-violet">
+        <p>Book X of Homer's <i>The Odyssey</i>: The Travels through Magic and Ruin.</p>
+    </footer>
+
+    <script>
+        let windsOpen = false;
+        let isPig = false;
+
+        function toggleWinds() {
+            const bag = document.getElementById('wind-bag-ui');
+            const icon = document.getElementById('bag-icon');
+            const status = document.getElementById('bag-status');
+            const hint = document.getElementById('bag-hint');
+            
+            windsOpen = !windsOpen;
+            if(windsOpen) {
+                bag.classList.add('open', 'bg-red-50');
+                icon.innerText = '🌪️';
+                status.innerText = 'THE WINDS ARE LOOSE!';
+                status.classList.add('text-red-600');
+                hint.innerText = 'The fleet is blown back to Aeolia...';
+            } else {
+                bag.classList.remove('open', 'bg-red-50');
+                icon.innerText = '🎒';
+                status.innerText = 'The Bag is Sealed';
+                status.classList.remove('text-red-600');
+                hint.innerText = 'Click to let the men open it...';
+            }
+        }
+
+        function transformCrew() {
+            const icon = document.getElementById('crew-icon');
+            const label = document.getElementById('crew-label');
+            const desc = document.getElementById('crew-desc');
+            
+            isPig = !isPig;
+            if(isPig) {
+                icon.innerText = '🐷';
+                label.innerText = 'The Crew (Swine)';
+                desc.innerText = '"Shut up squealing... they grunted just as pigs do."';
+            } else {
+                icon.innerText = '👨‍✈️';
+                label.innerText = 'The Crew (Men)';
+                desc.innerText = '"They became men again, younger... and much taller."';
+            }
+        }
+
+        function initFleetChart() {
+            const ctx = document.getElementById('fleetChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Ships Lost', 'Ships Remaining'],
+                    datasets: [{
+                        data: [11, 1],
+                        backgroundColor: ['#b91c1c', '#10b981'],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(targetId).classList.remove('hidden-section');
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+            if(targetId === 'cannibals') initFleetChart();
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => switchTab(e.target.getAttribute('data-target')));
+        });
+    </script>
+</body>
+</html>

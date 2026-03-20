@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XI Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #0a0a0a; /* Abyss Black */
+            color: #d1d5db;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .bg-hades-red { background-color: #450a0a; }
+        .text-ghost-teal { color: #5eead4; }
+        .border-ghost-teal { border-color: #5eead4; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #5eead4;
+            color: #5eead4;
+            font-weight: 600;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .hidden-section {
+            display: none;
+        }
+        .shade-card {
+            background: linear-gradient(135deg, #111827 0%, #000000 100%);
+            transition: all 0.4s ease;
+        }
+        .shade-card:hover {
+            box-shadow: 0 0 20px rgba(94, 234, 212, 0.3);
+            border-color: #5eead4;
+        }
+        .trench-item {
+            transition: all 0.3s ease;
+            opacity: 0.4;
+        }
+        .trench-item.active {
+            opacity: 1;
+            transform: translateY(-5px);
+            color: #5eead4;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-black text-white py-14 shadow-2xl border-b-2 border-ghost-teal text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-red-900 opacity-10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-6xl mb-4">🌑 🏺 🩸</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-[0.3em] text-white">NEKYIA</h1>
+            <h2 class="text-xl md:text-3xl font-light italic text-ghost-teal">Book XI: The Land of the Dead</h2>
+        </div>
+    </header>
+
+    <nav class="bg-zinc-950 shadow-md sticky top-0 z-50 border-b border-zinc-800">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active inline-block py-5 px-6 md:px-10 text-zinc-500 hover:text-ghost-teal font-cinzel text-sm md:text-base transition-colors" data-target="ritual">The Trench</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn inline-block py-5 px-6 md:px-10 text-zinc-500 hover:text-ghost-teal font-cinzel text-sm md:text-base transition-colors" data-target="shades">Ancestry List</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn inline-block py-5 px-6 md:px-10 text-zinc-500 hover:text-ghost-teal font-cinzel text-sm md:text-base transition-colors" data-target="prophecy">The Oracle</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn inline-block py-5 px-6 md:px-10 text-zinc-500 hover:text-ghost-teal font-cinzel text-sm md:text-base transition-colors" data-target="tartarus">Deep Tartarus</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-16">
+
+        <section id="ritual" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h3 class="text-3xl font-cinzel font-bold text-white mb-6">The Libations for the Ghosts</h3>
+                <p class="text-zinc-400 mb-10 leading-relaxed italic">"Dig a trench a cubit or so... and pour into it as a drink-offering to all the dead."</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="ritual-steps">
+                    <div class="p-6 bg-zinc-900 rounded-xl border border-zinc-800 trench-item cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="text-4xl mb-2">🥛</div>
+                        <p class="text-xs font-bold uppercase">Honey & Milk</p>
+                    </div>
+                    <div class="p-6 bg-zinc-900 rounded-xl border border-zinc-800 trench-item cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="text-4xl mb-2">🍷</div>
+                        <p class="text-xs font-bold uppercase">Sweet Wine</p>
+                    </div>
+                    <div class="p-6 bg-zinc-900 rounded-xl border border-zinc-800 trench-item cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="text-4xl mb-2">💧</div>
+                        <p class="text-xs font-bold uppercase">Clear Water</p>
+                    </div>
+                    <div class="p-6 bg-zinc-900 rounded-xl border border-zinc-800 trench-item cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="text-4xl mb-2">🌾</div>
+                        <p class="text-xs font-bold uppercase">Barley Meal</p>
+                    </div>
+                    <div class="p-6 bg-hades-red rounded-xl border border-red-900 trench-item cursor-pointer" onclick="this.classList.toggle('active')">
+                        <div class="text-4xl mb-2">🩸</div>
+                        <p class="text-xs font-bold uppercase text-red-300">Sheep's Blood</p>
+                    </div>
+                </div>
+                <p class="mt-8 text-xs text-zinc-500">Click each element to perform the ritual and summon the shades.</p>
+            </div>
+        </section>
+
+        <section id="shades" class="content-section hidden-section fade-in">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="shade-grid">
+                <!-- Shades injected here -->
+            </div>
+        </section>
+
+        <section id="prophecy" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto bg-zinc-900 p-10 rounded-3xl border border-ghost-teal shadow-2xl relative">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black px-6 py-2 border border-ghost-teal rounded-full text-ghost-teal font-cinzel font-bold">The Prophecy of Tiresias</div>
+                
+                <div class="space-y-8 mt-6">
+                    <div class="flex items-start space-x-6">
+                        <div class="w-12 h-12 rounded-full border border-ghost-teal flex items-center justify-center shrink-0 text-ghost-teal font-bold">1</div>
+                        <div>
+                            <h4 class="font-cinzel text-lg text-white mb-2">The Thrinacian Test</h4>
+                            <p class="text-sm text-zinc-400">Restrain yourself and your companions from harming the cattle of the Sun-god Hyperion. If you harm them, your ship and men will perish.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-6">
+                        <div class="w-12 h-12 rounded-full border border-ghost-teal flex items-center justify-center shrink-0 text-ghost-teal font-bold">2</div>
+                        <div>
+                            <h4 class="font-cinzel text-lg text-white mb-2">The Return to Ithaca</h4>
+                            <p class="text-sm text-zinc-400">You will find high-handed people devouring your substance and paying court to your wife. You must take your revenge on these suitors.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-6">
+                        <div class="w-12 h-12 rounded-full border border-ghost-teal flex items-center justify-center shrink-0 text-ghost-teal font-bold">3</div>
+                        <div>
+                            <h4 class="font-cinzel text-lg text-white mb-2">The Inland Journey</h4>
+                            <p class="text-sm text-zinc-400">Carry an oar inland until someone mistakes it for a winnowing shovel. Fix it there and sacrifice to Neptune.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-6">
+                        <div class="w-12 h-12 rounded-full border border-ghost-teal flex items-center justify-center shrink-0 text-ghost-teal font-bold">4</div>
+                        <div>
+                            <h4 class="font-cinzel text-lg text-white mb-2">A Peaceful End</h4>
+                            <p class="text-sm text-zinc-400">Death shall come to you gently from the sea when you are full of years and peace of mind.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tartarus" class="content-section hidden-section fade-in">
+            <div class="max-w-5xl mx-auto text-center">
+                <h3 class="text-3xl font-cinzel font-bold text-red-600 mb-12 uppercase tracking-widest">The Tortured Souls</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-8 bg-black rounded-2xl border border-red-900 hover:border-red-500 transition-colors">
+                        <h4 class="font-cinzel text-xl text-white mb-4">Tantalus</h4>
+                        <div class="w-16 h-1 bg-red-600 mx-auto mb-4"></div>
+                        <p class="text-xs text-zinc-400">Stands in a lake that recedes when he stoops to drink. Fruit branches pull away when he reaches for food. Eternal hunger and thirst.</p>
+                    </div>
+                    <div class="p-8 bg-black rounded-2xl border border-red-900 hover:border-red-500 transition-colors">
+                        <h4 class="font-cinzel text-xl text-white mb-4">Sisyphus</h4>
+                        <div class="w-16 h-1 bg-red-600 mx-auto mb-4"></div>
+                        <p class="text-xs text-zinc-400">Must roll a prodigious stone to the top of a hill, only for it to thunder back down just as it reaches the peak. Eternal labor.</p>
+                    </div>
+                    <div class="p-8 bg-black rounded-2xl border border-red-900 hover:border-red-500 transition-colors">
+                        <h4 class="font-cinzel text-xl text-white mb-4">Tityus</h4>
+                        <div class="w-16 h-1 bg-red-600 mx-auto mb-4"></div>
+                        <p class="text-xs text-zinc-400">Stretched over nine acres of ground while two vultures eternally peck and dig at his liver. Punishment for violating Leto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2010.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book X
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2012.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XII <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-zinc-600 py-10 text-center text-sm mt-auto border-t border-zinc-900">
+        <p>Book XI of Homer's <i>The Odyssey</i>: The Shades of the Abyss.</p>
+    </footer>
+
+    <script>
+        const shades = [
+            { name: 'Elpenor', role: 'The Lost Comrade', icon: '🛶', desc: 'Asks for burial and a barrow on the shore with his oar planted on top.' },
+            { name: 'Tiresias', role: 'The Theban Seer', icon: '🦯', desc: 'Predicts the difficult return, the cattle of the sun, and the final journey.' },
+            { name: 'Anticlea', role: 'Mother of Ulysses', icon: '👵', desc: 'Died of longing and grief for her son. Tells him of the state of Ithaca.' },
+            { name: 'Agamemnon', role: 'King of Men', icon: '👑', desc: 'Betrayed and murdered by his wife. Warns: "There is no trusting women."' },
+            { name: 'Achilles', role: 'The Great Hero', icon: '⚔️', desc: '"I would rather be a paid servant in a poor man\'s house than king of the dead."' },
+            { name: 'Ajax', role: 'Telamonian Ajax', icon: '🛡️', desc: 'Holds a bitter silence. Still angry over the judgement of Achilles\'s armor.' }
+        ];
+
+        function renderShades() {
+            const container = document.getElementById('shade-grid');
+            shades.forEach(s => {
+                container.innerHTML += `
+                    <div class="p-6 rounded-2xl border border-zinc-800 shade-card text-center group cursor-help">
+                        <div class="text-4xl mb-4 group-hover:scale-125 transition-transform">${s.icon}</div>
+                        <h4 class="font-cinzel font-bold text-white text-lg">${s.name}</h4>
+                        <p class="text-xs text-ghost-teal uppercase tracking-widest mb-3">${s.role}</p>
+                        <p class="text-xs text-zinc-400 leading-relaxed">${s.desc}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(targetId).classList.remove('hidden-section');
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => switchTab(e.target.getAttribute('data-target')));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderShades();
+        });
+    </script>
+</body>
+</html>

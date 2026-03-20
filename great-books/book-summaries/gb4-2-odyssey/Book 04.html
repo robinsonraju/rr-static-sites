@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book IV - The Splendor of Sparta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-purple: #4c1d95;
+            --silver: #e2e8f0;
+            --ivory: #fdfdfd;
+        }
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .bg-purple-900 { background-color: var(--royal-purple); }
+        
+        .memory-card {
+            perspective: 1000px;
+        }
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .memory-card:hover .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        .memory-card-back {
+            transform: rotateY(180deg);
+            background-color: var(--royal-purple);
+            color: white;
+        }
+        
+        .nepenthe-blur {
+            filter: blur(0px);
+            transition: filter 2s ease;
+        }
+        .nepenthe-active {
+            filter: blur(2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-purple-900 text-white py-16 shadow-2xl relative">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold font-cinzel mb-4 tracking-widest">ROYAL SPARTA</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-purple-200">The Court of Menelaus & Helen</h2>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-silver to-transparent"></div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-12">
+        
+        <!-- Section 1: The Palace Splendor -->
+        <section class="mb-20">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="text-3xl font-cinzel font-bold mb-4">The Gleam of Gold & Amber</h3>
+                <p class="text-lg leading-relaxed italic">"Look, Pisistratus... see the gleam of bronze and gold—of amber, ivory, and silver. Everything is so splendid that it is like seeing the palace of Olympian Jove."</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500 text-center">
+                    <span class="text-4xl mb-2 block">🏺</span>
+                    <h4 class="font-bold font-cinzel">The Mixing Bowl</h4>
+                    <p class="text-sm text-slate-500 mt-2">Pure silver with a gold rim, made by Vulcan's own hand.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500 text-center">
+                    <span class="text-4xl mb-2 block">🧶</span>
+                    <h4 class="font-bold font-cinzel">The Silver Work-box</h4>
+                    <p class="text-sm text-slate-500 mt-2">A gift from Egyptian Thebes, running on wheels with a gold band.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500 text-center">
+                    <span class="text-4xl mb-2 block">🍷</span>
+                    <h4 class="font-bold font-cinzel">The Nepenthe</h4>
+                    <p class="text-sm text-slate-500 mt-2">A drug from Egypt that banishes all sorrow and ill-humour.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500 text-center">
+                    <span class="text-4xl mb-2 block">🛌</span>
+                    <h4 class="font-bold font-cinzel">The Gatehouse Beds</h4>
+                    <p class="text-sm text-slate-500 mt-2">Spread with red rugs and woollen cloaks for the guests.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Menelaus's Journey (Chart) -->
+        <section class="mb-20 bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-slate-100">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <h3 class="text-3xl font-cinzel font-bold mb-6">Eight Years of Wandering</h3>
+                    <p class="mb-6 leading-relaxed">While Ulysses was trapped, Menelaus wandered the southern and eastern seas, gathering a fortune in gold and substance.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-purple-600 rounded-full mr-3"></div>
+                            <span class="text-sm font-semibold">Cyprus & Phoenicia</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                            <span class="text-sm font-semibold">Egypt & Ethiopia</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-purple-400 rounded-full mr-3"></div>
+                            <span class="text-sm font-semibold">Sidonians & Erembians</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-purple-300 rounded-full mr-3"></div>
+                            <span class="text-sm font-semibold">Libya (Where lambs are born with horns)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full h-[300px]">
+                    <canvas id="travelChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Proteus Transformation (Interactive) -->
+        <section class="mb-20" id="nepenthe-zone">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-cinzel font-bold mb-4">Snaring the Old Man of the Sea</h3>
+                <p class="text-slate-600">Proteus's shapeshifting attempts to escape Menelaus's grasp at Pharos.</p>
+                <button onclick="toggleNepenthe()" class="mt-4 px-6 py-2 bg-purple-900 text-white rounded-full font-cinzel text-sm hover:bg-purple-800 transition-colors">Apply Nepenthe Drug</button>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="memory-card h-48">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front bg-white shadow border border-slate-100">
+                            <span class="text-4xl">🦁</span>
+                            <span class="font-bold mt-2">LION</span>
+                        </div>
+                        <div class="memory-card-back">
+                            <p class="text-xs">With a great mane. The first and most fierce transformation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="memory-card h-48">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front bg-white shadow border border-slate-100">
+                            <span class="text-4xl">🐉</span>
+                            <span class="font-bold mt-2">DRAGON</span>
+                        </div>
+                        <div class="memory-card-back">
+                            <p class="text-xs">A serpent of immense scale and cunning.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="memory-card h-48">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front bg-white shadow border border-slate-100">
+                            <span class="text-4xl">🐆</span>
+                            <span class="font-bold mt-2">LEOPARD</span>
+                        </div>
+                        <div class="memory-card-back">
+                            <p class="text-xs">Swift and spotted, trying to slip through the fingers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="memory-card h-48">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front bg-white shadow border border-slate-100">
+                            <span class="text-4xl">🐗</span>
+                            <span class="font-bold mt-2">BOAR</span>
+                        </div>
+                        <div class="memory-card-back">
+                            <p class="text-xs">A wild, tusking beast of the earth.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="memory-card h-48">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front bg-white shadow border border-slate-100">
+                            <span class="text-4xl">🌊</span>
+                            <span class="font-bold mt-2">WATER</span>
+                        </div>
+                        <div class="memory-card-back">
+                            <p class="text-xs">Running water, nearly impossible to hold.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="memory-card h-48">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front bg-white shadow border border-slate-100">
+                            <span class="text-4xl">🌳</span>
+                            <span class="font-bold mt-2">TREE</span>
+                        </div>
+                        <div class="memory-card-back">
+                            <p class="text-xs">A tall, leafy tree, the final stationary effort.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Prophecy -->
+        <section class="max-w-4xl mx-auto bg-slate-900 text-white p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 opacity-10 text-8xl">📜</div>
+            <h3 class="text-3xl font-cinzel font-bold mb-8 border-b border-slate-700 pb-4">The Secret of the Sea-God</h3>
+            <div class="space-y-6 text-slate-300">
+                <p><strong class="text-purple-400">On Ulysses:</strong> "I can see him in an island sorrowing bitterly in the house of the nymph Calypso... he cannot reach his home for he has no ships nor sailors."</p>
+                <p><strong class="text-purple-400">On Ajax:</strong> Wrecked on the rocks of Gyrae. Drowned because of his boast that the gods could not kill him.</p>
+                <p><strong class="text-purple-400">On Agamemnon:</strong> Butchered like an ox in the shambles by Aegisthus after a year of being watched.</p>
+                <p><strong class="text-purple-400">On Menelaus:</strong> Destined for the Elysian plain because he is Jove's son-in-law.</p>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2003.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book III
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2005.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book V <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-purple-950 text-purple-300 py-10 text-center border-t border-purple-800">
+        <p class="font-cinzel text-lg">THE ODYSSEY: BOOK IV</p>
+        <p class="text-sm mt-2">Interactive Analysis of the Telemachy in Sparta</p>
+    </footer>
+
+    <script>
+        function initChart() {
+            const ctx = document.getElementById('travelChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Egypt', 'Libya', 'Phoenicia', 'Ethiopia', 'Cyprus'],
+                    datasets: [{
+                        label: 'Years / Wealth Influence',
+                        data: [8, 5, 7, 6, 4],
+                        backgroundColor: [
+                            'rgba(76, 29, 149, 0.7)',
+                            'rgba(109, 40, 217, 0.7)',
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(167, 139, 250, 0.7)',
+                            'rgba(196, 181, 253, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        function toggleNepenthe() {
+            const zone = document.getElementById('nepenthe-zone');
+            zone.classList.toggle('nepenthe-active');
+            const btn = event.target;
+            if(zone.classList.contains('nepenthe-active')) {
+                btn.innerText = "Sorrow Banishment Active";
+                btn.classList.add('bg-green-600');
+            } else {
+                btn.innerText = "Apply Nepenthe Drug";
+                btn.classList.remove('bg-green-600');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initChart);
+    </script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XIV - The Beguiling of Jove</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background-color: #f8fafc; /* Cloud/White Tint */
+            color: #1e1b4b;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+            color: #4338ca;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e0e7ff;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #818cf8;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <nav class="sticky top-0 z-50 bg-indigo-950 text-indigo-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-indigo-300">&#9729;</span>
+                    <span class="font-serif text-xl font-bold tracking-widest">THE ILIAD <span class="text-indigo-200 text-base font-normal italic">| BOOK XIV</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium uppercase tracking-widest">
+                        <a href="#overview" class="hover:text-indigo-300 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-indigo-300 transition-colors">The Beguiling</a>
+                        <a href="#analytics" class="hover:text-indigo-300 transition-colors">Olympian Stats</a>
+                        <a href="#themes" class="hover:text-indigo-300 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-bold">The Beguiling of Jove</h1>
+            <p class="text-xl md:text-2xl text-indigo-800 leading-relaxed italic">
+                "While he was thus engaged a sweet and careless sleep might be made to steal over his eyes and senses."
+            </p>
+            <p class="text-lg text-indigo-700 max-w-3xl mx-auto leading-relaxed">
+                In one of the most famous episodes of the epic, the 'Dios Apate', Juno orchestrates a masterful deception. By seducing Jove and enlisting the help of Sleep, she lulls the King of Gods into a stupor, allowing Neptune to lead a devastating Greek counter-charge that leaves Hector stunned and the Trojans in retreat.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-indigo-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128141;</span>
+                    <span class="text-xs uppercase font-bold mt-2">The Girdle</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128564;</span>
+                    <span class="text-xs uppercase font-bold mt-2">Sleep</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#127754;</span>
+                    <span class="text-xs uppercase font-bold mt-2">The Surge</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-indigo-200">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-indigo-900 mb-2">Chronicle of the Cloud-Capped Trick</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-3xl shadow-xl border border-indigo-50">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-indigo-50/30 rounded-2xl p-10 flex flex-col justify-center border border-indigo-100 relative">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-400"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-indigo-200">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-indigo-900 mb-2">Olympian Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-indigo-50">
+                    <h3 class="text-xl font-serif font-bold text-indigo-800 mb-6 text-center">Divine vs. Mortal Tension</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-indigo-50">
+                    <h3 class="text-xl font-serif font-bold text-indigo-800 mb-6 text-center">Juno's "Weaponry" (Effectiveness)</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-24 border-t border-indigo-200">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-indigo-900 mb-2">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white rounded-3xl p-10 shadow-sm border border-indigo-50">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book13.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Rebellion of the Sea</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book15.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Battle at the Ships</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-indigo-950 text-indigo-300 py-16 text-center">
+        <p class="font-serif text-lg mb-4 italic">"Sleep now departed and went his ways to and fro among mankind."</p>
+        <p class="text-xs uppercase tracking-[0.4em]">Interactive Analysis &bull; The Iliad Book XIV</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Kings\' Distress',
+                summary: 'Nestor meets the wounded Agamemnon, Diomedes, and Ulysses. Agamemnon, seeing the wall fallen, again suggests flight. Ulysses rebukes him fiercely.',
+                quote: '“Wretch, you should have commanded some other and baser army... Hold your peace!”',
+                icon: '&#128160;'
+            },
+            {
+                id: 't2',
+                title: 'Juno\'s Plan',
+                summary: 'Juno, seeing Neptune aiding the Greeks, decides to distract Jove. She arrays herself in magnificent garments and anoints herself with ambrosial oil.',
+                quote: '“She set herself to think how she might hoodwink him... in the end she deemed it best to go to Ida.”',
+                icon: '&#10024;'
+            },
+            {
+                id: 't3',
+                title: 'The Girdle of Venus',
+                summary: 'Juno tricks Venus into lending her her "charity girdle," which contains all the spells of love, desire, and persuasion.',
+                quote: '“Take this girdle wherein all my charms reside and lay it in your bosom.”',
+                icon: '&#128141;'
+            },
+            {
+                id: 't4',
+                title: 'Enlisting Sleep',
+                summary: 'Juno finds Sleep (Somnus) and bribes him with the promise of marriage to the Grace Pasithea. He agrees to lull Jove into a deep slumber.',
+                quote: '“Close Jove’s keen eyes for me in slumber while I hold him clasped in my embrace.”',
+                icon: '&#128564;'
+            },
+            {
+                id: 't5',
+                title: 'The Seduction on Ida',
+                summary: 'Jove sees Juno on Mount Ida and is overcome by passion. They lie together under a golden cloud, and Sleep does his work.',
+                quote: '“Thus, then, did the sire of all things repose peacefully on the crest of Ida.”',
+                icon: '&#9729;'
+            },
+            {
+                id: 't6',
+                title: 'Neptune\'s Counter-Charge',
+                summary: 'Sleep alerts Neptune that Jove is sleeping. Neptune rouses the Greek kings to exchange their armour for the best available and charge.',
+                quote: '“In his strong hand he grasped his terrible sword, keen of edge and flashing like lightning.”',
+                icon: '&#127754;'
+            },
+            {
+                id: 't7',
+                title: 'Hector is Felled',
+                summary: 'In the general clash, Ajax the Great strikes Hector with a massive stone. Hector is carried off the field, vomiting blood.',
+                quote: '“As an oak falls headlong when uprooted by the lightning flash... even so did Hector fall to earth.”',
+                icon: '&#129704;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'deception',
+                title: 'Divine Deception',
+                content: 'The "Dios Apate" (Beguiling of Jove) shows Juno at her most strategic. She uses soft power—beauty, desire, and manipulation—to achieve what military force cannot: the temporary removal of Jove\'s absolute oversight.',
+                keywords: ['Manipulation', 'Charms', 'Metis']
+            },
+            {
+                id: 'gender',
+                title: 'Gender & Power',
+                content: 'Book XIV explores the interplay between male and female power on Olympus. Juno\'s actions subvert the patriarchal order, using Jove\'s own desires against him to change the course of the mortal war.',
+                keywords: ['Seduction', 'Agency', 'Hierarchy']
+            },
+            {
+                id: 'momentum',
+                title: 'The Sudden Shift',
+                content: 'The book demonstrates the fluidity of narrative momentum. The Greeks go from discussing flight to a full-scale counter-charge within a single book, proving that in the world of the Iliad, fate is often just a divine whim away from turning.',
+                keywords: ['Reversal', 'Charge', 'Counter-Attack']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-2xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-indigo-700 text-white border-indigo-800 shadow-lg' : 'bg-white text-indigo-900 border-indigo-100 hover:bg-indigo-50'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-lg italic">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-indigo-700', 'text-white', 'border-indigo-800', 'shadow-lg');
+                        b.classList.add('bg-white', 'text-indigo-900', 'border-indigo-100');
+                    });
+                    btn.classList.add('bg-indigo-700', 'text-white', 'border-indigo-800', 'shadow-lg');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl text-indigo-500">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-indigo-900">${item.title}</h3>
+                            </div>
+                            <p class="text-indigo-800 text-lg leading-relaxed mb-8">${item.summary}</p>
+                            <div class="bg-indigo-50 border-l-4 border-indigo-400 p-6 rounded-r-2xl italic text-indigo-950 font-serif text-xl">
+                                "${item.quote}"
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-2xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-indigo-600 bg-indigo-50 text-indigo-900' : 'border-transparent bg-white text-indigo-700 hover:bg-indigo-50'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-indigo-600', 'bg-indigo-50', 'text-indigo-900');
+                        b.classList.add('border-transparent', 'bg-white', 'text-indigo-700');
+                    });
+                    btn.classList.add('border-indigo-600', 'bg-indigo-50', 'text-indigo-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-indigo-900 mb-4">${item.title}</h3>
+                        <p class="text-lg text-indigo-800 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold uppercase rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Kings Meeting', 'Juno Arraying', 'Somnus Deal', 'Mount Ida', 'The Nod', 'Neptune Cry', 'Ajax Strike'],
+                    datasets: [{
+                        label: 'Narrative Tension',
+                        data: [4, 5, 6, 8, 3, 9, 10],
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        fill: true,
+                        tension: 0.5
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Beauty', 'Manipulation', 'Divine Favor', 'Strategic Value', 'Physical Strength'],
+                    datasets: [
+                        {
+                            label: 'Juno',
+                            data: [10, 10, 8, 9, 4],
+                            borderColor: '#4338ca',
+                            backgroundColor: 'rgba(67, 56, 202, 0.2)'
+                        },
+                        {
+                            label: 'Jove',
+                            data: [5, 4, 10, 10, 10],
+                            borderColor: '#818cf8',
+                            backgroundColor: 'rgba(129, 140, 248, 0.2)'
+                        }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

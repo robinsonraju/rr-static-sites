@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XVI - The Death of Patroclus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f4f8;
+            color: #2d3748;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        .azure-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .silver-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+
+    <nav class="sticky top-0 z-50 bg-blue-900 text-blue-50 shadow-lg border-b border-blue-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">❄️</span>
+                    <span class="font-serif text-xl font-bold tracking-wider">THE ILIAD <span class="text-blue-300 text-base font-normal">| BOOK XVI</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-blue-300 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-blue-300 transition-colors">The Patrocleia</a>
+                        <a href="#analytics" class="hover:text-blue-300 transition-colors">Combat Analytics</a>
+                        <a href="#themes" class="hover:text-blue-300 transition-colors">Thematic Depths</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-blue-900 tracking-tight">The Death of Patroclus</h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed italic">
+                "The grey sea bore you and the sheer cliffs begot you, so cruel and remorseless are you."
+            </p>
+            <p class="text-lg text-slate-700 leading-relaxed">
+                Book XVI, known as the <em>Patrocleia</em>, is the turning point of the entire epic. Driven by pity for his dying comrades, Patroclus dons the armor of Achilles to drive the Trojans from the ships. His meteor-like rise and tragic fall mark the end of Achilles' isolation and the beginning of the end for Hector and Troy.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-blue-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🛡️</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-semibold">Borrowed Might</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🩸</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-semibold">Rain of Blood</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">⚔️</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-semibold">Tragic Valor</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-blue-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-blue-900 mb-4">Chronicle of a Falling Star</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Track Patroclus' journey from the tears shed at Achilles' tent to his final, prophetic breath on the dusty plain of Troy.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white/80 p-6 rounded-xl border border-blue-100 shadow-sm">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 azure-gradient rounded-lg p-6 md:p-8 flex flex-col justify-center shadow-inner relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-white text-8xl font-serif">XVI</div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300 text-white">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-blue-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-blue-900 mb-4">The Metrics of Hubris</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Analyzing the imbalance of power as Patroclus challenges the boundaries set by both man and god.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="silver-card p-6 rounded-xl flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-blue-800 mb-2 text-center">Narrative Velocity</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="silver-card p-6 rounded-xl flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-blue-800 mb-2 text-center">Patroclus vs. Hector (Book XVI)</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-blue-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-blue-900 mb-4">Thematic Explorations</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Deep literary analysis of the motifs that define this pivotal chapter.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-white rounded-xl shadow-sm border border-blue-100 p-8 min-h-[300px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book15.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Battle at the Ships</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book17.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Grinding Struggle</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-blue-900 text-blue-300 py-8 text-center text-sm">
+        <p>Interactive Literary Analysis — The Iliad, Book XVI</p>
+        <p class="mt-2 text-blue-100/50 text-2xl tracking-widest">🛡️ 🩸 ⚓</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                moment: 'The Plea',
+                title: 'Tears of a Hero',
+                summary: 'Patroclus approaches Achilles, weeping for the dying Greeks. He rebukes Achilles\' remorselessness and begs to lead the Myrmidons in his place, wearing his divine armor.',
+                quote: '“Achilles... do not be angry... All those who have been their champions so far are lying at the ships, wounded... are you still, O Achilles, so inexorable?”',
+                icon: '💧'
+            },
+            {
+                id: 't2',
+                moment: 'The Departure',
+                title: 'The Mirror Warrior',
+                summary: 'Achilles relents, allowing Patroclus to take his armor and men. He gives a strict warning: drive the Trojans from the ships, but do not pursue them to Troy, lest the gods intervene.',
+                quote: '“When you have driven the Trojans from the ships, come back again... do not fight the Trojans further in my absence, or you will rob me of glory...”',
+                icon: '🛡️'
+            },
+            {
+                id: 't3',
+                moment: 'The Charge',
+                title: 'The Myrmidons Strike',
+                summary: 'Patroclus leads the Myrmidons out. The Trojans, mistaking him for Achilles, are thrown into a panic. The fire is quenched at the ships and the tide of battle turns instantly.',
+                quote: '“The Trojans were now driven back with a shout that rent the skies, while the Danaans poured after them from their ships...”',
+                icon: '🐎'
+            },
+            {
+                id: 't4',
+                moment: 'The Duel',
+                title: 'The Fall of Sarpedon',
+                summary: 'Patroclus meets Sarpedon, son of Zeus, in combat. Despite Zeus\' desire to save his son, Juno insists on the fate of mortals. Patroclus slays Sarpedon, and Zeus rains blood in grief.',
+                quote: '“He fell like some oak or silver poplar or tall pine... moaning and clutching at the blood-stained dust.”',
+                icon: '🩸'
+            },
+            {
+                id: 't5',
+                moment: 'The Hubris',
+                title: 'The Gates of Troy',
+                summary: 'In the "pride and foolishness of his heart," Patroclus ignores Achilles\' warning and charges the very walls of Troy. Three times he attacks, and three times Apollo beats him back.',
+                quote: '“Thrice did Patroclus charge at an angle of the high wall, and thrice did Apollo beat him back, striking his shield with his own immortal hands.”',
+                icon: '🏛️'
+            },
+            {
+                id: 't6',
+                moment: 'The Disarming',
+                title: 'Divine Intervention',
+                summary: 'Apollo strikes Patroclus from behind, knocking his helmet off and loosening his armor. Euphorbus wounds him, leaving the dazed and unarmed hero vulnerable.',
+                quote: '“Phoebus Apollo beat the helmet from off his head... and Apollo undid the fastenings of his corslet. On this his mind became clouded; his limbs failed him...”',
+                icon: '🌪️'
+            },
+            {
+                id: 't7',
+                moment: 'The End',
+                title: 'A Dying Prophecy',
+                summary: 'Hector delivers the final blow. As he dies, Patroclus warns Hector that his own death is near at the hands of the true Achilles.',
+                quote: '“...you too shall live but for a little season: death and the day of your doom are close upon you, and they will lay you low by the hand of Achilles...”',
+                icon: '⚓'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-identity',
+                title: 'Identity and Armor',
+                content: 'Book XVI explores the power of the symbol. By wearing Achilles\' armor, Patroclus becomes a psychological weapon that shatters Trojan morale. However, the armor cannot grant him Achilles\' divine resilience or his restraint. The "false identity" leads both to his greatest triumph and his ultimate destruction, highlighting the gap between appearance and reality.',
+                keywords: ['Symbolism', 'Psychology', 'Metamorphosis']
+            },
+            {
+                id: 'theme-fate',
+                title: 'The Constraints of Fate',
+                content: 'The death of Sarpedon demonstrates that even Zeus, the king of gods, is bound by the laws of Fate (Moira) and the consensus of the other Olympians. His "rain of blood" is a rare moment of divine vulnerability and grief, emphasizing that in the Iliad, death is the one absolute that no power can truly override.',
+                keywords: ['Moira', 'Divine Grief', 'Inevitability']
+            },
+            {
+                id: 'theme-hubris',
+                title: 'Hubris and Haste',
+                content: 'Patroclus\' tragic flaw in this book is his inability to stop. His success against Sarpedon and the Trojans blinds him to the warnings of Achilles and the warnings of Apollo at the wall. This "ate" (blindness/folly) is a classic Greek tragic arc, where the hero\'s greatest strength becomes the source of his ruin.',
+                keywords: ['Ate', 'Overreach', 'Tragic Arc']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-blue-800 text-white border-blue-700 shadow-md' : 'bg-white text-slate-600 border-blue-100 hover:bg-blue-50'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-blue-200' : 'text-blue-400'}">${item.moment}</span><span class="font-serif font-bold text-sm">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-blue-800', 'text-white', 'border-blue-700', 'shadow-md');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-blue-100');
+                    });
+                    btn.classList.add('bg-blue-800', 'text-white', 'border-blue-700', 'shadow-md');
+                    
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-white/20 text-white flex items-center justify-center text-2xl border border-white/40 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-serif font-bold">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-blue-200">${item.moment}</span>
+                                </div>
+                            </div>
+                            <p class="text-white text-lg leading-relaxed mb-6">${item.summary}</p>
+                            <div class="bg-blue-900/40 border-l-4 border-blue-300 p-4 rounded-r-lg italic text-blue-50 font-serif">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-serif font-bold transition-all duration-200 border-2 ${index === 0 ? 'border-blue-500 bg-blue-50 text-blue-900' : 'border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-blue-500', 'bg-blue-50', 'text-blue-900');
+                        b.classList.add('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    });
+                    btn.classList.add('border-blue-500', 'bg-blue-50', 'text-blue-900');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-serif font-bold text-blue-900 mb-6">${item.title}</h3>
+                        <p class="text-lg text-slate-700 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider rounded-full border border-blue-200">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['The Plea', 'The Arming', 'The Charge', 'Sarpedon\'s Fall', 'The Overreach', 'Apollo\'s Blow', 'Death'],
+                    datasets: [{
+                        label: 'Intensity',
+                        data: [4, 6, 8, 9, 10, 9, 10],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { display: false, max: 11 }, x: { grid: { display: false } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            new Chart(document.getElementById('radarChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Divine Support', 'Martial Success', 'Wisdom', 'Fate', 'Narrative Weight'],
+                    datasets: [
+                        {
+                            label: 'Patroclus',
+                            data: [2, 10, 4, 10, 10],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: '#3b82f6',
+                            pointBackgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'Hector',
+                            data: [9, 6, 7, 5, 8],
+                            backgroundColor: 'rgba(148, 163, 184, 0.2)',
+                            borderColor: '#94a3b8',
+                            pointBackgroundColor: '#94a3b8'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { ticks: { display: false }, min: 0, max: 10 } },
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

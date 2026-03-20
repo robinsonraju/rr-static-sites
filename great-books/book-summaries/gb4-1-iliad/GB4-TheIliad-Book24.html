@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XXIV - The Ransom of Hector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #fdfcf0;
+            color: #2f4f4f;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #556b2f;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3d4d21;
+        }
+        .olive-accent {
+            color: #556b2f;
+        }
+        .bg-olive {
+            background-color: #556b2f;
+        }
+        .border-olive {
+            border-color: #556b2f;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-olive-100 selection:text-olive-900">
+
+    <nav class="sticky top-0 z-50 bg-[#556b2f] text-beige-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-parchment-100">&#9878;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider text-white">THE ILIAD <span class="text-olive-100 text-base font-normal">| BOOK XXIV</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium text-white/90">
+                        <a href="#overview" class="hover:text-white transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-white transition-colors">The Ransom</a>
+                        <a href="#analytics" class="hover:text-white transition-colors">Emotional Analytics</a>
+                        <a href="#themes" class="hover:text-white transition-colors">Core Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-800 uppercase tracking-widest drop-shadow-sm">The Ransom of Hector</h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                The final book of the Iliad concludes not with a climactic battle, but with a profound act of reconciliation. It explores the shared suffering of humanity, the limits of divine-sanctioned rage, and the necessity of pity. In the meeting between a grieving father and his son's killer, the epic finds its true resolution.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-olive-700">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128330;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Supplication</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#129309;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Pity & Mercy</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#127963;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Sacred Truce</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-olive-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">The Chronicle of Compassion</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Follow Priam\'s perilous journey from the walls of Troy to the tent of Achilles. This timeline tracks the divine intervention and human courage that led to the return of Hector.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-xl shadow-sm border border-olive-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[400px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-olive-50/30 rounded-lg p-6 md:p-8 flex flex-col justify-center border border-olive-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-[#556b2f]"></div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-olive-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Analytics of the Shared Tear</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Visualizing the emotional arc of the epic\'s conclusion. The first chart tracks the release of tension through shared grief, while the second compares the psychological states of the two central figures during their historic meeting.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-olive-200 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Emotional Release Curve</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Tracking the narrative\'s descent from rage to solemn peace.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-olive-200 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Priam vs. Achilles</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">The anatomy of grief and acceptance during the ransom of Hector.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-olive-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Thematic Explorer</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    The final book provides the philosophical backbone of the entire poem. Select a theme below to explore the concepts of mortality and mercy that define the Iliad\'s end.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-white rounded-xl shadow-sm border border-olive-200 p-8 min-h-[300px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book23.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Funeral Games</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <div class="w-1/3"></div>
+        </nav>
+    </main>
+
+    <footer class="bg-[#556b2f] text-white/70 py-8 text-center text-sm">
+        <p>Interactive Analysis based on The Iliad of Homer, Book XXIV.</p>
+        <p class="mt-2 text-white/30 text-2xl tracking-widest">&#9878; &#129309; &#127963;</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                day: 'Day 1-12',
+                title: 'The Desecration',
+                summary: 'Achilles, consumed by grief, continues to drag Hector\'s body around Patroclus\' tomb. Apollo, however, protects the body from decay or injury, sparking a debate among the gods on Olympus.',
+                quote: '“Achilles... drags him behind his chariot round the tomb of his comrade. It were better of him, and for him, that he should not do so... he should not vent his fury upon dead clay.”',
+                icon: '&#128148;'
+            },
+            {
+                id: 't2',
+                day: 'Day 12',
+                title: 'The Divine Decree',
+                summary: 'Zeus commands Thetis to tell Achilles he must return the body. Simultaneously, Iris is sent to Priam to bid him go to the Greek camp with a ransom, promising divine protection.',
+                quote: '“I will send Iris to great Priam to bid him go to the ships of the Achaeans, and ransom his son, taking with him such gifts for Achilles as may give him satisfaction.”',
+                icon: '&#9889;'
+            },
+            {
+                id: 't3',
+                day: 'Day 12',
+                title: 'The Omen of the Eagle',
+                summary: 'Despite Hecuba\'s terror, Priam prepares to leave. He prays for a sign, and Zeus sends a massive black eagle flying on the right, confirming his protection for the journey.',
+                quote: 'Forthwith he sent an eagle, the most unerring portent of all birds that fly... when they saw him they were glad and their hearts took comfort within them.',
+                icon: '&#129413;'
+            },
+            {
+                id: 't4',
+                day: 'Day 12',
+                title: 'The Divine Guide',
+                summary: 'Hermes, disguised as a Myrmidon squire, meets Priam on the plain. He puts the Greek sentinels to sleep and leads Priam safely into the heart of the enemy camp.',
+                quote: '“Sir, it is I, immortal Mercury, that am come with you, for my father sent me to escort you... Go you within, and embrace the knees of the son of Peleus.”',
+                icon: '&#129654;'
+            },
+            {
+                id: 't5',
+                day: 'Day 12',
+                title: 'The Meeting of Foes',
+                summary: 'Priam enters Achilles\' tent and kneels, kissing the hands that killed his sons. He invokes the memory of Achilles\' father, Peleus, breaking Achilles\' heart and leading to shared tears.',
+                quote: '“Think of your father, O Achilles... have compassion upon me... I have raised to my lips the hand of him who slew my son.”',
+                icon: '&#128591;'
+            },
+            {
+                id: 't6',
+                day: 'Day 12',
+                title: 'The Shared Meal',
+                summary: 'Achilles accepts the ransom and shares a meal with Priam, telling him the story of Niobe to show that even in peak grief, life must continue. He grants an 11-day truce for Hector\'s funeral.',
+                quote: '“Even lovely Niobe had to think about eating, though her twelve children... had been all slain in her house... for the present let us prepare our supper.”',
+                icon: '&#127829;'
+            },
+            {
+                id: 't7',
+                day: 'Day 13-24',
+                title: 'The Funeral of Hector',
+                summary: 'Priam returns to Troy with the body. After nine days of mourning led by Andromache, Hecuba, and Helen, Hector is burned on a pyre and his bones are buried in a golden urn.',
+                quote: '“Thus, then, did they celebrate the funeral of Hector tamer of horses.”',
+                icon: '&#127963;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-humanity',
+                title: 'Shared Humanity',
+                content: 'The climax of the poem is the recognition that suffering is the universal human experience. Achilles and Priam, representing the peak of youth and age, victor and victim, find common ground in their grief. This transcends the "them vs. us" mentality of the war.',
+                keywords: ['Empathy', 'Commonality', 'Sorrow']
+            },
+            {
+                id: 'theme-mercy',
+                title: 'Pity and Mercy (Eleos)',
+                content: 'The return of Hector\'s body is an act of "eleos" (pity). It marks the moment Achilles moves beyond the bestial rage (mēnis) that has defined him, re-entering the human moral community by recognizing the sanctity of the dead and the grief of a father.',
+                keywords: ['Pity', 'Forgiveness', 'Ethics']
+            },
+            {
+                id: 'theme-fate',
+                title: 'The Two Urns of Zeus',
+                content: 'Achilles\' speech about the two urns on Zeus\'s floor (one of evil, one of good) provides a bleak but profound view of the human condition. It suggests that life is a mixture of fleeting joys and inevitable sorrows, and that the only noble path is to endure with dignity.',
+                keywords: ['Fatalism', 'Endurance', 'Zeus']
+            },
+            {
+                id: 'theme-closure',
+                title: 'The Necessity of Rites',
+                content: 'The poem ends with a funeral, matching the plague that began it. The proper burial of Hector is essential for the restoration of order. It provides closure for the characters and the audience, even as the fall of Troy looms in the near future.',
+                keywords: ['Ritual', 'Order', 'Finality']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-olive text-white border-olive shadow-md' : 'bg-white text-slate-600 border-olive-100 hover:bg-olive-50'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-parchment-200' : 'text-olive-400'}">${item.day}</span><span class="font-serif font-bold">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-olive', 'text-white', 'border-olive', 'shadow-md');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-olive-100');
+                        b.querySelector('span:first-child').classList.remove('text-parchment-200');
+                        b.querySelector('span:first-child').classList.add('text-olive-400');
+                    });
+
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border-olive-100');
+                    btn.classList.add('bg-olive', 'text-white', 'border-olive', 'shadow-md');
+                    btn.querySelector('span:first-child').classList.remove('text-olive-400');
+                    btn.querySelector('span:first-child').classList.add('text-parchment-200');
+
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-olive-100 text-olive-800 flex items-center justify-center text-2xl border border-olive-200 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-serif font-bold text-slate-800">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-olive-700">${item.day}</span>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 text-lg leading-relaxed mb-6">${item.summary}</p>
+                            <div class="bg-white border-l-4 border-olive-600 p-4 rounded-r-lg italic text-slate-700 font-serif shadow-sm">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (timelineData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-serif font-bold transition-all duration-200 border-2 ${index === 0 ? 'border-olive-600 bg-olive-50 text-olive-900' : 'border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-olive-600', 'bg-olive-50', 'text-olive-900');
+                        b.classList.add('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    });
+
+                    btn.classList.remove('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    btn.classList.add('border-olive-600', 'bg-olive-50', 'text-olive-900');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-serif font-bold text-slate-800 mb-6">${item.title}</h3>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-olive-100 text-olive-800 text-sm font-bold uppercase tracking-wider rounded-full border border-olive-200">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (themesData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initCharts() {
+            const tensionCtx = document.getElementById('tensionChart').getContext('2d');
+            new Chart(tensionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Abuse', 'Council', 'Thetis', 'Eagle', 'Hermes', 'Meeting', 'Supper', 'Funeral'],
+                    datasets: [{
+                        label: 'Emotional Intensity',
+                        data: [9, 7, 6, 8, 7, 10, 5, 2],
+                        borderColor: '#556b2f',
+                        backgroundColor: 'rgba(85, 107, 47, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#556b2f',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(47, 79, 79, 0.9)',
+                            titleFont: { family: 'Cinzel', size: 14 },
+                            bodyFont: { family: 'Lato', size: 13 },
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 11,
+                            ticks: { display: false },
+                            grid: { borderDash: [5, 5], color: '#f3f4f6' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { family: 'Lato', size: 11 },
+                                color: '#64748b'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Grief Intensity', 'Fear/Dread', 'Compassion', 'Divine Guidance', 'Resignation'],
+                    datasets: [
+                        {
+                            label: 'Priam (Father)',
+                            data: [10, 9, 7, 9, 6],
+                            backgroundColor: 'rgba(85, 107, 47, 0.2)',
+                            borderColor: '#556b2f',
+                            pointBackgroundColor: '#556b2f',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Achilles (Warrior)',
+                            data: [8, 2, 10, 10, 10],
+                            backgroundColor: 'rgba(15, 23, 42, 0.2)',
+                            borderColor: '#0f172a',
+                            pointBackgroundColor: '#0f172a',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Cinzel', size: 13, weight: 'bold' },
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            pointLabels: {
+                                font: { family: 'Lato', size: 11, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            ticks: { display: false, min: 0, max: 10 }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book VI - Nausicaa of Scheria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f0fdf4;
+            color: #164e63;
+        }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .bg-sky-500 { background-color: #0ea5e9; }
+        
+        .transformation-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+        .transformation-side {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.5s ease;
+        }
+        #before-side {
+            background-color: #cbd5e1;
+            left: 0;
+            z-index: 2;
+            width: 50%;
+            border-right: 4px solid white;
+        }
+        #after-side {
+            background-color: #fde68a;
+            right: 0;
+            z-index: 1;
+        }
+        .slider-handle {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: white;
+            z-index: 3;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="bg-sky-500 text-white py-12 shadow-lg border-b-4 border-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold font-cinzel mb-2">SCHERIA</h1>
+            <h2 class="text-xl font-light italic">The Island of the Phaeacians</h2>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        
+        <!-- Section 1: The Laundry Mission -->
+        <section class="mb-16">
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-sky-100 flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/3 text-center">
+                    <div class="text-6xl mb-4">🧺</div>
+                    <h3 class="font-cinzel text-2xl font-bold">The Washing Day</h3>
+                </div>
+                <div class="md:w-2/3">
+                    <p class="leading-relaxed mb-4">Minerva visits Nausicaa in a dream, disguised as a friend, to spur her to the river. The "dirty clothes" are the catalyst for the meeting that saves Ulysses.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-3 bg-sky-50 rounded-lg text-sm font-bold">🫏 Mules & Waggon</div>
+                        <div class="p-3 bg-sky-50 rounded-lg text-sm font-bold">🍞 Provision Basket</div>
+                        <div class="p-3 bg-sky-50 rounded-lg text-sm font-bold">🏺 Golden Oil Cruse</div>
+                        <div class="p-3 bg-sky-50 rounded-lg text-sm font-bold">🥎 The Lost Ball</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Transformation (Slider) -->
+        <section class="mb-16">
+            <h3 class="font-cinzel text-3xl font-bold text-center mb-8">Minerva's Beautification</h3>
+            <p class="text-center mb-6 text-slate-500">Slide to witness the change in Ulysses after his bath.</p>
+            
+            <div class="max-w-2xl mx-auto transformation-container shadow-2xl relative" id="slider-root">
+                <div id="before-side" class="transformation-side">
+                    <span class="text-8xl mb-4">🧔‍♂️🌫️</span>
+                    <h4 class="font-bold text-slate-700">The Begrimed</h4>
+                    <p class="px-8 text-center text-xs text-slate-600">"Unkempt and begrimed with salt water... like some lion of the wilderness."</p>
+                </div>
+                <div id="after-side" class="transformation-side">
+                    <span class="text-8xl mb-4">✨🤵‍♂️</span>
+                    <h4 class="font-bold text-amber-900">The Gilded</h4>
+                    <p class="px-8 text-center text-xs text-amber-800">"Taller and stronger... hair like hyacinth blossoms... glorified about the head and shoulders."</p>
+                </div>
+                <div class="slider-handle" id="handle"></div>
+                <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 z-40 cursor-pointer" id="slider-input">
+            </div>
+        </section>
+
+        <!-- Section 3: Phaeacian Culture (Chart) -->
+        <section class="mb-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-emerald-100">
+                <h3 class="font-cinzel text-2xl font-bold mb-6 text-emerald-800">Phaeacian Priorities</h3>
+                <div class="h-[300px]">
+                    <canvas id="cultureChart"></canvas>
+                </div>
+                <p class="mt-6 text-sm italic text-slate-500">"We are not a nation of archers... we pride ourselves on our masts, oars, and ships."</p>
+            </div>
+            
+            <div class="space-y-6">
+                <h3 class="font-cinzel text-2xl font-bold text-sky-900">Nausicaa's Wisdom</h3>
+                <div class="p-6 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                    <h4 class="font-bold mb-2 uppercase text-xs">The Protocol</h4>
+                    <p class="text-sm">She instructs Ulysses to follow the waggon until they reach the city, then wait in Minerva's grove to avoid gossip.</p>
+                </div>
+                <div class="p-6 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                    <h4 class="font-bold mb-2 uppercase text-xs">The Key to Success</h4>
+                    <p class="text-sm">"Go right across the inner court till you come to my mother... If you can gain her over, you may hope to see your own country again."</p>
+                </div>
+                <div class="p-6 bg-emerald-50 rounded-xl border-l-4 border-emerald-500">
+                    <h4 class="font-bold mb-2 uppercase text-xs">Laws of the Land</h4>
+                    <p class="text-sm">"Strangers and foreigners in distress are under Jove's protection, and will take what they can get and be thankful."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Geography of Scheria -->
+        <section class="max-w-4xl mx-auto bg-sky-900 text-white p-10 rounded-3xl shadow-xl">
+            <h3 class="font-cinzel text-2xl font-bold mb-6 border-b border-sky-700 pb-2">Civic Planning of the Far West</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-bold text-sky-300 mb-2">The Market Place</h4>
+                    <p class="text-sm text-sky-100">Paved with large stones, featuring a temple of Neptune in the middle. Centers of shipping gear and cable commerce.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sky-300 mb-2">The Harbour</h4>
+                    <p class="text-sm text-sky-100">Narrow entrance with ships drawn up on either side. Every citizen has a private place for their vessel.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sky-300 mb-2">The Palace</h4>
+                    <p class="text-sm text-sky-100">Unmatched in the town. Surrounded by an outer court and a high wall. Home to Alcinous and Arete.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sky-300 mb-2">The Grove</h4>
+                    <p class="text-sm text-sky-100">Dedicated to Minerva, featuring a well and a meadow. Alcinous's rich garden ground is nearby.</p>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2005.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book V
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2007.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book VII <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-emerald-950 text-emerald-400 py-12 text-center mt-12">
+        <p class="font-cinzel text-xl">THE ODYSSEY: BOOK VI</p>
+        <p class="text-sm mt-2 opacity-60">Hospitality and Grace in the Land of the Phaeacians</p>
+    </footer>
+
+    <script>
+        // Slider Logic
+        const sliderInput = document.getElementById('slider-input');
+        const beforeSide = document.getElementById('before-side');
+        const handle = document.getElementById('handle');
+
+        sliderInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            beforeSide.style.width = val + '%';
+            handle.style.left = val + '%';
+        });
+
+        // Chart Logic
+        function initChart() {
+            const ctx = document.getElementById('cultureChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Shipping', 'Weaving', 'Dancing', 'Gardening', 'Archery'],
+                    datasets: [{
+                        label: 'Phaeacian National Aptitude',
+                        data: [100, 90, 85, 95, 5],
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        borderColor: '#10b981',
+                        pointBackgroundColor: '#10b981',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initChart);
+    </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XXII - The Death of Hector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 10px;
+        }
+        .ash-gradient {
+            background: linear-gradient(180deg, #374151 0%, #111827 100%);
+        }
+        .stone-border {
+            border-color: #4b5563;
+        }
+        .blood-accent {
+            color: #991b1b;
+        }
+        .blood-bg {
+            background-color: #991b1b;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-red-900 selection:text-red-100">
+
+    <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800 text-gray-100 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-red-700">💀</span>
+                    <span class="font-serif text-xl font-bold tracking-widest">THE ILIAD <span class="text-gray-500 text-base font-normal">| BOOK XXII</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium tracking-widest">
+                        <a href="#overview" class="hover:text-red-600 transition-colors uppercase">The Gates</a>
+                        <a href="#timeline" class="hover:text-red-600 transition-colors uppercase">The Duel</a>
+                        <a href="#analytics" class="hover:text-red-600 transition-colors uppercase">Fate's Weight</a>
+                        <a href="#themes" class="hover:text-red-600 transition-colors uppercase">Tragedy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <section id="overview" class="text-center space-y-8 max-w-4xl mx-auto pt-8">
+            <h1 class="text-5xl md:text-7xl font-bold text-white uppercase tracking-[0.2em] drop-shadow-lg">The Death of Hector</h1>
+            <div class="w-24 h-1 bg-red-800 mx-auto"></div>
+            <p class="text-xl md:text-2xl text-gray-400 leading-relaxed font-light">
+                The climax of the Iliad. A singular, devastating encounter between the two greatest champions of the war. Book XXII is a study in tragic isolation, the cruelty of fate, and the final, brutal resolution of Achilles' rage.
+            </p>
+            <div class="flex justify-center gap-12 pt-4">
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">⚖️</span>
+                    <span class="text-xs uppercase tracking-widest mt-2 text-gray-500">The Scales</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">🏹</span>
+                    <span class="text-xs uppercase tracking-widest mt-2 text-gray-500">The Chase</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">🩸</span>
+                    <span class="text-xs uppercase tracking-widest mt-2 text-gray-500">The Outrage</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-16 border-t border-gray-800">
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4 uppercase tracking-widest font-serif">Chronicle of the Fall</h2>
+                <p class="text-gray-500 max-w-3xl leading-relaxed text-lg">
+                    Witness the final moments of the Tamer of Horses. From the standoff at the Scaean Gates to the agonizing lamentation of Troy.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-10 bg-gray-900/50 p-8 rounded-lg border border-gray-800 shadow-inner">
+                <div class="w-full md:w-1/3 flex flex-col gap-4 h-[500px] overflow-y-auto custom-scrollbar pr-4" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-black/40 rounded-lg p-8 md:p-12 flex flex-col justify-center border border-gray-800 relative overflow-hidden shadow-2xl">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-red-900"></div>
+                    <div id="timeline-content" class="min-h-[350px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-16 border-t border-gray-800">
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4 uppercase tracking-widest font-serif">Analytics of Doom</h2>
+                <p class="text-gray-500 max-w-3xl leading-relaxed text-lg">
+                    Data visualization of the narrative's final peak. We track the tension levels and compare the tragic metrics of the two combatants.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-gray-900/30 p-10 rounded-lg border border-gray-800 shadow-xl">
+                    <h3 class="text-2xl font-serif font-bold text-white mb-4 text-center tracking-widest">The Path to the House of Hades</h3>
+                    <p class="text-sm text-gray-500 mb-10 text-center uppercase tracking-widest">Intensity tracking from the Gates to the Desecration.</p>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900/30 p-10 rounded-lg border border-gray-800 shadow-xl">
+                    <h3 class="text-2xl font-serif font-bold text-white mb-4 text-center tracking-widest">The Weight of the Soul</h3>
+                    <p class="text-sm text-gray-500 mb-10 text-center uppercase tracking-widest">Comparative profiles based on the metrics of Book XXII.</p>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-16 pb-24 border-t border-gray-800">
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4 uppercase tracking-widest font-serif">Tragic Pillars</h2>
+                <p class="text-gray-500 max-w-3xl leading-relaxed text-lg">
+                    Deep analysis of the thematic architecture that makes Book XXII one of the most powerful sequences in Western literature.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div class="md:col-span-1 flex flex-col gap-4" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-gray-900/40 rounded-lg border border-gray-800 p-12 min-h-[450px] shadow-2xl">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book21.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Battle at the River</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book23.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Funeral Games</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black py-16 text-center border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-serif tracking-[0.5em] text-gray-600 text-sm mb-6">ALL IS HONOURABLE IN DEATH</p>
+            <div class="flex justify-center gap-10 text-2xl text-gray-700 mb-8">
+                <span>⚔️</span><span>⚖️</span><span>🔥</span>
+            </div>
+            <p class="text-gray-500 text-xs tracking-widest uppercase">&copy; The Iliad Interactive Project | Book XXII Analysis</p>
+        </div>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                day: 'The Standoff',
+                title: 'Hector at the Scaean Gates',
+                summary: 'While the rest of the Trojans flee within the walls, Hector remains outside. His parents, Priam and Hecuba, beg him from the battlements to come inside, but his sense of shame and responsibility for the previous day\'s losses keeps him rooted.',
+                quote: '“Hector still stayed before the gates, for his heart was set upon doing battle with Achilles.”',
+                icon: '🏰'
+            },
+            {
+                id: 't2',
+                day: 'The Chase',
+                title: 'The Flight Around Troy',
+                summary: 'As Achilles approaches, "radiant as the star... Orion’s Hound," Hector\'s courage fails. He flees. Achilles chases him three times around the walls of Troy, a desperate race for the life of Hector.',
+                quote: '“they ran for the life of Hector... three times round the city of Priam.”',
+                icon: '🏃'
+            },
+            {
+                id: 't3',
+                day: 'The Decree',
+                title: 'The Golden Scales',
+                summary: 'Zeus weighs the fates of the two heroes on golden scales. Hector’s side sinks toward the house of Hades. Apollo, who had sustained Hector\'s strength, is forced to abandon him.',
+                quote: '“the doom of Hector fell down deep into the house of Hades—and then Phoebus Apollo left him.”',
+                icon: '⚖️'
+            },
+            {
+                id: 't4',
+                day: 'The Deception',
+                title: 'Athena’s Treachery',
+                summary: 'Athena disguises herself as Hector’s brother Deiphobus, convincing him that they should stand and fight together. Hector, emboldened by this "brotherly" support, stops his flight and faces Achilles.',
+                quote: '“Thus did Minerva inveigle him by her cunning.”',
+                icon: '🎭'
+            },
+            {
+                id: 't5',
+                day: 'The Duel',
+                title: 'The Fatal Spear-Thrust',
+                summary: 'The duel begins. Hector realizes the deception when "Deiphobus" disappears. Achilles, knowing the armor Hector wears (spoiled from Patroclus), strikes him in the only vulnerable spot: the throat.',
+                quote: '“here then did Achilles strike him... and the point of his spear went right through the fleshy part of the neck.”',
+                icon: '🗡️'
+            },
+            {
+                id: 't6',
+                day: 'The Rejection',
+                title: 'No Quarter for the Dead',
+                summary: 'Dying, Hector begs that his body be returned to his parents for ransom. Achilles, still consumed by rage, rejects him with animalistic ferocity, wishing he could "eat his flesh raw."',
+                quote: '“Dog, talk not to me neither of knees nor parents... clogs and vultures shall eat you utterly up.”',
+                icon: '🩸'
+            },
+            {
+                id: 't7',
+                day: 'The Outrage',
+                title: 'The Desecration',
+                summary: 'Achilles pierces Hector’s heels, binds him to his chariot, and drags his body through the dust toward the Greek ships. The people of Troy wail in agony as they witness the dishonor of their champion.',
+                quote: '“The dust rose from Hector as he was being dragged along... his head once so comely was laid low on earth.”',
+                icon: '🚜'
+            },
+            {
+                id: 't8',
+                day: 'The Lament',
+                title: 'The Grief of Andromache',
+                summary: 'Andromache, weaving in her inner chamber, hears the wailing. She runs to the wall and faints as she sees her husband being dragged away. She laments for her fatherless son, Astyanax.',
+                quote: '“Woe is me, O Hector: woe, indeed, that to share a common lot we were born.”',
+                icon: '😭'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-fate',
+                title: 'The Inevitability of Fate',
+                content: 'Book XXII is the final fulfillment of the "Will of Zeus." The weighing of the scales is a cold, mathematical moment where divine favor (Apollo) must yield to cosmic decree. Hector\'s death is presented not as a failure of skill, but as the closing of a trap that was set since the beginning of the poem.',
+                keywords: ['Scales of Zeus', 'Doom', 'Moira']
+            },
+            {
+                id: 'theme-tragic-hero',
+                title: 'The Tragic Hero & Shame',
+                content: 'Hector is a tragic figure driven by "aidōs" (shame). He refuses to enter the gates because he cannot bear the reproach of Polydamas or the Trojan people for his tactical errors. His decision to stand is a lonely one, made more poignant by his initial flight and his final realization that the gods have tricked him.',
+                keywords: ['Aidōs', 'Responsibility', 'Isolation']
+            },
+            {
+                id: 'theme-brutality',
+                title: 'The Limits of Heroic Rage',
+                content: 'Achilles’ treatment of Hector’s body crosses the boundary from heroic victory to "contumely" (outrage). His desire to eat Hector raw and his systematic desecration of the corpse represent a breakdown of the heroic code. It shows how grief, when transformed into pure rage, becomes something monstrous and anti-civilizational.',
+                keywords: ['Desecration', 'Mēnis', 'Dehumanization']
+            },
+            {
+                id: 'theme-domestic',
+                title: 'Domestic Grief vs. Heroic War',
+                content: 'The contrast between Andromache’s domestic life (preparing a bath for a husband who will never return) and the brutal reality on the field is heart-wrenching. Homer uses the "washing troughs" and the "weaving loom" to anchor the grand heroic struggle in the intimate, everyday world that war destroys.',
+                keywords: ['Andromache', 'Home', 'Pathos']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-6 py-5 rounded border-l-4 transition-all duration-300 ${index === 0 ? 'bg-gray-800 text-white border-red-700 shadow-lg' : 'bg-transparent text-gray-500 border-gray-800 hover:border-gray-600 hover:bg-gray-800/30'}`;
+                btn.innerHTML = `<span class="text-[10px] font-bold uppercase tracking-[0.2em] block mb-2 ${index === 0 ? 'text-red-500' : 'text-gray-600'}">${item.day}</span><span class="font-serif font-bold text-base tracking-widest uppercase">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-gray-800', 'text-white', 'border-red-700', 'shadow-lg');
+                        b.classList.add('bg-transparent', 'text-gray-500', 'border-gray-800');
+                        b.querySelector('span:first-child').classList.add('text-gray-600');
+                        b.querySelector('span:first-child').classList.remove('text-red-500');
+                    });
+
+                    btn.classList.remove('bg-transparent', 'text-gray-500', 'border-gray-800');
+                    btn.classList.add('bg-gray-800', 'text-white', 'border-red-700', 'shadow-lg');
+                    btn.querySelector('span:first-child').classList.remove('text-gray-600');
+                    btn.querySelector('span:first-child').classList.add('text-red-500');
+
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-8 mb-10">
+                                <div class="w-20 h-20 bg-gray-900 border border-gray-700 flex items-center justify-center text-5xl shadow-2xl">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-3xl md:text-4xl font-serif font-bold text-white tracking-widest uppercase">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-[0.3em] text-red-600">${item.day}</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-xl leading-relaxed mb-10 font-light">${item.summary}</p>
+                            <div class="bg-black/60 border-l-2 border-red-800 p-8 italic text-gray-300 font-serif text-xl tracking-wide">
+                                “${item.quote}”
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (timelineData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-6 font-serif font-bold transition-all duration-300 border-b border-gray-800 ${index === 0 ? 'text-white bg-gray-800/50' : 'text-gray-600 hover:text-gray-300 hover:bg-gray-800/20'}`;
+                btn.innerText = item.title.toUpperCase();
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('text-white', 'bg-gray-800/50');
+                        b.classList.add('text-gray-600');
+                    });
+
+                    btn.classList.remove('text-gray-600');
+                    btn.classList.add('text-white', 'bg-gray-800/50');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-4xl font-serif font-bold text-white mb-10 tracking-[0.1em] uppercase border-b border-gray-800 pb-6">${item.title}</h3>
+                        <p class="text-xl text-gray-400 leading-relaxed mb-12 font-light">${item.content}</p>
+                        <div class="flex flex-wrap gap-4">
+                            ${item.keywords.map(kw => `<span class="px-6 py-2 bg-black text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] border border-gray-800">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (themesData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initCharts() {
+            const tensionCtx = document.getElementById('tensionChart').getContext('2d');
+            new Chart(tensionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Gates Standoff', 'Chase Begins', 'Zeus Scales', 'Athena Trick', 'The Duel', 'Death', 'Desecration', 'Lament'],
+                    datasets: [{
+                        label: 'Narrative Tension',
+                        data: [7, 9, 9.5, 8.5, 10, 9.8, 10, 10],
+                        borderColor: '#991b1b',
+                        backgroundColor: 'rgba(153, 27, 27, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#fff',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { display: false, max: 11 },
+                        x: { ticks: { font: { family: 'Lato', size: 9 }, color: '#4b5563' } }
+                    }
+                }
+            });
+
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Rage', 'Honor/Shame', 'Divine Favor', 'Tragic Isolation', 'Brutality'],
+                    datasets: [
+                        {
+                            label: 'Achilles',
+                            data: [10, 6, 9, 7, 10],
+                            backgroundColor: 'rgba(153, 27, 27, 0.2)',
+                            borderColor: '#991b1b',
+                            pointBackgroundColor: '#991b1b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Hector',
+                            data: [4, 10, 2, 10, 5],
+                            backgroundColor: 'rgba(209, 213, 235, 0.1)',
+                            borderColor: '#d1d5db',
+                            pointBackgroundColor: '#d1d5db',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#374151' },
+                            grid: { color: '#374151' },
+                            ticks: { display: false, max: 10 },
+                            pointLabels: { font: { family: 'Lato', size: 10, weight: 'bold' }, color: '#9ca3af' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#9ca3af', font: { family: 'Cinzel' } } }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

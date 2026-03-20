@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book V - The Glory of Diomedes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fffbeb; /* Solar Gold Tint */
+            color: #451a03;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel Decorative', cursive;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #fef3c7;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-900">
+
+    <nav class="sticky top-0 z-50 bg-amber-900 text-amber-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-amber-400">&#9728;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider uppercase">The Iliad <span class="text-amber-200 text-base font-normal">| Book V</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium uppercase tracking-widest">
+                        <a href="#overview" class="hover:text-amber-400 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-amber-400 transition-colors">Aristeia</a>
+                        <a href="#analytics" class="hover:text-amber-400 transition-colors">Divine Combat</a>
+                        <a href="#themes" class="hover:text-amber-400 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-amber-950">The Glory of Diomedes</h1>
+            <p class="text-lg md:text-xl text-amber-900 leading-relaxed italic">
+                "She made a stream of fire flare from his shield and helmet like the star that shines most brilliantly in summer."
+            </p>
+            <p class="text-md text-amber-800 max-w-2xl mx-auto">
+                Book V is the 'Aristeia' of Diomedes—a sustained demonstration of supreme martial excellence. Empowered by Minerva, Diomedes becomes the first mortal to physically wound the gods, driving both Venus and Mars from the battlefield in a display of solar-like intensity.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-amber-700">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128293;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Mortal Fire</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128160;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Divine Blood</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9889;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Olympian Wrath</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-amber-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-amber-900 mb-4">Chronicle of Conquest</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-3xl shadow-2xl border border-amber-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-amber-50/50 rounded-2xl p-8 flex flex-col justify-center border border-amber-100 relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-amber-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-amber-900 mb-4">Combat Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-amber-50">
+                    <h3 class="text-xl font-serif font-bold text-amber-800 mb-2 text-center">Narrative Tension Tracker</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-amber-50">
+                    <h3 class="text-xl font-serif font-bold text-amber-800 mb-2 text-center">Diomedes' Kill Count vs. Divine Wounds</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-amber-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-amber-900 mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-amber-50">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book4.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Breach of Oaths</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book6.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: Interludes of Fate</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-amber-950 text-amber-200 py-12 text-center">
+        <p class="font-serif text-lg mb-4">"Men that walk the earth cannot hold their own with the immortals."</p>
+        <p class="text-xs uppercase tracking-widest">Interactive Analysis &bull; The Iliad Book V</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Fire of Minerva',
+                summary: 'Pallas Minerva empowers Diomedes, making a stream of fire flare from his helmet and shield. He charges into the thick of the Trojan ranks, unstoppable.',
+                quote: '“even such a fire did she kindle upon his head and shoulders as she bade him speed into the thickest hurly-burly.”',
+                icon: '&#128293;'
+            },
+            {
+                id: 't2',
+                title: 'The Wound of Pandarus',
+                summary: 'Pandarus hits Diomedes with an arrow. Diomedes prays to Minerva; she heals him and grants him the power to see gods among men.',
+                quote: '“Fear not, Diomed, to do battle... I have set in your heart the spirit of your knightly father Tydeus.”',
+                icon: '&#127993;'
+            },
+            {
+                id: 't3',
+                title: 'The Death of Pandarus',
+                summary: 'Diomedes kills Pandarus with a spear through the face and nearly kills Aeneas, crushing his hip with a massive stone.',
+                quote: '“It went crashing in among his white teeth... his glistening armour rang rattling round him.”',
+                icon: '&#9876;'
+            },
+            {
+                id: 't4',
+                title: 'Wounding of Venus',
+                summary: 'Venus attempts to rescue her son Aeneas. Diomedes, knowing her weakness, wounds her in the hand. She flees to Olympus, weeping.',
+                quote: '“Immortal blood, or ichor... came pouring from the wound; for the gods do not eat bread nor drink wine.”',
+                icon: '&#128148;'
+            },
+            {
+                id: 't5',
+                title: 'Apollo\'s Warning',
+                summary: 'Apollo rescues Aeneas and warns Diomedes not to match himself against the gods. Diomedes reluctantly gives way.',
+                quote: '“Take heed, son of Tydeus, and draw off; think not to match yourself against gods.”',
+                icon: '&#9729;'
+            },
+            {
+                id: 't6',
+                title: 'The Challenge of Sarpedon',
+                summary: 'The Lycian hero Sarpedon rebukes Hector and enters the fray, killing Tlepolemus but suffering a wound in the thigh.',
+                quote: '“Where is your prowess now? ... it is we, your allies, who bear the brunt of the battle.”',
+                icon: '&#128170;'
+            },
+            {
+                id: 't7',
+                title: 'Wounding of Mars',
+                summary: 'With Minerva as his charioteer, Diomedes drives his spear into the stomach of Mars. The god of war roars like ten thousand men and flees to Jove.',
+                quote: '“Mars roared as loudly as nine or ten thousand men in the thick of a fight.”',
+                icon: '&#128128;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'aristeia',
+                title: 'The Nature of Aristeia',
+                content: 'An Aristeia is a "hero\'s finest hour." Diomedes becomes an elemental force, compared to a winter torrent or a lion among sheep. This state of martial grace is fueled by divine support but manifested through human courage.',
+                keywords: ['Excellence', 'Momentum', 'Prowess']
+            },
+            {
+                id: 'mortal-divine',
+                title: 'Mortal vs. Divine Limits',
+                content: 'Book V explores the boundary between gods and men. Diomedes can wound the "feeble" Venus or even the "mad" Mars, but he must recoil before the majesty of Apollo. It highlights that while gods feel pain, they are fundamentally "other"—not of mortal mould.',
+                keywords: ['Ichor', 'Boundaries', 'Theodicy']
+            },
+            {
+                id: 'duty',
+                title: 'Allied Duty & Reproach',
+                content: 'Sarpedon\'s rebuke of Hector shows the internal politics of the Trojan side. The allies feel they are carrying the burden for a Trojan cause, adding a layer of social and political tension to the military narrative.',
+                keywords: ['Loyalty', 'Politics', 'Sacrifice']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-2xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-amber-700 text-white border-amber-700 shadow-xl' : 'bg-white text-amber-900 border-amber-100 hover:bg-amber-50'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-lg">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-amber-700', 'text-white', 'border-amber-700', 'shadow-xl');
+                        b.classList.add('bg-white', 'text-amber-900', 'border-amber-100');
+                    });
+                    btn.classList.add('bg-amber-700', 'text-white', 'border-amber-700', 'shadow-xl');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-amber-950">${item.title}</h3>
+                            </div>
+                            <p class="text-amber-900 text-lg leading-relaxed mb-8">${item.summary}</p>
+                            <div class="bg-amber-100 border-l-4 border-amber-500 p-6 rounded-r-2xl italic text-amber-950 font-serif text-xl">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-2xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-amber-600 bg-amber-50 text-amber-900' : 'border-transparent bg-white text-amber-700 hover:bg-amber-50'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-amber-600', 'bg-amber-50', 'text-amber-900');
+                        b.classList.add('border-transparent', 'bg-white', 'text-amber-700');
+                    });
+                    btn.classList.add('border-amber-600', 'bg-amber-50', 'text-amber-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-amber-950 mb-4">${item.title}</h3>
+                        <p class="text-lg text-amber-900 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-amber-200 text-amber-800 text-xs font-bold uppercase rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Fire Start', 'Pandarus Hit', 'Venus Wounded', 'Apollo Warns', 'Lycian Clash', 'Mars Wounded', 'Olympus Healing'],
+                    datasets: [{
+                        label: 'Combat Intensity',
+                        data: [7, 8, 10, 6, 8, 10, 5],
+                        borderColor: '#92400e',
+                        backgroundColor: 'rgba(146, 64, 14, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Trojans Slain', 'Lycian Leaders', 'Gods Wounded', 'Achaean Heroes'],
+                    datasets: [{
+                        label: 'Casualties/Incidents',
+                        data: [25, 12, 2, 8],
+                        backgroundColor: ['#b45309', '#d97706', '#f59e0b', '#fbbf24']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

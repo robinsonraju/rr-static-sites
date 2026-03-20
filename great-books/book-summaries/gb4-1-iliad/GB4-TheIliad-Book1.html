@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book I - The Anger
+                of Achilles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #fdfaf6;
+            color: #2d3748;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-rose-200 selection:text-rose-900">
+
+    <!-- Chosen Palette: Warm Antiquity (Parchment #fdfaf6, Slate #2d3748, Crimson/Rose accents #e11d48, Gold accents #d97706) -->
+
+    <!-- Application Structure Plan: The SPA is structured as a single-page interactive dashboard tailored for literary analysis. It departs from a linear reading of the poem to provide an analytical view. The flow begins with an overarching summary, moves into an interactive sequential timeline to ground the user in the plot, transitions into a quantitative/comparative analysis of the core conflict (Agamemnon vs. Achilles) and the narrative tension using Chart.js, and concludes with an interactive thematic explorer. This structure was chosen because Book I of The Iliad is dense with character introductions, divine interventions, and shifting emotional states. A dashboard allows users to dissect the 'Anatomy of Rage' by isolating timelines, character traits, and themes, making the ancient text highly accessible and explorable. -->
+
+    <!-- Visualization & Content Choices:
+         1. Timeline: Goal -> Organize/Inform. Method -> Interactive HTML List with side-panel detail. Justification -> Allows users to step through the 22+ days covered in Book I at their own pace without reading walls of text.
+         2. Tension Tracker: Goal -> Change/Trends. Method -> Chart.js Line Chart. Justification -> Visually demonstrates the emotional escalation from Chryses' initial plea to the peak of the quarrel and Jove's consequential promise.
+         3. Character Comparison: Goal -> Compare. Method -> Chart.js Radar Chart. Justification -> Perfect for comparing multi-dimensional traits (Power, Pride, Divine Favor) of the two main antagonists (Agamemnon and Achilles) without using complex graphics.
+         4. Thematic Explorer: Goal -> Inform/Relationships. Method -> Tabbed Text/Quote interface. Justification -> Encourages active discovery of core literary themes (Honor, Divine Will) by letting the user choose what to read.
+         Library/Method Confirmations: Canvas used for charts. HTML/Tailwind for UI. NO SVG used. NO Mermaid JS used. -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="sticky top-0 z-50 bg-slate-900 text-amber-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">&#127963;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider text-amber-400">THE ILIAD <span
+                            class="text-amber-100 text-base font-normal">| BOOK I</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-amber-400 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-amber-400 transition-colors">Chronicle</a>
+                        <a href="#analytics" class="hover:text-amber-400 transition-colors">Analytics of Rage</a>
+                        <a href="#themes" class="hover:text-amber-400 transition-colors">Core Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-800 uppercase tracking-widest drop-shadow-sm">The Anger
+                of Achilles</h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                Book I of Homer's epic sets the foundation for the entire Trojan War saga. It is not a tale of Greeks
+                fighting Trojans, but of a devastating internal fracture. The narrative introduces the catastrophic
+                consequences of pride, the inescapable influence of the gods, and the terrifying power of human rage.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-slate-500">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9876;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Mortal Conflict</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9889;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Divine Will</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#127942;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Honor & Prize</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-slate-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">The Chronicle of the Rift</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    This section breaks down the sequence of events across the first 22 days depicted in Book I. Click
+                    on the timeline events on the left to reveal the specific details, character interactions, and
+                    direct quotations from the source text on the right. This interactive flow helps untangle the rapid
+                    escalation of the conflict.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[400px] overflow-y-auto custom-scrollbar pr-2"
+                    id="timeline-buttons">
+                </div>
+
+                <div
+                    class="w-full md:w-2/3 bg-slate-50 rounded-lg p-6 md:p-8 flex flex-col justify-center border border-slate-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-rose-600"></div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-slate-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Analytics of Rage & Power</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Here we visualize the abstract concepts driving the narrative. The first chart tracks the escalation
+                    of narrative tension, showing how a simple request turns into a cosmic decree. The second chart
+                    compares the contrasting attributes of our two main mortal figures, Agamemnon and Achilles,
+                    illustrating why their clash was inevitable.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">The Trajectory of Tension
+                    </h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Tracking the conflict's intensity over the
+                        narrative's key moments.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Agamemnon vs. Achilles</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">A comparative analysis of the kings' defining
+                        traits based on Book I.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-slate-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Thematic Explorer</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    The Iliad is built upon complex societal and theological foundations. Select a theme below to
+                    explore the core concepts that drive the characters' decisions, supported by key insights derived
+                    from the text.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-white rounded-xl shadow-sm border border-slate-100 p-8 min-h-[300px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <div class="w-1/3"></div>
+
+            <a href="index.html"
+                class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book2.html"
+                class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Trial of the Army</span><span class="sm:hidden">Next</span>
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>Interactive Analysis based on The Iliad of Homer, Book I.</p>
+        <p class="mt-2 text-amber-600/50 text-2xl tracking-widest">&#9876; &#9889; &#127942;</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                day: 'Day 1',
+                title: 'The Priest\'s Plea',
+                summary: 'Chryses, priest of Apollo, arrives at the Achaean camp with a great ransom to free his captured daughter, Chryseis. Despite the army\'s approval, King Agamemnon fiercely rejects him and threatens him.',
+                quote: '“Old man,” said he, “let me not find you tarrying about our ships... I will not free her. She shall grow old in my house at Argos...”',
+                icon: '&#127963;'
+            },
+            {
+                id: 't2',
+                day: 'Days 1-9',
+                title: 'Apollo\'s Pestilence',
+                summary: 'The rejected priest prays to Apollo. The god of the silver bow descends in fury and unleashes a deadly plague of arrows upon the Achaean host. Dogs, mules, and men die, and funeral pyres burn constantly for nine days.',
+                quote: 'He came down furious from the summits of Olympus... and his silver bow rang death as he shot his arrow in the midst of them.',
+                icon: '&#127993;'
+            },
+            {
+                id: 't3',
+                day: 'Day 10',
+                title: 'The Assembly & The Seer',
+                summary: 'Achilles calls an assembly to find the cause of the plague. The seer Calchas, assured of Achilles\' protection, reveals that Agamemnon\'s insult to Chryses is the cause, and Chryseis must be returned without ransom.',
+                quote: 'He will not deliver the Danaans from this pestilence till Agamemnon has restored the girl without fee or ransom to her father...',
+                icon: '&#128065;'
+            },
+            {
+                id: 't4',
+                day: 'Day 10',
+                title: 'The Great Quarrel',
+                summary: 'Agamemnon agrees to return Chryseis but demands another prize in return. Achilles accuses him of greed. Agamemnon threatens to take Achilles\' prize, Briseis. Achilles threatens to leave the war entirely.',
+                quote: '...let the Achaeans find me a prize in fair exchange to my liking, or I will come and take your own, or that of Ajax or of Ulysses...',
+                icon: '&#9876;'
+            },
+            {
+                id: 't5',
+                day: 'Day 10',
+                title: 'Minerva\'s Intervention',
+                summary: 'Achilles is about to draw his sword to kill Agamemnon. Minerva (Athena), sent by Juno (Hera), appears only to Achilles, seizing his hair and commanding him to stay his hand, promising future rewards.',
+                quote: 'Cease, then, this brawling, and do not draw your sword; rail at him if you will... you shall hereafter receive gifts three times as splendid...',
+                icon: '&#128171;'
+            },
+            {
+                id: 't6',
+                day: 'Day 10',
+                title: 'The Seizure of Briseis',
+                summary: 'Agamemnon sends heralds to Achilles\' tent to take Briseis. Achilles surrenders her but swears an oath that the Achaeans will suffer for this insult. He then weeps by the sea and calls to his mother, Thetis.',
+                quote: '...if ever again there be need of me to save the people from ruin, they shall seek and they shall not find.',
+                icon: '&#128148;'
+            },
+            {
+                id: 't7',
+                day: 'Day 22',
+                title: 'The Vow of Jove',
+                summary: 'Thetis travels to Olympus and begs Jove (Zeus) to aid the Trojans to punish the Achaeans for dishonoring her son. Jove agrees, sealing the promise with a nod that shakes Olympus, leading to a brief squabble with Juno.',
+                quote: 'I will consider the matter, and will bring it about as you wish. See, I incline my head that you may believe me.',
+                icon: '&#9889;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-honor',
+                title: 'Honor & Prizes (Timē)',
+                content: 'In the heroic world of The Iliad, honor (timē) is a physical, measurable asset, primarily represented by war prizes (geras). When Agamemnon threatens to take Briseis, he is not just taking a captive; he is publicly stripping Achilles of his earned honor and status. Agamemnon\'s refusal to be without a prize stems from his need to maintain his position as the supreme leader. This zero-sum game of status is the engine of the entire conflict.',
+                keywords: ['Status', 'Public Recognition', 'Geras (Prize)']
+            },
+            {
+                id: 'theme-rage',
+                title: 'The Anatomy of Rage (Mēnis)',
+                content: 'The very first word of the Greek text is "Rage" (Mēnis). This specific type of wrath is usually reserved for the gods, highlighting the catastrophic and consuming nature of Achilles\' anger. It is a blinding force that overrides his loyalty to his comrades. Agamemnon\'s anger, described as a "black heart" and "eyes flashing fire," is driven by a threatened ego, whereas Achilles\' rage is driven by a deep sense of violated justice and personal slight.',
+                keywords: ['Destruction', 'Ego', 'Violation of Justice']
+            },
+            {
+                id: 'theme-divine',
+                title: 'Divine Intervention',
+                content: 'The gods in Book I are not distant observers; they are active participants who mirror human flaws. Apollo brings the plague out of vengeance for his priest. Minerva intervenes physically to stop a murder, showing how gods manipulate human emotion and action. Jove\'s reluctant agreement with Thetis, driven by his debt to her and his fear of his wife Juno\'s nagging, shows that even cosmic decrees are subject to divine politics and personal relationships.',
+                keywords: ['Fate', 'Manipulation', 'Divine Politics']
+            },
+            {
+                id: 'theme-leadership',
+                title: 'The Burden of Leadership',
+                content: 'Book I presents a stark critique of leadership. Agamemnon acts as a tyrant; he prioritizes his personal wealth and ego over the safety of his army, leading to the plague. He refuses the counsel of the army who wished to respect the priest. When forced to correct his mistake, he shifts the cost onto his best warrior. Nestor\'s failed attempt at mediation highlights the breakdown of traditional council and the danger when supreme authority lacks supreme wisdom.',
+                keywords: ['Tyranny', 'Responsibility', 'Hubris']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${item.day}</span><span class="font-serif font-bold">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-slate-800', 'text-white', 'border-slate-800', 'shadow-md');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+                        b.querySelector('span:first-child').classList.remove('text-amber-400');
+                        b.querySelector('span:first-child').classList.add('text-slate-400');
+                    });
+
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                    btn.classList.add('bg-slate-800', 'text-white', 'border-slate-800', 'shadow-md');
+                    btn.querySelector('span:first-child').classList.remove('text-slate-400');
+                    btn.querySelector('span:first-child').classList.add('text-amber-400');
+
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl border border-rose-200 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-serif font-bold text-slate-800">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-rose-600">${item.day}</span>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 text-lg leading-relaxed mb-6">${item.summary}</p>
+                            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg italic text-slate-700 font-serif">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (timelineData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-serif font-bold transition-all duration-200 border-2 ${index === 0 ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-amber-500', 'bg-amber-50', 'text-amber-900');
+                        b.classList.add('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    });
+
+                    btn.classList.remove('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    btn.classList.add('border-amber-500', 'bg-amber-50', 'text-amber-900');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-serif font-bold text-slate-800 mb-6">${item.title}</h3>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-slate-100 text-slate-600 text-sm font-bold uppercase tracking-wider rounded-full border border-slate-200">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (themesData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initCharts() {
+            const tensionCtx = document.getElementById('tensionChart').getContext('2d');
+            new Chart(tensionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Start', 'Chryses Rejected', 'Plague Begins', 'Assembly Called', 'Calchas Speaks', 'The Ultimatum', 'Athena Appears', 'Briseis Taken', 'Jove Nods'],
+                    datasets: [{
+                        label: 'Narrative Tension Level',
+                        data: [1, 4, 7, 6, 8, 10, 8.5, 9, 10],
+                        borderColor: '#e11d48',
+                        backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#e11d48',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleFont: { family: 'Cinzel', size: 14 },
+                            bodyFont: { family: 'Lato', size: 13 },
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return 'Intensity Level: ' + context.parsed.y + '/10';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 11,
+                            ticks: { display: false },
+                            grid: { borderDash: [5, 5], color: '#e2e8f0' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { family: 'Lato', size: 11 },
+                                color: '#64748b',
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Overt Pride', 'Personal Anger', 'Political Power', 'Divine Favor', 'Combat Necessity'],
+                    datasets: [
+                        {
+                            label: 'Agamemnon',
+                            data: [10, 8, 10, 4, 5],
+                            backgroundColor: 'rgba(217, 119, 6, 0.2)',
+                            borderColor: '#d97706',
+                            pointBackgroundColor: '#d97706',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Achilles',
+                            data: [9, 10, 4, 9, 10],
+                            backgroundColor: 'rgba(15, 23, 42, 0.2)',
+                            borderColor: '#0f172a',
+                            pointBackgroundColor: '#0f172a',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Cinzel', size: 13, weight: 'bold' },
+                                color: '#334155',
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#0f172a',
+                            bodyColor: '#334155',
+                            borderColor: '#e2e8f0',
+                            borderWidth: 1,
+                            titleFont: { family: 'Cinzel', size: 14 },
+                            bodyFont: { family: 'Lato', size: 13 },
+                            padding: 10
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            pointLabels: {
+                                font: { family: 'Lato', size: 11, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            ticks: {
+                                display: false,
+                                min: 0,
+                                max: 10
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+
+</html>

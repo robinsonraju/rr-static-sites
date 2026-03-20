@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book III - The Duel and the Vow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Crimson Pro', serif;
+            background-color: #fff5f7; /* Rose/White Tint */
+            color: #4c0519;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #fce7f3;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #f9a8d4;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-rose-200 selection:text-rose-900">
+
+    <nav class="sticky top-0 z-50 bg-rose-900 text-amber-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-amber-400">&#10024;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider">THE ILIAD <span class="text-rose-200 text-base font-normal">| BOOK III</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-amber-400 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-amber-400 transition-colors">Duel</a>
+                        <a href="#analytics" class="hover:text-amber-400 transition-colors">Character Profile</a>
+                        <a href="#themes" class="hover:text-amber-400 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-rose-950 uppercase tracking-widest">The Duel and the Vow</h1>
+            <p class="text-lg md:text-xl text-rose-800 leading-relaxed italic">
+                "Small wonder that Trojans and Achaeans should endure so much and so long, for the sake of a woman so marvellously and divinely lovely."
+            </p>
+            <p class="text-md text-rose-700 max-w-2xl mx-auto">
+                In Book III, the grand scale of the war is paused for a singular confrontation. Paris and Menelaus, the two men at the heart of the dispute, agree to a duel to settle the war. Meanwhile, Helen watches from the walls of Troy, a figure of both beauty and profound sorrow.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-amber-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9876;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Single Combat</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128141;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">The Covenant</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128120;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Helen's Wall</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-rose-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-rose-900 mb-4">Chronicle of the Duel</h2>
+                <p class="text-rose-700 max-w-3xl">Step through the key moments where the fate of two nations rested on the blades of two men.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-2xl shadow-xl border border-rose-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-rose-50/30 rounded-xl p-8 flex flex-col justify-center border border-rose-100 relative">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-rose-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-rose-900 mb-4">Analytical Insights</h2>
+                <p class="text-rose-700 max-w-3xl">Comparing the internal and external pressures on the main actors of Book III.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-rose-50">
+                    <h3 class="text-xl font-serif font-bold text-rose-800 mb-2 text-center">Narrative Intensity</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-rose-50">
+                    <h3 class="text-xl font-serif font-bold text-rose-800 mb-2 text-center">Paris vs. Menelaus (Traits)</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-rose-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-rose-900 mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-rose-50">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book2.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Trial of the Army</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book4.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Breach of Oaths</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-rose-950 text-rose-200 py-12 text-center">
+        <p class="font-serif text-lg mb-4">"The victory has been with Menelaus."</p>
+        <p class="text-xs uppercase tracking-widest">Interactive Analysis &bull; The Iliad Book III</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Challenge',
+                summary: 'As the armies close, Paris (Alexandrus) steps forward as a champion, but immediately shrinks back in terror when he sees Menelaus eager for revenge.',
+                quote: '“Alexandrus quailed as he saw Menelaus come forward, and shrank in fear of his life under cover of his men.”',
+                icon: '&#9876;'
+            },
+            {
+                id: 't2',
+                title: 'Hector\'s Rebuke',
+                summary: 'Hector harshly criticizes his brother Paris for his cowardice, contrasting his physical beauty with his lack of courage and responsibility for the war.',
+                quote: '“Evil-hearted Paris, fair to see, but woman-mad, and false of tongue, would that you had never been born.”',
+                icon: '&#129324;'
+            },
+            {
+                id: 't3',
+                title: 'The Truce and Vow',
+                summary: 'Paris proposes a duel with Menelaus to end the war. Both sides agree to a truce, and sacrifice lambs to Jove, Earth, and Sun to seal the covenant.',
+                quote: '“Let him who shall be victorious and prove to be the better man take the woman and all she has.”',
+                icon: '&#128017;'
+            },
+            {
+                id: 't4',
+                title: 'Helen on the Wall',
+                summary: 'Helen joins the Trojan elders (the Teichoskopia) and identifies the Greek leaders—Agamemnon, Ulysses, and Ajax—to King Priam.',
+                quote: '“Surely he must be a king... Agamemnon, son of Atreus, a good king and a brave soldier.”',
+                icon: '&#127984;'
+            },
+            {
+                id: 't5',
+                title: 'The Duel',
+                summary: 'The duel begins. Menelaus dominates Paris, breaking his sword and nearly strangling him by his helmet strap.',
+                quote: '“Menelaus would have dragged him off to his own great glory had not Jove’s daughter Venus been quick to mark...”',
+                icon: '&#129354;'
+            },
+            {
+                id: 't6',
+                title: 'Venus Intervenes',
+                summary: 'Venus miraculously snatches Paris from the battlefield and hides him in his own bedchamber, frustrating Menelaus\' victory.',
+                quote: '“Venus snatched him up in a moment... hid him under a cloud of darkness, and conveyed him to his own bedchamber.”',
+                icon: '&#9729;'
+            },
+            {
+                id: 't7',
+                title: 'Helen\'s Conflict',
+                summary: 'Venus compels Helen to go to Paris. Helen initially resists and mocks Paris for his defeat, but eventually yields to the goddess\'s will.',
+                quote: '“Bold hussy, do not provoke me; if you do, I shall leave you to your fate and hate you as much as I have loved you.”',
+                icon: '&#128148;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'beauty',
+                title: 'Beauty vs. Valour',
+                content: 'Book III juxtaposes the physical beauty of Paris and Helen with the martial valour expected of heroes. Hector\'s rebuke of Paris highlights a central tension: that "love-tricks" and "comely locks" are useless in the face of the grim reality of the battlefield.',
+                keywords: ['Aesthetics', 'Heroism', 'Contrast']
+            },
+            {
+                id: 'guilt',
+                title: 'Personal Guilt & Fate',
+                content: 'Helen\'s "Teichoskopia" reveals her deep self-loathing and sense of isolation. She calls herself "abhorred and miserable," yet Priam tells her, "it is the gods, not you who are to blame." This explores the blurred line between personal choice and divine puppetry.',
+                keywords: ['Identity', 'Divine Will', 'Sorrow']
+            },
+            {
+                id: 'whim',
+                title: 'Divine Whim & The Covenant',
+                content: 'Despite the solemn oaths of the mortals, the gods intervene to save their favorites. Venus\' rescue of Paris breaks the expected moral logic of the duel, showing that divine favor can override even the most sacred human covenants.',
+                keywords: ['Theodicy', 'Oaths', 'Intervention']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-rose-700 text-white border-rose-700 shadow-lg' : 'bg-white text-rose-800 border-rose-100 hover:bg-rose-50'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-lg">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-rose-700', 'text-white', 'border-rose-700', 'shadow-lg');
+                        b.classList.add('bg-white', 'text-rose-800', 'border-rose-100');
+                    });
+                    btn.classList.add('bg-rose-700', 'text-white', 'border-rose-700', 'shadow-lg');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-rose-900">${item.title}</h3>
+                            </div>
+                            <p class="text-rose-800 text-lg leading-relaxed mb-8">${item.summary}</p>
+                            <div class="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-xl italic text-rose-950 font-serif text-xl">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-transparent bg-rose-50 text-rose-800 hover:bg-rose-100'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-amber-500', 'bg-amber-50', 'text-amber-900');
+                        b.classList.add('border-transparent', 'bg-rose-50', 'text-rose-800');
+                    });
+                    btn.classList.add('border-amber-500', 'bg-amber-50', 'text-amber-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-rose-900 mb-4">${item.title}</h3>
+                        <p class="text-lg text-rose-800 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold uppercase rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Challenge', 'Hector\'s Anger', 'The Oath', 'Teichoskopia', 'The Duel', 'Rescue', 'Bedchamber'],
+                    datasets: [{
+                        label: 'Narrative Intensity',
+                        data: [7, 8, 5, 4, 10, 8, 6],
+                        borderColor: '#9d174d',
+                        backgroundColor: 'rgba(157, 23, 77, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Martial Skill', 'Divine Favor', 'Personal Honor', 'Beauty', 'Eloquence'],
+                    datasets: [
+                        {
+                            label: 'Paris',
+                            data: [3, 9, 2, 10, 4],
+                            borderColor: '#d97706',
+                            backgroundColor: 'rgba(217, 119, 6, 0.2)'
+                        },
+                        {
+                            label: 'Menelaus',
+                            data: [8, 4, 9, 5, 6],
+                            borderColor: '#9d174d',
+                            backgroundColor: 'rgba(157, 23, 77, 0.2)'
+                        }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

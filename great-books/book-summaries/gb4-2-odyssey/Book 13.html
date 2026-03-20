@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XIII Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <!-- Theme: Arrival in Ithaca (Mist, Sea, Olive) -->
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f0f4f8; /* Soft misty blue-grey */
+            color: #2d3748;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .mist-overlay {
+            transition: opacity 1s ease-in-out;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .olive-accent { color: #556b2f; }
+        .bg-olive { background-color: #556b2f; }
+        .sea-accent { color: #008080; }
+        .bg-sea { background-color: #008080; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #556b2f;
+            color: #556b2f;
+            font-weight: 600;
+        }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .transformation-card {
+            perspective: 1000px;
+        }
+        .transformation-inner {
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .transformation-card.is-beggar .transformation-inner {
+            transform: rotateY(180deg);
+        }
+        .face-front, .face-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .face-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-slate-800 text-slate-100 py-10 shadow-xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/foggy-birds.png')]"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="text-4xl mb-2">🌫️ ⚓ 🌿</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-wide text-stone-300">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-olive-accent">Book XIII: The Arrival in Ithaca</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-slate-200">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active py-4 px-6 text-slate-600 hover:text-olive-accent font-cinzel transition-colors" data-target="shore">The Misty Shore</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-slate-600 hover:text-olive-accent font-cinzel transition-colors" data-target="wrath">Neptune's Vengeance</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-slate-600 hover:text-olive-accent font-cinzel transition-colors" data-target="treasure">Phaeacian Gifts</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-slate-600 hover:text-olive-accent font-cinzel transition-colors" data-target="disguise">The Transformation</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Misty Shore -->
+        <section id="shore" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="text-3xl font-cinzel mb-4 olive-accent">Home, yet Unseen</h3>
+                <p class="text-lg text-slate-700 italic mb-6">"He had been so long away that he did not know it again; moreover, Minerva had made it a foggy day..."</p>
+                
+                <div class="relative bg-slate-300 rounded-xl h-80 overflow-hidden shadow-inner mb-6 group">
+                    <!-- The "Ithaca" View -->
+                    <div class="absolute inset-0 flex items-center justify-center bg-blue-100">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">🏞️</div>
+                            <h4 class="font-cinzel text-2xl text-slate-800">The Harbor of Phorcys</h4>
+                            <p class="text-slate-600 px-8">Sheltered by two points, marked by the ancient olive tree and the Cave of the Nymphs.</p>
+                        </div>
+                    </div>
+                    <!-- The Mist Overlay -->
+                    <div id="mist" class="mist-overlay absolute inset-0 flex items-center justify-center text-slate-500">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">🌫️</div>
+                            <p class="font-cinzel text-xl">"Where am I fallen?"</p>
+                            <p class="text-sm">Odysseus wakes in confusion</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="toggleMist()" class="bg-olive text-white px-8 py-3 rounded-full font-cinzel hover:bg-opacity-90 transition-all shadow-lg">
+                    Toggle Minerva's Mist
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 2: Neptune's Vengeance -->
+        <section id="wrath" class="content-section hidden-section fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-2xl font-cinzel mb-6 sea-accent">The Price of Escort</h3>
+                    <p class="mb-4 text-slate-700">Neptune, seeing Odysseus returned safely with vast wealth, strikes the Phaeacian ship as it nears home.</p>
+                    <div class="h-64">
+                        <canvas id="wrathChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 bg-slate-800 text-slate-100 rounded-xl border-l-4 border-sea-accent">
+                        <h4 class="font-cinzel text-xl mb-2">The Divine Decree</h4>
+                        <p class="italic">"Turn it into a rock near the land and looking like a ship. This will astonish everybody..." — Jove</p>
+                    </div>
+                    <div class="p-6 bg-white border border-slate-200 rounded-xl">
+                        <h4 class="font-cinzel text-xl mb-2 olive-accent text-slate-800">Phaeacian Reaction</h4>
+                        <ul class="list-disc list-inside text-slate-600 space-y-2">
+                            <li>King Alcinous remembers the old prophecy.</li>
+                            <li>Immediate cessation of all foreign escorts.</li>
+                            <li>Sacrifice of twelve bulls to appease Neptune.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Phaeacian Gifts -->
+        <section id="treasure" class="content-section hidden-section fade-in">
+            <div class="max-w-5xl mx-auto">
+                <h3 class="text-3xl font-cinzel mb-8 text-center olive-accent">The Cave of the Nymphs</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Treasure Item 1 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">🏺</div>
+                        <h4 class="font-cinzel font-bold mb-2">Bronze & Cauldrons</h4>
+                        <p class="text-sm text-slate-600">Many tripods and large cauldrons, worth more than his lost share of Trojan spoil.</p>
+                    </div>
+                    <!-- Treasure Item 2 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">💰</div>
+                        <h4 class="font-cinzel font-bold mb-2">Wrought Gold</h4>
+                        <p class="text-sm text-slate-600">Wealth beyond measure, safely stowed in the depths of the Naiads' cavern.</p>
+                    </div>
+                    <!-- Treasure Item 3 -->
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 text-center hover:shadow-md transition-shadow">
+                        <div class="text-4xl mb-4">🧥</div>
+                        <h4 class="font-cinzel font-bold mb-2">Rich Raiment</h4>
+                        <p class="text-sm text-slate-600">Finely woven clothes from Queen Arete, protected from the elements.</p>
+                    </div>
+                </div>
+                <div class="mt-12 p-8 bg-stone-100 rounded-2xl text-center border-2 border-dashed border-stone-300">
+                    <h4 class="font-cinzel text-xl mb-2 text-stone-600">Inventory Status</h4>
+                    <p class="text-stone-500">"He counted his goodly coppers and cauldrons... there was nothing missing."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Transformation -->
+        <section id="disguise" class="content-section hidden-section fade-in">
+            <div class="max-w-2xl mx-auto text-center">
+                <h3 class="text-3xl font-cinzel mb-8 olive-accent">Minerva's Artistry</h3>
+                <p class="mb-10 text-slate-700">To ensure his revenge, Athena must hide Odysseus in plain sight. Click the card below to see the transformation.</p>
+                
+                <div id="transformationCard" class="transformation-card w-full h-96 relative cursor-pointer mx-auto" onclick="this.classList.toggle('is-beggar')">
+                    <div class="transformation-inner w-full h-full relative">
+                        <!-- Front: The King -->
+                        <div class="face-front bg-white rounded-3xl shadow-2xl flex flex-col items-center justify-center p-8 border-4 border-stone-400">
+                            <div class="text-7xl mb-6">👑</div>
+                            <h4 class="text-3xl font-cinzel font-bold text-slate-800">Odysseus the King</h4>
+                            <p class="mt-4 text-slate-600">Strong, noble, and recognizable to any who knew him at Troy or in Ithaca.</p>
+                            <div class="mt-8 text-sm uppercase tracking-widest text-slate-400 font-bold italic">Click to Disguise</div>
+                        </div>
+                        <!-- Back: The Beggar -->
+                        <div class="face-back bg-stone-800 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-8 border-4 border-stone-600 text-slate-100">
+                            <div class="text-7xl mb-6">🦯</div>
+                            <h4 class="text-3xl font-cinzel font-bold text-stone-300">The Aged Beggar</h4>
+                            <p class="mt-4 text-stone-400">Withered skin, bald head, and rags. "Tanned as though by the sun," his eyes dimmed of their fire.</p>
+                            <div class="mt-8 text-sm uppercase tracking-widest text-stone-500 font-bold italic">Click to Reveal</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-left bg-white p-6 rounded-xl border border-slate-200">
+                    <h4 class="font-cinzel font-bold mb-3 text-slate-800">Athena's Plan</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        1. Visit the swineherd Eumaeus first. <br>
+                        2. Stay hidden from Penelope and the Suitors. <br>
+                        3. Await the arrival of Telemachus from Sparta.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2012.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XII
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2014.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XIV <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p class="font-cinzel mb-2 text-slate-200">The Odyssey: Book XIII</p>
+        <p>&copy; Great Books Interactive Series</p>
+    </footer>
+
+    <script>
+        function toggleMist() {
+            const mist = document.getElementById('mist');
+            mist.style.opacity = mist.style.opacity === '0' ? '1' : '0';
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.remove('hidden-section');
+            
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+            if (targetId === 'wrath') {
+                initWrathChart();
+            }
+        }
+
+        function initWrathChart() {
+            const ctx = document.getElementById('wrathChart').getContext('2d');
+            if (window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Phaeacian Hospitality', 'Neptune\'s Anger', 'Divine Compromise', 'Future Isolation'],
+                    datasets: [{
+                        label: 'Narrative Intensity',
+                        data: [95, 100, 60, 85],
+                        backgroundColor: ['#008080', '#1e293b', '#556b2f', '#4a5568'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.target));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial load state if needed
+        });
+    </script>
+</body>
+</html>

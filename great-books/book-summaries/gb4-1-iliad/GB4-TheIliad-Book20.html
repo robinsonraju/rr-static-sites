@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XX - The Great Council</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .rainbow-border {
+            border-image: linear-gradient(to right, #ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6) 1;
+        }
+        .celestial-bg {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 text-slate-900 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🌈</span>
+                    <span class="font-serif text-xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-right from-red-500 via-blue-500 to-purple-500" style="background-image: linear-gradient(to right, #ef4444, #3b82f6, #8b5cf6);">THE ILIAD <span class="text-slate-500 text-base font-normal">| BOOK XX</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-indigo-600 transition-colors">Olympian Council</a>
+                        <a href="#timeline" class="hover:text-indigo-600 transition-colors">Divine Descent</a>
+                        <a href="#analytics" class="hover:text-indigo-600 transition-colors">Power Scales</a>
+                        <a href="#themes" class="hover:text-indigo-600 transition-colors">Cosmic Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <div class="inline-block px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold uppercase tracking-widest mb-4">The Gods Descend</div>
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-800 uppercase tracking-widest drop-shadow-sm">The Great Council</h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                Book XX marks a pivotal shift in the epic. Jove lifts the prohibition on divine intervention, allowing the Olympians to join the fray directly. As Achilles returns to the field with terrifying fury, the battlefield becomes a cosmic stage where mortals and gods collide in a desperate, earth-shaking struggle.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-slate-500">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">⚡</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Divine Will</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🌍</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Earthshaker</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🛡️</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Fate's Shield</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-slate-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Chronicle of the Divine Incursion</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Explore the sequence of events as the gods descend from Olympus and Achilles begins his devastating rampage. Select an event to view the literary analysis and textual evidence.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-2xl shadow-xl shadow-indigo-50/50 border border-slate-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 celestial-bg rounded-xl p-6 md:p-8 flex flex-col justify-center border border-indigo-50 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-slate-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Cosmic Analytics</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Quantitative visualization of narrative dynamics. The first chart tracks the rising tension as gods and heroes enter the battle. The second chart compares the attributes of the two champions who face each other in the book's center.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-50 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Narrative Surge</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Intensity levels as the supernatural forces engage.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-50 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Achilles vs. Aeneas</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">A comparative analysis of the champions' heroic profiles.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-slate-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Celestial Themes</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Deep literary analysis of the foundational concepts explored in Book XX, from the supremacy of Fate to the dehumanizing nature of absolute rage.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-white rounded-2xl shadow-lg border border-slate-50 p-8 min-h-[350px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book19.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Renunciation of Quarrel</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book21.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Battle at the River</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="mb-4">Interactive Analysis of The Iliad, Book XX.</p>
+            <div class="flex justify-center gap-4 text-xl opacity-50 grayscale hover:grayscale-0 transition-all">
+                <span>⚡</span><span>🌊</span><span>🏹</span><span>🛡️</span><span>🔥</span>
+            </div>
+            <p class="mt-8 text-slate-600">&copy; Literary Digital Humanities Project</p>
+        </div>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                day: 'The Proclamation',
+                title: 'Jove’s Great Council',
+                summary: 'Jove commands Themis to summon all gods—including rivers and nymphs—to Olympus. He announces that they may now descend and assist either side, fearing Achilles’ rage might otherwise "override fate itself" and storm Troy prematurely.',
+                quote: '“do you others go about among Trojans and Achaeans, and help either side as you may be severally disposed.”',
+                icon: '⚡'
+            },
+            {
+                id: 't2',
+                day: 'The Descent',
+                title: 'The Gods Enter the Fray',
+                summary: 'The Olympians divide: Juno, Minerva, Neptune, Mercury, and Vulcan for the Greeks; Mars, Apollo, Diana, Leto, Xanthus, and Venus for the Trojans. Their approach causes the earth to quake and Hades to spring from his throne in terror.',
+                quote: '“The sire of gods and men thundered from heaven above, while from beneath Neptune shook the vast earth.”',
+                icon: '🌍'
+            },
+            {
+                id: 't3',
+                day: 'The Standoff',
+                title: 'Achilles vs. Aeneas',
+                summary: 'Apollo, disguised as Lycaon, goads Aeneas into facing Achilles. They exchange long accounts of their noble lineages—Aeneas tracing his back to Dardanus and Jove—before engaging in a spear-fight.',
+                quote: '“We know one another’s race and parentage as matters of common fame... it is known to many.”',
+                icon: '🛡️'
+            },
+            {
+                id: 't4',
+                day: 'Fate Intervenes',
+                title: 'Neptune Rescues Aeneas',
+                summary: 'Though he favors the Greeks, Neptune realizes Aeneas is fated to survive and lead the Trojan race. He whisks Aeneas away in a cloud of darkness, leaving Achilles baffled as his spear strikes empty ground.',
+                quote: '“It is fated, moreover, that he should escape... Aeneas shall reign over the Trojans, he and his children’s children.”',
+                icon: '☁️'
+            },
+            {
+                id: 't5',
+                day: 'The Rampage',
+                title: 'Death of Polydorus',
+                summary: 'Enraged by the divine meddling, Achilles begins a slaughter. He kills Polydorus, Priam’s youngest and swiftest son, striking him in the back. Hector, seeing his brother’s entrails in his hands, finally charges Achilles.',
+                quote: '“This is he that has wounded my heart most deeply and has slain my beloved comrade.”',
+                icon: '🏹'
+            },
+            {
+                id: 't6',
+                day: 'The Near Miss',
+                title: 'Apollo Saves Hector',
+                summary: 'Hector and Achilles engage briefly. Hector hurls his spear, but Minerva breathes it aside. When Achilles springs to kill him, Apollo snatches Hector away in a thick darkness, thrice frustrating Achilles’ strikes.',
+                quote: '“Hound, this time too you have escaped death... Apollo... has again saved you.”',
+                icon: '🌫️'
+            },
+            {
+                id: 't7',
+                day: 'The Slaughter',
+                title: 'The Threshing Floor',
+                summary: 'Achilles continues his indiscriminate slaughter of Trojans. The book ends with the terrifying image of Achilles’ horses trampling corpses like oxen treading barley, his chariot and hands "bedrabbled with gore."',
+                quote: '“even so did the horses of Achilles trample on the shields and bodies of the slain.”',
+                icon: '🔥'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-fate',
+                title: 'The Supremacy of Fate',
+                content: 'Book XX highlights that even the gods are bound by Fate (Moira). Jove allows the gods to fight specifically because he fears Achilles might "override fate" and destroy Troy too soon. Similarly, Neptune rescues Aeneas not out of personal affection, but because Aeneas is fated to preserve the line of Dardanus. Fate is the absolute boundary that even divine power cannot cross without risking cosmic collapse.',
+                keywords: ['Moira', 'Inevitability', 'Preservation']
+            },
+            {
+                id: 'theme-dehuman',
+                title: 'Dehumanization of the Hero',
+                content: 'As Achilles returns to battle, he is stripped of his human qualities and described through elemental metaphors—a raging forest fire, a "lion that the whole country-side has met to hunt," or a mechanical force treading barley. His "mēnis" (rage) has transformed him into an instrument of pure destruction, indifferent to the prayers or lineages of his victims.',
+                keywords: ['Elemental', 'Rage', 'Metaphor']
+            },
+            {
+                id: 'theme-divine',
+                title: 'The Mirror of Divine Conflict',
+                content: 'The "Theomachia" (battle of the gods) mirrors the human conflict but lacks its tragic weight. When the gods fight, it is spectacular and earth-shaking, yet they are immortal and cannot truly die. This contrast emphasizes the pathos of human mortality; for heroes like Polydorus, the conflict has final, devastating consequences that the gods can never experience.',
+                keywords: ['Theomachia', 'Mortality', 'Pathos']
+            },
+            {
+                id: 'theme-lineage',
+                title: 'Lineage as Identity',
+                content: 'The long dialogue between Aeneas and Achilles serves to ground the heroes in their history. In the face of imminent death, the recitation of ancestors is an attempt to assert permanence and honor (timē). For Aeneas, his divine mother Venus and his descent from Jove provide the justification for his rescue by Neptune.',
+                keywords: ['Ancestry', 'Timē', 'Legacy']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-4 rounded-xl border transition-all duration-300 focus:outline-none ${index === 0 ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'bg-white text-slate-600 border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30'}`;
+                btn.innerHTML = `<span class="text-[10px] font-bold uppercase tracking-widest block mb-1 ${index === 0 ? 'text-indigo-200' : 'text-indigo-400'}">${item.day}</span><span class="font-serif font-bold text-sm md:text-base">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-lg');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-slate-100');
+                        b.querySelector('span:first-child').classList.add('text-indigo-400');
+                        b.querySelector('span:first-child').classList.remove('text-indigo-200');
+                    });
+
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-100');
+                    btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600', 'shadow-lg');
+                    btn.querySelector('span:first-child').classList.remove('text-indigo-400');
+                    btn.querySelector('span:first-child').classList.add('text-indigo-200');
+
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-5 mb-6">
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-inner flex items-center justify-center text-3xl border border-indigo-50 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl md:text-3xl font-serif font-bold text-slate-800">${item.title}</h3>
+                                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-500">${item.day}</span>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 text-lg leading-relaxed mb-8">${item.summary}</p>
+                            <div class="bg-white/60 backdrop-blur-sm border-l-4 border-indigo-400 p-5 rounded-r-xl italic text-slate-700 font-serif text-lg shadow-sm">
+                                “${item.quote}”
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (timelineData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-xl font-serif font-bold transition-all duration-300 border-2 ${index === 0 ? 'border-indigo-500 bg-indigo-50 text-indigo-900 shadow-md' : 'border-transparent bg-slate-50 text-slate-600 hover:bg-white hover:border-slate-200'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-indigo-500', 'bg-indigo-50', 'text-indigo-900', 'shadow-md');
+                        b.classList.add('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    });
+
+                    btn.classList.remove('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    btn.classList.add('border-indigo-500', 'bg-indigo-50', 'text-indigo-900', 'shadow-md');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-serif font-bold text-slate-800 mb-6">${item.title}</h3>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-3">
+                            ${item.keywords.map(kw => `<span class="px-4 py-1.5 bg-indigo-50 text-indigo-600 text-xs font-bold uppercase tracking-widest rounded-lg border border-indigo-100">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (themesData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initCharts() {
+            const tensionCtx = document.getElementById('tensionChart').getContext('2d');
+            new Chart(tensionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Council', 'Descent', 'Standoff', 'Aeneas Duel', 'Rescue', 'Polydorus', 'Hector Clash', 'The Rampage'],
+                    datasets: [{
+                        label: 'Narrative Intensity',
+                        data: [4, 8, 6, 7, 5, 9, 9.5, 10],
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#6366f1',
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 11, ticks: { display: false }, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false }, ticks: { font: { family: 'Lato', size: 10 } } }
+                    }
+                }
+            });
+
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Combat Prowess', 'Divine Favor', 'Lineage Status', 'Mercy', 'Rage Level'],
+                    datasets: [
+                        {
+                            label: 'Achilles',
+                            data: [10, 9, 8, 1, 10],
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: '#ef4444',
+                            pointBackgroundColor: '#ef4444',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Aeneas',
+                            data: [7, 10, 9, 5, 6],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: '#3b82f6',
+                            pointBackgroundColor: '#3b82f6',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#f1f5f9' },
+                            grid: { color: '#f1f5f9' },
+                            ticks: { display: false, max: 10 },
+                            pointLabels: { font: { family: 'Lato', size: 10, weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

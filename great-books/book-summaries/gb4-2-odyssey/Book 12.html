@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XII Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f0f9ff; /* Ocean Breeze */
+            color: #0c4a6e;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .bg-ocean-deep { background-color: #075985; }
+        .text-sun-gold { color: #fbbf24; }
+        .border-scylla-flesh { border-color: #f472b6; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #075985;
+            color: #075985;
+            font-weight: 600;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden-section {
+            display: none;
+        }
+        .ship-part {
+            transition: all 0.3s ease;
+        }
+        .ship-part:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+        .siren-active {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(7, 89, 133, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(7, 89, 133, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(7, 89, 133, 0); }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-sky-950 text-sky-50 py-12 shadow-2xl border-b-4 border-sun-gold">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-6xl mb-4">⛵ 🧜‍♀️ 🐙</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-widest text-white">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-3xl font-light italic text-sky-300">Book XII: Scylla and Charybdis</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-sky-100">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active bg-white inline-block py-4 px-4 md:px-8 text-sky-900 hover:text-ocean-deep font-cinzel text-sm md:text-base transition-colors" data-target="guide">Survival Guide</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-sky-900 hover:text-ocean-deep font-cinzel text-sm md:text-base transition-colors" data-target="sirens">The Siren Song</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-sky-900 hover:text-ocean-deep font-cinzel text-sm md:text-base transition-colors" data-target="straits">The Deadly Straits</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-sky-900 hover:text-ocean-deep font-cinzel text-sm md:text-base transition-colors" data-target="thrinacia">Sun-God's Cattle</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-16">
+
+        <section id="guide" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto mb-12 text-center">
+                <h3 class="text-3xl font-cinzel font-bold text-sky-950 mb-4">Circe's Navigational Briefing</h3>
+                <p class="text-sky-800">Before departure, the goddess lays out the high-stakes choices for the journey ahead.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-b-8 border-sky-400">
+                    <div class="text-4xl mb-4">🕯️</div>
+                    <h4 class="font-cinzel font-bold text-xl mb-3">Trial I: Sirens</h4>
+                    <p class="text-xs text-sky-700 leading-relaxed mb-4">They warble men to death in a field of flowers. Use beeswax for the crew; bind the captain to the mast.</p>
+                    <ul class="text-[10px] space-y-1 font-bold uppercase text-sky-500">
+                        <li>✅ Beeswax Prepared</li>
+                        <li>✅ Ropes Tested</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-b-8 border-pink-400">
+                    <div class="text-4xl mb-4">🐙</div>
+                    <h4 class="font-cinzel font-bold text-xl mb-3">Trial II: The Straits</h4>
+                    <p class="text-xs text-sky-700 leading-relaxed mb-4">Choose Scylla's rock. It is better to lose six men to her six heads than the entire ship to Charybdis's whirlpool.</p>
+                    <ul class="text-[10px] space-y-1 font-bold uppercase text-pink-500">
+                        <li>⚠️ Scylla (6 Deaths)</li>
+                        <li>❌ Charybdis (Total Ruin)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-b-8 border-yellow-400">
+                    <div class="text-4xl mb-4">🐄</div>
+                    <h4 class="font-cinzel font-bold text-xl mb-3">Trial III: Thrinacia</h4>
+                    <p class="text-xs text-sky-700 leading-relaxed mb-4">Do not touch the cattle of the Sun-god Hyperion. If you harm them, I forewarn you of the destruction of ship and comrades.</p>
+                    <ul class="text-[10px] space-y-1 font-bold uppercase text-yellow-600">
+                        <li>🚫 No Hunting</li>
+                        <li>🍖 Final Warning</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="sirens" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto bg-white p-10 rounded-3xl shadow-2xl border-4 border-sky-200 text-center">
+                <h3 class="text-3xl font-cinzel font-bold text-sky-900 mb-6">Bound to the Mast</h3>
+                <p class="text-sky-700 italic mb-10 leading-relaxed">
+                    "Come here, renowned Ulysses... he who listens will go on his way not only charmed, but wiser."
+                </p>
+                
+                <div class="relative w-48 h-64 mx-auto bg-sky-50 border-x-8 border-stone-400 flex items-center justify-center">
+                    <div class="text-6xl" id="ulysses-bind">⚓</div>
+                    <div id="rope-overlay" class="absolute inset-0 border-4 border-dashed border-sky-900 opacity-0 transition-opacity pointer-events-none"></div>
+                </div>
+                
+                <div class="mt-8 flex justify-center space-x-4">
+                    <button class="bg-sky-900 text-white px-6 py-2 rounded-full font-cinzel text-sm hover:bg-sky-700 transition-colors" onclick="bindUlysses()">Tighten Ropes</button>
+                    <button class="border-2 border-sky-900 text-sky-900 px-6 py-2 rounded-full font-cinzel text-sm hover:bg-sky-50 transition-colors" onclick="resetRopes()">Reset</button>
+                </div>
+                <p id="siren-status" class="mt-6 text-sm font-bold text-sky-600 uppercase tracking-widest">Ulysses is Unbound</p>
+            </div>
+        </section>
+
+        <section id="straits" class="content-section hidden-section fade-in">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-pink-500">
+                    <h3 class="text-3xl font-cinzel font-bold text-sky-950 mb-6">The Impossible Choice</h3>
+                    <div class="space-y-6">
+                        <div class="p-4 bg-pink-50 rounded-xl cursor-help hover:bg-pink-100 transition-colors" onclick="showOutcome('scylla')">
+                            <h4 class="font-bold text-pink-900">Hug Scylla's Rock</h4>
+                            <p class="text-xs text-pink-700 mt-1">A six-headed monster with twelve feet. She will snatch six men in her mouths.</p>
+                        </div>
+                        <div class="p-4 bg-sky-50 rounded-xl cursor-help hover:bg-sky-100 transition-colors" onclick="showOutcome('charybdis')">
+                            <h4 class="font-bold text-sky-900">Avoid Charybdis's Pool</h4>
+                            <p class="text-xs text-sky-700 mt-1">Three times a day she sucks down the sea. If you are there then, not even Neptune can save you.</p>
+                        </div>
+                    </div>
+                    <div id="straits-outcome" class="mt-8 p-6 bg-zinc-900 text-white rounded-2xl hidden fade-in">
+                        <!-- Outcome text here -->
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-2xl">
+                    <h4 class="font-cinzel text-center text-xl mb-6">Risk Factor Analysis</h4>
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="thrinacia" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-amber-50 p-12 rounded-3xl border-4 border-yellow-400 text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-400 opacity-10 rounded-bl-full"></div>
+                    <h3 class="text-3xl font-cinzel font-bold text-yellow-900 mb-6">The Sin of the Starving</h3>
+                    <p class="text-yellow-800 mb-8 leading-relaxed">
+                        Trapped for a month by South winds, the men exhaust their stores. While Ulysses sleeps, Eurylochus convinces them: "All deaths are bad enough, but there is none so bad as famine."
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="p-6 bg-white rounded-2xl shadow-sm border-l-8 border-yellow-600 text-left">
+                            <h5 class="font-bold text-yellow-900 mb-2">The Omen</h5>
+                            <p class="text-xs text-yellow-700">"The hides of the cattle crawled about, and the meat on the spits began to low like cows."</p>
+                        </div>
+                        <div class="p-6 bg-red-950 text-red-50 rounded-2xl shadow-sm text-left">
+                            <h5 class="font-bold text-yellow-400 mb-2">The Thunderbolt</h5>
+                            <p class="text-xs opacity-80">Jove shivers the ship with lightning. The men fall like sea-gulls into the brine. Ulysses alone survives on a makeshift raft.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2011.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XI
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2013.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XIII <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-sky-950 text-sky-500 py-8 text-center text-sm mt-auto border-t-4 border-sun-gold">
+        <p>Book XII of Homer's <i>The Odyssey</i>: The Final Ordeal of the Crew.</p>
+    </footer>
+
+    <script>
+        function bindUlysses() {
+            const status = document.getElementById('siren-status');
+            const rope = document.getElementById('rope-overlay');
+            const ulysses = document.getElementById('ulysses-bind');
+            
+            status.innerText = 'ULYSSES IS BOUND TO THE MAST';
+            status.classList.replace('text-sky-600', 'text-red-600');
+            rope.classList.remove('opacity-0');
+            rope.classList.add('opacity-100', 'siren-active');
+            ulysses.classList.add('scale-75');
+        }
+
+        function resetRopes() {
+            const status = document.getElementById('siren-status');
+            const rope = document.getElementById('rope-overlay');
+            const ulysses = document.getElementById('ulysses-bind');
+            
+            status.innerText = 'Ulysses is Unbound';
+            status.classList.replace('text-red-600', 'text-sky-600');
+            rope.classList.add('opacity-0');
+            rope.classList.remove('opacity-100', 'siren-active');
+            ulysses.classList.remove('scale-75');
+        }
+
+        function showOutcome(choice) {
+            const el = document.getElementById('straits-outcome');
+            el.classList.remove('hidden');
+            if(choice === 'scylla') {
+                el.innerHTML = `<h5 class="font-cinzel text-pink-400 mb-2">The Cost of Safety</h5>
+                                <p class="text-xs">Scylla snatched the six best men. Ulysses watched them struggling in the air, calling his name in their mortal agony. "This was the most sickening sight that I saw throughout all my voyages."</p>`;
+            } else {
+                el.innerHTML = `<h5 class="font-cinzel text-sky-400 mb-2">The Whirlpool's Maw</h5>
+                                <p class="text-xs">Charybdis sucks down the whole sea. "Not even Neptune could save you." Total loss of ship, men, and mission. This path was rejected by the wise Navigator.</p>`;
+            }
+        }
+
+        function initRiskChart() {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Scylla', 'Charybdis', 'Sirens', 'Sun-Cattle'],
+                    datasets: [{
+                        label: 'Lethality Index',
+                        data: [60, 100, 40, 95],
+                        backgroundColor: 'rgba(7, 89, 133, 0.2)',
+                        borderColor: '#075985',
+                        pointBackgroundColor: '#075985'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: { beginAtZero: true, max: 100, ticks: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(targetId).classList.remove('hidden-section');
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+            if(targetId === 'straits') initRiskChart();
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => switchTab(e.target.getAttribute('data-target')));
+        });
+    </script>
+</body>
+</html>

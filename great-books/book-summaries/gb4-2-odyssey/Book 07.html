@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book VII - The Palace of Alcinous</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f0f4f0;
+            /* Soft Garden Green */
+            color: #1a2e1a;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .bg-palace-gold {
+            background-color: #d4af37;
+        }
+
+        .text-palace-gold {
+            color: #d4af37;
+        }
+
+        .border-palace-gold {
+            border-color: #d4af37;
+        }
+
+        .bg-palace-silver {
+            background-color: #c0c0c0;
+        }
+
+        .text-palace-silver {
+            color: #717171;
+        }
+
+        .tab-btn.active {
+            border-bottom: 4px solid #d4af37;
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .garden-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-emerald-900 text-emerald-50 py-10 shadow-2xl border-b-4 border-palace-gold">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-5xl mb-4">🏛️ ✨ 🌿</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-widest text-palace-gold">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-3xl font-light italic text-emerald-200">Book VII: The Palace of Alcinous</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-emerald-100">
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn active bg-white inline-block py-4 px-4 md:px-8 text-emerald-800 hover:text-palace-gold font-cinzel text-sm md:text-base transition-colors"
+                        data-target="palace">The Golden Hall</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-emerald-800 hover:text-palace-gold font-cinzel text-sm md:text-base transition-colors"
+                        data-target="garden">Eternal Garden</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-emerald-800 hover:text-palace-gold font-cinzel text-sm md:text-base transition-colors"
+                        data-target="lineage">Divine Descent</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn bg-white inline-block py-4 px-4 md:px-8 text-emerald-800 hover:text-palace-gold font-cinzel text-sm md:text-base transition-colors"
+                        data-target="petition">The Queen's Favor</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-16">
+
+        <section id="palace" class="content-section fade-in">
+            <div
+                class="max-w-4xl mx-auto mb-12 text-center text-lg text-emerald-900 bg-white p-6 rounded-lg shadow-inner border-l-8 border-palace-gold italic">
+                <p>"The splendour of the palace was like that of the sun or moon. The walls on either side were of
+                    bronze... the doors were gold, and hung on pillars of silver."</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto" id="palace-features">
+                <!-- Interactive features will be injected here -->
+            </div>
+        </section>
+
+        <section id="garden" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-12 text-center">
+                <h3 class="text-3xl font-cinzel font-bold text-emerald-800 mb-4 text-center">The Four-Acre Paradise</h3>
+                <p class="text-emerald-700">In Alcinous's garden, nature defies the seasons. Use the interactive
+                    "Harvest Cycle" below to see how fruit ripens year-round.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-t-4 border-emerald-500">
+                    <h4 class="font-cinzel text-xl font-bold mb-6 text-emerald-900 border-b pb-2">The Eternal Harvest
+                    </h4>
+                    <div class="space-y-6" id="garden-list">
+                        <!-- Garden list injected here -->
+                    </div>
+                </div>
+                <div class="bg-emerald-900 p-8 rounded-2xl shadow-2xl text-emerald-50 text-center">
+                    <div class="text-6xl mb-6">🍇</div>
+                    <h4 class="font-cinzel text-2xl mb-4 text-palace-gold">The Vineyard Data</h4>
+                    <canvas id="gardenChart" class="w-full h-64"></canvas>
+                    <p class="mt-6 text-sm italic text-emerald-300">"Pear grows on pear, apple on apple, and fig on
+                        fig..."</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="lineage" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-10 text-center">
+                <h3 class="text-3xl font-cinzel font-bold text-emerald-800 mb-4">The Blood of Neptune</h3>
+                <p class="text-emerald-700 mb-12">The Phaeacians are no mere mortals; they are kin to the gods,
+                    descended from the King of the Sea.</p>
+            </div>
+
+            <div class="flex flex-col items-center space-y-8">
+                <div class="relative w-full max-w-4xl bg-white p-10 rounded-3xl shadow-lg border border-palace-silver">
+                    <div id="tree-container" class="flex flex-col items-center gap-4">
+                        <!-- Tree will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="petition" class="content-section hidden-section fade-in">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white p-10 rounded-3xl shadow-2xl border-2 border-palace-gold relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-palace-gold opacity-10 rounded-bl-full"></div>
+                    <h3
+                        class="text-3xl font-cinzel font-bold text-emerald-900 mb-8 border-b-2 border-palace-silver pb-4">
+                        The Logic of Xenia</h3>
+                    <p class="mb-8 text-emerald-800 leading-relaxed">Ulysses must navigate the court of Alcinous. His
+                        first and most critical move is to bypass the King and appeal directly to **Queen Arete**.</p>
+
+                    <div class="space-y-6">
+                        <div class="p-6 bg-emerald-50 rounded-xl border-l-4 border-emerald-600 cursor-pointer hover:bg-emerald-100 transition-colors"
+                            onclick="toggleDetail('arete-logic')">
+                            <h4 class="font-bold text-emerald-900 font-cinzel">Why Arete First?</h4>
+                            <div id="arete-logic" class="hidden mt-4 text-emerald-700 text-sm italic">
+                                Minerva advises: "She is a thoroughly good woman both in head and heart... if you can
+                                gain her good will, you may have every hope of seeing your friends again."
+                            </div>
+                        </div>
+                        <div class="p-6 bg-emerald-50 rounded-xl border-l-4 border-emerald-600 cursor-pointer hover:bg-emerald-100 transition-colors"
+                            onclick="toggleDetail('clothes-logic')">
+                            <h4 class="font-bold text-emerald-900 font-cinzel">The Recognition of Cloth</h4>
+                            <div id="clothes-logic" class="hidden mt-4 text-emerald-700 text-sm italic">
+                                Arete recognizes the cloak and shirt as her own handiwork, prompting the inquiry: "Who
+                                gave you those clothes?" This provides Ulysses the chance to narrate his journey from
+                                Calypso.
+                            </div>
+                        </div>
+                        <div class="p-6 bg-emerald-900 text-emerald-50 rounded-xl border-l-4 border-palace-gold cursor-pointer hover:bg-emerald-800 transition-colors"
+                            onclick="toggleDetail('escort-promise')">
+                            <h4 class="font-bold text-palace-gold font-cinzel">The Promise of Escort</h4>
+                            <div id="escort-promise" class="hidden mt-4 text-emerald-200 text-sm italic">
+                                Alcinous promises a ship that "glides along like thought." Even if the destination is
+                                further than Euboea, the Phaeacians will return in a single day.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2006.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book VI
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2008.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book VIII <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-emerald-950 text-emerald-500 py-8 text-center text-sm mt-auto border-t-4 border-palace-gold">
+        <p>Book VII of Homer's <i>The Odyssey</i>: The Splendor of Scheria.</p>
+    </footer>
+
+    <script>
+        const palaceFeatures = [
+            { title: 'The Threshold', material: 'Bronze & Silver', desc: 'Threshold of bronze, lintel of silver, and a blue enamel cornice that shines like the moon.', icon: '🚪' },
+            { title: 'The Golden Doors', material: 'Pure Gold', desc: 'Hung on pillars of silver, these doors guard the entrance to the king\'s most inner chambers.', icon: '✨' },
+            { title: 'The Sentinels', material: 'Gold & Silver', desc: 'Mastiffs fashioned by Vulcan. Immortal and ageless, they keep watch over the palace of Alcinous.', icon: '🐕' },
+            { title: 'The Torchbearers', material: 'Gold', desc: 'Golden figures of young men raised on pedestals, holding torches to light the nightly banquets.', icon: '🔥' },
+            { title: 'The Weavers', material: 'Fine Linen', desc: 'Fifty maidservants grinding grain or weaving linen so closely that oil would run off it.', icon: '🧶' },
+            { title: 'The Seats', material: 'Inlaid Silver', desc: 'Seats ranged along the walls with coverings of fine woven work, where the Phaeacian chiefs dine.', icon: '🪑' }
+        ];
+
+        const gardenFruits = [
+            { name: 'Pears', status: 'Ever-Ripening', desc: 'Pear grows on pear, never failing all year round.' },
+            { name: 'Pomegranates', status: 'Glistening', desc: 'Heavy branches full of beautiful, ruby fruit.' },
+            { name: 'Apples', status: 'Delicious', desc: 'A new crop ripens before the old has dropped.' },
+            { name: 'Figs', status: 'Luscious', desc: 'Sweet and growing in abundance through winter and summer.' },
+            { name: 'Olives', status: 'Full Growth', desc: 'Flourishing in the soft, tempered air of Scheria.' },
+            { name: 'Grapes', status: 'Triple Phase', desc: 'Raisins drying, blossoms shedding, and fruit changing color simultaneously.' }
+        ];
+
+        function renderPalace() {
+            const container = document.getElementById('palace-features');
+            palaceFeatures.forEach(f => {
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-palace-gold hover:shadow-2xl transition-all group">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">${f.icon}</div>
+                        <h4 class="font-cinzel font-bold text-emerald-900 text-lg">${f.title}</h4>
+                        <p class="text-xs uppercase tracking-widest text-palace-gold font-bold mb-2">${f.material}</p>
+                        <p class="text-emerald-700 text-sm leading-relaxed">${f.desc}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function renderGarden() {
+            const list = document.getElementById('garden-list');
+            gardenFruits.forEach(fruit => {
+                list.innerHTML += `
+                    <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-emerald-50 transition-colors cursor-help group">
+                        <div class="w-3 h-3 rounded-full bg-palace-gold"></div>
+                        <div class="flex-grow">
+                            <span class="font-bold text-emerald-900">${fruit.name}</span>
+                            <span class="text-xs ml-2 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full font-bold uppercase">${fruit.status}</span>
+                            <p class="text-xs text-emerald-600 mt-1 hidden group-hover:block fade-in">${fruit.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderTree() {
+            const container = document.getElementById('tree-container');
+            const tree = [
+                { name: 'Neptune', sub: 'God of the Sea', icon: '🔱', color: 'bg-emerald-800 text-white' },
+                { name: 'Nausithous', sub: 'Son of Neptune & Periboea', icon: '👑' },
+                { name: 'Rhexenor & Alcinous', sub: 'Sons of Nausithous', icon: '⚔️' },
+                { name: 'Arete', sub: 'Daughter of Rhexenor', icon: '👸' }
+            ];
+
+            tree.forEach((node, i) => {
+                container.innerHTML += `
+                    <div class="flex flex-col items-center">
+                        <div class="p-4 ${node.color || 'bg-emerald-100'} rounded-xl shadow border-2 border-palace-gold w-64 text-center">
+                            <div class="text-2xl">${node.icon}</div>
+                            <div class="font-cinzel font-bold">${node.name}</div>
+                            <div class="text-xs italic">${node.sub}</div>
+                        </div>
+                        ${i < tree.length - 1 ? '<div class="w-0.5 h-8 bg-palace-silver"></div>' : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('gardenChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Pear', 'Apple', 'Fig', 'Grape', 'Olive', 'Pomegranate'],
+                    datasets: [{
+                        data: [16, 16, 16, 16, 16, 16],
+                        backgroundColor: [
+                            'rgba(212, 175, 55, 0.7)',
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(159, 18, 57, 0.7)',
+                            'rgba(107, 33, 168, 0.7)',
+                            'rgba(6, 78, 59, 0.7)',
+                            'rgba(245, 158, 11, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        r: { ticks: { display: false }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                    }
+                }
+            });
+        }
+
+        function toggleDetail(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(targetId).classList.remove('hidden-section');
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+            if (targetId === 'garden') initChart();
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => switchTab(e.target.getAttribute('data-target')));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPalace();
+            renderGarden();
+            renderTree();
+        });
+    </script>
+</body>
+
+</html>

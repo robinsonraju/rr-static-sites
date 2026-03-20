@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book I - The Telemachy Begins</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Chosen Palette: Aegean Harmony (Deep Ocean Blue, Sandstone Neutrals, Bronze/Gold Accents) -->
+    <!-- Application Structure Plan: A tabbed, interactive dashboard interface. This structure was chosen because Book I introduces multiple simultaneous narrative layers: the overarching cosmic status, the divine plotting on Olympus, the physical crisis in Ithaca, and the thematic foundations of the epic. A tabbed approach allows users to explore these layers independently without being overwhelmed by linear text. Interactive cards, timelines, and charts translate narrative descriptions into consumable, structural data. -->
+    <!-- Visualization & Content Choices:
+    1. Hero/Character Status (Goal: Inform) -> Interactive Flip Cards -> Click to reveal details -> Justification: Prevents text fatigue while allowing deep dives into character states -> HTML/Tailwind/JS.
+    2. The Divine Chain (Goal: Relationships) -> CSS/HTML Diagram Diagram -> Hover effects -> Justification: Visually maps the hierarchy and flow of divine intervention without complex SVGs -> HTML/Tailwind Flexbox.
+    3. The Ithaca Crisis (Goal: Compare) -> Donut Chart (Fate of Heroes) & Bar Chart (Resource Consumption) -> Tooltip interactions -> Justification: Transforms literary hyperbole ("eating any number of his sheep") into striking visual data -> Chart.js Canvas.
+    4. Telemachus's Path (Goal: Change/Organize) -> Step-by-step Interactive Timeline -> Click to progress -> Justification: Clearly outlines Athena's actionable advice and the hero's coming-of-age journey -> HTML/Tailwind/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fdfbf7;
+            color: #1e293b;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .tab-btn.active {
+            border-bottom: 4px solid #b45309;
+            color: #b45309;
+            font-weight: 600;
+        }
+
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden-section {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-slate-900 text-slate-50 py-8 shadow-lg">
+        <div class="container mx-auto px-4 text-center">
+            <div class="text-4xl mb-2">🏛️ 🌊 ⛵</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-wide text-amber-500">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-slate-300">Book I: The Telemachy Begins</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-slate-200">
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn active bg-white inline-block py-4 px-4 md:px-6 text-slate-600 hover:text-amber-700 font-cinzel text-sm md:text-base transition-colors"
+                        data-target="overview">The Setup</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn bg-white inline-block py-4 px-4 md:px-6 text-slate-600 hover:text-amber-700 font-cinzel text-sm md:text-base transition-colors"
+                        data-target="olympus">Divine Council</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn bg-white inline-block py-4 px-4 md:px-6 text-slate-600 hover:text-amber-700 font-cinzel text-sm md:text-base transition-colors"
+                        data-target="ithaca">Ithaca Crisis</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button
+                        class="tab-btn bg-white inline-block py-4 px-4 md:px-6 text-slate-600 hover:text-amber-700 font-cinzel text-sm md:text-base transition-colors"
+                        data-target="journey">The Path Forward</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+
+        <section id="overview" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto mb-10 text-center text-lg text-slate-700">
+                <p><strong>Overview:</strong> This section establishes the baseline status of the epic's primary figures
+                    ten years after the Trojan War. Explore the cards below to understand the current plight, location,
+                    and mindset of the key mortals and immortals as the story commences. Click any card to reveal deeper
+                    insights.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto" id="character-grid">
+            </div>
+        </section>
+
+        <section id="olympus" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-10 text-center text-lg text-slate-700">
+                <p><strong>The Divine Council:</strong> While Neptune (Poseidon) is away, the gods convene on Mount
+                    Olympus. This section illustrates the chain of command and the strategic decisions made by the gods
+                    to alter mortal fates. Interact with the hierarchy below to see how divine will translates into
+                    earthly action.</p>
+            </div>
+
+            <div
+                class="flex flex-col items-center max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-slate-200">
+
+                <div class="w-full text-center mb-8 cursor-pointer group" onclick="toggleDivineDetail('zeus-detail')">
+                    <div
+                        class="w-24 h-24 mx-auto bg-amber-100 rounded-full flex items-center justify-center text-4xl border-4 border-amber-500 shadow-lg group-hover:scale-110 transition-transform">
+                        ⚡</div>
+                    <h3 class="font-cinzel text-xl font-bold mt-3 text-slate-800">Jove (Zeus)</h3>
+                    <p class="text-sm text-slate-500 uppercase tracking-widest">King of Kings</p>
+                    <div id="zeus-detail"
+                        class="hidden mt-4 p-4 bg-slate-50 text-slate-700 rounded text-sm border-l-4 border-amber-500">
+                        Believes mortals blame gods for their own folly (citing Aegisthus). Agrees that Ulysses has
+                        suffered enough and decrees he must return home, overriding Neptune's solitary anger.
+                    </div>
+                </div>
+
+                <div class="flex w-full max-w-md justify-between items-start relative mb-8">
+                    <div class="absolute top-0 left-1/2 w-0.5 h-16 bg-slate-300 -translate-x-1/2 -z-10"></div>
+                    <div class="absolute top-16 left-1/4 right-1/4 h-0.5 bg-slate-300 -z-10"></div>
+                    <div class="absolute top-16 left-1/4 w-0.5 h-8 bg-slate-300 -z-10"></div>
+                    <div class="absolute top-16 right-1/4 w-0.5 h-8 bg-slate-300 -z-10"></div>
+
+                    <div class="w-5/12 text-center mt-20 cursor-pointer group"
+                        onclick="toggleDivineDetail('mercury-detail')">
+                        <div
+                            class="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center text-2xl border-2 border-slate-400 shadow group-hover:bg-amber-50 transition-colors">
+                            🪽</div>
+                        <h4 class="font-cinzel font-bold mt-2 text-slate-800">Mercury</h4>
+                        <p class="text-xs text-slate-500">The Messenger</p>
+                        <div id="mercury-detail"
+                            class="hidden mt-2 p-2 bg-slate-50 text-slate-700 rounded text-xs border-l-2 border-slate-400">
+                            <strong>Mission:</strong> Travel to Ogygia to command the nymph Calypso to finally release
+                            Ulysses from his captivity.
+                        </div>
+                    </div>
+
+                    <div class="w-5/12 text-center mt-20 cursor-pointer group"
+                        onclick="toggleDivineDetail('minerva-detail')">
+                        <div
+                            class="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center text-2xl border-2 border-blue-500 shadow group-hover:bg-blue-200 transition-colors">
+                            🦉</div>
+                        <h4 class="font-cinzel font-bold mt-2 text-slate-800">Minerva</h4>
+                        <p class="text-xs text-slate-500">Goddess of Wisdom</p>
+                        <div id="minerva-detail"
+                            class="hidden mt-2 p-2 bg-blue-50 text-slate-700 rounded text-xs border-l-2 border-blue-500">
+                            <strong>Mission:</strong> Travel to Ithaca disguised as Mentes. Inspire Telemachus to stand
+                            up to the suitors and seek news of his father.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="ithaca" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-10 text-center text-lg text-slate-700">
+                <p><strong>The Crisis in Ithaca:</strong> Ulysses' absence has created a dangerous vacuum. This section
+                    visualizes the dire situation in the palace, contrasting the broader fate of the Greek heroes with
+                    the immediate, parasitic drain on Telemachus's estate by the localized nobles (suitors).</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center">
+                    <h3 class="font-cinzel text-xl font-bold mb-2 text-slate-800 text-center">Fate of the Achaean Heroes
+                    </h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Ten years post-Troy. Where is the vanguard?</p>
+                    <div class="chart-container w-full">
+                        <canvas id="heroesChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600 text-center px-4">While most survived to reach their homelands
+                        or perished in battle/shipwreck, Ulysses alone remains unaccounted for, detained on Ogygia.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center">
+                    <h3 class="font-cinzel text-xl font-bold mb-2 text-slate-800 text-center">The Suitors' Plunder</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Estimated daily drain on Ulysses' estate</p>
+                    <div class="chart-container w-full">
+                        <canvas id="suitorsChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600 text-center px-4">The "lordly suitors" from Dulichium, Same,
+                        Zacynthus, and Ithaca consume vast quantities of oxen, sheep, and wine under the pretext of
+                        courting Penelope.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="journey" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto mb-10 text-center text-lg text-slate-700">
+                <p><strong>The Path Forward:</strong> The arrival of Minerva (disguised as Mentes) initiates the
+                    "Telemachy" — Telemachus's transition from passive youth to active leader. Follow the interactive
+                    checklist below to understand the exact instructions imparted by the goddess that set the plot in
+                    motion.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="font-cinzel text-2xl font-bold mb-6 text-slate-800 border-b pb-4 text-center">Minerva's
+                    Mandate to Telemachus</h3>
+
+                <div id="quest-tracker"
+                    class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                </div>
+
+                <div class="mt-10 p-6 bg-slate-900 text-amber-50 rounded-lg text-center">
+                    <h4 class="font-cinzel text-xl mb-3 text-amber-500">The Ultimate Goal</h4>
+                    <p class="italic text-slate-300">"You are a fine, smart looking fellow; show your mettle, then, and
+                        make yourself a name in story."</p>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <div class="w-1/3"></div>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2002.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book II <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-sm mt-auto">
+        <p>Interactive Analysis of Homer's <i>The Odyssey</i>, Book I.</p>
+    </footer>
+
+    <script>
+        const appState = {
+            currentTab: 'overview',
+            chartsInitialized: false
+        };
+
+        const characterData = [
+            { id: 'ulysses', name: 'Ulysses', title: 'The Lost King', icon: '⛵', front: 'Trapped far from home on a sea-girt island.', back: 'Detained by the nymph Calypso who wants to marry him. Though highly capable and beloved by gods (except Neptune), he longs only to see the smoke of his own chimneys.' },
+            { id: 'telemachus', name: 'Telemachus', title: 'The Grieving Heir', icon: '🗡️', front: 'Powerless youth watching his inheritance vanish.', back: 'Brooding moodily among the suitors. He believes his father is dead. Minerva\'s visit sparks a dramatic shift, giving him courage to assert authority over his household and mother.' },
+            { id: 'penelope', name: 'Penelope', title: 'The Besieged Queen', icon: '🧶', front: 'Mourning her husband, pressured to remarry.', back: 'Refuses to outright reject the suitors or choose a husband, resulting in the prolonged drain on the estate. Found weeping over the bard\'s song of Troy.' },
+            { id: 'suitors', name: 'The Suitors', title: 'The Parasites', icon: '🍷', front: 'Nobles consuming the wealth of Ithaca.', back: 'Led by Antinous and Eurymachus. They play draughts, demand music, and butcher oxen daily. They react with mockery and suspicion to Telemachus\'s newfound boldness.' },
+            { id: 'minerva', name: 'Minerva', title: 'The Divine Guide', icon: '🦉', front: 'Advocate for Ulysses; catalyst for action.', back: 'Pleads Ulysses\' case to Jove. Disguises herself as Mentes, King of the Taphians, to invoke the rules of Xenia (hospitality) and spur Telemachus into action.' },
+            { id: 'neptune', name: 'Neptune', title: 'The Persecutor', icon: '🔱', front: 'The sole god preventing Ulysses\' return.', back: 'Furious because Ulysses blinded his son, the Cyclops Polyphemus. Currently away visiting the Ethiopians, allowing the other gods to enact their rescue plan.' }
+        ];
+
+        const questSteps = [
+            { id: 1, title: 'Summon the Assembly', desc: 'Call the Achaean heroes in assembly tomorrow morning to formally bid the suitors depart.' },
+            { id: 2, title: 'Prepare a Ship', desc: 'Take the best ship you can get, with a crew of twenty men.' },
+            { id: 3, title: 'Travel to Pylos', desc: 'Visit King Nestor in Pylos to seek news of Ulysses.' },
+            { id: 4, title: 'Travel to Sparta', desc: 'Visit Menelaus in Sparta, as he was the last of the Achaeans to return home.' },
+            { id: 5, title: 'Determine the Truth', desc: 'If alive: endure the suitors one more year. If dead: build a barrow, marry off Penelope, and kill the suitors yourself.' }
+        ];
+
+        function renderCharacterCards() {
+            const grid = document.getElementById('character-grid');
+            grid.innerHTML = '';
+            characterData.forEach(char => {
+                const cardHTML = `
+                    <div class="h-64 cursor-pointer group perspective" onclick="this.classList.toggle('card-flipped')">
+                        <div class="card-inner w-full h-full relative transition-transform duration-500 shadow-md hover:shadow-xl rounded-xl">
+                            <div class="card-front absolute w-full h-full bg-white border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+                                <div class="text-5xl mb-4">${char.icon}</div>
+                                <h3 class="font-cinzel font-bold text-xl text-slate-800">${char.name}</h3>
+                                <p class="text-sm text-slate-500 uppercase tracking-wider mt-1">${char.title}</p>
+                                <p class="text-sm mt-4 text-slate-600 italic">Click to reveal</p>
+                            </div>
+                            <div class="card-back absolute w-full h-full bg-slate-800 text-slate-50 rounded-xl p-6 flex flex-col justify-center items-center text-center border-b-4 border-amber-600">
+                                <h3 class="font-cinzel font-bold text-lg text-amber-400 mb-2">${char.name}</h3>
+                                <p class="text-sm leading-relaxed">${char.back}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+
+            const style = document.createElement('style');
+            style.textContent = `
+                .perspective { perspective: 1000px; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function renderQuestTracker() {
+            const tracker = document.getElementById('quest-tracker');
+            tracker.innerHTML = '';
+            questSteps.forEach((step, index) => {
+                const isFirst = index === 0;
+                const html = `
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active cursor-pointer" onclick="toggleQuestDetails('quest-desc-${step.id}')">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-amber-500 text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform hover:scale-110">
+                            ${step.id}
+                        </div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded-lg shadow-sm border border-slate-100 group-hover:border-amber-200 transition-colors">
+                            <h4 class="font-cinzel font-bold text-slate-800">${step.title}</h4>
+                            <div id="quest-desc-${step.id}" class="${isFirst ? 'block' : 'hidden'} text-sm text-slate-600 mt-2 border-t pt-2 border-slate-100">
+                                ${step.desc}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tracker.innerHTML += html;
+            });
+        }
+
+        function toggleQuestDetails(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                el.classList.add('fade-in');
+            } else {
+                el.classList.add('hidden');
+                el.classList.remove('fade-in');
+            }
+        }
+
+        function toggleDivineDetail(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        function initCharts() {
+            if (appState.chartsInitialized) return;
+
+            const ctxHeroes = document.getElementById('heroesChart').getContext('2d');
+            new Chart(ctxHeroes, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Returned Safely', 'Perished (War/Sea)', 'Missing (Ulysses)'],
+                    datasets: [{
+                        data: [65, 34, 1],
+                        backgroundColor: ['#3b82f6', '#94a3b8', '#f59e0b'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + ': ' + (context.dataIndex === 2 ? '1 Hero' : context.raw + '% Estimate');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctxSuitors = document.getElementById('suitorsChart').getContext('2d');
+            new Chart(ctxSuitors, {
+                type: 'bar',
+                data: {
+                    labels: ['Oxen Slaughtered', 'Sheep Devoured', 'Wine Mixed (Bowls)', 'Bread Baskets'],
+                    datasets: [{
+                        label: 'Symbolic Daily Consumption',
+                        data: [12, 40, 25, 30],
+                        backgroundColor: '#b45309',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: {
+                            grid: { display: false }, ticks: {
+                                callback: function (val, index) {
+                                    let label = this.getLabelForValue(val);
+                                    if (/\s/.test(label)) {
+                                        return label.split(' ');
+                                    } else {
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function (context) {
+                                    return context[0].label.replace(/,/g, ' ');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            appState.chartsInitialized = true;
+        }
+
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.remove('hidden-section');
+
+            targetSection.classList.remove('fade-in');
+            void targetSection.offsetWidth;
+            targetSection.classList.add('fade-in');
+
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+            if (targetId === 'ithaca') {
+                initCharts();
+            }
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                switchTab(e.target.getAttribute('data-target'));
+            });
+        });
+
+        window.toggleQuestDetails = toggleQuestDetails;
+        window.toggleDivineDetail = toggleDivineDetail;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCharacterCards();
+            renderQuestTracker();
+        });
+
+    </script>
+</body>
+
+</html>

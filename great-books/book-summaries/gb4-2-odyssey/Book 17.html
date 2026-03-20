@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XVII Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <!-- Theme: Odysseus the Beggar (Disguise, Palace, Melancholy) -->
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f5f5f5; /* Neutral stone */
+            color: #262626;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .palace-gold { color: #b8860b; }
+        .bg-palace { background-color: #b8860b; }
+        .disguise-grey { color: #737373; }
+        .bg-disguise { background-color: #737373; }
+        .melancholy-blue { color: #1e3a8a; }
+        .bg-melancholy { background-color: #1e3a8a; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #b8860b;
+            color: #b8860b;
+            font-weight: 600;
+        }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .argos-tribute {
+            border: 1px solid #d4d4d4;
+            background: linear-gradient(to bottom, #ffffff, #f9fafb);
+            transition: all 0.5s ease;
+        }
+        .argos-tribute:hover {
+            background: #f1f5f9;
+            border-color: #1e3a8a;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-stone-800 text-stone-100 py-12 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')]"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="text-4xl mb-2">🏛️ 🐕 🥖</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-wide text-stone-400">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-palace-gold">Book XVII: The Beggar at the Gates</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-stone-200">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active py-4 px-6 text-stone-600 hover:text-palace-gold font-cinzel transition-colors" data-target="palace">The Hall of Insolence</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-stone-600 hover:text-palace-gold font-cinzel transition-colors" data-target="argos">The Fidelity of Argos</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-stone-600 hover:text-palace-gold font-cinzel transition-colors" data-target="cruelty">Suitor Cruelty</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-stone-600 hover:text-palace-gold font-cinzel transition-colors" data-target="disguise">Under the Rags</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Hall of Insolence -->
+        <section id="palace" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="text-3xl font-cinzel mb-4 palace-gold">A King in His Own House</h3>
+                <p class="text-lg text-slate-700 italic mb-10">"He looked like some broken-down old tramp as he leaned upon his staff, and his clothes were all in rags."</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                        <h4 class="font-cinzel text-xl mb-4 palace-gold">Threshold of Tension</h4>
+                        <p class="text-stone-600 mb-4">Odysseus crosses the threshold of his own palace, not as a conqueror, but as a suppliant. The contrast between the marble pillars and his tattered wallet defines the scene.</p>
+                        <div class="p-4 bg-stone-50 rounded-lg border-l-4 border-palace-gold text-sm italic">
+                            "May Jove and the other gods grant you your heart's desire for the way you have received me." — Odysseus to the loyal servants
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                        <h4 class="font-cinzel text-xl mb-4 text-red-700">The Goatherd's Malice</h4>
+                        <p class="text-stone-600 mb-4">Melanthius, the disloyal goatherd, insults and kicks the beggar. Odysseus restrains his divine strength, biding his time for the perfect vengeance.</p>
+                        <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-400 text-xs uppercase font-bold tracking-widest text-red-800">
+                            Conflict Level: Escalating
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Fidelity of Argos -->
+        <section id="argos" class="content-section hidden-section fade-in">
+            <div class="max-w-3xl mx-auto">
+                <div class="argos-tribute p-10 rounded-3xl shadow-lg text-center">
+                    <div class="text-6xl mb-6">🐕</div>
+                    <h3 class="text-3xl font-cinzel mb-4 melancholy-blue">The Death of Argos</h3>
+                    <p class="text-lg text-slate-600 italic mb-8">
+                        "He wagged his tail and dropped his ears, but he could not come to his master... and the darkness of death came over him as soon as he had seen Odysseus again."
+                    </p>
+                    <div class="bg-stone-100 p-6 rounded-2xl text-left border-t-4 border-melancholy-blue">
+                        <h4 class="font-bold mb-2">A Symbol of Decay</h4>
+                        <p class="text-sm text-stone-500 leading-relaxed">
+                            Once a swift and powerful hunter, Argos now lies neglected on a heap of dung. He is the first to recognize the King, proving that nature's loyalty transcends the gods' disguises. His death marks the peak of the book's melancholy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Suitor Cruelty -->
+        <section id="cruelty" class="content-section hidden-section fade-in">
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                    <h3 class="text-2xl font-cinzel mb-6 text-center text-red-900">Hostility Index: The Suitors' Reception</h3>
+                    <div class="h-80 mb-8">
+                        <canvas id="crueltyChart"></canvas>
+                    </div>
+                    <div class="p-6 bg-red-50 rounded-xl border border-red-100">
+                        <h4 class="font-bold text-red-900 mb-2">Antinous's Transgression</h4>
+                        <p class="text-sm text-red-800">By throwing a footstool at a suppliant, Antinous violates the sacred law of Xenia. Even the other suitors are uneasy, fearing the beggar might be a god in disguise testing their righteousness.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Under the Rags -->
+        <section id="disguise" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-cinzel mb-8 text-center disguise-grey">The Anatomy of a Disguise</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl border border-stone-200 text-center">
+                        <div class="text-4xl mb-4">🦯</div>
+                        <h4 class="font-cinzel font-bold">The Staff</h4>
+                        <p class="text-xs text-stone-500 mt-2">A rough-cut branch, masking the hands that once drew the great bow of Eurytus.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-stone-200 text-center">
+                        <div class="text-4xl mb-4">👜</div>
+                        <h4 class="font-cinzel font-bold">The Wallet</h4>
+                        <p class="text-xs text-stone-500 mt-2">A tattered bag for scraps, a mockery of the wealth he holds in the Cave of the Nymphs.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-stone-200 text-center">
+                        <div class="text-4xl mb-4">🎭</div>
+                        <h4 class="font-cinzel font-bold">The Guile</h4>
+                        <p class="text-xs text-stone-500 mt-2">The ultimate weapon: the patience to endure abuse while gathering intelligence.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-12 p-8 bg-stone-900 text-stone-100 rounded-3xl text-center">
+                    <h4 class="font-cinzel text-xl mb-4 text-palace-gold">The Queen's Invitation</h4>
+                    <p class="text-stone-400 italic mb-6">"Stranger, I should like to ask you about my husband... come and speak with me."</p>
+                    <p class="text-sm">Odysseus strategically delays the meeting until sundown, ensuring the suitors' eyes are elsewhere.</p>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2016.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XVI
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2018.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XVIII <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+        <p class="font-cinzel mb-2 text-stone-200">The Odyssey: Book XVII</p>
+        <p>&copy; Great Books Interactive Series</p>
+    </footer>
+
+    <script>
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.remove('hidden-section');
+            
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+            if (targetId === 'cruelty') {
+                initCrueltyChart();
+            }
+        }
+
+        function initCrueltyChart() {
+            const ctx = document.getElementById('crueltyChart').getContext('2d');
+            if (window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Antinous (Violence)', 'Melanthius (Insults)', 'Other Suitors (Mockery)', 'Telemachus (Protective)', 'Euryclea (Pity)'],
+                    datasets: [{
+                        label: 'Intensity of Reception',
+                        data: [100, 85, 60, 10, 5],
+                        backgroundColor: [
+                            '#991b1b', 
+                            '#dc2626', 
+                            '#f87171', 
+                            '#1e3a8a', 
+                            '#059669'
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.target));
+        });
+    </script>
+</body>
+</html>

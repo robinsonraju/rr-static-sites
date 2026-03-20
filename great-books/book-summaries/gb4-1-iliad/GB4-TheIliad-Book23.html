@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XXIII - The Funeral Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #ffffff;
+            color: #1a202c;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Cinzel', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #b8860b;
+        }
+        .gold-accent {
+            color: #d4af37;
+        }
+        .bg-gold {
+            background-color: #d4af37;
+        }
+        .border-gold {
+            border-color: #d4af37;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <nav class="sticky top-0 z-50 bg-white text-slate-900 shadow-md border-b border-amber-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-amber-500">&#127942;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider text-slate-800">THE ILIAD <span class="text-amber-600 text-base font-normal">| BOOK XXIII</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-amber-600 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-amber-600 transition-colors">Funeral Rites</a>
+                        <a href="#analytics" class="hover:text-amber-600 transition-colors">Competitive Analytics</a>
+                        <a href="#themes" class="hover:text-amber-600 transition-colors">Core Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-800 uppercase tracking-widest drop-shadow-sm">The Funeral Games</h1>
+            <p class="text-lg md:text-xl text-slate-600 leading-relaxed">
+                Book XXIII marks a pivotal transition in the epic. Following the death of Hector, the narrative shifts from the visceral horror of the battlefield to the structured rituals of mourning and the celebratory spirit of athletic competition. It is a book of fire, honor, and the restoration of social order among the Achaeans.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-amber-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128293;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">The Pyre</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#127937;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Chariot Race</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#127942;</span>
+                    <span class="text-sm uppercase tracking-wider mt-2">Athletic Merit</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-amber-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">The Chronicle of Honor</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Explore the sequence of events from the initial mourning of Patroclus to the final awarding of prizes. This timeline details the ritualistic burial and the intense competitions that followed.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-slate-50 p-6 rounded-xl shadow-sm border border-amber-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[400px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-white rounded-lg p-6 md:p-8 flex flex-col justify-center border border-amber-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-amber-500"></div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-amber-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Analytics of Merit & Spirit</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    These visualizations track the shift in narrative intensity and compare the attributes of the top competitors. While the "tension" of war subsides, the "tension" of competition takes its place, mediated by divine favor and tactical skill.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-amber-200 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Narrative Intensity Shift</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Tracking the transition from funeral grief to competitive fervor.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-amber-200 flex flex-col">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Diomedes vs. Antilochus</h3>
+                    <p class="text-sm text-slate-500 mb-6 text-center">Comparing the champion's divine favor vs. the challenger's tactical guile.</p>
+                    <div class="chart-container flex-grow">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-amber-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Thematic Explorer</h2>
+                <p class="text-slate-600 max-w-3xl leading-relaxed">
+                    Book XXIII explores the intersection of death, ritual, and societal values. Select a theme below to understand how the funeral games reinforced the heroic code.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-white rounded-xl shadow-sm border border-amber-200 p-8 min-h-[300px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book22.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Death of Hector</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book24.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Ransom of Hector</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>Interactive Analysis based on The Iliad of Homer, Book XXIII.</p>
+        <p class="mt-2 text-amber-500/50 text-2xl tracking-widest">&#128293; &#127937; &#127942;</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                day: 'Event 1',
+                title: 'The Mourning of Patroclus',
+                summary: 'Achilles and the Myrmidons return to the ships and mourn Patroclus, driving their chariots thrice around his body. Achilles swears to feed Hector to the dogs and sacrifice twelve Trojans on the pyre.',
+                quote: '“Farewell, Patroclus, even in the house of Hades. I will now do all that I erewhile promised you; I will drag Hector hither and let dogs devour him raw...”',
+                icon: '&#128148;'
+            },
+            {
+                id: 't2',
+                day: 'Event 2',
+                title: 'Visitation of the Spirit',
+                summary: 'The ghost of Patroclus appears to the sleeping Achilles, begging for a swift burial so he may pass the gates of Hades. He asks that their bones be laid together in the same golden urn.',
+                quote: '“You sleep, Achilles, and have forgotten me; you loved me living, but now that I am dead you think for me no further. Bury me with all speed that I may pass the gates of Hades.”',
+                icon: '&#128123;'
+            },
+            {
+                id: 't3',
+                day: 'Event 3',
+                title: 'The Great Pyre',
+                summary: 'A massive pyre is built. Achilles sacrifices sheep, oxen, four horses, two dogs, and the twelve Trojan captives. Iris summons the winds Boreas and Zephyrus to make the fire roar.',
+                quote: 'All night long did the two winds rise with a cry that rent the air and swept the clouds before them... they fell upon the pyre till the mighty flames roared.',
+                icon: '&#128293;'
+            },
+            {
+                id: 't4',
+                day: 'Event 4',
+                title: 'The Chariot Race',
+                summary: 'The games begin with the most prestigious event. Diomedes wins with Athena\'s aid. Antilochus uses a dangerous maneuver to pass Menelaus, leading to a heated dispute over the second prize.',
+                quote: '“Antilochus, you are driving recklessly; rein in your horses; the road is too narrow here... if you foul my chariot you may bring both of us to a mischief.”',
+                icon: '&#127937;'
+            },
+            {
+                id: 't5',
+                day: 'Event 5',
+                title: 'Wrestling & Footrace',
+                summary: 'Ajax and Odysseus draw in a grueling wrestling match. In the footrace, Athena trips Ajax (son of Oileus) so that Odysseus can win, a clear sign of her divine favor.',
+                quote: '“Alas, the goddess has spoiled my running; she watches over Ulysses and stands by him as though she were his own mother.”',
+                icon: '&#129334;'
+            },
+            {
+                id: 't6',
+                day: 'Event 6',
+                title: 'Combat & Archery',
+                summary: 'Diomedes and Ajax (Telamon) engage in armed combat, stopped by the Achaeans for safety. Meriones wins the archery contest by severing the string and then hitting the bird in flight.',
+                quote: 'Meriones... espying the pigeon high up under the clouds, he hit her in the middle of the wing as she was circling upwards.',
+                icon: '&#127993;'
+            },
+            {
+                id: 't7',
+                day: 'Event 7',
+                title: 'The Final Honor',
+                summary: 'The games conclude with the javelin throw. Achilles awards the first prize to Agamemnon without a contest, acknowledging his supreme status and skill, signaling total reconciliation.',
+                quote: '“Son of Atreus, we know how far you excel all others both in power and in throwing the javelin; take the cauldron back with you to your ships.”',
+                icon: '&#9876;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-catharsis',
+                title: 'Grief & Catharsis',
+                content: 'The entire book serves as a ritualized release of Achilles\' "mēnis" (rage). By honoring Patroclus through both the destruction of the pyre and the structured "war-play" of the games, the community transitions from the chaos of grief back to the order of civilization.',
+                keywords: ['Mourning', 'Ritual', 'Emotional Release']
+            },
+            {
+                id: 'theme-competition',
+                title: 'Heroic Competition',
+                content: 'The games are more than sport; they are a manifestation of "Aristeia" (excellence). Every event is a chance to win "Timē" (honor) and "Kleos" (glory). The disputes over prizes (like that of Antilochus and Menelaus) show that the social stakes are as high as the physical ones.',
+                keywords: ['Aristeia', 'Honor', 'Skill']
+            },
+            {
+                id: 'theme-divine',
+                title: 'Divine Favor in Peace',
+                content: 'Even in sport, the gods remain active participants. Athena aids her favorites (Diomedes, Odysseus) while Apollo sabotages his rivals. This reinforces the idea that human excellence is always intertwined with divine will, even in non-mortal contests.',
+                keywords: ['Intervention', 'Favoritism', 'Fate']
+            },
+            {
+                id: 'theme-reconciliation',
+                title: 'Social Order & Reconciliation',
+                content: 'The book concludes the internal conflict of the Achaeans. Achilles, once the breaker of social bonds, acts as the perfect host and arbiter. His awarding of a prize to Agamemnon without a fight represents the final healing of the rift that began in Book I.',
+                keywords: ['Leadership', 'Hierarchy', 'Peace']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-slate-800 text-white border-slate-800 shadow-md' : 'bg-white text-slate-600 border-amber-200 hover:bg-amber-50'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${item.day}</span><span class="font-serif font-bold">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-slate-800', 'text-white', 'border-slate-800', 'shadow-md');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-amber-200');
+                        b.querySelector('span:first-child').classList.remove('text-amber-400');
+                        b.querySelector('span:first-child').classList.add('text-slate-400');
+                    });
+
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border-amber-200');
+                    btn.classList.add('bg-slate-800', 'text-white', 'border-slate-800', 'shadow-md');
+                    btn.querySelector('span:first-child').classList.remove('text-slate-400');
+                    btn.querySelector('span:first-child').classList.add('text-amber-400');
+
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl border border-amber-200 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-serif font-bold text-slate-800">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-amber-600">${item.day}</span>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 text-lg leading-relaxed mb-6">${item.summary}</p>
+                            <div class="bg-slate-50 border-l-4 border-amber-400 p-4 rounded-r-lg italic text-slate-700 font-serif">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (timelineData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-serif font-bold transition-all duration-200 border-2 ${index === 0 ? 'border-amber-500 bg-amber-50 text-amber-900' : 'border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-amber-500', 'bg-amber-50', 'text-amber-900');
+                        b.classList.add('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    });
+
+                    btn.classList.remove('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    btn.classList.add('border-amber-500', 'bg-amber-50', 'text-amber-900');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-serif font-bold text-slate-800 mb-6">${item.title}</h3>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-amber-50 text-amber-700 text-sm font-bold uppercase tracking-wider rounded-full border border-amber-200">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+
+            if (themesData.length > 0) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initCharts() {
+            const tensionCtx = document.getElementById('tensionChart').getContext('2d');
+            new Chart(tensionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mourning', 'Ghost Visit', 'Pyre Built', 'Pyre Burning', 'Chariot Start', 'Chariot Foul', 'Combat', 'Reconciliation'],
+                    datasets: [{
+                        label: 'Narrative Intensity',
+                        data: [6, 8, 7, 10, 8, 9, 7, 3],
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#d4af37',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                            titleFont: { family: 'Cinzel', size: 14 },
+                            bodyFont: { family: 'Lato', size: 13 },
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 11,
+                            ticks: { display: false },
+                            grid: { borderDash: [5, 5], color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { family: 'Lato', size: 11 },
+                                color: '#64748b'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Divine Support', 'Tactical Guile', 'Equine Quality', 'Technical Skill', 'Speed'],
+                    datasets: [
+                        {
+                            label: 'Diomedes (Champion)',
+                            data: [10, 8, 10, 9, 9],
+                            backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                            borderColor: '#d4af37',
+                            pointBackgroundColor: '#d4af37',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Antilochus (Challenger)',
+                            data: [4, 10, 6, 10, 7],
+                            backgroundColor: 'rgba(30, 41, 59, 0.2)',
+                            borderColor: '#1e293b',
+                            pointBackgroundColor: '#1e293b',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: 'Cinzel', size: 13, weight: 'bold' },
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: '#f1f5f9' },
+                            grid: { color: '#f1f5f9' },
+                            pointLabels: {
+                                font: { family: 'Lato', size: 11, weight: 'bold' },
+                                color: '#475569'
+                            },
+                            ticks: { display: false, min: 0, max: 10 }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

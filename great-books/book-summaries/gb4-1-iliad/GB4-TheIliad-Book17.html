@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XVII - The Grinding Struggle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Cardo:ital,wght@0,400;0,700;1,400&display=swap');
+        body {
+            font-family: 'Cardo', serif;
+            background-color: #d2b48c; /* Tan/Dust */
+            color: #3e2723;
+        }
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #a1887f;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #7f0000; /* Crimson */
+            border-radius: 10px;
+        }
+        .blood-dust-gradient {
+            background: linear-gradient(135deg, #7f0000 0%, #3e2723 100%);
+        }
+        .dusty-overlay {
+            background: rgba(210, 180, 140, 0.85);
+            backdrop-filter: sepia(0.5);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-red-800 selection:text-white">
+
+    <nav class="sticky top-0 z-50 bg-[#3e2723] text-[#d2b48c] shadow-2xl border-b border-[#7f0000]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🩸</span>
+                    <span class="font-display text-xl font-bold">THE ILIAD <span class="text-red-600 text-base font-normal">| BOOK XVII</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-red-500 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-red-500 transition-colors">The Struggle</a>
+                        <a href="#analytics" class="hover:text-red-500 transition-colors">Grit Data</a>
+                        <a href="#themes" class="hover:text-red-500 transition-colors">Thematic Dust</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-[#7f0000] drop-shadow-md">The Grinding Struggle</h1>
+            <p class="text-lg md:text-xl text-[#5d4037] leading-relaxed italic">
+                "It was as when a man gives a great ox-hide all drenched in fat... even so did the two sides tug the dead body hither and thither."
+            </p>
+            <p class="text-lg text-[#3e2723] leading-relaxed">
+                Book XVII is a brutal, claustrophobic account of the battle for Patroclus' corpse. Stripped of Achilles' armor by Hector, the body becomes the focal point of a savage "tug-of-war" between two exhausted armies. It is a book of dust, sweat, and desperate endurance, where the honor of the dead is fought for with more ferocity than the lives of the living.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-[#7f0000]">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🛡️</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-display">Relentless Defense</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🏜️</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-display">Dust & Blood</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">🐎</span>
+                    <span class="text-sm uppercase tracking-wider mt-2 font-display">Divine Mourning</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-[#7f0000]/20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-[#7f0000] mb-4">The Tug of War</h2>
+                <p class="text-[#5d4037] max-w-3xl leading-relaxed">
+                    Witness the grueling sequence of events as the Achaeans attempt to rescue Patroclus from a field turned to crimson mud.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-[#efebe9] p-6 rounded-xl border border-[#d7ccc8] shadow-inner">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 blood-dust-gradient rounded-lg p-6 md:p-8 flex flex-col justify-center relative overflow-hidden shadow-2xl">
+                    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300 text-[#d2b48c]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-[#7f0000]/20">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-[#7f0000] mb-4">Combatant Endurance</h2>
+                <p class="text-[#5d4037] max-w-3xl mx-auto leading-relaxed">
+                    Quantifying the sheer grit required to hold the line when the gods themselves shroud the field in darkness.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white/50 p-6 rounded-xl border border-[#d7ccc8] flex flex-col shadow-sm">
+                    <h3 class="text-xl font-display font-bold text-[#3e2723] mb-4 text-center">Narrative Grind</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white/50 p-6 rounded-xl border border-[#d7ccc8] flex flex-col shadow-sm">
+                    <h3 class="text-xl font-display font-bold text-[#3e2723] mb-4 text-center">Endurance & Grit (Scale 1-10)</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="gritChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-[#7f0000]/20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-[#7f0000] mb-4">Core Motifs</h2>
+                <p class="text-[#5d4037] max-w-3xl leading-relaxed">
+                    Analyzing the societal and cosmic weight of the battle for the fallen.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-[#fdf5e6] rounded-xl border border-[#d7ccc8] p-8 min-h-[300px] shadow-md">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book16.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Death of Patroclus</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book18.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Shield of Achilles</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-[#3e2723] text-[#d2b48c] py-12 text-center text-sm border-t-4 border-[#7f0000]">
+        <p class="font-display tracking-widest text-lg mb-4">THE ILIAD: BOOK XVII</p>
+        <p>Interactive Analysis of the Blood and the Dust</p>
+        <div class="mt-6 flex justify-center gap-4 opacity-50">
+            <span>⚔️</span><span>🛡️</span><span>🩸</span><span>🏜️</span>
+        </div>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                phase: 'The First Stand',
+                title: 'Menelaus\' Vengeance',
+                summary: 'Menelaus bestrides the body of Patroclus like a cow over her first calf. He slays Euphorbus, the Trojan who first wounded Patroclus, reclaiming the initial spoils of the fall.',
+                quote: '“By father Jove, boasting is an ill thing... I shall make an end of you too, if you withstand me.”',
+                icon: '🛡️'
+            },
+            {
+                id: 't2',
+                phase: 'The Desecration',
+                title: 'Hector Takes the Armor',
+                summary: 'Apollo goads Hector back to the fray. Hector strips the immortal armor of Achilles from Patroclus\' body and puts it on, sealing his own doom as Zeus watches from above.',
+                quote: '“Alas! poor wretch, you arm in the armour of a hero, before whom many another trembles, and you reck nothing of the doom that is already close upon you.”',
+                icon: '🎭'
+            },
+            {
+                id: 't3',
+                phase: 'The Grinding War',
+                title: 'The Great Tug-of-War',
+                summary: 'The battle turns into a brutal physical struggle. Homer compares the two sides to men stretching a fat-soaked ox-hide, pulling the corpse back and forth in the dust.',
+                quote: '“...even so did the two sides tug the dead body hither and thither within the compass of but a little space.”',
+                icon: '🏜️'
+            },
+            {
+                id: 't4',
+                phase: 'Cosmic Grief',
+                title: 'The Weeping Horses',
+                summary: 'The immortal horses of Achilles, Xanthus and Balius, stand frozen in grief for Patroclus, their manes sweeping the dust. Zeus takes pity on them and breathes strength into their limbs.',
+                quote: '“Hot tears fell from their eyes as they mourned the loss of their charioteer... of all creatures that live and move upon the earth there is none so pitiable as man.”',
+                icon: '🐎'
+            },
+            {
+                id: 't5',
+                phase: 'The Darkness',
+                title: 'The Mist of Jove',
+                summary: 'Zeus shrouds the battle for the body in a thick mist and darkness to increase the fury and toil. The heroes fight blindly, feeling only the weight of their armor and the press of the foe.',
+                quote: '“...the bravest heroes were fighting about the dead son of Menoetius... hidden over all that part... darkness enfolded them.”',
+                icon: '☁️'
+            },
+            {
+                id: 't6',
+                phase: 'The Prayer',
+                title: 'Ajax\'s Plea for Light',
+                summary: 'In one of the most famous moments of the epic, Ajax prays not for victory, but for light—so that if they are to die, they may die seeing their enemies.',
+                quote: '“O father Jove, lift this cloud from over the sons of the Achaeans; make heaven serene, and let us see; if you will that we perish, let us fall at any rate by daylight.”',
+                icon: '☀️'
+            },
+            {
+                id: 't7',
+                phase: 'The Rescue',
+                title: 'Carrying the Fallen',
+                summary: 'The mist is lifted. Antilochus is sent to find Achilles. Menelaus and Meriones hoist Patroclus\' body while the two Ajaxes stand as a wall against the charging Hector and Aeneas.',
+                quote: '“...the two heroes strain every nerve to bear the body to the ships... like mules that put forth all their strength to draw some beam.”',
+                icon: '⚓'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-honor',
+                title: 'The Sanctity of the Body',
+                content: 'The entire book focuses on a corpse, elevating the physical remains of a hero to the status of a holy relic. The Greeks’ refusal to abandon the body, despite the tactical disadvantage, emphasizes that burial is the final, essential act of honor in the heroic code.',
+                keywords: ['Burial Rites', 'Honor', 'Relic']
+            },
+            {
+                id: 'theme-borrowed',
+                title: 'Borrowed Glory, Real Doom',
+                content: 'Hector wearing Achilles’ armor is a central irony. While it gives him the appearance of the "foremost hero" and temporary divine strength, Zeus explicitly marks it as a sign of his impending death. The armor is a misfit for Hector’s fate, a stolen skin that cannot protect him from the true owner.',
+                keywords: ['Irony', 'Identity', 'Zeus\' Will']
+            },
+            {
+                id: 'theme-endurance',
+                title: 'The Poetry of Toil',
+                content: 'Homer uses mundane, earthy similes (the ox-hide, the mules) to describe the fight. This strips away the "glamour" of war seen in earlier books and replaces it with the raw, exhausting reality of labor. Combat here is not a dance; it is a grueling, sweaty chore.',
+                keywords: ['Realism', 'Labor', 'Exhaustion']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-[#7f0000] text-white border-[#7f0000] shadow-lg' : 'bg-white text-[#3e2723] border-[#d7ccc8] hover:bg-[#efebe9]'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-[#d2b48c]' : 'text-[#7f0000]'}">${item.phase}</span><span class="font-display text-sm">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-[#7f0000]', 'text-white', 'border-[#7f0000]', 'shadow-lg');
+                        b.classList.add('bg-white', 'text-[#3e2723]', 'border-[#d7ccc8]');
+                    });
+                    btn.classList.add('bg-[#7f0000]', 'text-white', 'border-[#7f0000]', 'shadow-lg');
+                    
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-[#d2b48c] text-[#3e2723] flex items-center justify-center text-2xl border-2 border-[#7f0000] shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-display font-bold text-white">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-[#d2b48c]">${item.phase}</span>
+                                </div>
+                            </div>
+                            <p class="text-[#f5f5f5] text-lg leading-relaxed mb-6 italic">${item.summary}</p>
+                            <div class="bg-black/30 border-l-4 border-[#7f0000] p-4 rounded-r-lg italic text-[#d2b48c] font-serif">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-display transition-all duration-200 border-2 ${index === 0 ? 'border-[#7f0000] bg-[#efebe9] text-[#7f0000]' : 'border-transparent bg-[#efebe9]/50 text-[#3e2723] hover:bg-[#efebe9]'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-[#7f0000]', 'bg-[#efebe9]', 'text-[#7f0000]');
+                        b.classList.add('border-transparent', 'bg-[#efebe9]/50', 'text-[#3e2723]');
+                    });
+                    btn.classList.add('border-[#7f0000]', 'bg-[#efebe9]', 'text-[#7f0000]');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-display font-bold text-[#7f0000] mb-6">${item.title}</h3>
+                        <p class="text-lg text-[#3e2723] leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-[#3e2723] text-[#d2b48c] text-xs font-bold uppercase tracking-wider rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Menelaus Stands', 'Hector Arms', 'Tug-of-War', 'Horses Weep', 'Darkness Falls', 'The Prayer', 'The Rescue'],
+                    datasets: [{
+                        label: 'Narrative Grind',
+                        data: [5, 7, 8, 6, 9, 10, 9],
+                        borderColor: '#7f0000',
+                        backgroundColor: 'rgba(127, 0, 0, 0.1)',
+                        fill: true,
+                        tension: 0.1,
+                        borderWidth: 4,
+                        pointBackgroundColor: '#3e2723'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { display: false, max: 11 }, x: { ticks: { color: '#3e2723' } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            new Chart(document.getElementById('gritChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Menelaus', 'Ajax', 'Hector', 'Aeneas', 'The Ajaxes'],
+                    datasets: [{
+                        data: [8, 10, 9, 7, 9],
+                        backgroundColor: '#7f0000',
+                        borderColor: '#3e2723',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 10, ticks: { color: '#3e2723' } }, x: { ticks: { color: '#3e2723' } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

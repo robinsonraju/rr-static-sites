@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book II - The Assembly of Ithaca</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --color-marble: #f2f2f2;
+            --color-terracotta: #c36442;
+            --color-olive: #556b2f;
+            --color-deep-slate: #2f4f4f;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background-color: var(--color-marble);
+            color: var(--color-deep-slate);
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .bg-terracotta {
+            background-color: var(--color-terracotta);
+        }
+
+        .text-terracotta {
+            color: var(--color-terracotta);
+        }
+
+        .border-olive {
+            border-color: var(--color-olive);
+        }
+
+        .assembly-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .assembly-card:hover {
+            transform: translateX(5px);
+            border-left-color: var(--color-terracotta);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .omen-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <!-- Header: The Pnyx of Ithaca -->
+    <header class="bg-slate-900 text-white py-12 border-b-8 border-terracotta shadow-2xl">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl font-extrabold font-cinzel tracking-tighter text-terracotta mb-2">BOOK II: THE ASSEMBLY
+            </h1>
+            <p class="text-xl italic text-slate-400">"Sons are seldom as good men as their fathers..."</p>
+        </div>
+    </header>
+
+    <!-- Navigation Dashboard -->
+    <nav class="sticky top-0 bg-white shadow-md z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center space-x-2 md:space-x-8">
+                <button onclick="showTab('debate')"
+                    class="tab-btn px-4 py-4 font-cinzel font-bold border-b-4 border-transparent hover:border-terracotta transition-all text-sm md:text-base active-tab"
+                    id="btn-debate">THE DEBATE</button>
+                <button onclick="showTab('omens')"
+                    class="tab-btn px-4 py-4 font-cinzel font-bold border-b-4 border-transparent hover:border-terracotta transition-all text-sm md:text-base"
+                    id="btn-omens">DIVINE OMENS</button>
+                <button onclick="showTab('plunder')"
+                    class="tab-btn px-4 py-4 font-cinzel font-bold border-b-4 border-transparent hover:border-terracotta transition-all text-sm md:text-base"
+                    id="btn-plunder">ESTATE LOGS</button>
+                <button onclick="showTab('prep')"
+                    class="tab-btn px-4 py-4 font-cinzel font-bold border-b-4 border-transparent hover:border-terracotta transition-all text-sm md:text-base"
+                    id="btn-prep">VOYAGE PREP</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-12">
+
+        <!-- Tab 1: The Debate -->
+        <section id="debate" class="tab-content active animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-6">
+                    <h2 class="text-3xl font-cinzel font-bold mb-6 text-terracotta">Speakers' Rostrum</h2>
+                    <div class="assembly-card bg-white p-6 shadow-sm rounded-r-lg cursor-pointer"
+                        onclick="setSpeaker('telemachus')">
+                        <h3 class="font-bold text-lg">Telemachus</h3>
+                        <p class="text-sm text-slate-500 italic">"I am the most aggrieved..."</p>
+                    </div>
+                    <div class="assembly-card bg-white p-6 shadow-sm rounded-r-lg cursor-pointer"
+                        onclick="setSpeaker('antinous')">
+                        <h3 class="font-bold text-lg text-red-800">Antinous</h3>
+                        <p class="text-sm text-slate-500 italic">"It is your mother's fault..."</p>
+                    </div>
+                    <div class="assembly-card bg-white p-6 shadow-sm rounded-r-lg cursor-pointer"
+                        onclick="setSpeaker('mentor')">
+                        <h3 class="font-bold text-lg text-blue-800">Mentor</h3>
+                        <p class="text-sm text-slate-500 italic">"I am shocked at the way you all sit still..."</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 bg-white p-8 rounded-xl shadow-inner border border-slate-200">
+                    <div id="speaker-display">
+                        <h3 id="speaker-name" class="text-4xl font-cinzel font-bold text-slate-800 mb-4">Telemachus</h3>
+                        <div class="prose prose-slate max-w-none">
+                            <p id="speaker-argument" class="text-lg leading-relaxed italic">
+                                Telemachus denounces the suitors for consuming his inheritance and pestering his mother.
+                                He appeals to the assembly's sense of justice and the fear of the gods.
+                            </p>
+                            <div class="mt-6 p-4 bg-slate-50 rounded-lg border-l-4 border-terracotta">
+                                <h4 class="font-bold uppercase tracking-widest text-xs mb-2 text-slate-500">Key Tactic
+                                </h4>
+                                <p id="speaker-tactic" class="font-semibold">Moral Appeal & Emotional Outburst (Dashes
+                                    staff to ground).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Divine Omens -->
+        <section id="omens" class="tab-content animate-fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h2 class="text-4xl font-cinzel font-bold text-slate-900 mb-4">The Sign of Jove</h2>
+                <p class="text-lg">As Telemachus finishes his plea, two eagles descend from the mountain. What does it
+                    portend?</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center items-center gap-12">
+                <div
+                    class="w-64 h-64 bg-slate-800 rounded-full flex items-center justify-center text-8xl shadow-2xl omen-pulse border-4 border-terracotta">
+                    🦅🦅</div>
+                <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md border-t-8 border-terracotta">
+                    <h3 class="font-cinzel text-2xl font-bold mb-4">The Prophecy of Halitherses</h3>
+                    <ul class="space-y-4 text-slate-700">
+                        <li class="flex items-start">
+                            <span class="mr-2">📍</span>
+                            <span><strong>Ulysses is near:</strong> He is close at hand to deal out death.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2">📍</span>
+                            <span><strong>The 20th Year:</strong> He shall return alone, having lost all men.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2">📍</span>
+                            <span><strong>Suitors' Fate:</strong> Mischief is brewing for those who plunder.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Estate Logs (Chart) -->
+        <section id="plunder" class="tab-content animate-fade-in">
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
+                    <h2 class="text-3xl font-cinzel font-bold text-center mb-8">Resource Depletion Report</h2>
+                    <div style="height: 400px;">
+                        <canvas id="plunderChart"></canvas>
+                    </div>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-bold text-red-800">The "Parasite" Factor</h4>
+                            <p class="text-sm">Suitors from Dulichium, Same, Zacynthus, and Ithaca are daily
+                                slaughtering the best of the livestock.</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <h4 class="font-bold text-blue-800">The Penelope Trick</h4>
+                            <p class="text-sm">The "Great Web" unpicked at night delayed the drain for 3 years, but the
+                                secret is out.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Voyage Prep -->
+        <section id="prep" class="tab-content animate-fade-in">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl font-cinzel font-bold text-center mb-10 text-terracotta">Minerva's Logistics
+                    Checklist</h2>
+                <div class="space-y-4">
+                    <div
+                        class="flex items-center p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-olive transition-colors group">
+                        <div
+                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl mr-4 group-hover:bg-olive group-hover:text-white transition-colors">
+                            🍷</div>
+                        <div>
+                            <h4 class="font-bold">The Wine Stash</h4>
+                            <p class="text-sm text-slate-600">12 jars of the best wine, lids sealed. Drawn from the
+                                king's private stores.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-olive transition-colors group">
+                        <div
+                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl mr-4 group-hover:bg-olive group-hover:text-white transition-colors">
+                            🌾</div>
+                        <div>
+                            <h4 class="font-bold">The Staff of Life</h4>
+                            <p class="text-sm text-slate-600">20 measures of barley meal in well-sewn leathern bags.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-olive transition-colors group">
+                        <div
+                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl mr-4 group-hover:bg-olive group-hover:text-white transition-colors">
+                            ⛵</div>
+                        <div>
+                            <h4 class="font-bold">The Vessel</h4>
+                            <p class="text-sm text-slate-600">A fast ship borrowed from Noemon, son of Phronius. Crew of
+                                20 volunteers.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center p-6 bg-white rounded-xl shadow-sm border border-slate-200 hover:border-olive transition-colors group">
+                        <div
+                            class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl mr-4 group-hover:bg-olive group-hover:text-white transition-colors">
+                            🤫</div>
+                        <div>
+                            <h4 class="font-bold">Operational Security</h4>
+                            <p class="text-sm text-slate-600">Euryclea sworn to secrecy. Penelope must not know for
+                                10-12 days.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2001.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book I
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2003.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book III <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-12 text-center">
+        <div class="container mx-auto px-4">
+            <p class="font-cinzel text-lg mb-4">The Odyssey: Interactive Library</p>
+            <p class="text-sm">&copy; Interactive Analysis of Homer's Epic - Book II</p>
+        </div>
+    </footer>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('border-terracotta', 'text-terracotta'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('border-terracotta', 'text-terracotta');
+
+            if (tabId === 'plunder') initChart();
+        }
+
+        const speakers = {
+            telemachus: {
+                name: "Telemachus",
+                argument: "Telemachus denounces the suitors for consuming his inheritance and pestering his mother. He appeals to the assembly's sense of justice and the fear of the gods. He emphasizes that the suitors should pay for their consumption.",
+                tactic: "Moral Appeal & Emotional Outburst (Dashes staff to ground)."
+            },
+            antinous: {
+                name: "Antinous",
+                argument: "Antinous shifts the blame to Penelope, citing her trickery with Laertes' funeral pall. He demands that Telemachus send his mother back to her father Icarius to be remarried, asserting the suitors will not leave until she chooses.",
+                tactic: "Victim Blaming & Counter-Demand."
+            },
+            mentor: {
+                name: "Mentor",
+                argument: "Mentor rebukes the people of Ithaca for their passivity. He notes that Ulysses ruled them like a father, yet they sit by and allow the suitors to destroy his house. He warns that a king's kindness is forgotten.",
+                tactic: "Shaming the Public & Historical Comparison."
+            }
+        };
+
+        function setSpeaker(id) {
+            const s = speakers[id];
+            document.getElementById('speaker-name').innerText = s.name;
+            document.getElementById('speaker-argument').innerText = s.argument;
+            document.getElementById('speaker-tactic').innerText = s.tactic;
+        }
+
+        let chart = null;
+        function initChart() {
+            if (chart) return;
+            const ctx = document.getElementById('plunderChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Oxen', 'Sheep', 'Fat Goats', 'Wine Jars'],
+                    datasets: [{
+                        label: 'Estimated Weekly Plunder',
+                        data: [14, 45, 30, 60],
+                        backgroundColor: '#c36442',
+                        borderColor: '#2f4f4f',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Initialize first tab
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('debate');
+            document.getElementById('btn-debate').classList.add('border-terracotta', 'text-terracotta');
+        });
+    </script>
+</body>
+
+</html>

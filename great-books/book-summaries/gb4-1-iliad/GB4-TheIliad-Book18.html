@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book XVIII - The Shield of Achilles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Quicksand:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #0a0a0a;
+            color: #d4af37; /* Gold */
+        }
+        h1, h2, h3, h4, .font-ancient {
+            font-family: 'Cinzel Decorative', cursive;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 10px;
+        }
+        .molten-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #8b4513 50%, #000000 100%);
+        }
+        .gold-border {
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-yellow-600 selection:text-black">
+
+    <nav class="sticky top-0 z-50 bg-black/95 text-yellow-500 border-b border-yellow-700 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">⚒️</span>
+                    <span class="font-ancient text-xl font-bold tracking-tighter">THE ILIAD <span class="text-white text-base font-normal">| BOOK XVIII</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-white transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-white transition-colors">The Forging</a>
+                        <a href="#analytics" class="hover:text-white transition-colors">Cosmic Data</a>
+                        <a href="#themes" class="hover:text-white transition-colors">Thematic Gold</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-7xl font-black text-yellow-500 uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">The Shield of Achilles</h1>
+            <p class="text-lg md:text-xl text-yellow-700 leading-relaxed italic">
+                "An iron clank rose through the void air to the brazen vault of heaven."
+            </p>
+            <p class="text-lg text-gray-400 leading-relaxed">
+                Book XVIII is a masterpiece of contrast: the devastating, earth-shaking grief of Achilles meets the divine, orderly creation of Hephaestus. As Achilles accepts his mortal fate to avenge Patroclus, the gods forge for him a shield that contains the entire world—a cosmic reminder of the life he is about to leave behind for the sake of eternal glory.
+            </p>
+            <div class="flex justify-center gap-8 pt-4 text-yellow-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">🔥</span>
+                    <span class="text-sm uppercase tracking-widest mt-2 font-ancient">Divine Forge</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">🌎</span>
+                    <span class="text-sm uppercase tracking-widest mt-2 font-ancient">The Microcosm</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">⚡</span>
+                    <span class="text-sm uppercase tracking-widest mt-2 font-ancient">Vengeance Awakened</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-yellow-900/30">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-yellow-500 mb-4">The Forging of Destiny</h2>
+                <p class="text-gray-500 max-w-3xl leading-relaxed">
+                    From the dust of mourning to the fire of the trench and the gold of Olympus.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-black p-6 rounded-2xl border border-yellow-900/20 shadow-2xl">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 molten-gradient rounded-xl p-6 md:p-8 flex flex-col justify-center border border-yellow-600/30 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-yellow-500 shadow-[0_0_10px_#d4af37]"></div>
+                    <div id="timeline-content" class="min-h-[250px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-yellow-900/30">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-yellow-500 mb-4 uppercase">The Shield's Microcosm</h2>
+                <p class="text-gray-500 max-w-3xl mx-auto leading-relaxed">
+                    Quantifying the balance of the universe as depicted by the god of the forge.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-black/50 p-6 rounded-xl border border-yellow-900/30 flex flex-col gold-border">
+                    <h3 class="text-xl font-ancient text-yellow-500 mb-4 text-center">Narrative Intensity</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-black/50 p-6 rounded-xl border border-yellow-900/30 flex flex-col gold-border">
+                    <h3 class="text-xl font-ancient text-yellow-500 mb-4 text-center">World Elements on the Shield</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="shieldChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-yellow-900/30">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-yellow-500 mb-4">Metaphysical Alchemy</h2>
+                <p class="text-gray-500 max-w-3xl leading-relaxed">
+                    Understanding the transformation of Achilles from a man of grief to a force of nature.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="md:col-span-1 flex flex-col gap-3" id="theme-buttons">
+                </div>
+
+                <div class="md:col-span-3 bg-yellow-950/10 rounded-xl border border-yellow-900/30 p-8 min-h-[300px]">
+                    <div id="theme-content">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book17.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Grinding Struggle</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book19.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Renunciation of Quarrel</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-black text-yellow-900 py-12 text-center text-sm border-t border-yellow-950">
+        <p class="font-ancient text-xl mb-4 tracking-widest">VULCAN'S MASTERPIECE</p>
+        <p>Book XVIII Interactive Analysis — The Forge of Fate</p>
+        <div class="mt-8 flex justify-center gap-6 text-3xl opacity-30">
+            <span>⚔️</span><span>⚒️</span><span>🔥</span><span>🔱</span>
+        </div>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                moment: 'The News',
+                title: 'The Dust of Grief',
+                summary: 'Antilochus brings the word of Patroclus\' death. Achilles falls into a catastrophic grief, pouring dust over his head and tearing his hair, his cries reaching the bottom of the sea.',
+                quote: '“A dark cloud of grief fell upon Achilles... He filled both hands with dust from off the ground, and poured it over his head...”',
+                icon: '🌑'
+            },
+            {
+                id: 't2',
+                moment: 'The Vow',
+                title: 'Accepting the Doom',
+                summary: 'Thetis arrives to comfort her son. Achilles declares his intent to kill Hector, fully accepting that his own death will follow immediately. He renounces his anger at Agamemnon for a greater rage.',
+                quote: '“I would die here and now, in that I could not save my comrade... I will go; I will pursue Hector... and will then abide my doom.”',
+                icon: '⚖️'
+            },
+            {
+                id: 't3',
+                moment: 'The Trench',
+                title: 'The Shout of Fire',
+                summary: 'Unarmed, Achilles stands at the Greek trench. Athena crowns him with a golden fire-cloud. His triple shout panics the Trojans, causing twelve champions to die in the chaos and allowing the Greeks to recover Patroclus.',
+                quote: '“Thrice did Achilles raise his loud cry... and thrice were the Trojans and their brave allies thrown into confusion.”',
+                icon: '⚡'
+            },
+            {
+                id: 't4',
+                moment: 'The Council',
+                title: 'Hector\'s Hubris',
+                summary: 'Polydamas advises the Trojans to retreat to the city walls now that Achilles has returned. Hector fiercely refuses, and the Trojans applaud his fatal decision.',
+                quote: '“Trojans, fools that they were, shouted in applause, for Pallas Minerva had robbed them of their understanding.”',
+                icon: '🗣️'
+            },
+            {
+                id: 't5',
+                moment: 'The Forge',
+                title: 'The Divine Workshop',
+                summary: 'Thetis visits Hephaestus (Vulcan). The god, grateful for her past kindness, begins to forge a new set of armor, starting with the magnificent, multi-layered shield.',
+                quote: '“He threw tough copper into the fire, and tin, with silver and gold... First he shaped the shield so great and strong...”',
+                icon: '⚒️'
+            },
+            {
+                id: 't6',
+                moment: 'The Shield',
+                title: 'The Microcosm',
+                summary: 'Hephaestus depicts the entire universe on the shield: stars, cities of peace and war, fields, vineyards, and the great River Oceanus surrounding it all.',
+                quote: '“He wrought also two cities... one were weddings and wedding-feasts... about the other city there lay encamped two hosts...”',
+                icon: '🌍'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'theme-cosmic',
+                title: 'The Cosmic Perspective',
+                content: 'The Shield of Achilles is the most famous ekphrasis in literature. It depicts a world where human conflict (the siege) is balanced by human joy (the wedding) and the eternal cycles of nature (ploughing, harvest). It suggests that while Achilles\' life is ending, the world it represents will endure.',
+                keywords: ['Ekphrasis', 'Nature', 'Totality']
+            },
+            {
+                id: 'theme-mortality',
+                title: 'The Price of Glory',
+                content: 'Achilles\' decision in Book XVIII is the ultimate heroic choice. He knows that killing Hector triggers his own fated death. By choosing vengeance over safety, he transforms his short life into an eternal legend, making him the definitive tragic hero.',
+                keywords: ['Fate', 'Sacrifice', 'Kléos']
+            },
+            {
+                id: 'theme-fire',
+                title: 'The Inner Fire',
+                content: 'The fire that appears on Achilles\' head at the trench is a physical manifestation of his internal rage (Ménis). It is no longer just human anger; it is a divine, consuming force that terrifies an entire army without a single weapon being drawn.',
+                keywords: ['Ménis', 'Transformation', 'Divine Presence']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-yellow-600 text-black border-yellow-500 shadow-lg' : 'bg-black text-yellow-700 border-yellow-900/30 hover:bg-yellow-900/20'}`;
+                btn.innerHTML = `<span class="text-xs font-bold uppercase tracking-wider block mb-1 ${index === 0 ? 'text-white' : 'text-yellow-900'}">${item.moment}</span><span class="font-ancient text-sm">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-yellow-600', 'text-black', 'border-yellow-500', 'shadow-lg');
+                        b.classList.add('bg-black', 'text-yellow-700', 'border-yellow-900/30');
+                    });
+                    btn.classList.add('bg-yellow-600', 'text-black', 'border-yellow-500', 'shadow-lg');
+                    
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-black text-yellow-500 flex items-center justify-center text-2xl border-2 border-yellow-500 shrink-0">
+                                    ${item.icon}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-ancient text-black">${item.title}</h3>
+                                    <span class="text-sm font-bold uppercase tracking-wider text-yellow-900">${item.moment}</span>
+                                </div>
+                            </div>
+                            <p class="text-black text-lg leading-relaxed mb-6 font-semibold">${item.summary}</p>
+                            <div class="bg-black/80 border-l-4 border-yellow-400 p-4 rounded-r-lg italic text-yellow-100 font-serif">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-5 py-4 rounded-lg font-ancient transition-all duration-200 border-2 ${index === 0 ? 'border-yellow-500 bg-yellow-950/30 text-yellow-400' : 'border-transparent bg-black text-yellow-800 hover:bg-yellow-950/20'}`;
+                btn.innerText = item.title;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-yellow-500', 'bg-yellow-950/30', 'text-yellow-400');
+                        b.classList.add('border-transparent', 'bg-black', 'text-yellow-800');
+                    });
+                    btn.classList.add('border-yellow-500', 'bg-yellow-950/30', 'text-yellow-400');
+
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl font-ancient text-yellow-500 mb-6">${item.title}</h3>
+                        <p class="text-lg text-gray-300 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-yellow-900/40 text-yellow-200 text-xs font-bold uppercase tracking-wider rounded-full border border-yellow-500/30">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['The News', 'Lament', 'Decision', 'The Shout', 'Warning', 'Hubris'],
+                    datasets: [{
+                        label: 'Intensity',
+                        data: [8, 7, 8, 10, 6, 7],
+                        borderColor: '#d4af37',
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { display: false, max: 11 }, x: { ticks: { color: '#8b4513' } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            new Chart(document.getElementById('shieldChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Celestial', 'Civilized', 'Conflict', 'Agricultural', 'Nature'],
+                    datasets: [{
+                        label: 'Shield Detail',
+                        data: [10, 9, 9, 10, 8],
+                        backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                        borderColor: '#d4af37',
+                        pointBackgroundColor: '#d4af37',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { ticks: { display: false }, min: 0, max: 10, grid: { color: '#444' } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

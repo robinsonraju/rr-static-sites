@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book IX - The Embassy to Achilles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        body {
+            font-family: 'Crimson Text', serif;
+            background-color: #f5f5dc; /* Parchment Beige */
+            color: #1a1a1a;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Crimson Text', serif;
+            font-weight: 700;
+            color: #1e3a8a; /* Ink Blue */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e5e5d0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-100 selection:text-blue-900">
+
+    <nav class="sticky top-0 z-50 bg-stone-800 text-stone-100 shadow-md border-b-2 border-stone-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-stone-400">&#128220;</span>
+                    <span class="font-serif text-xl font-bold tracking-tight">THE ILIAD <span class="text-stone-400 text-base font-normal">| BOOK IX</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 text-sm font-medium uppercase">
+                        <a href="#overview" class="hover:text-blue-300 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-blue-300 transition-colors">The Embassy</a>
+                        <a href="#analytics" class="hover:text-blue-300 transition-colors">Analytics</a>
+                        <a href="#themes" class="hover:text-blue-300 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <section id="overview" class="text-center space-y-8 max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-7xl">The Embassy to Achilles</h1>
+            <p class="text-xl md:text-2xl text-stone-700 leading-relaxed italic">
+                "Him do I hate even as the gates of hell who says one thing while he hides another in his heart."
+            </p>
+            <p class="text-lg text-stone-800 max-w-3xl mx-auto leading-relaxed">
+                Book IX is the intellectual and rhetorical heart of the Iliad. Facing total defeat, Agamemnon sends a desperate delegation to Achilles, offering immense treasures for his return. The resulting debate explores the limits of reward, the nature of honor, and the irreconcilable rift between the hero and the king.
+            </p>
+            <div class="flex justify-center gap-16 pt-4 text-blue-900/60">
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128172;</span>
+                    <span class="text-xs uppercase font-bold mt-2 tracking-widest">Rhetoric</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#127873;</span>
+                    <span class="text-xs uppercase font-bold mt-2 tracking-widest">The Meeds</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-4xl">&#128148;</span>
+                    <span class="text-xs uppercase font-bold mt-2 tracking-widest">Alienation</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-stone-300">
+            <div class="mb-10 text-center">
+                <h2 class="text-4xl mb-4">Chronicle of the Negotiation</h2>
+                <p class="text-stone-600">The progression from Greek despair to the final, failed attempt at reconciliation.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-12 bg-stone-50/50 p-8 rounded-sm shadow-sm border border-stone-200">
+                <div class="w-full md:w-1/3 flex flex-col gap-4 h-[500px] overflow-y-auto custom-scrollbar pr-4" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-white p-10 flex flex-col justify-center border border-stone-200 shadow-inner relative">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-blue-900"></div>
+                    <div id="timeline-content" class="min-h-[350px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-stone-300">
+            <div class="mb-10 text-center">
+                <h2 class="text-4xl mb-4">Rhetorical Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-white p-8 border border-stone-200 shadow-sm">
+                    <h3 class="text-2xl font-bold text-center mb-6">Psychological Tension</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 border border-stone-200 shadow-sm">
+                    <h3 class="text-2xl font-bold text-center mb-6">Value Comparison: Gifts vs. Honor</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-24 border-t border-stone-300">
+            <div class="mb-10 text-center">
+                <h2 class="text-4xl mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white p-10 border border-stone-200 shadow-sm">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book8.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Tide of Battle</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book10.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Doloneia</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-500 py-16 text-center border-t-4 border-stone-950">
+        <p class="font-serif text-xl mb-4 italic text-stone-400">"Achilles is savage and remorseless."</p>
+        <p class="text-xs uppercase tracking-[0.3em]">Interactive Literary Analysis &bull; Book IX</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Despair of Agamemnon',
+                summary: 'The Greek camp is in panic. Agamemnon weeps and suggests fleeing Troy once more. Diomedes rebukes his cowardice and vows to stay even if all others leave.',
+                quote: '“Agamemnon shed tears as it were a running stream or cataract on the side of some sheer cliff.”',
+                icon: '&#128546;'
+            },
+            {
+                id: 't2',
+                title: 'Agamemnon\'s Offer',
+                summary: 'On Nestor\'s advice, Agamemnon admits his error and offers Achilles massive gifts: gold, tripods, cauldrons, horses, the return of Briseis, and seven cities.',
+                quote: '“I was blinded with passion and yielded to my worser mind; therefore I will make amends.”',
+                icon: '&#127873;'
+            },
+            {
+                id: 't3',
+                title: 'Arrival at the Tent',
+                summary: 'Ulysses, Ajax, and Phoenix find Achilles playing the lyre and singing of heroes. Achilles welcomes them warmly despite his rage against the king.',
+                quote: '“All hail and welcome—you must come upon some great matter, you, who for all my anger are still dearest to me.”',
+                icon: '&#127928;'
+            },
+            {
+                id: 't4',
+                title: 'The Speech of Ulysses',
+                summary: 'Ulysses uses logic and the list of gifts to persuade Achilles. He warns of the fleet\'s destruction and appeals to Achilles\' sense of pity for his comrades.',
+                quote: '“Up, then, and late though it be, save the sons of the Achaeans who faint before the fury of the Trojans.”',
+                icon: '&#128483;'
+            },
+            {
+                id: 't5',
+                title: 'The Refusal of Achilles',
+                summary: 'Achilles rejects everything. He attacks Agamemnon\'s character, claims honor is empty since death takes hero and coward alike, and threatens to sail home at dawn.',
+                quote: '“My life is more to me than all the wealth of Ilius... when his life has once left him it can neither be bought nor harried back again.”',
+                icon: '&#10060;'
+            },
+            {
+                id: 't6',
+                title: 'The Story of Meleager',
+                summary: 'Old Phoenix uses an emotional, personal appeal. He tells the myth of Meleager to show the danger of waiting too long to forgive and the loss of honor that results.',
+                quote: '“Now, therefore, I say battle with your pride and beat it; cherish not your anger for ever.”',
+                icon: '&#128366;'
+            },
+            {
+                id: 't7',
+                title: 'Ajax\'s Blunt Appeal',
+                summary: 'Ajax shames Achilles for his lack of comradeship, noting that even a brother\'s murderer is forgiven for a price, but Achilles remains implacable over one girl.',
+                quote: '“Achilles is savage and remorseless; he is cruel, and cares nothing for the love his comrades lavished upon him.”',
+                icon: '&#9876;'
+            },
+            {
+                id: 't8',
+                title: 'The Failed Return',
+                summary: 'The embassy returns to Agamemnon. Ulysses delivers the grim news: Achilles will not fight and advises everyone to sail home. Diomedes rallies the leaders once more.',
+                quote: '“Achilles will not be calmed, but is more fiercely angry than ever, and spurns both you and your gifts.”',
+                icon: '&#128148;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'price',
+                title: 'The Price of Honor',
+                content: 'Book IX examines whether honor (Timē) can be quantified. Agamemnon believes his "Meeds of Honor" (cities, gold, women) can buy back Achilles. Achilles, however, rejects the material exchange, realizing that if the king can strip honor away at a whim, no amount of treasure can restore its intrinsic value.',
+                keywords: ['Timē', 'Quantification', 'Restitution']
+            },
+            {
+                id: 'rhetoric',
+                title: 'Persuasion & Rhetoric',
+                content: 'The three speeches provide a masterclass in ancient rhetoric: Ulysses appeals to logic and gain; Phoenix appeals to emotion and tradition (paradeigma); and Ajax appeals to communal duty and shame. Achilles\' refusal of all three styles marks his total withdrawal from the heroic community.',
+                keywords: ['Logos', 'Pathos', 'Ethos']
+            },
+            {
+                id: 'heroism',
+                title: 'Heroic Alienation',
+                content: 'Achilles has moved beyond the heroic code. He questions why they are even at Troy ("for the sake of Helen?"). His choice between a "short, glorious life" and a "long, forgotten one" shows him weighing existential worth against societal acclaim.',
+                keywords: ['Alienation', 'Choice', 'Existentialism']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-6 py-4 border-b transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-blue-900 text-white' : 'bg-white text-stone-600 hover:bg-stone-50'}`;
+                btn.innerHTML = `<span class="font-bold text-lg tracking-tight">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-blue-900', 'text-white');
+                        b.classList.add('bg-white', 'text-stone-600');
+                    });
+                    btn.classList.add('bg-blue-900', 'text-white');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-8 mb-8">
+                                <div class="text-6xl">${item.icon}</div>
+                                <h3 class="text-4xl text-blue-900">${item.title}</h3>
+                            </div>
+                            <p class="text-stone-800 text-xl leading-relaxed mb-10">${item.summary}</p>
+                            <div class="bg-stone-50 p-8 italic text-stone-900 font-serif text-2xl border-l-8 border-stone-300">
+                                "${item.quote}"
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-8 py-5 font-bold text-lg transition-all border-l-4 ${index === 0 ? 'border-blue-900 bg-blue-50 text-blue-900' : 'border-stone-200 bg-stone-100 text-stone-500 hover:bg-stone-200'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-blue-900', 'bg-blue-50', 'text-blue-900');
+                        b.classList.add('border-stone-200', 'bg-stone-100', 'text-stone-500');
+                    });
+                    btn.classList.add('border-blue-900', 'bg-blue-50', 'text-blue-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-3xl text-blue-900 mb-6">${item.title}</h3>
+                        <p class="text-xl text-stone-800 leading-relaxed mb-8">${item.content}</p>
+                        <div class="flex flex-wrap gap-3">
+                            ${item.keywords.map(kw => `<span class="px-4 py-2 bg-stone-200 text-stone-700 text-sm font-bold uppercase tracking-widest rounded-sm">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Camp Panic', 'Gift Offer', 'Lyre Song', 'Ulysses Logos', 'Achilles NO', 'Phoenix Pathos', 'Ajax Ethos', 'Final Return'],
+                    datasets: [{
+                        label: 'Intensity',
+                        data: [9, 6, 4, 8, 10, 9, 8, 10],
+                        borderColor: '#1e3a8a',
+                        backgroundColor: 'rgba(30, 58, 138, 0.05)',
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Logic', 'Material Wealth', 'Loyalty', 'Personal Ego', 'Compassion'],
+                    datasets: [
+                        {
+                            label: 'The Embassy',
+                            data: [10, 10, 8, 2, 9],
+                            borderColor: '#1e3a8a',
+                            backgroundColor: 'rgba(30, 58, 138, 0.2)'
+                        },
+                        {
+                            label: 'Achilles',
+                            data: [4, 1, 3, 10, 2],
+                            borderColor: '#451a03',
+                            backgroundColor: 'rgba(69, 26, 3, 0.2)'
+                        }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

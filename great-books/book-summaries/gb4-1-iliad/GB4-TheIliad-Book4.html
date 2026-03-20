@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book IV - The Breach of Oaths</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Spectral:wght@400;700&family=EB+Garamond:wght@400;500;600&display=swap');
+        body {
+            font-family: 'EB Garamond', serif;
+            background-color: #f0f9f1; /* Emerald/White Tint */
+            color: #064e3b;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Spectral', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #d1fae5;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #6ee7b7;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-200 selection:text-emerald-900">
+
+    <nav class="sticky top-0 z-50 bg-emerald-900 text-emerald-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-emerald-400">&#127993;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider">THE ILIAD <span class="text-emerald-200 text-base font-normal">| BOOK IV</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-emerald-400 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-emerald-400 transition-colors">The Breach</a>
+                        <a href="#analytics" class="hover:text-emerald-400 transition-colors">War Analytics</a>
+                        <a href="#themes" class="hover:text-emerald-400 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-emerald-950 uppercase tracking-tight">The Breach of Oaths</h1>
+            <p class="text-lg md:text-xl text-emerald-800 leading-relaxed italic">
+                "The Trojans have trampled on their oaths and have wounded you; nevertheless the oath... shall not be vain."
+            </p>
+            <p class="text-md text-emerald-700 max-w-2xl mx-auto">
+                Book IV marks the end of diplomacy. Prompted by the gods, a single arrow shatters the truce between the Achaeans and Trojans. Agamemnon reviews his troops, and for the first time in the poem, the two massive armies collide in a general, bloody engagement.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-emerald-600">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#10024;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Divine Spite</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#127993;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">The Arrow</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#9876;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">First Blood</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-emerald-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-4">Chronicle of the Conflict</h2>
+                <p class="text-emerald-700 max-w-3xl">Follow the sequence of events that led from the council of Olympus to the first casualties on the Trojan plain.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white p-6 rounded-2xl shadow-xl border border-emerald-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-emerald-50/20 rounded-xl p-8 flex flex-col justify-center border border-emerald-100 relative">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-emerald-600"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-emerald-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-4">Tactical Analytics</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-emerald-50">
+                    <h3 class="text-xl font-serif font-bold text-emerald-800 mb-2 text-center">Narrative Tension Arc</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-emerald-50">
+                    <h3 class="text-xl font-serif font-bold text-emerald-800 mb-2 text-center">Casualties & Engagement</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-emerald-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-emerald-50">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book3.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Duel and the Vow</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book5.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Glory of Diomedes</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-emerald-950 text-emerald-200 py-12 text-center">
+        <p class="font-serif text-lg mb-4">"No man would have made light of the fighting."</p>
+        <p class="text-xs uppercase tracking-widest">Interactive Analysis &bull; The Iliad Book IV</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'Council of the Gods',
+                summary: 'Jove teases Juno and Minerva by suggesting peace. Juno, in her hatred for Troy, demands its destruction. Jove yields, and Minerva is sent to break the truce.',
+                quote: '“contrive that the Trojans shall be the first to break their oaths and set upon the Achaeans.”',
+                icon: '&#9881;'
+            },
+            {
+                id: 't2',
+                title: 'The Arrow of Pandarus',
+                summary: 'Minerva, disguised as Laodocus, persuades the Lycian archer Pandarus to shoot at Menelaus, promising him glory and rewards from Paris.',
+                quote: '“His fools heart was persuaded... he let fly, and the bow twanged, and the string sang...”',
+                icon: '&#127993;'
+            },
+            {
+                id: 't3',
+                title: 'Minerva Protects Menelaus',
+                summary: 'Minerva deflects the arrow so it only grazes Menelaus, preventing a fatal wound but ensuring the truce is broken by Trojan blood-guilt.',
+                quote: '“She turned it from his skin as a mother whisks a fly from off her child...”',
+                icon: '&#128171;'
+            },
+            {
+                id: 't4',
+                title: 'Agamemnon\'s Review',
+                summary: 'Agamemnon, fearing for his brother, first ensures he is healed, then walks through the ranks (the Epipolesis), praising the eager and rebuking the slack.',
+                quote: '“Argives, slacken not one whit in your onset; father Jove will be no helper of liars.”',
+                icon: '&#128065;'
+            },
+            {
+                id: 't5',
+                title: 'The Clash of Armies',
+                summary: 'The two armies meet. The poet uses powerful similes of storm-driven waves and mountain torrents to describe the massive, orderly collision of the hosts.',
+                quote: '“As when some mighty wave that thunders on the beach... even so did the serried phalanxes march steadfastly.”',
+                icon: '&#127754;'
+            },
+            {
+                id: 't6',
+                title: 'First Casualties',
+                summary: 'Antilochus kills Echepolus, the first death in the general battle. A desperate struggle ensues over his body as leaders from both sides engage.',
+                quote: '“Headlong as a tower he fell amid the press of the fight...”',
+                icon: '&#9876;'
+            },
+            {
+                id: 't7',
+                title: 'The General Fray',
+                summary: 'Ajax, Ulysses, and other leaders join the killing. Apollo shouts encouragement to the Trojans from the city, while Minerva moves among the Achaeans.',
+                quote: '“For many Trojans and Achaeans on that day lay stretched side by side face downwards upon the earth.”',
+                icon: '&#128128;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'oaths',
+                title: 'The Fragility of Oaths',
+                content: 'Book IV explores how human efforts to find peace (the covenant) are easily undermined by divine manipulation and individual foolishness. The "Breach" is a moral turning point where the Trojans become "liars" in the eyes of Jove.',
+                keywords: ['Covenant', 'Treacherous', 'Justice']
+            },
+            {
+                id: 'divine',
+                title: 'Divine Spite',
+                content: 'The gods on Olympus are depicted as petty and cruel. Juno is willing to sacrifice her own favorite cities (Argos, Sparta, Mycenae) just to see Troy destroyed, highlighting the cosmic indifference to human suffering.',
+                keywords: ['Olympus', 'Malice', 'Trade-off']
+            },
+            {
+                id: 'reality',
+                title: 'The Reality of War',
+                content: 'The transition from the orderly review of troops to the chaotic, bloody reality of the clash is marked by intense, violent similes. The focus shifts from the glory of kings to the grim, physical reality of death (e.g., the death of Simoeisius).',
+                keywords: ['Violence', 'Simile', 'Mortality']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-emerald-700 text-white border-emerald-700 shadow-lg' : 'bg-white text-emerald-800 border-emerald-100 hover:bg-emerald-50'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-lg">${item.title}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700', 'shadow-lg');
+                        b.classList.add('bg-white', 'text-emerald-800', 'border-emerald-100');
+                    });
+                    btn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700', 'shadow-lg');
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-emerald-900">${item.title}</h3>
+                            </div>
+                            <p class="text-emerald-800 text-lg leading-relaxed mb-8">${item.summary}</p>
+                            <div class="bg-emerald-50 border-l-4 border-emerald-400 p-6 rounded-r-xl italic text-emerald-950 font-serif text-xl">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-transparent bg-emerald-50 text-emerald-800 hover:bg-emerald-100'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+                        b.classList.add('border-transparent', 'bg-emerald-50', 'text-emerald-800');
+                    });
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-emerald-900 mb-4">${item.title}</h3>
+                        <p class="text-lg text-emerald-800 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold uppercase rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Olympus', 'The Arrow', 'The Wound', 'The Review', 'The Clash', 'The Fray'],
+                    datasets: [{
+                        label: 'Intensity',
+                        data: [4, 9, 7, 6, 10, 10],
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Greek Casualties', 'Trojan Casualties', 'Divine Interventions'],
+                    datasets: [{
+                        data: [45, 55, 15],
+                        backgroundColor: ['#047857', '#10b981', '#6ee7b7']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

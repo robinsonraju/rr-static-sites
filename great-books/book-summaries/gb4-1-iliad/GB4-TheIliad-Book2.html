@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Iliad: Book II - The Trial of the Army</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap');
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8; /* Sky Blue/Grey Tint */
+            color: #334e68;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #d9e2ec;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #9fb3c8;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #829ab1;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-200 selection:text-blue-900">
+
+    <nav class="sticky top-0 z-50 bg-slate-800 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl text-blue-300">&#9729;</span>
+                    <span class="font-serif text-xl font-bold tracking-wider">THE ILIAD <span class="text-blue-200 text-base font-normal">| BOOK II</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-6 text-sm font-medium">
+                        <a href="#overview" class="hover:text-blue-300 transition-colors">Overview</a>
+                        <a href="#timeline" class="hover:text-blue-300 transition-colors">Chronicle</a>
+                        <a href="#analytics" class="hover:text-blue-300 transition-colors">Analytics</a>
+                        <a href="#themes" class="hover:text-blue-300 transition-colors">Themes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <section id="overview" class="text-center space-y-6 max-w-4xl mx-auto pt-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-900 uppercase tracking-tighter">The Trial of the Army</h1>
+            <p class="text-lg md:text-xl text-slate-700 leading-relaxed italic">
+                "As when some great forest fire is raging upon a mountain top and its light is seen afar, even so as they marched the gleam of their armour flashed up into the firmament of heaven."
+            </p>
+            <p class="text-md text-slate-600 max-w-2xl mx-auto">
+                Book II shifts from personal rage to the collective scale of war. It features a divine deception, a near-collapse of the Achaean host, and the legendary 'Catalogue of Ships'—a grand inventory of the forces gathered before the walls of Troy.
+            </p>
+            <div class="flex justify-center gap-12 pt-4 text-slate-500">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128173;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Lying Dream</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128674;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">The Fleet</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl">&#128101;</span>
+                    <span class="text-xs uppercase tracking-widest mt-2">Mass Mobilization</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="pt-12 border-t border-blue-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Chronicle of Mobilization</h2>
+                <p class="text-slate-600 max-w-3xl">Explore the shifting moods of the army, from the madness of flight to the disciplined roar of the march.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-blue-100">
+                <div class="w-full md:w-1/3 flex flex-col gap-3 h-[450px] overflow-y-auto custom-scrollbar pr-2" id="timeline-buttons">
+                </div>
+
+                <div class="w-full md:w-2/3 bg-slate-50/50 rounded-xl p-8 flex flex-col justify-center border border-blue-100 relative">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-blue-400"></div>
+                    <div id="timeline-content" class="min-h-[300px] transition-opacity duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="pt-12 border-t border-blue-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Military Analytics</h2>
+                <p class="text-slate-600 max-w-3xl">Visualizing the narrative arc and the relative strength of the contending forces as described in the Great Catalogues.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-blue-50">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Narrative Tension Tracker</h3>
+                    <div class="chart-container">
+                        <canvas id="tensionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-blue-50">
+                    <h3 class="text-xl font-serif font-bold text-slate-800 mb-2 text-center">Force Distribution (The Catalogues)</h3>
+                    <div class="chart-container">
+                        <canvas id="compChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="themes" class="pt-12 pb-20 border-t border-blue-200">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Thematic Explorer</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div id="theme-buttons" class="flex flex-col gap-4"></div>
+                <div class="md:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-blue-50">
+                    <div id="theme-content"></div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="GB4-TheIliad-Book1.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-left">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> <span class="hidden sm:inline">Previous: The Anger of Achilles</span><span class="sm:hidden">Prev</span>
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="GB4-TheIliad-Book3.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                <span class="hidden sm:inline">Next: The Duel and the Vow</span><span class="sm:hidden">Next</span> <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center">
+        <p class="font-serif text-lg text-blue-200 mb-4">"The earth groaned beneath them as they sped over the plain."</p>
+        <p class="text-xs uppercase tracking-widest">Interactive Analysis &bull; The Iliad Book II</p>
+    </footer>
+
+    <script>
+        const timelineData = [
+            {
+                id: 't1',
+                title: 'The Lying Dream',
+                summary: 'Jove sends a deceptive dream to Agamemnon, appearing in the guise of Nestor. The dream falsely promises that the Achaeans will take Troy that very day, encouraging the king to arm his host.',
+                quote: '“Tell him to get the Achaeans instantly under arms, for he shall take Troy.”',
+                icon: '&#128173;'
+            },
+            {
+                id: 't2',
+                title: 'The Sounding',
+                summary: 'To test the army\'s resolve, Agamemnon suggests they flee and return to Greece. To his dismay, the soldiers take him literally and rush to the ships in a chaotic frenzy of joy.',
+                quote: '“They surged to and fro like the waves of the Icarian Sea... so eager were they to return.”',
+                icon: '&#127754;'
+            },
+            {
+                id: 't3',
+                title: 'Ulysses Restores Order',
+                summary: 'Minerva prompts Ulysses to intervene. Armed with Agamemnon\'s sceptre, he rallies the leaders with persuasion and beats back the common soldiers with force, halting the exodus.',
+                quote: '“Sirrah, hold your peace, and listen to better men than yourself. You are a coward and no soldier.”',
+                icon: '&#9876;'
+            },
+            {
+                id: 't4',
+                title: 'Thersites\' Sedition',
+                summary: 'Thersites, a commoner known for dissent, publicly insults Agamemnon and encourages the army to leave. Ulysses brutally silences him, winning the approval of the people.',
+                quote: '“Ulysses... never did the Argives a better turn than when he stopped this fellow’s mouth.”',
+                icon: '&#129324;'
+            },
+            {
+                id: 't5',
+                title: 'Nestor\'s Strategy',
+                summary: 'Nestor advises Agamemnon to organize the army by tribes and clans, so that each group might support its own and cowards can be easily identified in the heat of battle.',
+                quote: '“Divide your men... into their several tribes and clans, that clans and tribes may stand by and help one another.”',
+                icon: '&#128104;&#8205;&#128104;&#8205;&#128102;&#8205;&#128102;'
+            },
+            {
+                id: 't6',
+                title: 'The Catalogue of Ships',
+                summary: 'A massive poetic inventory of the Achaean forces, listing the leaders, the cities they come from, and the number of ships they brought to Troy.',
+                quote: '“O Muses... tell me—who were the chiefs and princes of the Danaans?”',
+                icon: '&#128674;'
+            },
+            {
+                id: 't7',
+                title: 'Iris\'s Warning',
+                summary: 'The messenger goddess Iris, disguised as Polites, warns Priam and Hector of the advancing Achaean host, which is moving across the plain like a "consuming fire."',
+                quote: '“I have been in many a battle, but never yet saw such a host as is now advancing.”',
+                icon: '&#127752;'
+            }
+        ];
+
+        const themesData = [
+            {
+                id: 'leadership',
+                title: 'The Crisis of Leadership',
+                content: 'Agamemnon\'s "test" of the army backfires spectacularly, revealing his disconnect from the soldiers\' true morale. It requires the wisdom of Nestor and the iron will of Ulysses to restore order. This book highlights that power is not just about the sceptre, but about the ability to control the "Wildfire Rumour" and the collective spirit of the host.',
+                keywords: ['Authority', 'Strategy', 'Persuasion']
+            },
+            {
+                id: 'mass',
+                title: 'The Power of the Multitude',
+                content: 'Book II is famous for its similes describing the mass of men—compared to swarms of bees, waves of the sea, and flocks of birds. These images emphasize the overwhelming, almost elemental force of the army when it moves as one, but also its volatile nature when leadership fails.',
+                keywords: ['Nature Similes', 'Collective Energy', 'Chaos vs Order']
+            },
+            {
+                id: 'heritage',
+                title: 'Ancestry & Place (The Catalogue)',
+                content: 'The Catalogue of Ships serves as a map of the Greek world and a hall of fame for ancestral lineages. By naming every tribe and its origin, the poem transforms a military list into a monument of cultural identity, rooting the conflict in the geography of the ancient world.',
+                keywords: ['Geography', 'Lineage', 'Legacy']
+            }
+        ];
+
+        function initTimeline() {
+            const btnContainer = document.getElementById('timeline-buttons');
+            const contentContainer = document.getElementById('timeline-content');
+
+            timelineData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `text-left px-4 py-3 rounded-xl border transition-all duration-200 focus:outline-none ${index === 0 ? 'bg-blue-600 text-white border-blue-600 shadow-lg translate-x-1' : 'bg-white text-slate-600 border-slate-100 hover:border-blue-200 hover:bg-blue-50'}`;
+                btn.innerHTML = `<span class="font-serif font-bold text-lg">${item.title}</span>`;
+
+                btn.onclick = () => {
+                    document.querySelectorAll('#timeline-buttons button').forEach(b => {
+                        b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-lg', 'translate-x-1');
+                        b.classList.add('bg-white', 'text-slate-600', 'border-slate-100');
+                    });
+                    btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-lg', 'translate-x-1');
+
+                    contentContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        contentContainer.innerHTML = `
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="text-5xl">${item.icon}</div>
+                                <h3 class="text-3xl font-serif font-bold text-slate-900">${item.title}</h3>
+                            </div>
+                            <p class="text-slate-700 text-lg leading-relaxed mb-8">${item.summary}</p>
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-xl italic text-slate-800 font-serif text-xl">
+                                ${item.quote}
+                            </div>
+                        `;
+                        contentContainer.style.opacity = 1;
+                    }, 150);
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initThemes() {
+            const btnContainer = document.getElementById('theme-buttons');
+            const contentContainer = document.getElementById('theme-content');
+
+            themesData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-6 py-4 rounded-xl font-serif font-bold transition-all border-2 ${index === 0 ? 'border-blue-500 bg-blue-50 text-blue-900' : 'border-transparent bg-slate-50 text-slate-600 hover:bg-slate-100'}`;
+                btn.innerText = item.title;
+                btn.onclick = () => {
+                    document.querySelectorAll('#theme-buttons button').forEach(b => {
+                        b.classList.remove('border-blue-500', 'bg-blue-50', 'text-blue-900');
+                        b.classList.add('border-transparent', 'bg-slate-50', 'text-slate-600');
+                    });
+                    btn.classList.add('border-blue-500', 'bg-blue-50', 'text-blue-900');
+                    contentContainer.innerHTML = `
+                        <h3 class="text-2xl font-serif font-bold text-slate-900 mb-4">${item.title}</h3>
+                        <p class="text-lg text-slate-700 leading-relaxed mb-6">${item.content}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.keywords.map(kw => `<span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold uppercase rounded-full">${kw}</span>`).join('')}
+                        </div>
+                    `;
+                };
+                btnContainer.appendChild(btn);
+            });
+            btnContainer.firstElementChild.click();
+        }
+
+        function initCharts() {
+            new Chart(document.getElementById('tensionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['The Dream', 'The Council', 'The Flight', 'The Rally', 'Thersites', 'The Sacrifice', 'The March'],
+                    datasets: [{
+                        label: 'Narrative Tension',
+                        data: [6, 7, 2, 8, 9, 7, 10],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            new Chart(document.getElementById('compChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Boeotians', 'Mycenaeans', 'Pylians', 'Cretans', 'Arcadians', 'Trojans', 'Dardanians'],
+                    datasets: [{
+                        label: 'Number of Ships / Units',
+                        data: [50, 100, 90, 80, 60, 40, 30],
+                        backgroundColor: ['#3b82f6', '#1d4ed8', '#1e40af', '#60a5fa', '#93c5fd', '#94a3b8', '#cbd5e1']
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            initThemes();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

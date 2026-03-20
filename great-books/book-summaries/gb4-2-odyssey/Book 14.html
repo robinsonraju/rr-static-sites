@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XIV Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <!-- Theme: Eumaeus's Hut (Humble, Woodland, Earth) -->
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #f7f3e9; /* Parchment/Earth */
+            color: #3e2723; /* Dark wood brown */
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .woodland-green { color: #2e7d32; }
+        .bg-woodland { background-color: #2e7d32; }
+        .earth-brown { color: #5d4037; }
+        .bg-earth { background-color: #5d4037; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #2e7d32;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .xenia-card {
+            border: 1px solid #d7ccc8;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+        .xenia-card:hover {
+            transform: scale(1.02);
+            border-color: #2e7d32;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-stone-800 text-stone-100 py-12 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="text-4xl mb-2">🛖 🐗 🌲</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-wide text-amber-100">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-emerald-400">Book XIV: The Loyal Swineherd</h2>
+        </div>
+    </header>
+
+    <nav class="bg-stone-50 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-stone-200">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active py-4 px-6 text-stone-600 hover:text-woodland-green font-cinzel transition-colors" data-target="hut">The Swineherd's Hut</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-stone-600 hover:text-woodland-green font-cinzel transition-colors" data-target="loyalty">The Wealth of Odysseus</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-stone-600 hover:text-woodland-green font-cinzel transition-colors" data-target="tales">The Lying Tales</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-stone-600 hover:text-woodland-green font-cinzel transition-colors" data-target="xenia">Sacred Hospitality</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Swineherd's Hut -->
+        <section id="hut" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="text-3xl font-cinzel mb-4 woodland-green">Eumaeus: The Mirror of Loyalty</h3>
+                <p class="text-lg text-stone-700 italic mb-8">"He found him sitting in front of his hut... which he had built during his master’s absence..."</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                        <h4 class="font-cinzel text-xl mb-4 woodland-green">The Stronghold</h4>
+                        <ul class="space-y-4 text-stone-600">
+                            <li class="flex items-start">
+                                <span class="mr-3">🪨</span>
+                                <span>Built of stone gathered from the ground, fenced with thorn bushes.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="mr-3">🪵</span>
+                                <span>Outer fence of oaken posts, split and set close together.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="mr-3">🐗</span>
+                                <span>Twelve sties for five hundred breeding sows; three hundred and sixty boars outside.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                        <h4 class="font-cinzel text-xl mb-4 woodland-green">The Guardians</h4>
+                        <p class="text-stone-600 mb-4">Four hounds, "fierce as wolves," protect the herds. They nearly tear the disguised Odysseus to pieces until Eumaeus intervenes.</p>
+                        <div class="p-4 bg-stone-100 rounded-lg italic text-sm border-l-4 border-stone-400">
+                            "Stranger, though a still poorer man should come here, it would not be right for me to insult him, for all strangers and beggars are from Jove."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Wealth of Odysseus -->
+        <section id="loyalty" class="content-section hidden-section fade-in">
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-200">
+                    <h3 class="text-2xl font-cinzel mb-6 earth-brown text-center">Livestock Census: The Estate of a King</h3>
+                    <p class="text-center text-stone-600 mb-8">Eumaeus lists the vast herds of Odysseus, contrasting his master's former glory with the current plunder by the suitors.</p>
+                    <div class="h-80">
+                        <canvas id="wealthChart"></canvas>
+                    </div>
+                    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 bg-stone-50 rounded-lg">
+                            <div class="text-2xl mb-1">🐂</div>
+                            <div class="font-cinzel font-bold text-stone-800">12 Herds</div>
+                            <div class="text-xs text-stone-500 uppercase">Cattle</div>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-lg">
+                            <div class="text-2xl mb-1">🐑</div>
+                            <div class="font-cinzel font-bold text-stone-800">12 Flocks</div>
+                            <div class="text-xs text-stone-500 uppercase">Sheep</div>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-lg">
+                            <div class="text-2xl mb-1">🐗</div>
+                            <div class="font-cinzel font-bold text-stone-800">12 Droves</div>
+                            <div class="text-xs text-stone-500 uppercase">Pigs</div>
+                        </li>
+                        <div class="p-4 bg-stone-50 rounded-lg">
+                            <div class="text-2xl mb-1">🐐</div>
+                            <div class="font-cinzel font-bold text-stone-800">23 Herds</div>
+                            <div class="text-xs text-stone-500 uppercase">Goats</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Lying Tales -->
+        <section id="tales" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-cinzel mb-8 text-center woodland-green">The Cretan's Journey</h3>
+                <p class="text-center text-stone-600 mb-10">Odysseus weaves a complex web of lies to conceal his identity while testing Eumaeus's heart.</p>
+                
+                <div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-stone-300">
+                    <!-- Step 1 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-stone-100 bg-woodland text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">1</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                            <h4 class="font-cinzel font-bold text-stone-800">Cretan Origins</h4>
+                            <p class="text-sm text-stone-600 mt-2">Claims to be the illegitimate son of Castor, a rich Cretan. Led nine naval expeditions before the Trojan War.</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-stone-100 bg-woodland text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">2</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                            <h4 class="font-cinzel font-bold text-stone-800">The Egyptian Raid</h4>
+                            <p class="text-sm text-stone-600 mt-2">After Troy, he led a disastrous raid on Egypt. His men were killed or enslaved; he surrendered to the King of Egypt.</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-stone-100 bg-woodland text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">3</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                            <h4 class="font-cinzel font-bold text-stone-800">The Phoenician Scoundrel</h4>
+                            <p class="text-sm text-stone-600 mt-2">Lived seven years in Egypt, then was tricked by a Phoenician into a voyage to Libya, ending in shipwreck.</p>
+                        </div>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-stone-100 bg-woodland text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">4</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                            <h4 class="font-cinzel font-bold text-stone-800">The Thesprotian Promise</h4>
+                            <p class="text-sm text-stone-600 mt-2">Washed up in Thesprotia, where King Pheidon told him Odysseus was alive and gathering treasure nearby.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Sacred Hospitality -->
+        <section id="xenia" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto text-center">
+                <h3 class="text-3xl font-cinzel mb-8 earth-brown">The Pillars of Xenia</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="xenia-card p-6 rounded-2xl shadow-sm">
+                        <div class="text-4xl mb-4">🧺</div>
+                        <h4 class="font-cinzel font-bold mb-2">The Bed of Rushes</h4>
+                        <p class="text-sm text-stone-600">Eumaeus strews fresh rushes and a shaggy chamois skin for the stranger's rest.</p>
+                    </div>
+                    <div class="xenia-card p-6 rounded-2xl shadow-sm">
+                        <div class="text-4xl mb-4">🍖</div>
+                        <h4 class="font-cinzel font-bold mb-2">The Servant's Pork</h4>
+                        <p class="text-sm text-stone-600">Sacrificing two sucking pigs immediately, sprinkling them with barley meal for the guest.</p>
+                    </div>
+                    <div class="xenia-card p-6 rounded-2xl shadow-sm">
+                        <div class="text-4xl mb-4">🧥</div>
+                        <h4 class="font-cinzel font-bold mb-2">The Cloak Test</h4>
+                        <p class="text-sm text-stone-600">Odysseus tells a story of Troy to "borrow" a cloak. Eumaeus provides his own thick cloak for the night.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-12 p-8 bg-stone-800 text-stone-100 rounded-2xl shadow-xl">
+                    <h4 class="font-cinzel text-xl mb-4 text-emerald-400">Moral Reflection</h4>
+                    <p class="italic text-lg">"The gods love not such shameful doings, and respect those who do what is lawful and right."</p>
+                    <p class="mt-4 text-stone-400 text-sm">Eumaeus stands as the antithesis to the Suitors, proving that nobility is found in the heart, not the station.</p>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2013.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XIII
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2015.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XV <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+        <p class="font-cinzel mb-2 text-stone-200">The Odyssey: Book XIV</p>
+        <p>&copy; Great Books Interactive Series</p>
+    </footer>
+
+    <script>
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.remove('hidden-section');
+            
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+            if (targetId === 'loyalty') {
+                initWealthChart();
+            }
+        }
+
+        function initWealthChart() {
+            const ctx = document.getElementById('wealthChart').getContext('2d');
+            if (window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Cattle Herds', 'Sheep Flocks', 'Pig Droves', 'Goat Herds (Ithaca)', 'Goat Herds (Mainland)'],
+                    datasets: [{
+                        label: 'Number of Herds/Flocks',
+                        data: [12, 12, 12, 11, 12],
+                        backgroundColor: '#5d4037',
+                        borderColor: '#3e2723',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                afterBody: (items) => {
+                                    return 'Each herd represents hundreds of animals managed by loyal servants.';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 15,
+                            ticks: { stepSize: 3 }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.target));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Odyssey: Book XV Interactive Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <!-- Theme: Telemachus's Return (Prophetic, Sky, Dawn) -->
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #fcf8ff; /* Very pale lavender/white */
+            color: #2d3748;
+        }
+        h1, h2, h3, h4, h5, .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+        .dawn-gold { color: #d4af37; }
+        .bg-dawn { background-color: #d4af37; }
+        .sky-blue { color: #60a5fa; }
+        .bg-sky { background-color: #60a5fa; }
+        .prophecy-purple { color: #6b46c1; }
+        .bg-prophecy { background-color: #6b46c1; }
+        
+        .tab-btn.active {
+            border-bottom: 4px solid #6b46c1;
+            color: #6b46c1;
+            font-weight: 600;
+        }
+        .hidden-section { display: none; }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gift-card {
+            transition: all 0.3s ease;
+            perspective: 1000px;
+        }
+        .gift-card:hover {
+            transform: translateY(-5px);
+        }
+        .omen-box {
+            background: linear-gradient(135deg, #60a5fa 0%, #6b46c1 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-gradient-to-r from-blue-400 via-rose-300 to-amber-200 py-12 shadow-lg relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="text-4xl mb-2">🦅 🌅 🏺</div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-wide text-white drop-shadow-md">THE ODYSSEY</h1>
+            <h2 class="text-xl md:text-2xl font-light italic text-purple-900">Book XV: The Return of Telemachus</h2>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <ul class="flex overflow-x-auto border-b border-slate-200">
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn active py-4 px-6 text-slate-600 hover:text-prophecy-purple font-cinzel transition-colors" data-target="departure">The Spartan Departure</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-slate-600 hover:text-prophecy-purple font-cinzel transition-colors" data-target="omens">The Sky's Prophecy</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-slate-600 hover:text-prophecy-purple font-cinzel transition-colors" data-target="journey">The Homeward Path</button>
+                </li>
+                <li class="mr-1 shrink-0">
+                    <button class="tab-btn py-4 px-6 text-slate-600 hover:text-prophecy-purple font-cinzel transition-colors" data-target="eumaeus">Secrets of the Past</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Spartan Departure -->
+        <section id="departure" class="content-section fade-in">
+            <div class="max-w-4xl mx-auto text-center mb-12">
+                <h3 class="text-3xl font-cinzel mb-4 prophecy-purple">Gifts of the High Lords</h3>
+                <p class="text-lg text-slate-700 italic mb-10">"I will now present you with the finest and most precious piece of plate in all my house."</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="gift-card bg-white p-6 rounded-2xl shadow-sm border border-purple-100 text-center">
+                        <div class="text-5xl mb-4">🥣</div>
+                        <h4 class="font-cinzel font-bold text-slate-800">Vulcan's Bowl</h4>
+                        <p class="text-sm text-slate-500 mt-2">A silver mixing-bowl with a gold rim, crafted by the god of fire himself.</p>
+                        <div class="mt-4 text-xs font-bold text-dawn-gold uppercase tracking-widest">From Menelaus</div>
+                    </div>
+                    <div class="gift-card bg-white p-6 rounded-2xl shadow-sm border border-purple-100 text-center">
+                        <div class="text-5xl mb-4">🏆</div>
+                        <h4 class="font-cinzel font-bold text-slate-800">The Double Cup</h4>
+                        <p class="text-sm text-slate-500 mt-2">A solid gold double cup for making libations to the immortal gods.</p>
+                        <div class="mt-4 text-xs font-bold text-dawn-gold uppercase tracking-widest">From Menelaus</div>
+                    </div>
+                    <div class="gift-card bg-white p-6 rounded-2xl shadow-sm border border-purple-100 text-center">
+                        <div class="text-5xl mb-4">👗</div>
+                        <h4 class="font-cinzel font-bold text-slate-800">The Embroidered Robe</h4>
+                        <p class="text-sm text-slate-500 mt-2">A robe that glitters like a star, to be worn by Telemachus's future bride.</p>
+                        <div class="mt-4 text-xs font-bold text-dawn-gold uppercase tracking-widest">From Helen</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Sky's Prophecy -->
+        <section id="omens" class="content-section hidden-section fade-in">
+            <div class="max-w-5xl mx-auto">
+                <h3 class="text-3xl font-cinzel mb-8 text-center sky-blue">Heaven's Messaging</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Omen 1 -->
+                    <div class="omen-box p-8 rounded-3xl shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-6">
+                                <h4 class="font-cinzel text-2xl font-bold">The Eagle & The Goose</h4>
+                                <span class="text-4xl">🦅</span>
+                            </div>
+                            <p class="italic text-blue-50 mb-6">"An eagle with a great white goose in its talons... flew away on their right hands."</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                            <h5 class="font-bold text-sm uppercase tracking-widest mb-2">Helen's Interpretation:</h5>
+                            <p class="text-sm text-white">Odysseus will return to take his revenge, just as the eagle from the mountain took the farmyard goose.</p>
+                        </div>
+                    </div>
+                    <!-- Omen 2 -->
+                    <div class="omen-box p-8 rounded-3xl shadow-xl flex flex-col justify-between" style="background: linear-gradient(135deg, #6b46c1 0%, #4a5568 100%);">
+                        <div>
+                            <div class="flex justify-between items-start mb-6">
+                                <h4 class="font-cinzel text-2xl font-bold">The Hawk & The Dove</h4>
+                                <span class="text-4xl">🕊️</span>
+                            </div>
+                            <p class="italic text-purple-50 mb-6">"A hawk, Apollo's messenger, flew by with a dove in its talons, plucking it as it went."</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 p-4 rounded-xl">
+                            <h5 class="font-bold text-sm uppercase tracking-widest mb-2">Theoclymenus's Interpretation:</h5>
+                            <p class="text-sm text-white">No house in Ithaca is more royal than that of Telemachus; his power shall endure forever.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Homeward Path -->
+        <section id="journey" class="content-section hidden-section fade-in">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-2xl font-cinzel mb-6 sky-blue text-center">Navigating the Suitors' Ambush</h3>
+                    <div class="h-64 mb-8">
+                        <canvas id="confidenceChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 bg-blue-50 rounded-xl border-l-4 border-blue-400">
+                            <h4 class="font-bold text-slate-800">Theoclymenus joins</h4>
+                            <p class="text-sm text-slate-600">A seer and fugitive from Argos seeks passage. Telemachus grants him Xenia, strengthening his retinue with prophetic sight.</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 rounded-xl border-l-4 border-purple-400">
+                            <h4 class="font-bold text-slate-800">The Secret Landing</h4>
+                            <p class="text-sm text-slate-600">Following Athena's advice, Telemachus lands on a remote part of Ithaca, avoiding the suitors lying in wait at the Strait.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Secrets of the Past -->
+        <section id="eumaeus" class="content-section hidden-section fade-in">
+            <div class="max-w-3xl mx-auto text-center">
+                <h3 class="text-3xl font-cinzel mb-8 prophecy-purple">The Swineherd's Lineage</h3>
+                <div class="bg-white p-10 rounded-3xl shadow-sm border border-purple-100 text-left">
+                    <p class="text-slate-600 mb-6">While waiting for Telemachus, Eumaeus reveals his own tragic history to the disguised Odysseus:</p>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-xl shrink-0 mr-4">👑</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Prince of Syra</h4>
+                                <p class="text-sm text-slate-500">Son of Ctesius, king of two cities on a fertile island.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center text-xl shrink-0 mr-4">🚢</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">The Betrayal</h4>
+                                <p class="text-sm text-slate-500">Kidnapped by a Phoenician nurse and sold to Laertes for a great price.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl shrink-0 mr-4">🧤</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Loyal Bondage</h4>
+                                <p class="text-sm text-slate-500">Raised with Ctimene, Odysseus's sister, and treated with kindness by Anticlea.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <nav class="flex justify-between items-center mt-16 pt-8 border-t border-slate-200">
+            <a href="Book%2014.html" class="w-1/3 flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="group-hover:-translate-x-1 transition-transform">←</span> Previous: Book XIV
+            </a>
+
+            <a href="index.html" class="w-1/3 flex justify-center items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group">
+                <span class="text-xl group-hover:scale-110 transition-transform">🏠</span> Home
+            </a>
+
+            <a href="Book%2016.html" class="w-1/3 flex justify-end items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors group text-right">
+                Next: Book XVI <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </nav>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p class="font-cinzel mb-2 text-slate-200">The Odyssey: Book XV</p>
+        <p>&copy; Great Books Interactive Series</p>
+    </footer>
+
+    <script>
+        function switchTab(targetId) {
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(targetId);
+            targetSection.classList.remove('hidden-section');
+            
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+
+            if (targetId === 'journey') {
+                initConfidenceChart();
+            }
+        }
+
+        function initConfidenceChart() {
+            const ctx = document.getElementById('confidenceChart').getContext('2d');
+            if (window.myChart) window.myChart.destroy();
+            
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Departure (Ithaca)', 'Pylos Arrival', 'Sparta (Menelaus)', 'Departure (Sparta)', 'Ithaca Return'],
+                    datasets: [{
+                        label: 'Telemachus\'s Growth & Confidence',
+                        data: [10, 40, 65, 85, 95],
+                        borderColor: '#6b46c1',
+                        backgroundColor: 'rgba(107, 70, 193, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#d4af37',
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.target));
+        });
+    </script>
+</body>
+</html>
