@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thucydides: The Origins of the Peloponnesian War</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #fcfbf9;
+            color: #333333;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Georgia', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 40vh;
+            max-height: 450px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 50vh;
+            }
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid #8b0000;
+            color: #8b0000;
+            font-weight: bold;
+        }
+
+        .flashpoint-btn.active {
+            background-color: #8b0000;
+            color: white;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Stone/Parchment #fcfbf9) with Spartan Red (#8b0000) and Athenian Blue (#003366) accents -->
+    <!-- Application Structure Plan: A linear narrative dashboard. It begins with the macro "true" cause (Athenian growth), dives into the psychological contrast (Corinthian speech), details the specific flashpoints (Epidamnus/Potidaea), and concludes with the strategic asymmetry (Pericles' speech). This structure guides the user from the underlying tectonic shifts to the immediate sparks and finally the outlook for the war, prioritizing logical flow of causes over chronological chapter reading. -->
+    <!-- Visualization & Content Choices: 1. Pentecontaetia Line Chart (Chart.js) -> Goal: Change/Trend -> Shows the steady rise of Athenian power vs stagnant Sparta based on the 50-year narrative. 2. Radar Chart of National Character (Chart.js) -> Goal: Compare -> Illustrates Corinth's speech contrasting Athenian innovation with Spartan caution. 3. Interactive Flashpoint Cards (HTML/JS) -> Goal: Organize -> Explains the complex localized conflicts triggering the war via toggleable text blocks. 4. Resource Donut Charts (Chart.js) -> Goal: Inform/Compare -> Visualizes Pericles' strategy of naval/financial supremacy vs Spartan land dominance. Confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+
+<body class="antialiased selection:bg-red-200 selection:text-red-900">
+
+    <nav class="sticky top-0 z-50 bg-[#fcfbf9] border-b border-gray-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex-shrink-0 flex items-center text-xl font-bold text-gray-800 font-serif">
+                    🏛️ Thucydides Analysis
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#structural-cause"
+                        class="nav-link text-gray-600 hover:text-red-800 transition px-3 py-2 text-sm font-medium">The
+                        Truest Cause</a>
+                    <a href="#ideological-clash"
+                        class="nav-link text-gray-600 hover:text-red-800 transition px-3 py-2 text-sm font-medium">Ideological
+                        Clash</a>
+                    <a href="#flashpoints"
+                        class="nav-link text-gray-600 hover:text-red-800 transition px-3 py-2 text-sm font-medium">Sparks
+                        of War</a>
+                    <a href="#grand-strategy"
+                        class="nav-link text-gray-600 hover:text-red-800 transition px-3 py-2 text-sm font-medium">Grand
+                        Strategy</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-[#1a1a1a] text-white py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-wide">The Origins of the Peloponnesian
+                War</h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                An interactive exploration of Book 1 of Thucydides' history. Discover the deep structural shifts,
+                psychological divides, and immediate flashpoints that plunged ancient Greece into its greatest conflict.
+            </p>
+            <div class="inline-flex items-center space-x-4 bg-white/10 px-6 py-3 rounded-full text-sm font-medium">
+                <span class="text-blue-300">⚓ Athens (Delian League)</span>
+                <span class="text-gray-400">vs</span>
+                <span class="text-red-400">🛡️ Sparta (Peloponnesian League)</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <section id="structural-cause" class="scroll-mt-20">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4 border-b-2 border-red-800 pb-2 inline-block">I. The
+                    Truest Cause: The Growth of Athenian Power</h2>
+                <p class="text-lg text-gray-700 leading-relaxed max-w-4xl">
+                    This section illustrates the macroeconomic and geopolitical shifts during the "Pentecontaetia" (the
+                    50 years between the Persian and Peloponnesian wars). Thucydides argues that the immediate disputes
+                    were secondary; the "truest cause" of the war was the alarming growth of Athenian naval and imperial
+                    power, which forced a fearful Sparta into a pre-emptive war. The interactive chart below visualizes
+                    the estimated trajectory of Athenian hegemony compared to Spartan stagnation based on Thucydides'
+                    narrative.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div class="mb-6 flex flex-wrap gap-4 justify-center md:justify-start">
+                    <button id="btn-naval"
+                        class="px-4 py-2 bg-[#003366] text-white rounded shadow hover:bg-blue-800 transition">Show Naval
+                        Power</button>
+                    <button id="btn-tribute"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded shadow hover:bg-gray-300 transition">Show
+                        Imperial Wealth</button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="powerTimelineChart"></canvas>
+                </div>
+
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-lg">
+                    <div>
+                        <strong class="text-blue-900 text-base">The Athenian Transformation</strong><br>
+                        Following the retreat of Xerxes, Athens rebuilt its walls via Themistocles' deception. They
+                        assumed leadership of the Delian League after Sparta's general Pausanias alienated the allies.
+                        Slowly, voluntary contributions of ships turned into mandatory cash tributes, funding a massive
+                        Athenian navy and reducing autonomous allies to subjects.
+                    </div>
+                    <div>
+                        <strong class="text-red-900 text-base">The Spartan Dilemma</strong><br>
+                        Sparta, a conservative land power burdened by the constant threat of Helot (slave) rebellions,
+                        remained largely inactive. They watched as Athens built the Long Walls and expanded their
+                        influence. The perceived tipping point left Sparta with a choice: accept permanent secondary
+                        status or break the treaty and fight.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ideological-clash" class="scroll-mt-20">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4 border-b-2 border-red-800 pb-2 inline-block">II. The
+                    Ideological Clash: National Character</h2>
+                <p class="text-lg text-gray-700 leading-relaxed max-w-4xl">
+                    This section explores the psychological divide between the two superpowers, as articulated in the
+                    famous speech by the Corinthian delegates at Sparta. To understand why the war occurred, one must
+                    understand how these states perceived the world. The radar chart below compares the behavioral
+                    attributes of Athens and Sparta, highlighting the volatile mixture of Athenian dynamism and Spartan
+                    conservatism that made coexistence impossible.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="w-full lg:w-1/2 chart-container">
+                    <canvas id="characterRadarChart"></canvas>
+                </div>
+                <div class="w-full lg:w-1/2 space-y-6">
+                    <div class="p-6 bg-blue-50 border-l-4 border-[#003366] rounded-r-lg">
+                        <h3 class="text-xl font-bold text-[#003366] mb-2">The Restless Athenian</h3>
+                        <p class="text-gray-700 italic mb-2">"...born into the world to take no rest themselves and to
+                            give none to others."</p>
+                        <p class="text-sm text-gray-600">The Corinthians described Athens as dangerously innovative,
+                            swift in conception and execution, and daring beyond their judgment. They viewed peace
+                            merely as a time to prepare for the next action, constantly seeking to expand their
+                            acquisitions through naval supremacy.</p>
+                    </div>
+                    <div class="p-6 bg-red-50 border-l-4 border-[#8b0000] rounded-r-lg">
+                        <h3 class="text-xl font-bold text-[#8b0000] mb-2">The Conservative Spartan</h3>
+                        <p class="text-gray-700 italic mb-2">"...a genius for keeping what you have got, accompanied by
+                            a total want of invention."</p>
+                        <p class="text-sm text-gray-600">Sparta was criticized by its own allies for extreme caution.
+                            They were slow to act, preferring to maintain the status quo. Their power was based on an
+                            elite, heavily armed infantry (hoplites) and a rigid social system that discouraged foreign
+                            adventures or prolonged absences from home.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="flashpoints" class="scroll-mt-20">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4 border-b-2 border-red-800 pb-2 inline-block">III. The
+                    Sparks of War: Immediate Catalysts</h2>
+                <p class="text-lg text-gray-700 leading-relaxed max-w-4xl">
+                    While the shifting balance of power was the underlying cause, the war was ignited by specific,
+                    localized conflicts that dragged the superpowers into open hostility. This section breaks down the
+                    two major diplomatic crises—Epidamnus and Potidaea—that broke the Thirty Years' Truce. Click the
+                    buttons below to explore how these proxy conflicts forced Athens and Sparta into a direct collision
+                    course.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="flex flex-col sm:flex-row border-b border-gray-200">
+                    <button id="btn-epidamnus"
+                        class="flashpoint-btn active flex-1 py-4 px-6 text-center font-bold text-lg hover:bg-gray-100 transition focus:outline-none">
+                        🌊 The Affair of Epidamnus
+                    </button>
+                    <button id="btn-potidaea"
+                        class="flashpoint-btn flex-1 py-4 px-6 text-center font-bold text-lg hover:bg-gray-100 transition focus:outline-none bg-gray-50 text-gray-600">
+                        🛡️ The Affair of Potidaea
+                    </button>
+                </div>
+
+                <div class="p-8 min-h-[300px]">
+                    <div id="content-epidamnus" class="block animate-fade-in">
+                        <h3 class="text-2xl font-serif text-gray-900 mb-4">Civil War & Naval Entanglement</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="col-span-2 space-y-4 text-gray-700">
+                                <p><strong>The Crisis:</strong> Epidamnus, a colony of Corcyra, fell into civil war.
+                                    When the mother city Corcyra refused to help the democratic faction, Epidamnus
+                                    turned to Corinth (Corcyra's own mother city).</p>
+                                <p><strong>The Escalation:</strong> Corinth, hating Corcyra for its arrogance and lack
+                                    of respect, eagerly intervened. Corcyra responded with force, defeating the
+                                    Corinthian fleet. Corinth began a massive naval buildup in retaliation.</p>
+                                <p><strong>The Athenian Dilemma:</strong> Fearing Corinth's new fleet, Corcyra begged
+                                    Athens for an alliance. Athens knew that if Corinth captured the Corcyraean navy,
+                                    the combined Peloponnesian fleet could challenge Athenian supremacy. Athens entered
+                                    a "defensive" alliance, leading directly to Athenian ships fighting Corinthians at
+                                    the <strong>Battle of Sybota</strong>.</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded border border-gray-200 text-sm">
+                                <h4 class="font-bold text-gray-900 mb-2">Key Takeaways</h4>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                    <li>Demonstrates how entangled alliance networks escalate local disputes.</li>
+                                    <li>Highlights the strategic necessity of naval superiority for Athens.</li>
+                                    <li>Marks the first direct military clash breaking the spirit of the truce.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="content-potidaea" class="hidden animate-fade-in">
+                        <h3 class="text-2xl font-serif text-gray-900 mb-4">Revolt in the Athenian Empire</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="col-span-2 space-y-4 text-gray-700">
+                                <p><strong>The Crisis:</strong> Potidaea was uniquely situated: it was a tribute-paying
+                                    subject of the Athenian Empire, but its original founders were Corinthian, and it
+                                    still received magistrates from Corinth.</p>
+                                <p><strong>The Escalation:</strong> Athens, suspecting a revolt engineered by Corinth
+                                    and the Macedonian King Perdiccas, ordered Potidaea to tear down its walls and expel
+                                    the Corinthians. In response, Potidaea revolted after receiving secret promises from
+                                    Sparta that they would invade Attica if Athens attacked.</p>
+                                <p><strong>The Siege:</strong> Corinth sent "volunteers" to defend Potidaea, while
+                                    Athens dispatched an army to besiege it. This meant Athenians were now besieging a
+                                    city defended by Corinthian troops, pushing Corinth to demand Sparta convene the
+                                    Peloponnesian League and declare war.</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded border border-gray-200 text-sm">
+                                <h4 class="font-bold text-gray-900 mb-2">Key Takeaways</h4>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                    <li>Exposes the fragility and paranoia within the Athenian imperial system.</li>
+                                    <li>Shows Sparta's covert willingness to encourage rebellion against Athens.</li>
+                                    <li>The final straw that forced the Peloponnesian League to formally vote for war.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="grand-strategy" class="scroll-mt-20 mb-20">
+            <div class="mb-10 text-center md:text-left">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4 border-b-2 border-red-800 pb-2 inline-block">IV. Grand
+                    Strategy: Pericles' Island Vision</h2>
+                <p class="text-lg text-gray-700 leading-relaxed max-w-4xl">
+                    As war became a certainty, the Athenian statesman Pericles laid out a revolutionary strategy based
+                    on profound asymmetrical warfare. This section visualizes the resource disparity between the two
+                    leagues. Pericles argued that by abandoning their countryside and treating Athens as an impregnable
+                    island supplied by the sea, their naval and financial dominance would exhaust the agrarian,
+                    land-locked Peloponnesians.
+                </p>
+            </div>
+
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-gray-50 p-8 rounded-xl border border-gray-100">
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-gray-900 border-l-4 border-[#003366] pl-4">The Asymmetry of
+                        Resources</h3>
+                    <p class="text-gray-700">Pericles' speech in Book 1 highlights a critical weakness in the
+                        Peloponnesian war machine: they were farmers, not sailors. They relied on personal service
+                        rather than accumulated capital.</p>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="mr-2">💰</span>
+                            <span><strong>Capital vs. Men:</strong> Athens possessed massive financial reserves from
+                                imperial tribute. Sparta relied on slow, forced contributions from poorer agrarian
+                                states.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2">🧱</span>
+                            <span><strong>The Long Walls:</strong> By retreating behind walls connecting the city to the
+                                port of Piraeus, Athens neutralized Spartan infantry dominance.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2">🌊</span>
+                            <span><strong>Naval Supremacy:</strong> Seamanship is an art requiring constant practice.
+                                Pericles knew the Peloponnesians could not quickly build or train a fleet to challenge
+                                Athenian control of supply routes.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-[#003366] text-white rounded shadow-md text-sm italic text-center">
+                        "Dismissing all thought of our land and houses, we must vigilantly guard the sea and the city."
+                        — Pericles
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="resourceDonutChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm mt-12">
+        <p>Interactive Analysis based on Thucydides: The History of the Peloponnesian War, Book 1.</p>
+        <p class="mt-2">Created for analytical exploration of historical texts.</p>
+    </footer>
+
+    <script>
+        const scrollSpy = () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        };
+
+        const setupFlashpointTabs = () => {
+            const btnEpidamnus = document.getElementById('btn-epidamnus');
+            const btnPotidaea = document.getElementById('btn-potidaea');
+            const contentEpidamnus = document.getElementById('content-epidamnus');
+            const contentPotidaea = document.getElementById('content-potidaea');
+
+            btnEpidamnus.addEventListener('click', () => {
+                btnEpidamnus.classList.add('active', 'text-white');
+                btnEpidamnus.classList.remove('bg-gray-50', 'text-gray-600');
+                btnPotidaea.classList.remove('active', 'text-white');
+                btnPotidaea.classList.add('bg-gray-50', 'text-gray-600');
+
+                contentEpidamnus.classList.remove('hidden');
+                contentPotidaea.classList.add('hidden');
+            });
+
+            btnPotidaea.addEventListener('click', () => {
+                btnPotidaea.classList.add('active', 'text-white');
+                btnPotidaea.classList.remove('bg-gray-50', 'text-gray-600');
+                btnEpidamnus.classList.remove('active', 'text-white');
+                btnEpidamnus.classList.add('bg-gray-50', 'text-gray-600');
+
+                contentPotidaea.classList.remove('hidden');
+                contentEpidamnus.classList.add('hidden');
+            });
+        };
+
+        const state = {
+            timelineMode: 'naval'
+        };
+
+        let timelineChartInstance = null;
+
+        const timelineData = {
+            labels: ['Persian Retreat', 'Formation of Delian League', 'Reduction of Naxos', 'Battle of Eurymedon', 'Building Long Walls', 'Egyptian Disaster', 'Thirty Years Truce', 'Eve of War'],
+            naval: [30, 50, 65, 80, 85, 70, 90, 100],
+            tribute: [10, 40, 55, 70, 75, 60, 85, 95],
+            sparta: [80, 75, 75, 75, 70, 75, 75, 70]
+        };
+
+        const renderTimelineChart = () => {
+            const ctx = document.getElementById('powerTimelineChart').getContext('2d');
+
+            if (timelineChartInstance) {
+                timelineChartInstance.destroy();
+            }
+
+            const athensData = state.timelineMode === 'naval' ? timelineData.naval : timelineData.tribute;
+            const athensLabel = state.timelineMode === 'naval' ? 'Athenian Naval Strength (Est.)' : 'Athenian Imperial Wealth (Est.)';
+
+            timelineChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timelineData.labels,
+                    datasets: [
+                        {
+                            label: athensLabel,
+                            data: athensData,
+                            borderColor: '#003366',
+                            backgroundColor: 'rgba(0, 51, 102, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Spartan Relative Influence (Est.)',
+                            data: timelineData.sparta,
+                            borderColor: '#8b0000',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) { label += context.parsed.y + ' Index'; }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 110,
+                            title: { display: true, text: 'Estimated Relative Power Index' }
+                        },
+                        x: {
+                            ticks: {
+                                callback: function (value) {
+                                    const label = this.getLabelForValue(value);
+                                    if (label.length > 16) {
+                                        return label.match(/.{1,16}(\s|$)/g);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        const setupTimelineButtons = () => {
+            const btnNaval = document.getElementById('btn-naval');
+            const btnTribute = document.getElementById('btn-tribute');
+
+            btnNaval.addEventListener('click', () => {
+                state.timelineMode = 'naval';
+                btnNaval.classList.replace('bg-gray-200', 'bg-[#003366]');
+                btnNaval.classList.replace('text-gray-800', 'text-white');
+                btnTribute.classList.replace('bg-[#003366]', 'bg-gray-200');
+                btnTribute.classList.replace('text-white', 'text-gray-800');
+                renderTimelineChart();
+            });
+
+            btnTribute.addEventListener('click', () => {
+                state.timelineMode = 'tribute';
+                btnTribute.classList.replace('bg-gray-200', 'bg-[#003366]');
+                btnTribute.classList.replace('text-gray-800', 'text-white');
+                btnNaval.classList.replace('bg-[#003366]', 'bg-gray-200');
+                btnNaval.classList.replace('text-white', 'text-gray-800');
+                renderTimelineChart();
+            });
+        };
+
+        const renderRadarChart = () => {
+            const ctx = document.getElementById('characterRadarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Innovation/Speed', 'Risk Tolerance', 'Naval Focus', 'Land Focus', 'Tradition/Caution'],
+                    datasets: [
+                        {
+                            label: 'Athens',
+                            data: [9, 8, 10, 3, 2],
+                            backgroundColor: 'rgba(0, 51, 102, 0.2)',
+                            borderColor: '#003366',
+                            pointBackgroundColor: '#003366',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Sparta',
+                            data: [2, 2, 3, 10, 9],
+                            backgroundColor: 'rgba(139, 0, 0, 0.2)',
+                            borderColor: '#8b0000',
+                            pointBackgroundColor: '#8b0000',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        };
+
+        const renderDonutChart = () => {
+            const ctx = document.getElementById('resourceDonutChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Athenian Capital & Fleet', 'Spartan Heavy Infantry', 'Athenian Infantry', 'Spartan Fleet & Wealth'],
+                    datasets: [{
+                        data: [60, 30, 5, 5],
+                        backgroundColor: [
+                            '#003366',
+                            '#8b0000',
+                            '#6699cc',
+                            '#cc6666'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return ` ${context.label}: Relative Impact`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            scrollSpy();
+            setupFlashpointTabs();
+            setupTimelineButtons();
+
+            renderTimelineChart();
+            renderRadarChart();
+            renderDonutChart();
+        });
+    </script>
+</body>
+
+</html>
